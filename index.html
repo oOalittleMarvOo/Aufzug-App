@@ -139,7 +139,7 @@
             font-size: 16px; /* Schriftgröße */
         }
 
-        /* ========== JA/NEIN FRAGEN ========== */
+        /* ========== JA/NEIN BUTTONS ========== */
         .ja-nein-gruppe { /* Container für Ja/Nein Buttons */
             display: flex; /* Buttons nebeneinander */
             gap: 10px; /* Abstand zwischen Buttons */
@@ -154,10 +154,7 @@
             background: white; /* Weißer Hintergrund */
             color: #28a745; /* Grüne Schrift */
         }
-        .ja-btn.aktiv { /* Ja Button wenn ausgewählt */
-            background-color: #28a745; /* Grüner Hintergrund */
-            color: white; /* Weiße Schrift */
-        }
+        .ja-btn.aktiv { background-color: #28a745; color: white; } /* Ja Button aktiv - grüner Hintergrund */
 
         .nein-btn { /* Nein Button */
             padding: 10px 30px; /* Innenabstand */
@@ -168,10 +165,7 @@
             background: white; /* Weißer Hintergrund */
             color: #dc3545; /* Rote Schrift */
         }
-        .nein-btn.aktiv { /* Nein Button wenn ausgewählt */
-            background-color: #dc3545; /* Roter Hintergrund */
-            color: white; /* Weiße Schrift */
-        }
+        .nein-btn.aktiv { background-color: #dc3545; color: white; } /* Nein Button aktiv - roter Hintergrund */
 
         /* ========== ANTWORT BUTTONS ========== */
         .antwort-gruppe { /* Container für die drei Antwort Buttons */
@@ -238,6 +232,124 @@
             font-weight: bold; /* Fettschrift */
         }
 
+        /* ========== BERECHNUNG ========== */
+        .berechnung-block { /* Container für einen Berechnungsbereich */
+            background: white; /* Weißer Hintergrund */
+            border: 1px solid #ddd; /* Grauer Rahmen */
+            border-radius: 10px; /* Abgerundete Ecken */
+            padding: 20px; /* Innenabstand */
+            margin-bottom: 20px; /* Abstand nach unten */
+        }
+
+        .berechnung-block h3 { /* Überschrift im Berechnungsbereich */
+            color: #0057a8; /* Blaue Schrift */
+            margin-bottom: 15px; /* Abstand nach unten */
+            font-size: 17px; /* Schriftgröße */
+            border-bottom: 2px solid #0057a8; /* Blaue Linie unten */
+            padding-bottom: 8px; /* Abstand zur Linie */
+        }
+
+        .eingabe-zeile { /* Eine Eingabezeile mit Label und Feld */
+            display: flex; /* Elemente nebeneinander */
+            align-items: center; /* Vertikal zentrieren */
+            margin-bottom: 12px; /* Abstand nach unten */
+            gap: 10px; /* Abstand zwischen Elementen */
+            flex-wrap: wrap; /* Umbrechen auf kleinen Bildschirmen */
+        }
+
+        .eingabe-zeile label { /* Beschriftung der Eingabe */
+            min-width: 280px; /* Mindestbreite damit alle Labels gleich breit sind */
+            font-size: 14px; /* Schriftgröße */
+            color: #333; /* Dunkelgraue Schrift */
+        }
+
+        .eingabe-zeile input { /* Eingabefeld */
+            padding: 8px 12px; /* Innenabstand */
+            border: 2px solid #0057a8; /* Blauer Rahmen */
+            border-radius: 6px; /* Abgerundete Ecken */
+            font-size: 15px; /* Schriftgröße */
+            width: 120px; /* Breite */
+        }
+
+        .eingabe-zeile select { /* Auswahlfeld */
+            padding: 8px 12px; /* Innenabstand */
+            border: 2px solid #0057a8; /* Blauer Rahmen */
+            border-radius: 6px; /* Abgerundete Ecken */
+            font-size: 15px; /* Schriftgröße */
+            background: white; /* Weißer Hintergrund */
+        }
+
+        .einheit { /* Einheit hinter dem Eingabefeld */
+            font-size: 14px; /* Schriftgröße */
+            color: #666; /* Grauer Text */
+            font-weight: bold; /* Fettschrift */
+        }
+
+        .fix-wert { /* Fixer Wert der nicht geändert werden kann */
+            padding: 8px 12px; /* Innenabstand */
+            background: #e8f0fb; /* Heller blauer Hintergrund */
+            border-radius: 6px; /* Abgerundete Ecken */
+            font-size: 15px; /* Schriftgröße */
+            color: #0057a8; /* Blaue Schrift */
+            font-weight: bold; /* Fettschrift */
+        }
+
+        /* ========== ERGEBNIS TABELLE ========== */
+        .ergebnis-tabelle { /* Container für die Ergebnisse */
+            margin-top: 20px; /* Abstand nach oben */
+            border-radius: 10px; /* Abgerundete Ecken */
+            overflow: hidden; /* Ecken werden abgeschnitten */
+            border: 1px solid #ddd; /* Grauer Rahmen */
+        }
+
+        .ergebnis-tabelle table { /* Tabelle für Ergebnisse */
+            width: 100%; /* Volle Breite */
+            border-collapse: collapse; /* Rahmen zusammenführen */
+        }
+
+        .ergebnis-tabelle th { /* Tabellenüberschriften */
+            background-color: #0057a8; /* Blauer Hintergrund */
+            color: white; /* Weiße Schrift */
+            padding: 12px; /* Innenabstand */
+            text-align: left; /* Text linksbündig */
+            font-size: 14px; /* Schriftgröße */
+        }
+
+        .ergebnis-tabelle td { /* Tabellenzellen */
+            padding: 10px 12px; /* Innenabstand */
+            border-bottom: 1px solid #ddd; /* Grauer Trennstrich */
+            font-size: 14px; /* Schriftgröße */
+        }
+
+        .ergebnis-tabelle tr:nth-child(even) { /* Jede zweite Zeile */
+            background-color: #f8f9fa; /* Heller grauer Hintergrund */
+        }
+
+        .wahr { /* Ergebnis ist in Ordnung */
+            color: #28a745; /* Grüne Schrift */
+            font-weight: bold; /* Fettschrift */
+        }
+
+        .falsch { /* Ergebnis ist nicht in Ordnung */
+            color: #dc3545; /* Rote Schrift */
+            font-weight: bold; /* Fettschrift */
+        }
+
+        .zwischenwert { /* Zwischenergebnis Zeile */
+            background: #f0f4f8; /* Heller blauer Hintergrund */
+            padding: 10px 12px; /* Innenabstand */
+            border-radius: 6px; /* Abgerundete Ecken */
+            margin-bottom: 8px; /* Abstand nach unten */
+            font-size: 14px; /* Schriftgröße */
+            display: flex; /* Elemente nebeneinander */
+            justify-content: space-between; /* Abstand zwischen Label und Wert */
+        }
+
+        .zwischenwert span { /* Wert im Zwischenergebnis */
+            font-weight: bold; /* Fettschrift */
+            color: #0057a8; /* Blaue Schrift */
+        }
+
     </style>
 </head>
 <body> <!-- Hier beginnt der sichtbare Inhalt der App -->
@@ -275,9 +387,9 @@
     </div>
 
     <!-- ========== PRÜFUNG VOR ORT ========== -->
-    <div id="pruefung" class="tab-inhalt aktiv"> <!-- Prüfung Tab Inhalt - standardmäßig sichtbar -->
+    <div id="pruefung" class="tab-inhalt aktiv"> <!-- Prüfung Tab Inhalt -->
 
-        <!-- FRAGE 1.0 - Dokument vor Ort - nur Ja/Nein -->
+        <!-- FRAGE 1.0 - Dokument vor Ort -->
         <div class="frage" id="frage1_0"> <!-- Container für Frage 1.0 -->
             <h3>1.0 – Liegt das Dokument zur Ermittlung des Seildurchmessers mit dem Messschieber vor Ort vor?</h3> <!-- Fragetext -->
             <div class="ja-nein-gruppe"> <!-- Container für Ja/Nein Buttons -->
@@ -316,12 +428,12 @@
             </div>
         </div>
 
-        <!-- FRAGE 1.3 - Durchmesser mit Messschieber erfassen -->
+        <!-- FRAGE 1.3 - Durchmesser mit Messschieber -->
         <div class="frage" id="frage1_3"> <!-- Container für Frage 1.3 -->
             <h3>1.3 – Durchmesser mit dem Messschieber erfassen:</h3> <!-- Fragetext -->
             <div class="messwert-gruppe"> <!-- Container für Eingabefeld -->
-                <input type="number" id="messwert1_3" placeholder="0.00" step="0.01" min="0"> <!-- Zahleneingabe für Messwert -->
-                <span>mm</span> <!-- Einheit Millimeter -->
+                <input type="number" id="messwert1_3" placeholder="0.00" step="0.01" min="0"> <!-- Zahleneingabe -->
+                <span>mm</span> <!-- Einheit -->
             </div>
         </div>
 
@@ -350,8 +462,147 @@
 
     <!-- ========== BERECHNUNG ========== -->
     <div id="berechnung" class="tab-inhalt"> <!-- Berechnung Tab Inhalt -->
-        <h3>Berechnung</h3> <!-- Überschrift -->
-        <p>Hier kommen die Berechnungen...</p> <!-- Platzhalter -->
+
+        <!-- EINGABEN -->
+        <div class="berechnung-block"> <!-- Container für Eingaben -->
+            <h3>📥 Eingabewerte</h3> <!-- Überschrift -->
+
+            <!-- Position des Geschwindigkeitsbegrenzers -->
+            <div class="eingabe-zeile"> <!-- Eingabezeile -->
+                <label>Position des Geschwindigkeitsbegrenzers (GB):</label> <!-- Beschriftung -->
+                <select id="positionGB" onchange="berechne()"> <!-- Auswahlfeld - bei Änderung wird berechnet -->
+                    <option value="1">1 = oben</option> <!-- Option oben -->
+                    <option value="2" selected>2 = unten</option> <!-- Option unten - standardmäßig ausgewählt -->
+                </select>
+            </div>
+
+            <!-- Spannkraft G -->
+            <div class="eingabe-zeile"> <!-- Eingabezeile -->
+                <label>Von der Spannrolle aufgebrachte Kraft G:</label> <!-- Beschriftung -->
+                <input type="number" id="kraftG" value="300" oninput="berechne()"> <!-- Eingabefeld - bei Eingabe wird berechnet -->
+                <span class="einheit">N</span> <!-- Einheit Newton -->
+            </div>
+
+            <!-- Fein - Kraft für Fangvorrichtung -->
+            <div class="eingabe-zeile"> <!-- Eingabezeile -->
+                <label>Erforderliche Kraft für Einrücken der Fangvorrichtung Fein:</label> <!-- Beschriftung -->
+                <input type="number" id="fein" value="300" oninput="berechne()"> <!-- Eingabefeld -->
+                <span class="einheit">N</span> <!-- Einheit Newton -->
+            </div>
+
+            <!-- Mindestbruchkraft -->
+            <div class="eingabe-zeile"> <!-- Eingabezeile -->
+                <label>Mindestbruchkraft Begrenzerseil:</label> <!-- Beschriftung -->
+                <input type="number" id="mindestbruchkraft" value="32" oninput="berechne()"> <!-- Eingabefeld -->
+                <span class="einheit">kN</span> <!-- Einheit Kilonewton -->
+            </div>
+
+            <!-- Nenngeschwindigkeit -->
+            <div class="eingabe-zeile"> <!-- Eingabezeile -->
+                <label>Nenngeschwindigkeit v:</label> <!-- Beschriftung -->
+                <input type="number" id="geschwindigkeit" value="1.0" step="0.01" oninput="berechne()"> <!-- Eingabefeld -->
+                <span class="einheit">m/s</span> <!-- Einheit Meter pro Sekunde -->
+            </div>
+
+            <!-- Rillenform -->
+            <div class="eingabe-zeile"> <!-- Eingabezeile -->
+                <label>Rillenform:</label> <!-- Beschriftung -->
+                <select id="rillenform" onchange="berechne()"> <!-- Auswahlfeld -->
+                    <option value="1">1 = Keilrille gehärtet / nicht gehärtet</option> <!-- Keilrille -->
+                    <option value="2">2 = Halbrundille mit Unterschnitt</option> <!-- Halbrundille -->
+                </select>
+            </div>
+
+            <!-- Reibwert μ -->
+            <div class="eingabe-zeile"> <!-- Eingabezeile -->
+                <label>Reibwert μ (vom Ingenieur einzugeben):</label> <!-- Beschriftung -->
+                <input type="number" id="reibwert" value="0.1" step="0.01" oninput="berechne()"> <!-- Eingabefeld -->
+            </div>
+
+            <!-- Keilwinkel Gamma -->
+            <div class="eingabe-zeile"> <!-- Eingabezeile -->
+                <label>Keilwinkel Gamma γ:</label> <!-- Beschriftung -->
+                <input type="number" id="gamma" value="45" oninput="berechne()"> <!-- Eingabefeld -->
+                <span class="einheit">Grad</span> <!-- Einheit Grad -->
+            </div>
+
+            <!-- Umschlingungswinkel - fix -->
+            <div class="eingabe-zeile"> <!-- Eingabezeile -->
+                <label>Umschlingungswinkel α (fix = 180°):</label> <!-- Beschriftung -->
+                <div class="fix-wert">3.142 rad (= 180°)</div> <!-- Fixer Wert nicht änderbar -->
+            </div>
+
+        </div>
+
+        <!-- ZWISCHENWERTE -->
+        <div class="berechnung-block"> <!-- Container für Zwischenwerte -->
+            <h3>🔄 Zwischenwerte</h3> <!-- Überschrift -->
+
+            <!-- Reibungszahl f(μ) -->
+            <div class="zwischenwert"> <!-- Zwischenwert Zeile -->
+                <label>Reibungszahl f(μ) =</label> <!-- Beschriftung -->
+                <span id="ergebnis_fmu">-</span> <!-- Wert wird per JavaScript gesetzt -->
+            </div>
+
+            <!-- Seilkraft S1 -->
+            <div class="zwischenwert"> <!-- Zwischenwert Zeile -->
+                <label>Seilkraft S1 =</label> <!-- Beschriftung -->
+                <span id="ergebnis_s1">-</span> <!-- Wert wird per JavaScript gesetzt -->
+            </div>
+
+            <!-- Seilkraft S2 -->
+            <div class="zwischenwert"> <!-- Zwischenwert Zeile -->
+                <label>Seilkraft S2 =</label> <!-- Beschriftung -->
+                <span id="ergebnis_s2">-</span> <!-- Wert wird per JavaScript gesetzt -->
+            </div>
+
+        </div>
+
+        <!-- ERGEBNISSE -->
+        <div class="berechnung-block"> <!-- Container für Ergebnisse -->
+            <h3>📊 Ergebnisse</h3> <!-- Überschrift -->
+            <div class="ergebnis-tabelle"> <!-- Tabellen Container -->
+                <table> <!-- Ergebnistabelle -->
+                    <thead> <!-- Tabellenüberschriften -->
+                        <tr> <!-- Überschriftenzeile -->
+                            <th>Fall</th> <!-- Spalte Fall -->
+                            <th>Kleinste FE</th> <!-- Spalte Zugkraft -->
+                            <th>Fein</th> <!-- Spalte Sollwert -->
+                            <th>FE ≥ Fein?</th> <!-- Spalte Prüfung Zugkraft -->
+                            <th>Sicherheitsfaktor</th> <!-- Spalte Sicherheitsfaktor -->
+                            <th>SF ≥ 8?</th> <!-- Spalte Prüfung Sicherheitsfaktor -->
+                        </tr>
+                    </thead>
+                    <tbody> <!-- Tabelleninhalt -->
+                        <tr> <!-- Zeile GB oben Fang abwärts -->
+                            <td>GB oben Fang ↓</td> <!-- Fallbezeichnung -->
+                            <td id="fe_oben_ab">-</td> <!-- Zugkraft wird per JavaScript gesetzt -->
+                            <td id="fein_anzeige1">-</td> <!-- Fein Wert -->
+                            <td id="check_fe_oben_ab">-</td> <!-- Prüfergebnis -->
+                            <td id="sf_oben_ab">-</td> <!-- Sicherheitsfaktor -->
+                            <td id="check_sf_oben_ab">-</td> <!-- Prüfergebnis SF -->
+                        </tr>
+                        <tr> <!-- Zeile GB oben Fang aufwärts -->
+                            <td>GB oben Fang ↑</td> <!-- Fallbezeichnung -->
+                            <td id="fe_oben_auf">-</td> <!-- Zugkraft -->
+                            <td id="fein_anzeige2">-</td> <!-- Fein Wert -->
+                            <td id="check_fe_oben_auf">-</td> <!-- Prüfergebnis -->
+                            <td id="sf_oben_auf">-</td> <!-- Sicherheitsfaktor -->
+                            <td id="check_sf_oben_auf">-</td> <!-- Prüfergebnis SF -->
+                        </tr>
+                        <tr> <!-- Zeile GB unten -->
+                            <td>GB unten Fang ↓↑</td> <!-- Fallbezeichnung -->
+                            <td id="fe_unten">-</td> <!-- Zugkraft -->
+                            <td id="fein_anzeige3">-</td> <!-- Fein Wert -->
+                            <td id="check_fe_unten">-</td> <!-- Prüfergebnis -->
+                            <td id="sf_unten">-</td> <!-- Sicherheitsfaktor -->
+                            <td id="check_sf_unten">-</td> <!-- Prüfergebnis SF -->
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -367,7 +618,7 @@
             el.style.display = 'none'; /* Alle Seiten verstecken */
         });
         const el = document.getElementById(id); /* Gewünschte Seite auswählen */
-        if (el) { el.style.display = id === 'startseite' ? 'flex' : 'block'; } /* Startseite als flex, andere als block anzeigen */
+        if (el) { el.style.display = id === 'startseite' ? 'flex' : 'block'; } /* Startseite als flex, andere als block */
     }
 
     /**
@@ -376,7 +627,7 @@
      * Parameter: bereich = "Neubau" oder "Umbau"
      */
     function zeigeBauteile(bereich) {
-        document.getElementById('bereichTitel').innerText = bereich; /* Titel auf Neubau oder Umbau setzen */
+        document.getElementById('bereichTitel').innerText = bereich; /* Titel setzen */
         zeige('bauteilSeite'); /* Zur Bauteil-Liste wechseln */
     }
 
@@ -386,12 +637,13 @@
      * Parameter: name = Name des Bauteils
      */
     function zeigeBauteil(name) {
-        document.getElementById('bauteilTitel').innerText = name; /* Titel auf Bauteilnamen setzen */
+        document.getElementById('bauteilTitel').innerText = name; /* Titel setzen */
         zeige('detailSeite'); /* Zur Detail-Seite wechseln */
         document.querySelector('.tab.aktiv')?.classList.remove('aktiv'); /* Aktiven Tab deaktivieren */
         document.querySelector('.tab').classList.add('aktiv'); /* Ersten Tab aktivieren */
         document.querySelectorAll('.tab-inhalt').forEach(el => el.classList.remove('aktiv')); /* Alle Tab Inhalte verstecken */
         document.getElementById('pruefung').classList.add('aktiv'); /* Prüfung Tab anzeigen */
+        berechne(); /* Berechnung beim Öffnen direkt ausführen */
     }
 
     /**
@@ -401,15 +653,15 @@
      */
     function zeigeTab(btn, tabId) {
         document.querySelectorAll('.tab').forEach(el => el.classList.remove('aktiv')); /* Alle Tabs deaktivieren */
-        document.querySelectorAll('.tab-inhalt').forEach(el => el.classList.remove('aktiv')); /* Alle Tab Inhalte verstecken */
+        document.querySelectorAll('.tab-inhalt').forEach(el => el.classList.remove('aktiv')); /* Alle Inhalte verstecken */
         btn.classList.add('aktiv'); /* Gewählten Tab aktivieren */
-        document.getElementById(tabId).classList.add('aktiv'); /* Gewählten Tab Inhalt anzeigen */
+        document.getElementById(tabId).classList.add('aktiv'); /* Gewählten Inhalt anzeigen */
     }
 
     /**
      * Funktion: antwort
      * Zweck: Verarbeitet die Antwort auf eine Prüffrage mit drei Optionen
-     * Parameter: btn = geklickter Antwort Button, frageId = ID der Frage
+     * Parameter: btn = geklickter Button, frageId = ID der Frage
      */
     function antwort(btn, frageId) {
         const frage = document.getElementById(frageId); /* Frage Container auswählen */
@@ -426,7 +678,7 @@
     /**
      * Funktion: jaNein
      * Zweck: Verarbeitet Ja/Nein Fragen
-     * Parameter: btn = geklickter Button, frageId = ID der Frage, antwort = "ja" oder "nein"
+     * Parameter: btn = geklickter Button, frageId = ID der Frage, antwortWert = "ja" oder "nein"
      */
     function jaNein(btn, frageId, antwortWert) {
         const frage = document.getElementById(frageId); /* Frage Container auswählen */
@@ -434,8 +686,117 @@
         btn.classList.add('aktiv'); /* Gewählten Button aktivieren */
     }
 
+    /**
+     * Funktion: berechne
+     * Zweck: Hauptberechnungsfunktion - berechnet alle Werte nach EN 81-50
+     * Wird automatisch aufgerufen wenn ein Eingabewert geändert wird
+     */
+    function berechne() {
+
+        /* ========== EINGABEWERTE LESEN ========== */
+        const G = parseFloat(document.getElementById('kraftG').value) || 0; /* Spannkraft G in Newton lesen */
+        const Fein = parseFloat(document.getElementById('fein').value) || 0; /* Fein in Newton lesen */
+        const mindestbruchkraft = parseFloat(document.getElementById('mindestbruchkraft').value) || 0; /* Mindestbruchkraft in kN lesen */
+        const mu = parseFloat(document.getElementById('reibwert').value) || 0; /* Reibwert μ lesen */
+        const gamma = parseFloat(document.getElementById('gamma').value) || 45; /* Keilwinkel in Grad lesen */
+        const rillenform = parseInt(document.getElementById('rillenform').value); /* Rillenform lesen (1 oder 2) */
+        const alpha = Math.PI; /* Umschlingungswinkel α = 180° = π (fix, nicht änderbar) */
+
+        /* ========== REIBUNGSZAHL BERECHNEN ========== */
+        let fmu = 0; /* Reibungszahl f(μ) initialisieren */
+        const gammaRad = gamma * Math.PI / 180; /* Keilwinkel von Grad in Bogenmaß umrechnen */
+
+        if (rillenform === 1) { /* Wenn Keilrille gewählt */
+            fmu = mu / Math.sin(gammaRad / 2); /* Formel für Keilrille: f(μ) = μ / sin(γ/2) */
+        } else { /* Wenn Halbrundille mit Unterschnitt gewählt */
+            const beta = gammaRad; /* Beta entspricht dem Keilwinkel */
+            fmu = 4 * mu * (1 - Math.sin(beta / 2)) / (Math.PI - beta - Math.sin(beta)); /* Formel für Halbrundille */
+        }
+
+        /* ========== SEILKRÄFTE BERECHNEN ========== */
+        const efmu_alpha = Math.exp(fmu * alpha); /* e^(f(μ)×α) berechnen - wird mehrfach benötigt */
+
+        /* Seilkräfte für GB oben */
+        const S1_oben = G / 2; /* Seilkraft S1 bei GB oben = G/2 */
+        const S2_oben_ab = S1_oben * efmu_alpha; /* Seilkraft S2 GB oben Fang abwärts */
+        const S2_oben_auf = G / 2 - (G / 2) * (1 / efmu_alpha); /* Seilkraft S2 GB oben Fang aufwärts - korrigiert */
+
+        /* Seilkräfte für GB unten */
+        const S1_unten = G; /* Seilkraft S1 bei GB unten = G */
+        const S2_unten = S1_unten * efmu_alpha; /* Seilkraft S2 GB unten */
+
+        /* ========== ZUGKRAFT FE BERECHNEN ========== */
+        /* Formel GB oben Fang abwärts: FE = G/2 × (e^(f(μ)×α) - 1) */
+        const FE_oben_ab = (G / 2) * (efmu_alpha - 1);
+
+        /* Formel GB oben Fang aufwärts: FE = G/2 × (1 - 1/e^(f(μ)×α)) */
+        const FE_oben_auf = (G / 2) * (1 - 1 / efmu_alpha);
+
+        /* Formel GB unten: FE = G × (e^(f(μ)×α) - 1) / (e^(f(μ)×α) + 1) */
+        const FE_unten = G * (efmu_alpha - 1) / (efmu_alpha + 1);
+
+        /* ========== SICHERHEITSFAKTOREN BERECHNEN ========== */
+        /* Sicherheitsfaktor = Mindestbruchkraft (in N) / größte Zugkraft im Seil */
+        const mindestbruchkraft_N = mindestbruchkraft * 1000; /* kN in N umrechnen */
+
+        /* Größte Seilkraft je Fall bestimmen */
+        const groesseSeilkraft_oben_ab = Math.max(S1_oben, S2_oben_ab); /* Größte Seilkraft GB oben Fang ab */
+        const groesseSeilkraft_oben_auf = Math.max(S1_oben, S2_oben_auf); /* Größte Seilkraft GB oben Fang auf */
+        const groesseSeilkraft_unten = Math.max(S1_unten, S2_unten); /* Größte Seilkraft GB unten */
+
+        /* Sicherheitsfaktoren berechnen */
+        const SF_oben_ab = mindestbruchkraft_N / groesseSeilkraft_oben_ab; /* Sicherheitsfaktor GB oben Fang ab */
+        const SF_oben_auf = mindestbruchkraft_N / groesseSeilkraft_oben_auf; /* Sicherheitsfaktor GB oben Fang auf */
+        const SF_unten = mindestbruchkraft_N / groesseSeilkraft_unten; /* Sicherheitsfaktor GB unten */
+
+        /* ========== ZWISCHENWERTE ANZEIGEN ========== */
+        document.getElementById('ergebnis_fmu').innerText = fmu.toFixed(3); /* Reibungszahl mit 3 Nachkommastellen */
+        document.getElementById('ergebnis_s1').innerText = S1_oben.toFixed(2) + ' N'; /* Seilkraft S1 */
+        document.getElementById('ergebnis_s2').innerText = S2_oben_ab.toFixed(2) + ' N'; /* Seilkraft S2 */
+
+        /* ========== ERGEBNISSE IN TABELLE ANZEIGEN ========== */
+
+        /* Fein Wert in allen Zeilen anzeigen */
+        document.getElementById('fein_anzeige1').innerText = Fein.toFixed(2) + ' N'; /* Fein Zeile 1 */
+        document.getElementById('fein_anzeige2').innerText = Fein.toFixed(2) + ' N'; /* Fein Zeile 2 */
+        document.getElementById('fein_anzeige3').innerText = Fein.toFixed(2) + ' N'; /* Fein Zeile 3 */
+
+        /* GB oben Fang abwärts Ergebnisse */
+        document.getElementById('fe_oben_ab').innerText = FE_oben_ab.toFixed(2) + ' N'; /* Zugkraft anzeigen */
+        zeigeCheck('check_fe_oben_ab', FE_oben_ab >= Fein); /* Prüfen ob FE >= Fein */
+        document.getElementById('sf_oben_ab').innerText = SF_oben_ab.toFixed(2); /* Sicherheitsfaktor anzeigen */
+        zeigeCheck('check_sf_oben_ab', SF_oben_ab >= 8); /* Prüfen ob Sicherheitsfaktor >= 8 */
+
+        /* GB oben Fang aufwärts Ergebnisse */
+        document.getElementById('fe_oben_auf').innerText = FE_oben_auf.toFixed(2) + ' N'; /* Zugkraft anzeigen */
+        zeigeCheck('check_fe_oben_auf', FE_oben_auf >= Fein); /* Prüfen ob FE >= Fein */
+        document.getElementById('sf_oben_auf').innerText = SF_oben_auf.toFixed(2); /* Sicherheitsfaktor anzeigen */
+        zeigeCheck('check_sf_oben_auf', SF_oben_auf >= 8); /* Prüfen ob Sicherheitsfaktor >= 8 */
+
+        /* GB unten Ergebnisse */
+        document.getElementById('fe_unten').innerText = FE_unten.toFixed(2) + ' N'; /* Zugkraft anzeigen */
+        zeigeCheck('check_fe_unten', FE_unten >= Fein); /* Prüfen ob FE >= Fein */
+        document.getElementById('sf_unten').innerText = SF_unten.toFixed(2); /* Sicherheitsfaktor anzeigen */
+        zeigeCheck('check_sf_unten', SF_unten >= 8); /* Prüfen ob Sicherheitsfaktor >= 8 */
+    }
+
+    /**
+     * Funktion: zeigeCheck
+     * Zweck: Zeigt WAHR (grün) oder FALSCH (rot) in einer Tabellenzelle
+     * Parameter: id = ID der Tabellenzelle, istWahr = true oder false
+     */
+    function zeigeCheck(id, istWahr) {
+        const el = document.getElementById(id); /* Tabellenzelle auswählen */
+        if (istWahr) { /* Wenn Bedingung erfüllt */
+            el.innerHTML = '<span class="wahr">✅ WAHR</span>'; /* Grünes WAHR anzeigen */
+        } else { /* Wenn Bedingung nicht erfüllt */
+            el.innerHTML = '<span class="falsch">❌ FALSCH</span>'; /* Rotes FALSCH anzeigen */
+        }
+    }
+
+    /* Berechnung beim Laden der Seite direkt ausführen damit Standardwerte berechnet werden */
+    berechne();
+
 </script> <!-- Ende des JavaScript Bereichs -->
 
 </body> <!-- Ende des sichtbaren Inhalts --> </html> <!-- Ende der HTML Seite -->
-
-
