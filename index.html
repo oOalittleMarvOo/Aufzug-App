@@ -1,15 +1,24 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+    <!-- ========== KOPFBEREICH ========== -->
+    <!-- Zeichensatz und Darstellung für mobile Geräte -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aufzug-App</title>
     <style>
+        /* ========== GRUNDEINSTELLUNGEN ========== */
+        /* Gilt für alle Elemente - kein Abstand, keine Außenränder */
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        /* Schrift und Hintergrundfarbe der gesamten App */
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f4f8;
         }
+
+        /* ========== KOPFZEILE ========== */
+        /* Blaue Kopfzeile oben */
         header {
             background-color: #0057a8;
             color: white;
@@ -18,6 +27,9 @@
             font-size: 24px;
             font-weight: bold;
         }
+
+        /* ========== STARTSEITE ========== */
+        /* Zentriert die Buttons auf der Startseite */
         .startseite {
             display: flex;
             flex-direction: column;
@@ -25,15 +37,15 @@
             margin-top: 60px;
             gap: 20px;
         }
-        .startseite h2 {
-            color: #333;
-            font-size: 20px;
-        }
-        .auswahl {
-            display: flex;
-            gap: 20px;
-            margin-top: 20px;
-        }
+
+        /* Überschrift auf der Startseite */
+        .startseite h2 { color: #333; font-size: 20px; }
+
+        /* Bereich für die zwei Hauptbuttons */
+        .auswahl { display: flex; gap: 20px; margin-top: 20px; }
+
+        /* ========== BUTTONS ========== */
+        /* Hauptbuttons Neubau/Umbau */
         .btn {
             background-color: #0057a8;
             color: white;
@@ -46,9 +58,12 @@
         }
         .btn:hover { background-color: #003f7f; }
 
-        /* Bauteil Seite */
+        /* ========== SEITEN NAVIGATION ========== */
+        /* Alle Unterseiten sind standardmäßig versteckt */
         .seite { display: none; padding: 20px; }
         .seite.aktiv { display: block; }
+
+        /* Zurück Button */
         .zuruck {
             background-color: #888;
             color: white;
@@ -59,12 +74,17 @@
             margin-bottom: 20px;
             font-size: 16px;
         }
+
+        /* ========== BAUTEIL LISTE ========== */
+        /* Liste der Bauteile untereinander */
         .bauteil-liste {
             display: flex;
             flex-direction: column;
             gap: 15px;
             margin-top: 20px;
         }
+
+        /* Einzelner Bauteil Button */
         .bauteil-btn {
             background-color: white;
             border: 2px solid #0057a8;
@@ -77,13 +97,9 @@
         }
         .bauteil-btn:hover { background-color: #e8f0fb; }
 
-        /* Detail Seite */
-        .tabs {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
+        /* ========== TABS ========== */
+        /* Die drei Reiter: Prüfung, Dokumente, Berechnung */
+        .tabs { display: flex; gap: 10px; margin-top: 20px; margin-bottom: 20px; }
         .tab {
             background-color: #ddd;
             border: none;
@@ -95,49 +111,153 @@
         .tab.aktiv { background-color: #0057a8; color: white; }
         .tab-inhalt { display: none; }
         .tab-inhalt.aktiv { display: block; background: white; padding: 20px; border-radius: 10px; }
+
+        /* ========== PRÜFFRAGEN ========== */
+        /* Einzelne Prüffrage */
+        .frage {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* Fragetext */
+        .frage h3 { color: #0057a8; margin-bottom: 15px; font-size: 16px; }
+
+        /* Antwort Buttons */
+        .antwort-gruppe { display: flex; gap: 10px; flex-wrap: wrap; }
+        .antwort-btn {
+            padding: 10px 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            background: white;
+        }
+
+        /* Farben für die drei Antwortmöglichkeiten */
+        .antwort-btn.passt { border-color: #28a745; color: #28a745; }
+        .antwort-btn.passt.aktiv { background-color: #28a745; color: white; }
+        .antwort-btn.passt-nicht { border-color: #dc3545; color: #dc3545; }
+        .antwort-btn.passt-nicht.aktiv { background-color: #dc3545; color: white; }
+        .antwort-btn.irrelevant { border-color: #888; color: #888; }
+        .antwort-btn.irrelevant.aktiv { background-color: #888; color: white; }
+
+        /* ========== MANGELFELD ========== */
+        /* Erscheint nur wenn "Passt nicht" gewählt wird */
+        .mangelfeld {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #fff3f3;
+            border: 1px solid #dc3545;
+            border-radius: 8px;
+        }
+        .mangelfeld textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 15px;
+            margin-top: 10px;
+            min-height: 80px;
+        }
+
+        /* ========== MANGEL WARNUNG ========== */
+        .mangel-hinweis {
+            color: #dc3545;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
     </style>
 </head>
 <body>
 
+<!-- ========== KOPFZEILE ========== -->
 <header>🛗 Aufzug-App</header>
 
-<!-- Startseite -->
-<div id="startseite" class="startseite">
+<!-- ========== STARTSEITE ========== -->
+<!-- Zeigt die zwei Hauptbereiche Neubau und Umbau --> <div id="startseite" class="startseite">
     <h2>Bitte wählen Sie einen Bereich:</h2>
     <div class="auswahl">
+        <!-- Bei Klick wird die Bauteil-Liste für den jeweiligen Bereich gezeigt -->
         <button class="btn" onclick="zeigeBauteile('Neubau')">Neubau</button>
         <button class="btn" onclick="zeigeBauteile('Umbau')">Umbau</button>
     </div>
 </div>
 
-<!-- Bauteil Liste -->
-<div id="bauteilSeite" class="seite">
+<!-- ========== BAUTEIL LISTE ========== -->
+<!-- Zeigt alle verfügbaren Bauteile --> <div id="bauteilSeite" class="seite">
     <button class="zuruck" onclick="zeige('startseite')">← Zurück</button>
     <h2 id="bereichTitel"></h2>
     <div class="bauteil-liste">
+        <!-- Erstes Bauteil: Geschwindigkeitsbegrenzerseil -->
         <button class="bauteil-btn" onclick="zeigeBauteil('Geschwindigkeitsbegrenzerseil')">
             🔩 Geschwindigkeitsbegrenzerseil
         </button>
     </div>
 </div>
 
-<!-- Bauteil Detail -->
-<div id="detailSeite" class="seite">
+<!-- ========== BAUTEIL DETAIL SEITE ========== -->
+<!-- Zeigt die drei Bereiche: Prüfung, Dokumente, Berechnung --> <div id="detailSeite" class="seite">
     <button class="zuruck" onclick="zeige('bauteilSeite')">← Zurück</button>
     <h2 id="bauteilTitel"></h2>
+
+    <!-- Die drei Reiter -->
     <div class="tabs">
-        <button class="tab aktiv" onclick="zeigeTab('pruefung')">📋 Prüfung vor Ort</button>
-        <button class="tab" onclick="zeigeTab('dokumente')">📄 Dokumente</button>
-        <button class="tab" onclick="zeigeTab('berechnung')">🔢 Berechnung</button>
+        <button class="tab aktiv" onclick="zeigeTab(this, 'pruefung')">📋 Prüfung vor Ort</button>
+        <button class="tab" onclick="zeigeTab(this, 'dokumente')">📄 Dokumente</button>
+        <button class="tab" onclick="zeigeTab(this, 'berechnung')">🔢 Berechnung</button>
     </div>
+
+    <!-- ========== PRÜFUNG VOR ORT ========== -->
     <div id="pruefung" class="tab-inhalt aktiv">
-        <h3>Prüfung vor Ort</h3>
-        <p>Hier kommen die Prüfschritte für das Geschwindigkeitsbegrenzerseil...</p>
+
+        <!-- FRAGE 1: Verhältnis Begrenzerseil / Rollendurchmesser -->
+        <div class="frage" id="frage1">
+            <h3>1. Ist das Verhältnis von Begrenzerseil und Rollendurchmesser 1:30?</h3>
+            <div class="antwort-gruppe">
+                <!-- Grüner Button: Alles in Ordnung -->
+                <button class="antwort-btn passt" onclick="antwort(this, 'frage1')">🟢 Passt</button>
+                <!-- Roter Button: Mangel vorhanden -->
+                <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage1')">🔴 Passt nicht</button>
+                <!-- Grauer Button: Nicht relevant für diese Prüfung -->
+                <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage1')">⚪ Irrelevant</button>
+            </div>
+            <!-- Mangelfeld erscheint nur wenn "Passt nicht" gewählt wird -->
+            <div class="mangelfeld" id="mangel-frage1">
+                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+                <label>Bitte Mangel beschreiben:</label>
+                <textarea placeholder="Beschreibung des Mangels..."></textarea>
+            </div>
+        </div>
+
+        <!-- FRAGE 2: Mindestbruchkraft -->
+        <div class="frage" id="frage2">
+            <h3>2. Beträgt die Mindestbruchkraft das Achtfache der Zugkraft der Fangvorrichtung?</h3>
+            <div class="antwort-gruppe">
+                <button class="antwort-btn passt" onclick="antwort(this, 'frage2')">🟢 Passt</button>
+                <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage2')">🔴 Passt nicht</button>
+                <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage2')">⚪ Irrelevant</button>
+            </div>
+            <!-- Mangelfeld erscheint nur wenn "Passt nicht" gewählt wird -->
+            <div class="mangelfeld" id="mangel-frage2">
+                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+                <label>Bitte Mangel beschreiben:</label>
+                <textarea placeholder="Beschreibung des Mangels..."></textarea>
+            </div>
+        </div>
+
     </div>
+
+    <!-- ========== DOKUMENTE ========== -->
     <div id="dokumente" class="tab-inhalt">
         <h3>Dokumente</h3>
         <p>Hier kommen relevante Dokumente und Normen...</p>
     </div>
+
+    <!-- ========== BERECHNUNG ========== -->
     <div id="berechnung" class="tab-inhalt">
         <h3>Berechnung</h3>
         <p>Hier kommen die Berechnungen...</p>
@@ -145,31 +265,86 @@
 </div>
 
 <script>
+    /**
+     * Funktion: zeige
+     * Zweck: Versteckt alle Seiten und zeigt nur die gewünschte Seite
+     * Parameter: id = ID der Seite die angezeigt werden soll
+     */
     function zeige(id) {
+        // Alle Seiten und Startseite verstecken
         document.querySelectorAll('.startseite, .seite').forEach(el => {
-            el.classList.remove('aktiv');
             el.style.display = 'none';
         });
+        // Gewünschte Seite anzeigen
         const el = document.getElementById(id);
         if (el) { el.style.display = id === 'startseite' ? 'flex' : 'block'; }
     }
 
+    /**
+     * Funktion: zeigeBauteile
+     * Zweck: Zeigt die Bauteil-Liste für den gewählten Bereich
+     * Parameter: bereich = "Neubau" oder "Umbau"
+     */
     function zeigeBauteile(bereich) {
+        // Setzt den Titel auf den gewählten Bereich
         document.getElementById('bereichTitel').innerText = bereich;
+        // Wechselt zur Bauteil-Liste
         zeige('bauteilSeite');
     }
 
+    /**
+     * Funktion: zeigeBauteil
+     * Zweck: Öffnet die Detail-Seite für ein bestimmtes Bauteil
+     * Parameter: name = Name des Bauteils
+     */
     function zeigeBauteil(name) {
+        // Setzt den Titel auf den Bauteilnamen
         document.getElementById('bauteilTitel').innerText = name;
+        // Wechselt zur Detail-Seite
         zeige('detailSeite');
-        zeigeTab('pruefung');
+        // Zeigt standardmäßig den Prüfung-Tab
+        document.querySelector('.tab.aktiv')?.classList.remove('aktiv');
+        document.querySelector('.tab').classList.add('aktiv');
+        document.querySelectorAll('.tab-inhalt').forEach(el => el.classList.remove('aktiv'));
+        document.getElementById('pruefung').classList.add('aktiv');
     }
 
-    function zeigeTab(tab) {
-        document.querySelectorAll('.tab-inhalt').forEach(el => el.classList.remove('aktiv'));
+    /**
+     * Funktion: zeigeTab
+     * Zweck: Wechselt zwischen den drei Reitern Prüfung/Dokumente/Berechnung
+     * Parameter: btn = der geklickte Tab-Button, tabId = ID des Tab-Inhalts
+     */
+    function zeigeTab(btn, tabId) {
+        // Alle Tabs deaktivieren
         document.querySelectorAll('.tab').forEach(el => el.classList.remove('aktiv'));
-        document.getElementById(tab).classList.add('aktiv');
-        event.target.classList.add('aktiv');
+        document.querySelectorAll('.tab-inhalt').forEach(el => el.classList.remove('aktiv'));
+        // Gewählten Tab aktivieren
+        btn.classList.add('aktiv');
+        document.getElementById(tabId).classList.add('aktiv');
+    }
+
+    /**
+     * Funktion: antwort
+     * Zweck: Verarbeitet die Antwort auf eine Prüffrage
+     * Parameter: btn = geklickter Antwort-Button, frageId = ID der Frage
+     */
+    function antwort(btn, frageId) {
+        // Alle Antwort-Buttons der Frage deaktivieren
+        const frage = document.getElementById(frageId);
+        frage.querySelectorAll('.antwort-btn').forEach(el => el.classList.remove('aktiv'));
+        
+        // Gewählten Button aktivieren
+        btn.classList.add('aktiv');
+
+        // Mangelfeld anzeigen oder verstecken
+        const mangelfeld = document.getElementById('mangel-' + frageId);
+        if (btn.classList.contains('passt-nicht')) {
+            // "Passt nicht" gewählt - Mangelfeld einblenden
+            mangelfeld.style.display = 'block';
+        } else {
+            // Andere Antwort - Mangelfeld ausblenden
+            mangelfeld.style.display = 'none';
+        }
     }
 </script>
 
