@@ -5,41 +5,173 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aufzug-App</title>
     <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
+            background-color: #f0f4f8;
         }
-        h1 {
+        header {
+            background-color: #0057a8;
+            color: white;
             text-align: center;
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .startseite {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 60px;
+            gap: 20px;
+        }
+        .startseite h2 {
             color: #333;
+            font-size: 20px;
         }
         .auswahl {
             display: flex;
-            justify-content: center;
             gap: 20px;
-            margin-top: 40px;
+            margin-top: 20px;
         }
         .btn {
             background-color: #0057a8;
             color: white;
-            padding: 20px 40px;
+            padding: 25px 50px;
             font-size: 20px;
             border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .btn:hover { background-color: #003f7f; }
+
+        /* Bauteil Seite */
+        .seite { display: none; padding: 20px; }
+        .seite.aktiv { display: block; }
+        .zuruck {
+            background-color: #888;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        .bauteil-liste {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .bauteil-btn {
+            background-color: white;
+            border: 2px solid #0057a8;
+            color: #0057a8;
+            padding: 20px;
+            font-size: 18px;
             border-radius: 10px;
             cursor: pointer;
+            text-align: left;
         }
-        .btn:hover {
-            background-color: #003f7f;
+        .bauteil-btn:hover { background-color: #e8f0fb; }
+
+        /* Detail Seite */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            margin-bottom: 20px;
         }
+        .tab {
+            background-color: #ddd;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .tab.aktiv { background-color: #0057a8; color: white; }
+        .tab-inhalt { display: none; }
+        .tab-inhalt.aktiv { display: block; background: white; padding: 20px; border-radius: 10px; }
     </style>
 </head>
 <body>
-    <h1>Aufzug-App</h1>
+
+<header>🛗 Aufzug-App</header>
+
+<!-- Startseite -->
+<div id="startseite" class="startseite">
+    <h2>Bitte wählen Sie einen Bereich:</h2>
     <div class="auswahl">
-        <button class="btn">Neubau</button>
-        <button class="btn">Umbau</button>
+        <button class="btn" onclick="zeigeBauteile('Neubau')">Neubau</button>
+        <button class="btn" onclick="zeigeBauteile('Umbau')">Umbau</button>
     </div>
+</div>
+
+<!-- Bauteil Liste -->
+<div id="bauteilSeite" class="seite">
+    <button class="zuruck" onclick="zeige('startseite')">← Zurück</button>
+    <h2 id="bereichTitel"></h2>
+    <div class="bauteil-liste">
+        <button class="bauteil-btn" onclick="zeigeBauteil('Geschwindigkeitsbegrenzerseil')">
+            🔩 Geschwindigkeitsbegrenzerseil
+        </button>
+    </div>
+</div>
+
+<!-- Bauteil Detail -->
+<div id="detailSeite" class="seite">
+    <button class="zuruck" onclick="zeige('bauteilSeite')">← Zurück</button>
+    <h2 id="bauteilTitel"></h2>
+    <div class="tabs">
+        <button class="tab aktiv" onclick="zeigeTab('pruefung')">📋 Prüfung vor Ort</button>
+        <button class="tab" onclick="zeigeTab('dokumente')">📄 Dokumente</button>
+        <button class="tab" onclick="zeigeTab('berechnung')">🔢 Berechnung</button>
+    </div>
+    <div id="pruefung" class="tab-inhalt aktiv">
+        <h3>Prüfung vor Ort</h3>
+        <p>Hier kommen die Prüfschritte für das Geschwindigkeitsbegrenzerseil...</p>
+    </div>
+    <div id="dokumente" class="tab-inhalt">
+        <h3>Dokumente</h3>
+        <p>Hier kommen relevante Dokumente und Normen...</p>
+    </div>
+    <div id="berechnung" class="tab-inhalt">
+        <h3>Berechnung</h3>
+        <p>Hier kommen die Berechnungen...</p>
+    </div>
+</div>
+
+<script>
+    function zeige(id) {
+        document.querySelectorAll('.startseite, .seite').forEach(el => {
+            el.classList.remove('aktiv');
+            el.style.display = 'none';
+        });
+        const el = document.getElementById(id);
+        if (el) { el.style.display = id === 'startseite' ? 'flex' : 'block'; }
+    }
+
+    function zeigeBauteile(bereich) {
+        document.getElementById('bereichTitel').innerText = bereich;
+        zeige('bauteilSeite');
+    }
+
+    function zeigeBauteil(name) {
+        document.getElementById('bauteilTitel').innerText = name;
+        zeige('detailSeite');
+        zeigeTab('pruefung');
+    }
+
+    function zeigeTab(tab) {
+        document.querySelectorAll('.tab-inhalt').forEach(el => el.classList.remove('aktiv'));
+        document.querySelectorAll('.tab').forEach(el => el.classList.remove('aktiv'));
+        document.getElementById(tab).classList.add('aktiv');
+        event.target.classList.add('aktiv');
+    }
+</script>
+
 </body>
 </html>
