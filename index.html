@@ -1,283 +1,373 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <!-- ========== KOPFBEREICH ========== -->
-    <!-- Zeichensatz und Darstellung für mobile Geräte -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aufzug-App</title>
-    <style>
+<!DOCTYPE html> <!-- Gibt dem Browser an dass dies eine HTML5 Seite ist --> <html lang="de"> <!-- Startet die HTML Seite, Sprache ist Deutsch --> <head> <!-- Kopfbereich - hier stehen Einstellungen die der Benutzer nicht sieht -->
+    <meta charset="UTF-8"> <!-- Ermöglicht deutsche Sonderzeichen wie ä,ö,ü -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Macht die App auf dem Handy richtig darstellbar -->
+    <title>Aufzug-App</title> <!-- Name der App der oben im Browser Tab erscheint -->
+    <style> <!-- Hier beginnen alle Design Einstellungen -->
+
         /* ========== GRUNDEINSTELLUNGEN ========== */
-        /* Gilt für alle Elemente - kein Abstand, keine Außenränder */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        /* Schrift und Hintergrundfarbe der gesamten App */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f4f8;
+        * { /* Gilt für ALLE Elemente auf der Seite */
+            box-sizing: border-box; /* Abstände werden innerhalb des Elements berechnet */
+            margin: 0; /* Kein Außenabstand */
+            padding: 0; /* Kein Innenabstand */
+        }
+
+        body { /* Grundeinstellungen für die gesamte Seite */
+            font-family: Arial, sans-serif; /* Schriftart für die gesamte App */
+            background-color: #f0f4f8; /* Hellblauer Hintergrund */
         }
 
         /* ========== KOPFZEILE ========== */
-        /* Blaue Kopfzeile oben */
-        header {
-            background-color: #0057a8;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            font-size: 24px;
-            font-weight: bold;
+        header { /* Blaue Leiste ganz oben */
+            background-color: #0057a8; /* Blaue Hintergrundfarbe */
+            color: white; /* Weiße Schrift */
+            text-align: center; /* Text mittig ausrichten */
+            padding: 20px; /* Innenabstand oben/unten/links/rechts */
+            font-size: 24px; /* Schriftgröße */
+            font-weight: bold; /* Fettschrift */
         }
 
         /* ========== STARTSEITE ========== */
-        /* Zentriert die Buttons auf der Startseite */
-        .startseite {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 60px;
-            gap: 20px;
+        .startseite { /* Container für die Startseite */
+            display: flex; /* Flexbox Layout */
+            flex-direction: column; /* Elemente untereinander */
+            align-items: center; /* Horizontal zentrieren */
+            margin-top: 60px; /* Abstand nach oben */
+            gap: 20px; /* Abstand zwischen Elementen */
         }
 
-        /* Überschrift auf der Startseite */
-        .startseite h2 { color: #333; font-size: 20px; }
-
-        /* Bereich für die zwei Hauptbuttons */
-        .auswahl { display: flex; gap: 20px; margin-top: 20px; }
-
-        /* ========== BUTTONS ========== */
-        /* Hauptbuttons Neubau/Umbau */
-        .btn {
-            background-color: #0057a8;
-            color: white;
-            padding: 25px 50px;
-            font-size: 20px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        .startseite h2 { /* Überschrift auf der Startseite */
+            color: #333; /* Dunkelgraue Schrift */
+            font-size: 20px; /* Schriftgröße */
         }
-        .btn:hover { background-color: #003f7f; }
+
+        .auswahl { /* Container für die zwei Hauptbuttons */
+            display: flex; /* Buttons nebeneinander */
+            gap: 20px; /* Abstand zwischen Buttons */
+            margin-top: 20px; /* Abstand nach oben */
+        }
+
+        /* ========== HAUPTBUTTONS ========== */
+        .btn { /* Neubau und Umbau Buttons */
+            background-color: #0057a8; /* Blaue Hintergrundfarbe */
+            color: white; /* Weiße Schrift */
+            padding: 25px 50px; /* Innenabstand */
+            font-size: 20px; /* Schriftgröße */
+            border: none; /* Kein Rahmen */
+            border-radius: 12px; /* Abgerundete Ecken */
+            cursor: pointer; /* Hand Cursor */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Schatten */
+        }
+        .btn:hover { background-color: #003f7f; } /* Dunkleres Blau beim Darüberfahren */
 
         /* ========== SEITEN NAVIGATION ========== */
-        /* Alle Unterseiten sind standardmäßig versteckt */
-        .seite { display: none; padding: 20px; }
-        .seite.aktiv { display: block; }
+        .seite { /* Alle Unterseiten */
+            display: none; /* Standardmäßig versteckt */
+            padding: 20px; /* Innenabstand */
+        }
+        .seite.aktiv { display: block; } /* Aktive Seite wird angezeigt */
 
-        /* Zurück Button */
-        .zuruck {
-            background-color: #888;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-bottom: 20px;
-            font-size: 16px;
+        .zuruck { /* Zurück Button */
+            background-color: #888; /* Grauer Hintergrund */
+            color: white; /* Weiße Schrift */
+            border: none; /* Kein Rahmen */
+            padding: 10px 20px; /* Innenabstand */
+            border-radius: 8px; /* Abgerundete Ecken */
+            cursor: pointer; /* Hand Cursor */
+            margin-bottom: 20px; /* Abstand nach unten */
+            font-size: 16px; /* Schriftgröße */
         }
 
         /* ========== BAUTEIL LISTE ========== */
-        /* Liste der Bauteile untereinander */
-        .bauteil-liste {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-top: 20px;
+        .bauteil-liste { /* Container für alle Bauteil Buttons */
+            display: flex; /* Flexbox Layout */
+            flex-direction: column; /* Buttons untereinander */
+            gap: 15px; /* Abstand zwischen Buttons */
+            margin-top: 20px; /* Abstand nach oben */
         }
 
-        /* Einzelner Bauteil Button */
-        .bauteil-btn {
-            background-color: white;
-            border: 2px solid #0057a8;
-            color: #0057a8;
-            padding: 20px;
-            font-size: 18px;
-            border-radius: 10px;
-            cursor: pointer;
-            text-align: left;
+        .bauteil-btn { /* Einzelner Bauteil Button */
+            background-color: white; /* Weißer Hintergrund */
+            border: 2px solid #0057a8; /* Blauer Rahmen */
+            color: #0057a8; /* Blaue Schrift */
+            padding: 20px; /* Innenabstand */
+            font-size: 18px; /* Schriftgröße */
+            border-radius: 10px; /* Abgerundete Ecken */
+            cursor: pointer; /* Hand Cursor */
+            text-align: left; /* Text linksbündig */
         }
-        .bauteil-btn:hover { background-color: #e8f0fb; }
+        .bauteil-btn:hover { background-color: #e8f0fb; } /* Helles Blau beim Darüberfahren */
 
         /* ========== TABS ========== */
-        /* Die drei Reiter: Prüfung, Dokumente, Berechnung */
-        .tabs { display: flex; gap: 10px; margin-top: 20px; margin-bottom: 20px; }
-        .tab {
-            background-color: #ddd;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
+        .tabs { /* Container für die drei Reiter */
+            display: flex; /* Reiter nebeneinander */
+            gap: 10px; /* Abstand zwischen Reitern */
+            margin-top: 20px; /* Abstand nach oben */
+            margin-bottom: 20px; /* Abstand nach unten */
         }
-        .tab.aktiv { background-color: #0057a8; color: white; }
-        .tab-inhalt { display: none; }
-        .tab-inhalt.aktiv { display: block; background: white; padding: 20px; border-radius: 10px; }
+        .tab { /* Einzelner Reiter Button */
+            background-color: #ddd; /* Grauer Hintergrund */
+            border: none; /* Kein Rahmen */
+            padding: 12px 20px; /* Innenabstand */
+            border-radius: 8px; /* Abgerundete Ecken */
+            cursor: pointer; /* Hand Cursor */
+            font-size: 16px; /* Schriftgröße */
+        }
+        .tab.aktiv { /* Aktiver Reiter */
+            background-color: #0057a8; /* Blauer Hintergrund */
+            color: white; /* Weiße Schrift */
+        }
+        .tab-inhalt { display: none; } /* Tab Inhalt standardmäßig versteckt */
+        .tab-inhalt.aktiv { /* Aktiver Tab Inhalt */
+            display: block; /* Wird angezeigt */
+            background: white; /* Weißer Hintergrund */
+            padding: 20px; /* Innenabstand */
+            border-radius: 10px; /* Abgerundete Ecken */
+        }
 
         /* ========== PRÜFFRAGEN ========== */
-        /* Einzelne Prüffrage */
-        .frage {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
+        .frage { /* Container für eine einzelne Prüffrage */
+            background: white; /* Weißer Hintergrund */
+            border: 1px solid #ddd; /* Grauer Rahmen */
+            border-radius: 10px; /* Abgerundete Ecken */
+            padding: 20px; /* Innenabstand */
+            margin-bottom: 20px; /* Abstand zur nächsten Frage */
         }
 
-        /* Fragetext */
-        .frage h3 { color: #0057a8; margin-bottom: 15px; font-size: 16px; }
-
-        /* Antwort Buttons */
-        .antwort-gruppe { display: flex; gap: 10px; flex-wrap: wrap; }
-        .antwort-btn {
-            padding: 10px 20px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 15px;
-            background: white;
+        .frage h3 { /* Fragetext */
+            color: #0057a8; /* Blaue Schrift */
+            margin-bottom: 15px; /* Abstand nach unten */
+            font-size: 16px; /* Schriftgröße */
         }
 
-        /* Farben für die drei Antwortmöglichkeiten */
-        .antwort-btn.passt { border-color: #28a745; color: #28a745; }
-        .antwort-btn.passt.aktiv { background-color: #28a745; color: white; }
-        .antwort-btn.passt-nicht { border-color: #dc3545; color: #dc3545; }
-        .antwort-btn.passt-nicht.aktiv { background-color: #dc3545; color: white; }
-        .antwort-btn.irrelevant { border-color: #888; color: #888; }
-        .antwort-btn.irrelevant.aktiv { background-color: #888; color: white; }
+        /* ========== JA/NEIN FRAGEN ========== */
+        .ja-nein-gruppe { /* Container für Ja/Nein Buttons */
+            display: flex; /* Buttons nebeneinander */
+            gap: 10px; /* Abstand zwischen Buttons */
+        }
+
+        .ja-btn { /* Ja Button */
+            padding: 10px 30px; /* Innenabstand */
+            border: 2px solid #28a745; /* Grüner Rahmen */
+            border-radius: 8px; /* Abgerundete Ecken */
+            cursor: pointer; /* Hand Cursor */
+            font-size: 15px; /* Schriftgröße */
+            background: white; /* Weißer Hintergrund */
+            color: #28a745; /* Grüne Schrift */
+        }
+        .ja-btn.aktiv { /* Ja Button wenn ausgewählt */
+            background-color: #28a745; /* Grüner Hintergrund */
+            color: white; /* Weiße Schrift */
+        }
+
+        .nein-btn { /* Nein Button */
+            padding: 10px 30px; /* Innenabstand */
+            border: 2px solid #dc3545; /* Roter Rahmen */
+            border-radius: 8px; /* Abgerundete Ecken */
+            cursor: pointer; /* Hand Cursor */
+            font-size: 15px; /* Schriftgröße */
+            background: white; /* Weißer Hintergrund */
+            color: #dc3545; /* Rote Schrift */
+        }
+        .nein-btn.aktiv { /* Nein Button wenn ausgewählt */
+            background-color: #dc3545; /* Roter Hintergrund */
+            color: white; /* Weiße Schrift */
+        }
+
+        /* ========== ANTWORT BUTTONS ========== */
+        .antwort-gruppe { /* Container für die drei Antwort Buttons */
+            display: flex; /* Buttons nebeneinander */
+            gap: 10px; /* Abstand zwischen Buttons */
+            flex-wrap: wrap; /* Umbrechen auf kleinen Bildschirmen */
+        }
+        .antwort-btn { /* Einzelner Antwort Button */
+            padding: 10px 20px; /* Innenabstand */
+            border: 2px solid #ddd; /* Grauer Rahmen */
+            border-radius: 8px; /* Abgerundete Ecken */
+            cursor: pointer; /* Hand Cursor */
+            font-size: 15px; /* Schriftgröße */
+            background: white; /* Weißer Hintergrund */
+        }
+        .antwort-btn.passt { border-color: #28a745; color: #28a745; } /* Passt - grüner Rahmen */
+        .antwort-btn.passt.aktiv { background-color: #28a745; color: white; } /* Passt aktiv - grüner Hintergrund */
+        .antwort-btn.passt-nicht { border-color: #dc3545; color: #dc3545; } /* Passt nicht - roter Rahmen */
+        .antwort-btn.passt-nicht.aktiv { background-color: #dc3545; color: white; } /* Passt nicht aktiv - roter Hintergrund */
+        .antwort-btn.irrelevant { border-color: #888; color: #888; } /* Irrelevant - grauer Rahmen */
+        .antwort-btn.irrelevant.aktiv { background-color: #888; color: white; } /* Irrelevant aktiv - grauer Hintergrund */
 
         /* ========== MANGELFELD ========== */
-        /* Erscheint nur wenn "Passt nicht" gewählt wird */
-        .mangelfeld {
-            display: none;
-            margin-top: 15px;
-            padding: 15px;
-            background: #fff3f3;
-            border: 1px solid #dc3545;
-            border-radius: 8px;
+        .mangelfeld { /* Bereich der bei "Passt nicht" erscheint */
+            display: none; /* Standardmäßig versteckt */
+            margin-top: 15px; /* Abstand nach oben */
+            padding: 15px; /* Innenabstand */
+            background: #fff3f3; /* Heller roter Hintergrund */
+            border: 1px solid #dc3545; /* Roter Rahmen */
+            border-radius: 8px; /* Abgerundete Ecken */
         }
-        .mangelfeld textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 15px;
-            margin-top: 10px;
-            min-height: 80px;
+        .mangelfeld textarea { /* Textfeld für Mangelbeschreibung */
+            width: 100%; /* Volle Breite */
+            padding: 10px; /* Innenabstand */
+            border: 1px solid #ddd; /* Grauer Rahmen */
+            border-radius: 6px; /* Abgerundete Ecken */
+            font-size: 15px; /* Schriftgröße */
+            margin-top: 10px; /* Abstand nach oben */
+            min-height: 80px; /* Mindesthöhe */
+        }
+        .mangel-hinweis { /* Roter Warnhinweis */
+            color: #dc3545; /* Rote Schrift */
+            font-weight: bold; /* Fettschrift */
+            margin-bottom: 8px; /* Abstand nach unten */
         }
 
-        /* ========== MANGEL WARNUNG ========== */
-        .mangel-hinweis {
-            color: #dc3545;
-            font-weight: bold;
-            margin-bottom: 8px;
+        /* ========== MESSWERT EINGABE ========== */
+        .messwert-gruppe { /* Container für Messwert Eingabe */
+            display: flex; /* Elemente nebeneinander */
+            align-items: center; /* Vertikal zentrieren */
+            gap: 10px; /* Abstand zwischen Elementen */
+            margin-top: 10px; /* Abstand nach oben */
         }
+        .messwert-gruppe input { /* Eingabefeld für Messwert */
+            padding: 10px; /* Innenabstand */
+            border: 2px solid #0057a8; /* Blauer Rahmen */
+            border-radius: 8px; /* Abgerundete Ecken */
+            font-size: 16px; /* Schriftgröße */
+            width: 150px; /* Breite des Eingabefeldes */
+        }
+        .messwert-gruppe span { /* Einheit neben dem Eingabefeld */
+            font-size: 16px; /* Schriftgröße */
+            color: #333; /* Dunkelgraue Schrift */
+            font-weight: bold; /* Fettschrift */
+        }
+
     </style>
 </head>
-<body>
+<body> <!-- Hier beginnt der sichtbare Inhalt der App -->
 
 <!-- ========== KOPFZEILE ========== -->
-<header>🛗 Aufzug-App</header>
+<header>🛗 Aufzug-App</header> <!-- Blaue Kopfzeile mit App Name -->
 
-<!-- ========== STARTSEITE ========== -->
-<!-- Zeigt die zwei Hauptbereiche Neubau und Umbau --> <div id="startseite" class="startseite">
-    <h2>Bitte wählen Sie einen Bereich:</h2>
-    <div class="auswahl">
-        <!-- Bei Klick wird die Bauteil-Liste für den jeweiligen Bereich gezeigt -->
-        <button class="btn" onclick="zeigeBauteile('Neubau')">Neubau</button>
-        <button class="btn" onclick="zeigeBauteile('Umbau')">Umbau</button>
+<!-- ========== STARTSEITE ========== --> <div id="startseite" class="startseite"> <!-- Container der Startseite -->
+    <h2>Bitte wählen Sie einen Bereich:</h2> <!-- Aufforderung zur Auswahl -->
+    <div class="auswahl"> <!-- Container für die zwei Buttons -->
+        <button class="btn" onclick="zeigeBauteile('Neubau')">Neubau</button> <!-- Neubau Button -->
+        <button class="btn" onclick="zeigeBauteile('Umbau')">Umbau</button> <!-- Umbau Button -->
     </div>
 </div>
 
-<!-- ========== BAUTEIL LISTE ========== -->
-<!-- Zeigt alle verfügbaren Bauteile --> <div id="bauteilSeite" class="seite">
-    <button class="zuruck" onclick="zeige('startseite')">← Zurück</button>
-    <h2 id="bereichTitel"></h2>
-    <div class="bauteil-liste">
-        <!-- Erstes Bauteil: Geschwindigkeitsbegrenzerseil -->
-        <button class="bauteil-btn" onclick="zeigeBauteil('Geschwindigkeitsbegrenzerseil')">
-            🔩 Geschwindigkeitsbegrenzerseil
+<!-- ========== BAUTEIL LISTE ========== --> <div id="bauteilSeite" class="seite"> <!-- Container der Bauteil-Liste -->
+    <button class="zuruck" onclick="zeige('startseite')">← Zurück</button> <!-- Zurück zur Startseite -->
+    <h2 id="bereichTitel"></h2> <!-- Titel wird per JavaScript gesetzt -->
+    <div class="bauteil-liste"> <!-- Liste aller Bauteile -->
+        <button class="bauteil-btn" onclick="zeigeBauteil('Geschwindigkeitsbegrenzerseil')"> <!-- Erstes Bauteil -->
+            🔩 Geschwindigkeitsbegrenzerseil <!-- Name des Bauteils -->
         </button>
     </div>
 </div>
 
-<!-- ========== BAUTEIL DETAIL SEITE ========== -->
-<!-- Zeigt die drei Bereiche: Prüfung, Dokumente, Berechnung --> <div id="detailSeite" class="seite">
-    <button class="zuruck" onclick="zeige('bauteilSeite')">← Zurück</button>
-    <h2 id="bauteilTitel"></h2>
+<!-- ========== BAUTEIL DETAIL SEITE ========== --> <div id="detailSeite" class="seite"> <!-- Container der Detail Seite -->
+    <button class="zuruck" onclick="zeige('bauteilSeite')">← Zurück</button> <!-- Zurück zur Bauteil-Liste -->
+    <h2 id="bauteilTitel"></h2> <!-- Bauteilname wird per JavaScript gesetzt -->
 
     <!-- Die drei Reiter -->
-    <div class="tabs">
-        <button class="tab aktiv" onclick="zeigeTab(this, 'pruefung')">📋 Prüfung vor Ort</button>
-        <button class="tab" onclick="zeigeTab(this, 'dokumente')">📄 Dokumente</button>
-        <button class="tab" onclick="zeigeTab(this, 'berechnung')">🔢 Berechnung</button>
+    <div class="tabs"> <!-- Container für die Reiter -->
+        <button class="tab aktiv" onclick="zeigeTab(this, 'pruefung')">📋 Prüfung vor Ort</button> <!-- Prüfung Reiter -->
+        <button class="tab" onclick="zeigeTab(this, 'dokumente')">📄 Dokumente</button> <!-- Dokumente Reiter -->
+        <button class="tab" onclick="zeigeTab(this, 'berechnung')">🔢 Berechnung</button> <!-- Berechnung Reiter -->
     </div>
 
     <!-- ========== PRÜFUNG VOR ORT ========== -->
-    <div id="pruefung" class="tab-inhalt aktiv">
+    <div id="pruefung" class="tab-inhalt aktiv"> <!-- Prüfung Tab Inhalt - standardmäßig sichtbar -->
 
-        <!-- FRAGE 1: Verhältnis Begrenzerseil / Rollendurchmesser -->
-        <div class="frage" id="frage1">
-            <h3>1. Ist das Verhältnis von Begrenzerseil und Rollendurchmesser 1:30?</h3>
-            <div class="antwort-gruppe">
-                <!-- Grüner Button: Alles in Ordnung -->
-                <button class="antwort-btn passt" onclick="antwort(this, 'frage1')">🟢 Passt</button>
-                <!-- Roter Button: Mangel vorhanden -->
-                <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage1')">🔴 Passt nicht</button>
-                <!-- Grauer Button: Nicht relevant für diese Prüfung -->
-                <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage1')">⚪ Irrelevant</button>
-            </div>
-            <!-- Mangelfeld erscheint nur wenn "Passt nicht" gewählt wird -->
-            <div class="mangelfeld" id="mangel-frage1">
-                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
-                <label>Bitte Mangel beschreiben:</label>
-                <textarea placeholder="Beschreibung des Mangels..."></textarea>
+        <!-- FRAGE 1.0 - Dokument vor Ort - nur Ja/Nein -->
+        <div class="frage" id="frage1_0"> <!-- Container für Frage 1.0 -->
+            <h3>1.0 – Liegt das Dokument zur Ermittlung des Seildurchmessers mit dem Messschieber vor Ort vor?</h3> <!-- Fragetext -->
+            <div class="ja-nein-gruppe"> <!-- Container für Ja/Nein Buttons -->
+                <button class="ja-btn" onclick="jaNein(this, 'frage1_0', 'ja')">✅ Ja</button> <!-- Ja Button -->
+                <button class="nein-btn" onclick="jaNein(this, 'frage1_0', 'nein')">❌ Nein</button> <!-- Nein Button -->
             </div>
         </div>
 
-        <!-- FRAGE 2: Mindestbruchkraft -->
-        <div class="frage" id="frage2">
-            <h3>2. Beträgt die Mindestbruchkraft das Achtfache der Zugkraft der Fangvorrichtung?</h3>
-            <div class="antwort-gruppe">
-                <button class="antwort-btn passt" onclick="antwort(this, 'frage2')">🟢 Passt</button>
-                <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage2')">🔴 Passt nicht</button>
-                <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage2')">⚪ Irrelevant</button>
+        <!-- FRAGE 1.1 - Verhältnis Begrenzerseil / Rollendurchmesser -->
+        <div class="frage" id="frage1_1"> <!-- Container für Frage 1.1 -->
+            <h3>1.1 – Ist das Verhältnis von Begrenzerseil und Rollendurchmesser 1:30?</h3> <!-- Fragetext -->
+            <div class="antwort-gruppe"> <!-- Container für Antwort Buttons -->
+                <button class="antwort-btn passt" onclick="antwort(this, 'frage1_1')">🟢 Passt</button> <!-- Positiv -->
+                <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage1_1')">🔴 Passt nicht</button> <!-- Negativ -->
+                <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage1_1')">⚪ Irrelevant</button> <!-- Nicht relevant -->
             </div>
-            <!-- Mangelfeld erscheint nur wenn "Passt nicht" gewählt wird -->
-            <div class="mangelfeld" id="mangel-frage2">
-                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
-                <label>Bitte Mangel beschreiben:</label>
-                <textarea placeholder="Beschreibung des Mangels..."></textarea>
+            <div class="mangelfeld" id="mangel-frage1_1"> <!-- Mangelfeld erscheint bei "Passt nicht" -->
+                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p> <!-- Warnhinweis -->
+                <label>Bitte Mangel beschreiben:</label> <!-- Beschriftung -->
+                <textarea placeholder="Beschreibung des Mangels..."></textarea> <!-- Textfeld -->
+            </div>
+        </div>
+
+        <!-- FRAGE 1.2 - Mindestbruchkraft -->
+        <div class="frage" id="frage1_2"> <!-- Container für Frage 1.2 -->
+            <h3>1.2 – Beträgt die Mindestbruchkraft das Achtfache der Zugkraft der Fangvorrichtung?</h3> <!-- Fragetext -->
+            <div class="antwort-gruppe"> <!-- Container für Antwort Buttons -->
+                <button class="antwort-btn passt" onclick="antwort(this, 'frage1_2')">🟢 Passt</button> <!-- Positiv -->
+                <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage1_2')">🔴 Passt nicht</button> <!-- Negativ -->
+                <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage1_2')">⚪ Irrelevant</button> <!-- Nicht relevant -->
+            </div>
+            <div class="mangelfeld" id="mangel-frage1_2"> <!-- Mangelfeld erscheint bei "Passt nicht" -->
+                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p> <!-- Warnhinweis -->
+                <label>Bitte Mangel beschreiben:</label> <!-- Beschriftung -->
+                <textarea placeholder="Beschreibung des Mangels..."></textarea> <!-- Textfeld -->
+            </div>
+        </div>
+
+        <!-- FRAGE 1.3 - Durchmesser mit Messschieber erfassen -->
+        <div class="frage" id="frage1_3"> <!-- Container für Frage 1.3 -->
+            <h3>1.3 – Durchmesser mit dem Messschieber erfassen:</h3> <!-- Fragetext -->
+            <div class="messwert-gruppe"> <!-- Container für Eingabefeld -->
+                <input type="number" id="messwert1_3" placeholder="0.00" step="0.01" min="0"> <!-- Zahleneingabe für Messwert -->
+                <span>mm</span> <!-- Einheit Millimeter -->
+            </div>
+        </div>
+
+        <!-- FRAGE 1.4 - Schrauben fest bei Seilklemmen -->
+        <div class="frage" id="frage1_4"> <!-- Container für Frage 1.4 -->
+            <h3>1.4 – Sind die Schrauben fest wenn Seilklemmen (Frosch) verwendet wurden?</h3> <!-- Fragetext -->
+            <div class="antwort-gruppe"> <!-- Container für Antwort Buttons -->
+                <button class="antwort-btn passt" onclick="antwort(this, 'frage1_4')">🟢 Passt</button> <!-- Positiv -->
+                <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage1_4')">🔴 Passt nicht</button> <!-- Negativ -->
+                <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage1_4')">⚪ Irrelevant</button> <!-- Nicht relevant -->
+            </div>
+            <div class="mangelfeld" id="mangel-frage1_4"> <!-- Mangelfeld erscheint bei "Passt nicht" -->
+                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p> <!-- Warnhinweis -->
+                <label>Bitte Mangel beschreiben:</label> <!-- Beschriftung -->
+                <textarea placeholder="Beschreibung des Mangels..."></textarea> <!-- Textfeld -->
             </div>
         </div>
 
     </div>
 
     <!-- ========== DOKUMENTE ========== -->
-    <div id="dokumente" class="tab-inhalt">
-        <h3>Dokumente</h3>
-        <p>Hier kommen relevante Dokumente und Normen...</p>
+    <div id="dokumente" class="tab-inhalt"> <!-- Dokumente Tab Inhalt -->
+        <h3>Dokumente</h3> <!-- Überschrift -->
+        <p>Hier kommen relevante Dokumente und Normen...</p> <!-- Platzhalter -->
     </div>
 
     <!-- ========== BERECHNUNG ========== -->
-    <div id="berechnung" class="tab-inhalt">
-        <h3>Berechnung</h3>
-        <p>Hier kommen die Berechnungen...</p>
+    <div id="berechnung" class="tab-inhalt"> <!-- Berechnung Tab Inhalt -->
+        <h3>Berechnung</h3> <!-- Überschrift -->
+        <p>Hier kommen die Berechnungen...</p> <!-- Platzhalter -->
     </div>
 </div>
 
-<script>
+<script> <!-- Hier beginnt der JavaScript Bereich -->
+
     /**
      * Funktion: zeige
      * Zweck: Versteckt alle Seiten und zeigt nur die gewünschte Seite
      * Parameter: id = ID der Seite die angezeigt werden soll
      */
     function zeige(id) {
-        // Alle Seiten und Startseite verstecken
-        document.querySelectorAll('.startseite, .seite').forEach(el => {
-            el.style.display = 'none';
+        document.querySelectorAll('.startseite, .seite').forEach(el => { /* Alle Seiten auswählen */
+            el.style.display = 'none'; /* Alle Seiten verstecken */
         });
-        // Gewünschte Seite anzeigen
-        const el = document.getElementById(id);
-        if (el) { el.style.display = id === 'startseite' ? 'flex' : 'block'; }
+        const el = document.getElementById(id); /* Gewünschte Seite auswählen */
+        if (el) { el.style.display = id === 'startseite' ? 'flex' : 'block'; } /* Startseite als flex, andere als block anzeigen */
     }
 
     /**
@@ -286,10 +376,8 @@
      * Parameter: bereich = "Neubau" oder "Umbau"
      */
     function zeigeBauteile(bereich) {
-        // Setzt den Titel auf den gewählten Bereich
-        document.getElementById('bereichTitel').innerText = bereich;
-        // Wechselt zur Bauteil-Liste
-        zeige('bauteilSeite');
+        document.getElementById('bereichTitel').innerText = bereich; /* Titel auf Neubau oder Umbau setzen */
+        zeige('bauteilSeite'); /* Zur Bauteil-Liste wechseln */
     }
 
     /**
@@ -298,55 +386,56 @@
      * Parameter: name = Name des Bauteils
      */
     function zeigeBauteil(name) {
-        // Setzt den Titel auf den Bauteilnamen
-        document.getElementById('bauteilTitel').innerText = name;
-        // Wechselt zur Detail-Seite
-        zeige('detailSeite');
-        // Zeigt standardmäßig den Prüfung-Tab
-        document.querySelector('.tab.aktiv')?.classList.remove('aktiv');
-        document.querySelector('.tab').classList.add('aktiv');
-        document.querySelectorAll('.tab-inhalt').forEach(el => el.classList.remove('aktiv'));
-        document.getElementById('pruefung').classList.add('aktiv');
+        document.getElementById('bauteilTitel').innerText = name; /* Titel auf Bauteilnamen setzen */
+        zeige('detailSeite'); /* Zur Detail-Seite wechseln */
+        document.querySelector('.tab.aktiv')?.classList.remove('aktiv'); /* Aktiven Tab deaktivieren */
+        document.querySelector('.tab').classList.add('aktiv'); /* Ersten Tab aktivieren */
+        document.querySelectorAll('.tab-inhalt').forEach(el => el.classList.remove('aktiv')); /* Alle Tab Inhalte verstecken */
+        document.getElementById('pruefung').classList.add('aktiv'); /* Prüfung Tab anzeigen */
     }
 
     /**
      * Funktion: zeigeTab
-     * Zweck: Wechselt zwischen den drei Reitern Prüfung/Dokumente/Berechnung
-     * Parameter: btn = der geklickte Tab-Button, tabId = ID des Tab-Inhalts
+     * Zweck: Wechselt zwischen den drei Reitern
+     * Parameter: btn = geklickter Tab Button, tabId = ID des Tab Inhalts
      */
     function zeigeTab(btn, tabId) {
-        // Alle Tabs deaktivieren
-        document.querySelectorAll('.tab').forEach(el => el.classList.remove('aktiv'));
-        document.querySelectorAll('.tab-inhalt').forEach(el => el.classList.remove('aktiv'));
-        // Gewählten Tab aktivieren
-        btn.classList.add('aktiv');
-        document.getElementById(tabId).classList.add('aktiv');
+        document.querySelectorAll('.tab').forEach(el => el.classList.remove('aktiv')); /* Alle Tabs deaktivieren */
+        document.querySelectorAll('.tab-inhalt').forEach(el => el.classList.remove('aktiv')); /* Alle Tab Inhalte verstecken */
+        btn.classList.add('aktiv'); /* Gewählten Tab aktivieren */
+        document.getElementById(tabId).classList.add('aktiv'); /* Gewählten Tab Inhalt anzeigen */
     }
 
     /**
      * Funktion: antwort
-     * Zweck: Verarbeitet die Antwort auf eine Prüffrage
-     * Parameter: btn = geklickter Antwort-Button, frageId = ID der Frage
+     * Zweck: Verarbeitet die Antwort auf eine Prüffrage mit drei Optionen
+     * Parameter: btn = geklickter Antwort Button, frageId = ID der Frage
      */
     function antwort(btn, frageId) {
-        // Alle Antwort-Buttons der Frage deaktivieren
-        const frage = document.getElementById(frageId);
-        frage.querySelectorAll('.antwort-btn').forEach(el => el.classList.remove('aktiv'));
-        
-        // Gewählten Button aktivieren
-        btn.classList.add('aktiv');
-
-        // Mangelfeld anzeigen oder verstecken
-        const mangelfeld = document.getElementById('mangel-' + frageId);
-        if (btn.classList.contains('passt-nicht')) {
-            // "Passt nicht" gewählt - Mangelfeld einblenden
-            mangelfeld.style.display = 'block';
-        } else {
-            // Andere Antwort - Mangelfeld ausblenden
-            mangelfeld.style.display = 'none';
+        const frage = document.getElementById(frageId); /* Frage Container auswählen */
+        frage.querySelectorAll('.antwort-btn').forEach(el => el.classList.remove('aktiv')); /* Alle Buttons deaktivieren */
+        btn.classList.add('aktiv'); /* Gewählten Button aktivieren */
+        const mangelfeld = document.getElementById('mangel-' + frageId); /* Mangelfeld auswählen */
+        if (btn.classList.contains('passt-nicht')) { /* Wenn "Passt nicht" gewählt */
+            mangelfeld.style.display = 'block'; /* Mangelfeld einblenden */
+        } else { /* Andere Antwort gewählt */
+            mangelfeld.style.display = 'none'; /* Mangelfeld ausblenden */
         }
     }
-</script>
 
-</body>
-</html>
+    /**
+     * Funktion: jaNein
+     * Zweck: Verarbeitet Ja/Nein Fragen
+     * Parameter: btn = geklickter Button, frageId = ID der Frage, antwort = "ja" oder "nein"
+     */
+    function jaNein(btn, frageId, antwortWert) {
+        const frage = document.getElementById(frageId); /* Frage Container auswählen */
+        frage.querySelectorAll('.ja-btn, .nein-btn').forEach(el => el.classList.remove('aktiv')); /* Alle Buttons deaktivieren */
+        btn.classList.add('aktiv'); /* Gewählten Button aktivieren */
+    }
+
+</script> <!-- Ende des JavaScript Bereichs -->
+
+</body> <!-- Ende des sichtbaren Inhalts --> </html> <!-- Ende der HTML Seite -->
+
+
