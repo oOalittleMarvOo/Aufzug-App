@@ -2,6 +2,7 @@
     <meta charset="UTF-8"> <!-- Ermöglicht deutsche Sonderzeichen wie ä,ö,ü -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Macht die App auf dem Handy richtig darstellbar -->
     <title>Aufzug-App</title> <!-- Name der App der oben im Browser Tab erscheint -->
+    <script src="https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcdnjs.cloudflare.com%2Fajax%2Flibs%2Fjspdf%2F2.5.1%2Fjspdf.umd.min.js&data=05%7C02%7Csteffen.pahl%40de.tuv.com%7C759367cf9af346f9869108de76e7d7b9%7C255bd3b384124e31a3ec56916c7ae8c0%7C0%7C0%7C639078935293331352%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=yCGe9YU3J%2Fx5gzuFhL8Ohtmsp%2FEQ9oQIj5LP7kr361s%3D&reserved=0"></script> <!-- Externe Bibliothek für PDF Erstellung wird geladen -->
     <style> <!-- Hier beginnen alle Design Einstellungen -->
 
         /* ========== GRUNDEINSTELLUNGEN ========== */
@@ -21,7 +22,7 @@
             background-color: #0057a8; /* Blaue Hintergrundfarbe */
             color: white; /* Weiße Schrift */
             text-align: center; /* Text mittig ausrichten */
-            padding: 20px; /* Innenabstand oben/unten/links/rechts */
+            padding: 20px; /* Innenabstand */
             font-size: 24px; /* Schriftgröße */
             font-weight: bold; /* Fettschrift */
         }
@@ -350,6 +351,25 @@
             color: #0057a8; /* Blaue Schrift */
         }
 
+        /* ========== PDF BUTTON ========== */
+        .pdf-bereich { /* Container für den PDF Button */
+            margin-top: 30px; /* Abstand nach oben */
+            text-align: center; /* Zentriert */
+            padding: 20px; /* Innenabstand */
+        }
+
+        .pdf-btn { /* PDF Export Button */
+            background-color: #dc3545; /* Roter Hintergrund - erinnert an PDF Farbe */
+            color: white; /* Weiße Schrift */
+            border: none; /* Kein Rahmen */
+            padding: 15px 40px; /* Innenabstand */
+            font-size: 18px; /* Schriftgröße */
+            border-radius: 10px; /* Abgerundete Ecken */
+            cursor: pointer; /* Hand Cursor */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Schatten */
+        }
+        .pdf-btn:hover { background-color: #b02a37; } /* Dunkleres Rot beim Darüberfahren */
+
     </style>
 </head>
 <body> <!-- Hier beginnt der sichtbare Inhalt der App -->
@@ -456,8 +476,16 @@
 
     <!-- ========== DOKUMENTE ========== -->
     <div id="dokumente" class="tab-inhalt"> <!-- Dokumente Tab Inhalt -->
-        <h3>Dokumente</h3> <!-- Überschrift -->
-        <p>Hier kommen relevante Dokumente und Normen...</p> <!-- Platzhalter -->
+
+        <!-- DOKUMENT 0.1 - Datenblatt -->
+        <div class="frage" id="dok_datenblatt"> <!-- Container für Datenblatt Frage -->
+            <h3>0.1 – Liegt das Datenblatt vor?</h3> <!-- Fragetext -->
+            <div class="ja-nein-gruppe"> <!-- Container für Ja/Nein Buttons -->
+                <button class="ja-btn" onclick="jaNein(this, 'dok_datenblatt', 'ja')">✅ Ja</button> <!-- Ja Button -->
+                <button class="nein-btn" onclick="jaNein(this, 'dok_datenblatt', 'nein')">❌ Nein</button> <!-- Nein Button -->
+            </div>
+        </div>
+
     </div>
 
     <!-- ========== BERECHNUNG ========== -->
@@ -467,8 +495,7 @@
         <div class="berechnung-block"> <!-- Container für Eingaben -->
             <h3>📥 Eingabewerte</h3> <!-- Überschrift -->
 
-            <!-- Position des Geschwindigkeitsbegrenzers -->
-            <div class="eingabe-zeile"> <!-- Eingabezeile -->
+            <div class="eingabe-zeile"> <!-- Eingabezeile Position GB -->
                 <label>Position des Geschwindigkeitsbegrenzers (GB):</label> <!-- Beschriftung -->
                 <select id="positionGB" onchange="berechne()"> <!-- Auswahlfeld -->
                     <option value="">-- Bitte wählen --</option> <!-- Leere Standardoption -->
@@ -477,36 +504,31 @@
                 </select>
             </div>
 
-            <!-- Spannkraft G -->
-            <div class="eingabe-zeile"> <!-- Eingabezeile -->
+            <div class="eingabe-zeile"> <!-- Eingabezeile Kraft G -->
                 <label>Von der Spannrolle aufgebrachte Kraft G:</label> <!-- Beschriftung -->
                 <input type="number" id="kraftG" placeholder="Wert eingeben" oninput="berechne()"> <!-- Leer -->
-                <span class="einheit">N</span> <!-- Einheit Newton -->
+                <span class="einheit">N</span> <!-- Einheit -->
             </div>
 
-            <!-- Fein -->
-            <div class="eingabe-zeile"> <!-- Eingabezeile -->
+            <div class="eingabe-zeile"> <!-- Eingabezeile Fein -->
                 <label>Erforderliche Kraft für Einrücken der Fangvorrichtung Fein:</label> <!-- Beschriftung -->
                 <input type="number" id="fein" placeholder="Wert eingeben" oninput="berechne()"> <!-- Leer -->
-                <span class="einheit">N</span> <!-- Einheit Newton -->
+                <span class="einheit">N</span> <!-- Einheit -->
             </div>
 
-            <!-- Mindestbruchkraft -->
-            <div class="eingabe-zeile"> <!-- Eingabezeile -->
+            <div class="eingabe-zeile"> <!-- Eingabezeile Mindestbruchkraft -->
                 <label>Mindestbruchkraft Begrenzerseil:</label> <!-- Beschriftung -->
                 <input type="number" id="mindestbruchkraft" placeholder="Wert eingeben" oninput="berechne()"> <!-- Leer -->
-                <span class="einheit">kN</span> <!-- Einheit Kilonewton -->
+                <span class="einheit">kN</span> <!-- Einheit -->
             </div>
 
-            <!-- Nenngeschwindigkeit -->
-            <div class="eingabe-zeile"> <!-- Eingabezeile -->
+            <div class="eingabe-zeile"> <!-- Eingabezeile Geschwindigkeit -->
                 <label>Nenngeschwindigkeit v:</label> <!-- Beschriftung -->
                 <input type="number" id="geschwindigkeit" placeholder="Wert eingeben" step="0.01" oninput="berechne()"> <!-- Leer -->
-                <span class="einheit">m/s</span> <!-- Einheit Meter pro Sekunde -->
+                <span class="einheit">m/s</span> <!-- Einheit -->
             </div>
 
-            <!-- Rillenform -->
-            <div class="eingabe-zeile"> <!-- Eingabezeile -->
+            <div class="eingabe-zeile"> <!-- Eingabezeile Rillenform -->
                 <label>Rillenform:</label> <!-- Beschriftung -->
                 <select id="rillenform" onchange="berechne()"> <!-- Auswahlfeld -->
                     <option value="">-- Bitte wählen --</option> <!-- Leere Standardoption -->
@@ -515,23 +537,20 @@
                 </select>
             </div>
 
-            <!-- Reibwert μ -->
-            <div class="eingabe-zeile"> <!-- Eingabezeile -->
+            <div class="eingabe-zeile"> <!-- Eingabezeile Reibwert -->
                 <label>Reibwert μ:</label> <!-- Beschriftung -->
                 <input type="number" id="reibwert" placeholder="Wert eingeben" step="0.01" oninput="berechne()"> <!-- Leer -->
             </div>
 
-            <!-- Keilwinkel Gamma -->
-            <div class="eingabe-zeile"> <!-- Eingabezeile -->
+            <div class="eingabe-zeile"> <!-- Eingabezeile Keilwinkel -->
                 <label>Keilwinkel Gamma γ:</label> <!-- Beschriftung -->
                 <input type="number" id="gamma" placeholder="Wert eingeben" oninput="berechne()"> <!-- Leer -->
-                <span class="einheit">Grad</span> <!-- Einheit Grad -->
+                <span class="einheit">Grad</span> <!-- Einheit -->
             </div>
 
-            <!-- Umschlingungswinkel fix -->
-            <div class="eingabe-zeile"> <!-- Eingabezeile -->
+            <div class="eingabe-zeile"> <!-- Eingabezeile Umschlingungswinkel fix -->
                 <label>Umschlingungswinkel α (fix = 180°):</label> <!-- Beschriftung -->
-                <div class="fix-wert">3.142 rad (= 180°)</div> <!-- Fixer Wert nicht änderbar -->
+                <div class="fix-wert">3.142 rad (= 180°)</div> <!-- Fixer Wert -->
             </div>
 
         </div>
@@ -540,19 +559,19 @@
         <div class="berechnung-block"> <!-- Container für Zwischenwerte -->
             <h3>🔄 Zwischenwerte</h3> <!-- Überschrift -->
 
-            <div class="zwischenwert"> <!-- Zwischenwert Zeile -->
+            <div class="zwischenwert"> <!-- Zwischenwert Reibungszahl -->
                 <label>Reibungszahl f(μ) =</label> <!-- Beschriftung -->
-                <span id="ergebnis_fmu">-</span> <!-- Wert wird per JavaScript gesetzt -->
+                <span id="ergebnis_fmu">-</span> <!-- Wert per JavaScript -->
             </div>
 
-            <div class="zwischenwert"> <!-- Zwischenwert Zeile -->
+            <div class="zwischenwert"> <!-- Zwischenwert S1 -->
                 <label>Seilkraft S1 =</label> <!-- Beschriftung -->
-                <span id="ergebnis_s1">-</span> <!-- Wert wird per JavaScript gesetzt -->
+                <span id="ergebnis_s1">-</span> <!-- Wert per JavaScript -->
             </div>
 
-            <div class="zwischenwert"> <!-- Zwischenwert Zeile -->
+            <div class="zwischenwert"> <!-- Zwischenwert S2 -->
                 <label>Seilkraft S2 =</label> <!-- Beschriftung -->
-                <span id="ergebnis_s2">-</span> <!-- Wert wird per JavaScript gesetzt -->
+                <span id="ergebnis_s2">-</span> <!-- Wert per JavaScript -->
             </div>
 
         </div>
@@ -603,6 +622,12 @@
         </div>
 
     </div>
+
+    <!-- ========== PDF EXPORT BUTTON ========== -->
+    <div class="pdf-bereich"> <!-- Container für den PDF Button -->
+        <button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button> <!-- PDF Button -->
+    </div>
+
 </div>
 
 <script> <!-- Hier beginnt der JavaScript Bereich -->
@@ -685,6 +710,33 @@
     }
 
     /**
+     * Funktion: holeAntwort
+     * Zweck: Liest die aktuelle Antwort einer Frage aus
+     * Parameter: frageId = ID der Frage
+     * Rückgabe: Text der gewählten Antwort oder "Nicht beantwortet"
+     */
+    function holeAntwort(frageId) {
+        const frage = document.getElementById(frageId); /* Frage Container auswählen */
+        if (!frage) return 'Nicht beantwortet'; /* Wenn Frage nicht gefunden */
+        const aktiv = frage.querySelector('.aktiv'); /* Aktiven Button suchen */
+        if (!aktiv) return 'Nicht beantwortet'; /* Wenn kein Button aktiv */
+        return aktiv.innerText.trim(); /* Text des aktiven Buttons zurückgeben */
+    }
+
+    /**
+     * Funktion: holeMangel
+     * Zweck: Liest den eingegebenen Mangeltext einer Frage aus
+     * Parameter: frageId = ID der Frage
+     * Rückgabe: Eingegebener Mangeltext oder leerer String
+     */
+    function holeMangel(frageId) {
+        const mangelfeld = document.getElementById('mangel-' + frageId); /* Mangelfeld auswählen */
+        if (!mangelfeld) return ''; /* Wenn kein Mangelfeld vorhanden */
+        const textarea = mangelfeld.querySelector('textarea'); /* Textfeld auswählen */
+        return textarea ? textarea.value.trim() : ''; /* Inhalt des Textfeldes zurückgeben */
+    }
+
+    /**
      * Funktion: berechne
      * Zweck: Hauptberechnungsfunktion nach EN 81-50
      * Wird automatisch aufgerufen wenn ein Eingabewert geändert wird
@@ -692,12 +744,12 @@
     function berechne() {
 
         /* ========== EINGABEWERTE LESEN ========== */
-        const G = parseFloat(document.getElementById('kraftG').value); /* Spannkraft G in Newton lesen */
-        const Fein = parseFloat(document.getElementById('fein').value); /* Fein in Newton lesen */
-        const mindestbruchkraft = parseFloat(document.getElementById('mindestbruchkraft').value); /* Mindestbruchkraft in kN lesen */
-        const mu = parseFloat(document.getElementById('reibwert').value); /* Reibwert μ lesen */
-        const gamma = parseFloat(document.getElementById('gamma').value); /* Keilwinkel in Grad lesen */
-        const rillenform = parseInt(document.getElementById('rillenform').value); /* Rillenform lesen */
+        const G = parseFloat(document.getElementById('kraftG').value); /* Spannkraft G in Newton */
+        const Fein = parseFloat(document.getElementById('fein').value); /* Fein in Newton */
+        const mindestbruchkraft = parseFloat(document.getElementById('mindestbruchkraft').value); /* Mindestbruchkraft in kN */
+        const mu = parseFloat(document.getElementById('reibwert').value); /* Reibwert μ */
+        const gamma = parseFloat(document.getElementById('gamma').value); /* Keilwinkel in Grad */
+        const rillenform = parseInt(document.getElementById('rillenform').value); /* Rillenform */
         const alpha = Math.PI; /* Umschlingungswinkel α = 180° = π (fix) */
 
         /* Wenn nicht alle Werte eingegeben sind - Berechnung abbrechen */
@@ -706,60 +758,59 @@
         }
 
         /* ========== REIBUNGSZAHL BERECHNEN ========== */
-        let fmu = 0; /* Reibungszahl f(μ) initialisieren */
-        const gammaRad = gamma * Math.PI / 180; /* Keilwinkel von Grad in Bogenmaß umrechnen */
+        let fmu = 0; /* Reibungszahl initialisieren */
+        const gammaRad = gamma * Math.PI / 180; /* Grad in Bogenmaß umrechnen */
 
-        if (rillenform === 1) { /* Wenn Keilrille gewählt */
-            fmu = mu / Math.sin(gammaRad / 2); /* Formel Keilrille: f(μ) = μ / sin(γ/2) */
-        } else { /* Wenn Halbrundille gewählt */
-            const beta = gammaRad; /* Beta entspricht dem Keilwinkel */
+        if (rillenform === 1) { /* Keilrille gewählt */
+            fmu = mu / Math.sin(gammaRad / 2); /* Formel Keilrille */
+        } else { /* Halbrundille gewählt */
+            const beta = gammaRad; /* Beta = Keilwinkel */
             fmu = 4 * mu * (1 - Math.sin(beta / 2)) / (Math.PI - beta - Math.sin(beta)); /* Formel Halbrundille */
         }
 
         /* ========== SEILKRÄFTE BERECHNEN ========== */
         const efmu_alpha = Math.exp(fmu * alpha); /* e^(f(μ)×α) berechnen */
-
-        const S1_oben = G / 2; /* Seilkraft S1 bei GB oben = G/2 */
-        const S2_oben_ab = S1_oben * efmu_alpha; /* Seilkraft S2 GB oben Fang abwärts */
-        const S2_oben_auf = G / 2 * (1 / efmu_alpha); /* Seilkraft S2 GB oben Fang aufwärts */
-        const S1_unten = G; /* Seilkraft S1 bei GB unten = G */
-        const S2_unten = S1_unten * efmu_alpha; /* Seilkraft S2 GB unten */
+        const S1_oben = G / 2; /* S1 bei GB oben */
+        const S2_oben_ab = S1_oben * efmu_alpha; /* S2 GB oben Fang ab */
+        const S2_oben_auf = G / 2 * (1 / efmu_alpha); /* S2 GB oben Fang auf */
+        const S1_unten = G; /* S1 bei GB unten */
+        const S2_unten = S1_unten * efmu_alpha; /* S2 GB unten */
 
         /* ========== ZUGKRAFT FE BERECHNEN ========== */
-        const FE_oben_ab = (G / 2) * (efmu_alpha - 1); /* FE GB oben Fang abwärts */
-        const FE_oben_auf = (G / 2) * (1 - 1 / efmu_alpha); /* FE GB oben Fang aufwärts */
+        const FE_oben_ab = (G / 2) * (efmu_alpha - 1); /* FE GB oben Fang ab */
+        const FE_oben_auf = (G / 2) * (1 - 1 / efmu_alpha); /* FE GB oben Fang auf */
         const FE_unten = G * (efmu_alpha - 1) / (efmu_alpha + 1); /* FE GB unten */
 
         /* ========== SICHERHEITSFAKTOREN BERECHNEN ========== */
         const mindestbruchkraft_N = mindestbruchkraft * 1000; /* kN in N umrechnen */
-        const SF_oben_ab = mindestbruchkraft_N / Math.max(S1_oben, S2_oben_ab); /* SF GB oben Fang ab */
-        const SF_oben_auf = mindestbruchkraft_N / Math.max(S1_oben, S2_oben_auf); /* SF GB oben Fang auf */
+        const SF_oben_ab = mindestbruchkraft_N / Math.max(S1_oben, S2_oben_ab); /* SF GB oben ab */
+        const SF_oben_auf = mindestbruchkraft_N / Math.max(S1_oben, S2_oben_auf); /* SF GB oben auf */
         const SF_unten = mindestbruchkraft_N / Math.max(S1_unten, S2_unten); /* SF GB unten */
 
         /* ========== ZWISCHENWERTE ANZEIGEN ========== */
         document.getElementById('ergebnis_fmu').innerText = fmu.toFixed(3); /* Reibungszahl anzeigen */
-        document.getElementById('ergebnis_s1').innerText = S1_oben.toFixed(2) + ' N'; /* Seilkraft S1 anzeigen */
-        document.getElementById('ergebnis_s2').innerText = S2_oben_ab.toFixed(2) + ' N'; /* Seilkraft S2 anzeigen */
+        document.getElementById('ergebnis_s1').innerText = S1_oben.toFixed(2) + ' N'; /* S1 anzeigen */
+        document.getElementById('ergebnis_s2').innerText = S2_oben_ab.toFixed(2) + ' N'; /* S2 anzeigen */
 
         /* ========== ERGEBNISSE ANZEIGEN ========== */
         document.getElementById('fein_anzeige1').innerText = Fein.toFixed(2) + ' N'; /* Fein Zeile 1 */
         document.getElementById('fein_anzeige2').innerText = Fein.toFixed(2) + ' N'; /* Fein Zeile 2 */
         document.getElementById('fein_anzeige3').innerText = Fein.toFixed(2) + ' N'; /* Fein Zeile 3 */
 
-        document.getElementById('fe_oben_ab').innerText = FE_oben_ab.toFixed(2) + ' N'; /* FE GB oben ab anzeigen */
-        zeigeCheck('check_fe_oben_ab', FE_oben_ab >= Fein); /* Prüfen FE >= Fein */
-        document.getElementById('sf_oben_ab').innerText = SF_oben_ab.toFixed(2); /* SF anzeigen */
-        zeigeCheck('check_sf_oben_ab', SF_oben_ab >= 8); /* Prüfen SF >= 8 */
+        document.getElementById('fe_oben_ab').innerText = FE_oben_ab.toFixed(2) + ' N'; /* FE oben ab */
+        zeigeCheck('check_fe_oben_ab', FE_oben_ab >= Fein); /* Prüfung FE >= Fein */
+        document.getElementById('sf_oben_ab').innerText = SF_oben_ab.toFixed(2); /* SF oben ab */
+        zeigeCheck('check_sf_oben_ab', SF_oben_ab >= 8); /* Prüfung SF >= 8 */
 
-        document.getElementById('fe_oben_auf').innerText = FE_oben_auf.toFixed(2) + ' N'; /* FE GB oben auf anzeigen */
-        zeigeCheck('check_fe_oben_auf', FE_oben_auf >= Fein); /* Prüfen FE >= Fein */
-        document.getElementById('sf_oben_auf').innerText = SF_oben_auf.toFixed(2); /* SF anzeigen */
-        zeigeCheck('check_sf_oben_auf', SF_oben_auf >= 8); /* Prüfen SF >= 8 */
+        document.getElementById('fe_oben_auf').innerText = FE_oben_auf.toFixed(2) + ' N'; /* FE oben auf */
+        zeigeCheck('check_fe_oben_auf', FE_oben_auf >= Fein); /* Prüfung FE >= Fein */
+        document.getElementById('sf_oben_auf').innerText = SF_oben_auf.toFixed(2); /* SF oben auf */
+        zeigeCheck('check_sf_oben_auf', SF_oben_auf >= 8); /* Prüfung SF >= 8 */
 
-        document.getElementById('fe_unten').innerText = FE_unten.toFixed(2) + ' N'; /* FE GB unten anzeigen */
-        zeigeCheck('check_fe_unten', FE_unten >= Fein); /* Prüfen FE >= Fein */
-        document.getElementById('sf_unten').innerText = SF_unten.toFixed(2); /* SF anzeigen */
-        zeigeCheck('check_sf_unten', SF_unten >= 8); /* Prüfen SF >= 8 */
+        document.getElementById('fe_unten').innerText = FE_unten.toFixed(2) + ' N'; /* FE unten */
+        zeigeCheck('check_fe_unten', FE_unten >= Fein); /* Prüfung FE >= Fein */
+        document.getElementById('sf_unten').innerText = SF_unten.toFixed(2); /* SF unten */
+        zeigeCheck('check_sf_unten', SF_unten >= 8); /* Prüfung SF >= 8 */
     }
 
     /**
@@ -769,16 +820,127 @@
      */
     function zeigeCheck(id, istWahr) {
         const el = document.getElementById(id); /* Tabellenzelle auswählen */
-        if (istWahr) { /* Wenn Bedingung erfüllt */
-            el.innerHTML = '<span class="wahr">✅ WAHR</span>'; /* Grünes WAHR anzeigen */
-        } else { /* Wenn nicht erfüllt */
-            el.innerHTML = '<span class="falsch">❌ FALSCH</span>'; /* Rotes FALSCH anzeigen */
+        if (istWahr) { /* Bedingung erfüllt */
+            el.innerHTML = '<span class="wahr">✅ WAHR</span>'; /* Grünes WAHR */
+        } else { /* Bedingung nicht erfüllt */
+            el.innerHTML = '<span class="falsch">❌ FALSCH</span>'; /* Rotes FALSCH */
         }
+    }
+
+    /**
+     * Funktion: erstellePDF
+     * Zweck: Erstellt ein PDF Protokoll mit allen Prüfergebnissen, Dokumenten und Berechnungen
+     * Wird aufgerufen wenn der PDF Button geklickt wird
+     */
+    function erstellePDF() {
+        const { jsPDF } = window.jspdf; /* jsPDF Bibliothek laden */
+        const doc = new jsPDF(); /* Neues PDF Dokument erstellen */
+
+        let y = 20; /* Startposition oben auf der Seite */
+        const zeilenAbstand = 8; /* Abstand zwischen den Zeilen */
+        const seitenHoehe = 280; /* Maximale Höhe der Seite bevor neue Seite */
+
+        /**
+         * Hilfsfunktion: neueZeile
+         * Zweck: Fügt eine neue Zeile zum PDF hinzu und wechselt bei Bedarf die Seite
+         * Parameter: text = Text der Zeile, einzug = Einrückung in mm
+         */
+        function neueZeile(text, einzug = 0) {
+            if (y > seitenHoehe) { /* Wenn am Ende der Seite */
+                doc.addPage(); /* Neue Seite hinzufügen */
+                y = 20; /* Position zurücksetzen */
+            }
+            doc.text(text, 15 + einzug, y); /* Text auf der Seite platzieren */
+            y += zeilenAbstand; /* Position für nächste Zeile erhöhen */
+        }
+
+        /* ========== KOPFZEILE IM PDF ========== */
+        doc.setFontSize(18); /* Große Schrift für Titel */
+        doc.setTextColor(0, 87, 168); /* Blaue Farbe für Titel */
+        neueZeile('Aufzug-App - Prüfprotokoll'); /* Titel */
+
+        doc.setFontSize(11); /* Normale Schriftgröße */
+        doc.setTextColor(100, 100, 100); /* Graue Farbe für Datum */
+        neueZeile('Erstellt am: ' + new Date().toLocaleDateString('de-DE') + ' um ' + new Date().toLocaleTimeString('de-DE')); /* Datum und Uhrzeit */
+        neueZeile('Bauteil: ' + (document.getElementById('bauteilTitel').innerText || '-')); /* Bauteilname */
+        neueZeile('Bereich: ' + (document.getElementById('bereichTitel').innerText || '-')); /* Neubau oder Umbau */
+        y += 5; /* Extra Abstand */
+
+        /* ========== PRÜFUNG VOR ORT IM PDF ========== */
+        doc.setFontSize(14); /* Überschrift Schriftgröße */
+        doc.setTextColor(0, 87, 168); /* Blaue Farbe */
+        neueZeile('1. Prüfung vor Ort'); /* Abschnittsüberschrift */
+
+        doc.setFontSize(10); /* Kleine Schriftgröße für Fragen */
+        doc.setTextColor(0, 0, 0); /* Schwarze Schrift */
+
+        /* Frage 1.0 ins PDF schreiben */
+        neueZeile('1.0 Dokument vor Ort vorhanden: ' + holeAntwort('frage1_0')); /* Antwort auslesen und schreiben */
+
+        /* Frage 1.1 ins PDF schreiben */
+        neueZeile('1.1 Verhältnis Begrenzerseil/Rollendurchmesser 1:30: ' + holeAntwort('frage1_1')); /* Antwort */
+        const mangel11 = holeMangel('frage1_1'); /* Mangeltext auslesen */
+        if (mangel11) neueZeile('    Mangel: ' + mangel11, 5); /* Mangeltext eingerückt schreiben */
+
+        /* Frage 1.2 ins PDF schreiben */
+        neueZeile('1.2 Mindestbruchkraft = 8x Zugkraft Fangvorrichtung: ' + holeAntwort('frage1_2')); /* Antwort */
+        const mangel12 = holeMangel('frage1_2'); /* Mangeltext auslesen */
+        if (mangel12) neueZeile('    Mangel: ' + mangel12, 5); /* Mangeltext schreiben */
+
+        /* Frage 1.3 ins PDF schreiben */
+        const messwert = document.getElementById('messwert1_3').value; /* Messwert auslesen */
+        neueZeile('1.3 Gemessener Seildurchmesser: ' + (messwert || 'Nicht erfasst') + ' mm'); /* Messwert schreiben */
+
+        /* Frage 1.4 ins PDF schreiben */
+        neueZeile('1.4 Schrauben Seilklemmen (Frosch) fest: ' + holeAntwort('frage1_4')); /* Antwort */
+        const mangel14 = holeMangel('frage1_4'); /* Mangeltext auslesen */
+        if (mangel14) neueZeile('    Mangel: ' + mangel14, 5); /* Mangeltext schreiben */
+
+        y += 5; /* Extra Abstand zwischen Abschnitten */
+
+        /* ========== DOKUMENTE IM PDF ========== */
+        doc.setFontSize(14); /* Überschrift Schriftgröße */
+        doc.setTextColor(0, 87, 168); /* Blaue Farbe */
+        neueZeile('2. Dokumente'); /* Abschnittsüberschrift */
+
+        doc.setFontSize(10); /* Kleine Schrift */
+        doc.setTextColor(0, 0, 0); /* Schwarze Schrift */
+        neueZeile('0.1 Datenblatt vorhanden: ' + holeAntwort('dok_datenblatt')); /* Datenblatt Antwort */
+
+        y += 5; /* Extra Abstand */
+
+        /* ========== BERECHNUNG IM PDF ========== */
+        doc.setFontSize(14); /* Überschrift Schriftgröße */
+        doc.setTextColor(0, 87, 168); /* Blaue Farbe */
+        neueZeile('3. Berechnung (EN 81-50)'); /* Abschnittsüberschrift */
+
+        doc.setFontSize(10); /* Kleine Schrift */
+        doc.setTextColor(0, 0, 0); /* Schwarze Schrift */
+
+        /* Eingabewerte ins PDF schreiben */
+        neueZeile('Eingabewerte:'); /* Unterüberschrift */
+        neueZeile('  Kraft G: ' + (document.getElementById('kraftG').value || '-') + ' N', 5); /* G Wert */
+        neueZeile('  Fein: ' + (document.getElementById('fein').value || '-') + ' N', 5); /* Fein Wert */
+        neueZeile('  Mindestbruchkraft: ' + (document.getElementById('mindestbruchkraft').value || '-') + ' kN', 5); /* Mindestbruchkraft */
+        neueZeile('  Reibwert μ: ' + (document.getElementById('reibwert').value || '-'), 5); /* Reibwert */
+        neueZeile('  Keilwinkel γ: ' + (document.getElementById('gamma').value || '-') + '°', 5); /* Keilwinkel */
+        neueZeile('  Umschlingungswinkel α: 180° (fix)', 5); /* Umschlingungswinkel */
+
+        y += 3; /* Kleiner Abstand */
+
+        /* Ergebnisse ins PDF schreiben */
+        neueZeile('Ergebnisse:'); /* Unterüberschrift */
+        neueZeile('  GB oben Fang ab - FE: ' + document.getElementById('fe_oben_ab').innerText + ' | SF: ' + document.getElementById('sf_oben_ab').innerText, 5); /* Ergebnis Zeile 1 */
+        neueZeile('  GB oben Fang auf - FE: ' + document.getElementById('fe_oben_auf').innerText + ' | SF: ' + document.getElementById('sf_oben_auf').innerText, 5); /* Ergebnis Zeile 2 */
+        neueZeile('  GB unten - FE: ' + document.getElementById('fe_unten').innerText + ' | SF: ' + document.getElementById('sf_unten').innerText, 5); /* Ergebnis Zeile 3 */
+
+        /* ========== PDF SPEICHERN ========== */
+        const datum = new Date().toLocaleDateString('de-DE').replace(/\./g, '-'); /* Datum für Dateiname formatieren */
+        doc.save('Pruefprotokoll_Geschwindigkeitsbegrenzerseil_' + datum + '.pdf'); /* PDF herunterladen */
     }
 
 </script> <!-- Ende des JavaScript Bereichs -->
 
 </body> <!-- Ende des sichtbaren Inhalts --> </html> <!-- Ende der HTML Seite -->
-
 
 
