@@ -377,18 +377,18 @@
             <h3>2.1 – Eingabewerte</h3> <!-- Überschrift -->
             <div class="eingabe-zeile"> <!-- Eingabezeile -->
                 <label>Nenngeschwindigkeit v:</label> <!-- Beschriftung -->
-                <input type="number" id="geschwindigkeit" placeholder="Wert eingeben" step="0.01" min="0" oninput="berechneReibungszahl()"> <!-- Eingabefeld -->
+                <input type="number" id="geschwindigkeit" placeholder="Wert eingeben" step="0.01" min="0" oninput="berechneReibwert()"> <!-- Eingabefeld -->
                 <span class="einheit">m/s</span> <!-- Einheit -->
             </div>
         </div>
 
-        <!-- FORMEL: Reibungszahl grafisch dargestellt -->
+        <!-- FORMEL: Reibwert grafisch dargestellt -->
         <div class="frage"> <!-- Container für Formel -->
-            <h3>2.2 – Reibungszahl μ</h3> <!-- Überschrift -->
+            <h3>2.2 – Reibwert f(μ)</h3> <!-- Überschrift -->
 
             <!-- Grafische Darstellung der Formel als Bruch -->
             <div class="formel-container"> <!-- Zentrierte Formel -->
-                <span>μ = </span> <!-- Gleichheitszeichen -->
+                <span>f(μ) = </span> <!-- Gleichheitszeichen -->
                 <span class="bruch"> <!-- Äußerer Bruch -->
                     <span class="zaehler">0,1</span> <!-- Zähler: 0,1 -->
                     <span class="nenner"> <!-- Nenner: 1 + v/10 -->
@@ -403,7 +403,7 @@
 
             <!-- Ergebnis der Berechnung -->
             <div class="zwischenwert" style="margin-top: 20px;"> <!-- Ergebniszeile -->
-                <label>Ergebnis μ =</label> <!-- Beschriftung -->
+                <label>Ergebnis f(μ) =</label> <!-- Beschriftung -->
                 <span id="ergebnis_mu" style="font-weight: bold; color: #888;">Bitte Geschwindigkeit eingeben</span> <!-- Ergebnis -->
             </div>
         </div>
@@ -524,11 +524,11 @@
     }
 
     /**
-     * Funktion: berechneReibungszahl
-     * Zweck: Berechnet die Reibungszahl μ aus der eingegebenen Geschwindigkeit
-     * Formel: μ = 0,1 / (1 + v/10)
+     * Funktion: berechneReibwert
+     * Zweck: Berechnet die Reibwert f(μ) aus der eingegebenen Geschwindigkeit
+     * Formel: f(μ) = 0,1 / (1 + v/10)
      */
-    function berechneReibungszahl() {
+    function berechneReibwert() {
         const v = parseFloat(document.getElementById('geschwindigkeit').value); /* Geschwindigkeit auslesen */
         const ergebnisEl = document.getElementById('ergebnis_mu'); /* Ergebnisfeld auswählen */
 
@@ -538,7 +538,7 @@
             return; /* Funktion beenden */
         }
 
-        const mu = 0.1 / (1 + v / 10); /* Reibungszahl berechnen: μ = 0,1 / (1 + v/10) */
+        const mu = 0.1 / (1 + v / 10); /* Reibwert berechnen: f(μ) = 0,1 / (1 + v/10) */
         ergebnisEl.innerText = mu.toFixed(4); /* Ergebnis mit 4 Nachkommastellen */
         ergebnisEl.style.color = '#0057a8'; /* Blaue Schrift */
     }
@@ -619,9 +619,9 @@
         doc.setFontSize(10); /* Kleine Schrift */
         doc.setTextColor(0, 0, 0); /* Schwarz */
         const v = document.getElementById('geschwindigkeit').value; /* Geschwindigkeit auslesen */
-        const mu = document.getElementById('ergebnis_mu').innerText; /* Reibungszahl auslesen */
+        const mu = document.getElementById('ergebnis_mu').innerText; /* Reibwert auslesen */
         neueZeile('Nenngeschwindigkeit v: ' + (v || 'Nicht eingegeben') + ' m/s'); /* Geschwindigkeit */
-        neueZeile('Reibungszahl mu = 0,1 / (1 + v/10) = ' + mu); /* Reibungszahl */
+        neueZeile('Reibwert mu = 0,1 / (1 + v/10) = ' + mu); /* Reibwert */
 
         /* ========== PDF SPEICHERN ========== */
         const datum = new Date().toLocaleDateString('de-DE').replace(/\./g, '-'); /* Datum formatieren */
