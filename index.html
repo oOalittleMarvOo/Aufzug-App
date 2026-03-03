@@ -2,7 +2,7 @@
     <meta charset="UTF-8"> <!-- Ermöglicht deutsche Sonderzeichen wie ä,ö,ü -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Macht die App auf dem Handy richtig darstellbar -->
     <title>Aufzug-App</title> <!-- Name der App der oben im Browser Tab erscheint -->
-    <script src="https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcdnjs.cloudflare.com%2Fajax%2Flibs%2Fjspdf%2F2.5.1%2Fjspdf.umd.min.js&data=05%7C02%7Csteffen.pahl%40de.tuv.com%7C991e5559c7c1412e5d9208de796bf766%7C255bd3b384124e31a3ec56916c7ae8c0%7C0%7C0%7C639081701781169707%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=GINTNLc1ZFfgHMvx9Qffvn94fn808o%2BJD847MhHMOUs%3D&reserved=0"></script> <!-- Externe Bibliothek für PDF Erstellung -->
+    <script src="https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcdnjs.cloudflare.com%2Fajax%2Flibs%2Fjspdf%2F2.5.1%2Fjspdf.umd.min.js&data=05%7C02%7Csteffen.pahl%40de.tuv.com%7Ca7077a83825944dd802108de7972bb87%7C255bd3b384124e31a3ec56916c7ae8c0%7C0%7C0%7C639081730858601768%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=rijYdAgbJlavOKCVYGhmiLrvZsZsN7aqu4sRhJjQR7s%3D&reserved=0"></script> <!-- Externe Bibliothek für PDF Erstellung -->
     <style> <!-- Hier beginnen alle Design Einstellungen -->
 
         /* ========== GRUNDEINSTELLUNGEN ========== */
@@ -175,11 +175,7 @@
             gap: 10px; /* Abstand zwischen Elementen */
             flex-wrap: wrap; /* Umbrechen auf kleinen Bildschirmen */
         }
-        .eingabe-zeile label {
-            min-width: 200px; /* Mindestbreite */
-            font-size: 14px; /* Schriftgröße */
-            color: #333; /* Dunkelgraue Schrift */
-        }
+        .eingabe-zeile label { min-width: 200px; font-size: 14px; color: #333; } /* Beschriftung */
         .eingabe-zeile input {
             padding: 8px 12px; /* Innenabstand */
             border: 2px solid #0057a8; /* Blauer Rahmen */
@@ -187,11 +183,7 @@
             font-size: 15px; /* Schriftgröße */
             width: 120px; /* Breite */
         }
-        .einheit {
-            font-size: 14px; /* Schriftgröße */
-            color: #666; /* Grauer Text */
-            font-weight: bold; /* Fettschrift */
-        }
+        .einheit { font-size: 14px; color: #666; font-weight: bold; } /* Einheit */
 
         /* ========== ZWISCHENWERT / ERGEBNIS ========== */
         .zwischenwert {
@@ -205,54 +197,16 @@
         }
 
         /* ========== FORMEL DARSTELLUNG ========== */
-        .formel-container {
-            text-align: center; /* Zentriert */
-            padding: 20px; /* Innenabstand */
-            font-size: 20px; /* Schriftgröße */
-            color: #333; /* Dunkelgraue Schrift */
-        }
-        .bruch {
-            display: inline-block; /* Inline Block für Bruchdarstellung */
-            vertical-align: middle; /* Vertikal zentrieren */
-            text-align: center; /* Text zentrieren */
-            margin: 0 4px; /* Kleiner Abstand */
-        }
-        .zaehler {
-            display: block; /* Block für Zähler */
-            border-bottom: 2px solid #0057a8; /* Blauer Bruchstrich */
-            padding-bottom: 4px; /* Abstand zum Bruchstrich */
-            font-size: 18px; /* Schriftgröße */
-        }
-        .nenner {
-            display: block; /* Block für Nenner */
-            padding-top: 4px; /* Abstand zum Bruchstrich */
-            font-size: 18px; /* Schriftgröße */
-        }
-        .bruch-klein {
-            display: inline-block; /* Inline Block für inneren Bruch */
-            vertical-align: middle; /* Vertikal zentrieren */
-            text-align: center; /* Text zentrieren */
-            margin: 0 3px; /* Kleiner Abstand */
-        }
-        .zaehler-klein {
-            display: block; /* Block für kleinen Zähler */
-            border-bottom: 2px solid #0057a8; /* Blauer Bruchstrich */
-            padding-bottom: 2px; /* Abstand zum Bruchstrich */
-            font-size: 15px; /* Kleinere Schriftgröße */
-        }
-        .nenner-klein {
-            display: block; /* Block für kleinen Nenner */
-            padding-top: 2px; /* Abstand zum Bruchstrich */
-            font-size: 15px; /* Kleinere Schriftgröße */
-        }
+        .formel-container { text-align: center; padding: 20px; font-size: 20px; color: #333; } /* Zentriert */
+        .bruch { display: inline-block; vertical-align: middle; text-align: center; margin: 0 4px; } /* Bruch */
+        .zaehler { display: block; border-bottom: 2px solid #0057a8; padding-bottom: 4px; font-size: 18px; } /* Zähler */
+        .nenner { display: block; padding-top: 4px; font-size: 18px; } /* Nenner */
+        .bruch-klein { display: inline-block; vertical-align: middle; text-align: center; margin: 0 3px; } /* Kleiner Bruch */
+        .zaehler-klein { display: block; border-bottom: 2px solid #0057a8; padding-bottom: 2px; font-size: 15px; } /* Kleiner Zähler */
+        .nenner-klein { display: block; padding-top: 2px; font-size: 15px; } /* Kleiner Nenner */
 
         /* ========== AUSWAHL BUTTONS ========== */
-        .auswahl-gruppe {
-            display: flex; /* Buttons nebeneinander */
-            gap: 15px; /* Abstand zwischen Buttons */
-            flex-wrap: wrap; /* Umbrechen auf kleinen Bildschirmen */
-            margin-bottom: 10px; /* Abstand nach unten */
-        }
+        .auswahl-gruppe { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 10px; } /* Buttons nebeneinander */
         .auswahl-btn {
             padding: 12px 20px; /* Innenabstand */
             border: 2px solid #0057a8; /* Blauer Rahmen */
@@ -262,22 +216,16 @@
             background: white; /* Weißer Hintergrund */
             color: #0057a8; /* Blaue Schrift */
         }
-        .auswahl-btn.aktiv {
-            background-color: #0057a8; /* Blauer Hintergrund wenn aktiv */
-            color: white; /* Weiße Schrift wenn aktiv */
-        }
+        .auswahl-btn.aktiv { background-color: #0057a8; color: white; } /* Aktiv blau */
 
         /* ========== BERECHNUNG BEREICH ========== */
-        .berechnung-bereich {
-            display: none; /* Standardmäßig versteckt */
-            margin-top: 20px; /* Abstand nach oben */
-        }
+        .berechnung-bereich { display: none; margin-top: 20px; } /* Standardmäßig versteckt */
         .berechnung-bereich.aktiv { display: block; } /* Sichtbar nach Auswahl */
 
         /* ========== PDF BUTTON ========== */
         .pdf-bereich { margin-top: 30px; text-align: center; padding: 20px; } /* Container zentriert */
         .pdf-btn {
-            background-color: #dc3545; /* Rot wie PDF */
+            background-color: #dc3545; /* Rot */
             color: white; /* Weiße Schrift */
             border: none; /* Kein Rahmen */
             padding: 15px 40px; /* Innenabstand */
@@ -286,258 +234,241 @@
             cursor: pointer; /* Hand Cursor */
             box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Schatten */
         }
-        .pdf-btn:hover { background-color: #b02a37; } /* Dunkleres Rot beim Darüberfahren */
+        .pdf-btn:hover { background-color: #b02a37; } /* Dunkleres Rot */
 
     </style>
 </head>
 <body>
 
 <!-- ========== KOPFZEILE ========== -->
-<header>🛗 Aufzug-App</header> <!-- Blaue Kopfzeile -->
+<header>🛗 Aufzug-App</header>
 
-<!-- ========== STARTSEITE ========== --> <div id="startseite" class="startseite"> <!-- Container Startseite -->
-    <h2>Bitte wählen Sie einen Bereich:</h2> <!-- Aufforderung -->
-    <div class="auswahl"> <!-- Container für Buttons -->
-        <button class="btn" onclick="zeigeBauteile('Neubau')">Neubau</button> <!-- Neubau Button -->
-        <button class="btn" onclick="zeigeBauteile('Umbau')">Umbau</button> <!-- Umbau Button -->
+<!-- ========== STARTSEITE ========== --> <div id="startseite" class="startseite">
+    <h2>Bitte wählen Sie einen Bereich:</h2>
+    <div class="auswahl">
+        <button class="btn" onclick="zeigeBauteile('Neubau')">Neubau</button>
+        <button class="btn" onclick="zeigeBauteile('Umbau')">Umbau</button>
     </div>
 </div>
 
-<!-- ========== BAUTEIL LISTE ========== --> <div id="bauteilSeite" class="seite"> <!-- Container Bauteil-Liste -->
-    <button class="zuruck" onclick="zeige('startseite')">← Zurück</button> <!-- Zurück Button -->
-    <h2 id="bereichTitel"></h2> <!-- Titel per JavaScript -->
-    <div class="bauteil-liste"> <!-- Liste der Bauteile -->
-        <button class="bauteil-btn" onclick="zeigeBauteil('Geschwindigkeitsbegrenzerseil')"> <!-- Bauteil Button -->
-            🔩 Geschwindigkeitsbegrenzerseil <!-- Bauteilname -->
+<!-- ========== BAUTEIL LISTE ========== --> <div id="bauteilSeite" class="seite">
+    <button class="zuruck" onclick="zeige('startseite')">← Zurück</button>
+    <h2 id="bereichTitel"></h2>
+    <div class="bauteil-liste">
+        <button class="bauteil-btn" onclick="zeigeBauteil('Geschwindigkeitsbegrenzerseil')">
+            🔩 Geschwindigkeitsbegrenzerseil
         </button>
     </div>
 </div>
 
-<!-- ========== BAUTEIL DETAIL SEITE ========== --> <div id="detailSeite" class="seite"> <!-- Container Detail Seite -->
-    <button class="zuruck" onclick="zeige('bauteilSeite')">← Zurück</button> <!-- Zurück Button -->
-    <h2 id="bauteilTitel"></h2> <!-- Bauteilname per JavaScript -->
+<!-- ========== BAUTEIL DETAIL SEITE ========== --> <div id="detailSeite" class="seite">
+    <button class="zuruck" onclick="zeige('bauteilSeite')">← Zurück</button>
+    <h2 id="bauteilTitel"></h2>
 
-    <!-- Die drei Reiter -->
-    <div class="tabs"> <!-- Container Reiter -->
-        <button class="tab aktiv" onclick="zeigeTab(this, 'pruefung')">📋 Prüfung vor Ort</button> <!-- Prüfung Reiter -->
-        <button class="tab" onclick="zeigeTab(this, 'dokumente')">📄 Dokumente</button> <!-- Dokumente Reiter -->
-        <button class="tab" onclick="zeigeTab(this, 'berechnung')">🔢 Berechnung</button> <!-- Berechnung Reiter -->
+    <div class="tabs">
+        <button class="tab aktiv" onclick="zeigeTab(this, 'pruefung')">📋 Prüfung vor Ort</button>
+        <button class="tab" onclick="zeigeTab(this, 'dokumente')">📄 Dokumente</button>
+        <button class="tab" onclick="zeigeTab(this, 'berechnung')">🔢 Berechnung</button>
     </div>
 
     <!-- ========== PRÜFUNG VOR ORT ========== -->
-    <div id="pruefung" class="tab-inhalt aktiv"> <!-- Prüfung Tab -->
+    <div id="pruefung" class="tab-inhalt aktiv">
 
-        <!-- FRAGE 1.0 -->
-        <div class="frage" id="frage1_0"> <!-- Container Frage 1.0 -->
-            <h3>1.0 – Liegt das Dokument zur Ermittlung des Seildurchmessers mit dem Messschieber vor Ort vor?</h3> <!-- Fragetext -->
-            <div class="ja-nein-gruppe"> <!-- Ja/Nein Buttons -->
-                <button class="ja-btn" onclick="jaNein(this, 'frage1_0', 'ja')">✅ Ja</button> <!-- Ja -->
-                <button class="nein-btn" onclick="jaNein(this, 'frage1_0', 'nein')">❌ Nein</button> <!-- Nein -->
+        <div class="frage" id="frage1_0">
+            <h3>1.0 – Liegt das Dokument zur Ermittlung des Seildurchmessers mit dem Messschieber vor Ort vor?</h3>
+            <div class="ja-nein-gruppe">
+                <button class="ja-btn" onclick="jaNein(this, 'frage1_0', 'ja')">✅ Ja</button>
+                <button class="nein-btn" onclick="jaNein(this, 'frage1_0', 'nein')">❌ Nein</button>
             </div>
         </div>
 
-        <!-- FRAGE 1.1 -->
-        <div class="frage" id="frage1_1"> <!-- Container Frage 1.1 -->
-            <h3>1.1 – Ist das Verhältnis von Begrenzerseil und Rollendurchmesser 1:30?</h3> <!-- Fragetext -->
-            <div class="antwort-gruppe"> <!-- Antwort Buttons -->
-                <button class="antwort-btn passt" onclick="antwort(this, 'frage1_1')">🟢 Passt</button> <!-- Positiv -->
-                <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage1_1')">🔴 Passt nicht</button> <!-- Negativ -->
-                <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage1_1')">⚪ Irrelevant</button> <!-- Irrelevant -->
+        <div class="frage" id="frage1_1">
+            <h3>1.1 – Ist das Verhältnis von Begrenzerseil und Rollendurchmesser 1:30?</h3>
+            <div class="antwort-gruppe">
+                <button class="antwort-btn passt" onclick="antwort(this, 'frage1_1')">🟢 Passt</button>
+                <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage1_1')">🔴 Passt nicht</button>
+                <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage1_1')">⚪ Irrelevant</button>
             </div>
-            <div class="mangelfeld" id="mangel-frage1_1"> <!-- Mangelfeld -->
-                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p> <!-- Warnhinweis -->
-                <label>Bitte Mangel beschreiben:</label> <!-- Beschriftung -->
-                <textarea placeholder="Beschreibung des Mangels..."></textarea> <!-- Textfeld -->
-            </div>
-        </div>
-
-        <!-- FRAGE 1.2 -->
-        <div class="frage" id="frage1_2"> <!-- Container Frage 1.2 -->
-            <h3>1.2 – Beträgt die Mindestbruchkraft das Achtfache der Zugkraft der Fangvorrichtung?</h3> <!-- Fragetext -->
-            <div class="antwort-gruppe"> <!-- Antwort Buttons -->
-                <button class="antwort-btn passt" onclick="antwort(this, 'frage1_2')">🟢 Passt</button> <!-- Positiv -->
-                <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage1_2')">🔴 Passt nicht</button> <!-- Negativ -->
-                <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage1_2')">⚪ Irrelevant</button> <!-- Irrelevant -->
-            </div>
-            <div class="mangelfeld" id="mangel-frage1_2"> <!-- Mangelfeld -->
-                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p> <!-- Warnhinweis -->
-                <label>Bitte Mangel beschreiben:</label> <!-- Beschriftung -->
-                <textarea placeholder="Beschreibung des Mangels..."></textarea> <!-- Textfeld -->
+            <div class="mangelfeld" id="mangel-frage1_1">
+                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+                <label>Bitte Mangel beschreiben:</label>
+                <textarea placeholder="Beschreibung des Mangels..."></textarea>
             </div>
         </div>
 
-        <!-- FRAGE 1.3 -->
-        <div class="frage" id="frage1_3"> <!-- Container Frage 1.3 -->
-            <h3>1.3 – Durchmesser mit dem Messschieber erfassen:</h3> <!-- Fragetext -->
-            <div class="messwert-gruppe"> <!-- Eingabefeld -->
-                <input type="number" id="messwert1_3" placeholder="Wert eingeben" step="0.01" min="0"> <!-- Zahleneingabe -->
-                <span>mm</span> <!-- Einheit -->
+        <div class="frage" id="frage1_2">
+            <h3>1.2 – Beträgt die Mindestbruchkraft das Achtfache der Zugkraft der Fangvorrichtung?</h3>
+            <div class="antwort-gruppe">
+                <button class="antwort-btn passt" onclick="antwort(this, 'frage1_2')">🟢 Passt</button>
+                <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage1_2')">🔴 Passt nicht</button>
+                <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage1_2')">⚪ Irrelevant</button>
+            </div>
+            <div class="mangelfeld" id="mangel-frage1_2">
+                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+                <label>Bitte Mangel beschreiben:</label>
+                <textarea placeholder="Beschreibung des Mangels..."></textarea>
             </div>
         </div>
 
-        <!-- FRAGE 1.4 -->
-        <div class="frage" id="frage1_4"> <!-- Container Frage 1.4 -->
-            <h3>1.4 – Sind die Schrauben fest wenn Seilklemmen (Frosch) verwendet wurden?</h3> <!-- Fragetext -->
-            <div class="antwort-gruppe"> <!-- Antwort Buttons -->
-                <button class="antwort-btn passt" onclick="antwort(this, 'frage1_4')">🟢 Passt</button> <!-- Positiv -->
-                <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage1_4')">🔴 Passt nicht</button> <!-- Negativ -->
-                <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage1_4')">⚪ Irrelevant</button> <!-- Irrelevant -->
+        <div class="frage" id="frage1_3">
+            <h3>1.3 – Durchmesser mit dem Messschieber erfassen:</h3>
+            <div class="messwert-gruppe">
+                <input type="number" id="messwert1_3" placeholder="Wert eingeben" step="0.01" min="0">
+                <span>mm</span>
             </div>
-            <div class="mangelfeld" id="mangel-frage1_4"> <!-- Mangelfeld -->
-                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p> <!-- Warnhinweis -->
-                <label>Bitte Mangel beschreiben:</label> <!-- Beschriftung -->
-                <textarea placeholder="Beschreibung des Mangels..."></textarea> <!-- Textfeld -->
+        </div>
+
+        <div class="frage" id="frage1_4">
+            <h3>1.4 – Sind die Schrauben fest wenn Seilklemmen (Frosch) verwendet wurden?</h3>
+            <div class="antwort-gruppe">
+                <button class="antwort-btn passt" onclick="antwort(this, 'frage1_4')">🟢 Passt</button>
+                <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage1_4')">🔴 Passt nicht</button>
+                <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage1_4')">⚪ Irrelevant</button>
+            </div>
+            <div class="mangelfeld" id="mangel-frage1_4">
+                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+                <label>Bitte Mangel beschreiben:</label>
+                <textarea placeholder="Beschreibung des Mangels..."></textarea>
             </div>
         </div>
 
     </div>
 
     <!-- ========== DOKUMENTE ========== -->
-    <div id="dokumente" class="tab-inhalt"> <!-- Dokumente Tab -->
-        <div class="frage" id="dok_datenblatt"> <!-- Container Datenblatt -->
-            <h3>0.1 – Liegt das Datenblatt vor?</h3> <!-- Fragetext -->
-            <div class="ja-nein-gruppe"> <!-- Ja/Nein Buttons -->
-                <button class="ja-btn" onclick="jaNein(this, 'dok_datenblatt', 'ja')">✅ Ja</button> <!-- Ja -->
-                <button class="nein-btn" onclick="jaNein(this, 'dok_datenblatt', 'nein')">❌ Nein</button> <!-- Nein -->
+    <div id="dokumente" class="tab-inhalt">
+        <div class="frage" id="dok_datenblatt">
+            <h3>0.1 – Liegt das Datenblatt vor?</h3>
+            <div class="ja-nein-gruppe">
+                <button class="ja-btn" onclick="jaNein(this, 'dok_datenblatt', 'ja')">✅ Ja</button>
+                <button class="nein-btn" onclick="jaNein(this, 'dok_datenblatt', 'nein')">❌ Nein</button>
             </div>
         </div>
     </div>
 
     <!-- ========== BERECHNUNG ========== -->
-    <div id="berechnung" class="tab-inhalt"> <!-- Berechnung Tab -->
+    <div id="berechnung" class="tab-inhalt">
 
         <!-- SCHRITT 1: AUSWAHL RILLENFORM -->
-        <div class="frage"> <!-- Container für Auswahl -->
-            <h3>2.1 – Rillenform auswählen</h3> <!-- Überschrift -->
-            <div class="auswahl-gruppe"> <!-- Container für Auswahl Buttons -->
-                <button class="auswahl-btn" onclick="waehleRillenform(this, 'gehaertet')">⚙️ Keilrille gehärtet</button> <!-- Keilrille gehärtet -->
-                <button class="auswahl-btn" onclick="waehleRillenform(this, 'nicht_gehaertet')">⚙️ Keilrille nicht gehärtet</button> <!-- Keilrille nicht gehärtet -->
-                <button class="auswahl-btn" onclick="waehleRillenform(this, 'halbrund')">⚙️ Halbrundrille mit Unterschnitt</button> <!-- Halbrundrille -->
+        <div class="frage">
+            <h3>2.1 – Rillenform auswählen</h3>
+            <div class="auswahl-gruppe">
+                <button class="auswahl-btn" onclick="waehleRillenform(this, 'gehaertet')">⚙️ Keilrille gehärtet</button>
+                <button class="auswahl-btn" onclick="waehleRillenform(this, 'nicht_gehaertet')">⚙️ Keilrille nicht gehärtet</button>
+                <button class="auswahl-btn" onclick="waehleRillenform(this, 'halbrund')">⚙️ Halbrundrille mit Unterschnitt</button>
             </div>
         </div>
 
         <!-- SCHRITT 2: EINGABEN UND FORMELN -->
-        <div class="berechnung-bereich" id="berechnungBereich"> <!-- Wird nach Auswahl sichtbar -->
+        <div class="berechnung-bereich" id="berechnungBereich">
 
-            <!-- EINGABE: Geschwindigkeit und Keilwinkel -->
-            <div class="frage"> <!-- Container für Eingaben -->
-                <h3>2.2 – Eingabewerte</h3> <!-- Überschrift -->
-
-                <div class="eingabe-zeile"> <!-- Eingabezeile Geschwindigkeit -->
-                    <label>Nenngeschwindigkeit v:</label> <!-- Beschriftung -->
-                    <input type="number" id="geschwindigkeit" placeholder="Wert eingeben" step="0.01" min="0" oninput="berechneAlles()"> <!-- Eingabefeld -->
-                    <span class="einheit">m/s</span> <!-- Einheit -->
+            <!-- EINGABE -->
+            <div class="frage">
+                <h3>2.2 – Eingabewerte</h3>
+                <div class="eingabe-zeile">
+                    <label>Nenngeschwindigkeit v:</label>
+                    <input type="number" id="geschwindigkeit" placeholder="Wert eingeben" step="0.01" min="0" oninput="berechneAlles()">
+                    <span class="einheit">m/s</span>
                 </div>
-
-                <div class="eingabe-zeile"> <!-- Eingabezeile Keilwinkel -->
-                    <label>Keilwinkel γ:</label> <!-- Beschriftung -->
-                    <input type="number" id="keilwinkel" placeholder="Wert eingeben" step="0.1" min="0" oninput="berechneAlles()"> <!-- Eingabefeld -->
-                    <span class="einheit">Grad</span> <!-- Einheit -->
+                <div class="eingabe-zeile">
+                    <label>Keilwinkel γ:</label>
+                    <input type="number" id="keilwinkel" placeholder="Wert eingeben" step="0.1" min="0" oninput="berechneAlles()">
+                    <span class="einheit">Grad</span>
                 </div>
             </div>
 
             <!-- FORMEL 1: Reibwert f(μ) -->
-            <div class="frage"> <!-- Container für Formel 1 -->
-                <h3>2.3 – Reibwert f(μ)</h3> <!-- Überschrift -->
-
-                <!-- Grafische Darstellung Formel 1 -->
-                <div class="formel-container"> <!-- Zentrierte Formel -->
-                    <span>f(μ) = </span> <!-- Gleichheitszeichen -->
-                    <span class="bruch"> <!-- Äußerer Bruch -->
-                        <span class="zaehler">0,1</span> <!-- Zähler: 0,1 -->
-                        <span class="nenner"> <!-- Nenner: 1 + v/10 -->
+            <div class="frage">
+                <h3>2.3 – Reibwert f(μ)</h3>
+                <div class="formel-container">
+                    <span>f(μ) = </span>
+                    <span class="bruch">
+                        <span class="zaehler">0,1</span>
+                        <span class="nenner">
                             1 +
-                            <span class="bruch-klein"> <!-- Innerer Bruch v/10 -->
-                                <span class="zaehler-klein">v</span> <!-- Zähler: v -->
-                                <span class="nenner-klein">10</span> <!-- Nenner: 10 -->
+                            <span class="bruch-klein">
+                                <span class="zaehler-klein">v</span>
+                                <span class="nenner-klein">10</span>
                             </span>
                         </span>
                     </span>
                 </div>
-
-                <!-- Ergebnis Reibwert -->
-                <div class="zwischenwert" style="margin-top: 15px;"> <!-- Ergebniszeile -->
-                    <label>Ergebnis f(μ) =</label> <!-- Beschriftung -->
-                    <span id="ergebnis_fmu" style="font-weight: bold; color: #888;">Bitte Werte eingeben</span> <!-- Ergebnis -->
+                <div class="zwischenwert" style="margin-top: 15px;">
+                    <label>Ergebnis f(μ) =</label>
+                    <span id="ergebnis_fmu" style="font-weight: bold; color: #888;">Bitte Werte eingeben</span>
                 </div>
             </div>
 
             <!-- FORMEL 2: Reibungszahl μ -->
-            <div class="frage"> <!-- Container für Formel 2 -->
-                <h3>2.4 – Reibungszahl μ</h3> <!-- Überschrift -->
+            <div class="frage">
+                <h3>2.4 – Reibungszahl μ</h3>
 
-                <!-- Formel für Keilrille - standardmäßig sichtbar -->
-                <div class="formel-container" id="formelKeilrille"> <!-- Formel Keilrille -->
-                    <span>μ = </span> <!-- Gleichheitszeichen -->
-                    <span class="bruch"> <!-- Äußerer Bruch -->
-                        <span class="zaehler">f(μ)</span> <!-- Zähler: Reibwert -->
-                        <span class="nenner"> <!-- Nenner: sin(...) -->
+                <!-- Formel Keilrille -->
+                <div class="formel-container" id="formelKeilrille">
+                    <span>μ = </span>
+                    <span class="bruch">
+                        <span class="zaehler">f(μ)</span>
+                        <span class="nenner">
                             sin
-                            <span style="font-size: 20px;">(</span> <!-- Große öffnende Klammer -->
-                            <span class="bruch-klein"> <!-- Bruch im Nenner -->
-                                <span class="zaehler-klein"> <!-- Zähler des inneren Bruchs -->
-                                    <span style="font-size: 13px;">(</span> <!-- Kleine Klammer -->
-                                    <span class="bruch-klein"> <!-- π/180 -->
-                                        <span class="zaehler-klein">π</span> <!-- π oben -->
-                                        <span class="nenner-klein">180</span> <!-- 180 unten -->
+                            <span style="font-size: 20px;">(</span>
+                            <span class="bruch-klein">
+                                <span class="zaehler-klein">
+                                    <span style="font-size: 13px;">(</span>
+                                    <span class="bruch-klein">
+                                        <span class="zaehler-klein">π</span>
+                                        <span class="nenner-klein">180</span>
                                     </span>
-                                    <span style="font-size: 13px;">)</span> <!-- Kleine Klammer zu -->
+                                    <span style="font-size: 13px;">)</span>
                                     × γ
                                 </span>
-                                <span class="nenner-klein">2</span> <!-- Geteilt durch 2 -->
+                                <span class="nenner-klein">2</span>
                             </span>
-                            <span style="font-size: 20px;">)</span> <!-- Große schließende Klammer -->
+                            <span style="font-size: 20px;">)</span>
                         </span>
                     </span>
                 </div>
 
-                <!-- Formel für Halbrundrille - standardmäßig versteckt -->
-                <div class="formel-container" id="formelHalbrund" style="display:none;"> <!-- Formel Halbrundrille -->
-                    <span>μ = f(μ) × </span> <!-- Gleichheitszeichen -->
-                    <span class="bruch"> <!-- Äußerer Bruch -->
-                        <span class="zaehler"> <!-- Zähler: 4 × sin((π/180×γ)/2) -->
-                            4 × sin
-                            <span style="font-size:16px;">(</span> <!-- Klammer öffnen -->
-                            <span class="bruch-klein"> <!-- Bruch (π/180×γ)/2 -->
-                                <span class="zaehler-klein"> <!-- Zähler -->
-                                    <span style="font-size:13px;">(</span> <!-- Klammer -->
-                                    <span class="bruch-klein"> <!-- π/180 -->
-                                        <span class="zaehler-klein">π</span> <!-- π -->
-                                        <span class="nenner-klein">180</span> <!-- 180 -->
-                                    </span>
-                                    <span style="font-size:13px;">)</span> <!-- Klammer zu -->
-                                    × γ
-                                </span>
-                                <span class="nenner-klein">2</span> <!-- Geteilt durch 2 -->
+                <!-- Formel Halbrundrille -->
+                <div class="formel-container" id="formelHalbrund" style="display:none;">
+                    <span>μ = 4 × f(μ) × </span>
+                    <span class="bruch">
+                        <span class="zaehler"> <!-- Zähler: 1 - sin((π/180)×γ) -->
+                            1 − sin
+                            <span style="font-size:16px;">(</span>
+                            <span style="font-size:13px;">(</span>
+                            <span class="bruch-klein">
+                                <span class="zaehler-klein">π</span>
+                                <span class="nenner-klein">180</span>
                             </span>
-                            <span style="font-size:16px;">)</span> <!-- Klammer schließen -->
+                            <span style="font-size:13px;">)</span>
+                            × γ
+                            <span style="font-size:16px;">)</span>
                         </span>
                         <span class="nenner"> <!-- Nenner: π - (π/180×γ) - sin((π/180×γ)) -->
                             π −
-                            <span style="font-size:13px;">(</span> <!-- Klammer -->
-                            <span class="bruch-klein"> <!-- π/180 -->
-                                <span class="zaehler-klein">π</span> <!-- π -->
-                                <span class="nenner-klein">180</span> <!-- 180 -->
+                            <span style="font-size:13px;">(</span>
+                            <span class="bruch-klein">
+                                <span class="zaehler-klein">π</span>
+                                <span class="nenner-klein">180</span>
                             </span>
-                            <span style="font-size:13px;">)</span> <!-- Klammer zu -->
-                            × γ − sin
-                            <span style="font-size:16px;">(</span> <!-- Klammer -->
-                            <span style="font-size:13px;">(</span> <!-- Klammer -->
-                            <span class="bruch-klein"> <!-- π/180 -->
-                                <span class="zaehler-klein">π</span> <!-- π -->
-                                <span class="nenner-klein">180</span> <!-- 180 -->
-                            </span>
-                            <span style="font-size:13px;">)</span> <!-- Klammer zu -->
                             × γ
-                            <span style="font-size:16px;">)</span> <!-- Klammer schließen -->
+                            <span style="font-size:13px;">)</span>
+                            − sin
+                            <span style="font-size:16px;">(</span>
+                            <span style="font-size:13px;">(</span>
+                            <span class="bruch-klein">
+                                <span class="zaehler-klein">π</span>
+                                <span class="nenner-klein">180</span>
+                            </span>
+                            × γ
+                            <span style="font-size:13px;">)</span>
+                            <span style="font-size:16px;">)</span>
                         </span>
                     </span>
                 </div>
 
-                <!-- Ergebnis Reibungszahl -->
-                <div class="zwischenwert" style="margin-top: 15px;"> <!-- Ergebniszeile -->
-                    <label>Ergebnis μ =</label> <!-- Beschriftung -->
-                    <span id="ergebnis_mu" style="font-weight: bold; color: #888;">Bitte Werte eingeben</span> <!-- Ergebnis -->
+                <div class="zwischenwert" style="margin-top: 15px;">
+                    <label>Ergebnis μ =</label>
+                    <span id="ergebnis_mu" style="font-weight: bold; color: #888;">Bitte Werte eingeben</span>
                 </div>
             </div>
 
@@ -545,116 +476,72 @@
     </div>
 
     <!-- ========== PDF EXPORT BUTTON ========== -->
-    <div class="pdf-bereich"> <!-- Container PDF Button -->
-        <button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button> <!-- PDF Button -->
+    <div class="pdf-bereich">
+        <button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button>
     </div>
 
 </div>
 
-<script> <!-- JavaScript Bereich -->
+<script>
 
-    /**
-     * Funktion: zeige
-     * Zweck: Versteckt alle Seiten und zeigt nur die gewünschte
-     * Parameter: id = ID der Seite
-     */
     function zeige(id) {
-        document.querySelectorAll('.startseite, .seite').forEach(el => { /* Alle Seiten auswählen */
-            el.style.display = 'none'; /* Alle verstecken */
-        });
-        const el = document.getElementById(id); /* Gewünschte Seite auswählen */
-        if (el) { el.style.display = id === 'startseite' ? 'flex' : 'block'; } /* Anzeigen */
+        document.querySelectorAll('.startseite, .seite').forEach(el => { el.style.display = 'none'; });
+        const el = document.getElementById(id);
+        if (el) { el.style.display = id === 'startseite' ? 'flex' : 'block'; }
     }
 
-    /**
-     * Funktion: zeigeBauteile
-     * Zweck: Zeigt die Bauteil-Liste für den gewählten Bereich
-     * Parameter: bereich = "Neubau" oder "Umbau"
-     */
     function zeigeBauteile(bereich) {
-        document.getElementById('bereichTitel').innerText = bereich; /* Titel setzen */
-        zeige('bauteilSeite'); /* Zur Bauteil-Liste wechseln */
+        document.getElementById('bereichTitel').innerText = bereich;
+        zeige('bauteilSeite');
     }
 
-    /**
-     * Funktion: zeigeBauteil
-     * Zweck: Öffnet die Detail-Seite für ein Bauteil
-     * Parameter: name = Bauteilname
-     */
     function zeigeBauteil(name) {
-        document.getElementById('bauteilTitel').innerText = name; /* Titel setzen */
-        zeige('detailSeite'); /* Zur Detail-Seite wechseln */
-        document.querySelector('.tab.aktiv')?.classList.remove('aktiv'); /* Aktiven Tab deaktivieren */
-        document.querySelector('.tab').classList.add('aktiv'); /* Ersten Tab aktivieren */
-        document.querySelectorAll('.tab-inhalt').forEach(el => el.classList.remove('aktiv')); /* Alle Inhalte verstecken */
-        document.getElementById('pruefung').classList.add('aktiv'); /* Prüfung Tab anzeigen */
+        document.getElementById('bauteilTitel').innerText = name;
+        zeige('detailSeite');
+        document.querySelector('.tab.aktiv')?.classList.remove('aktiv');
+        document.querySelector('.tab').classList.add('aktiv');
+        document.querySelectorAll('.tab-inhalt').forEach(el => el.classList.remove('aktiv'));
+        document.getElementById('pruefung').classList.add('aktiv');
     }
 
-    /**
-     * Funktion: zeigeTab
-     * Zweck: Wechselt zwischen den Reitern
-     * Parameter: btn = geklickter Tab, tabId = ID des Inhalts
-     */
     function zeigeTab(btn, tabId) {
-        document.querySelectorAll('.tab').forEach(el => el.classList.remove('aktiv')); /* Alle Tabs deaktivieren */
-        document.querySelectorAll('.tab-inhalt').forEach(el => el.classList.remove('aktiv')); /* Alle Inhalte verstecken */
-        btn.classList.add('aktiv'); /* Gewählten Tab aktivieren */
-        document.getElementById(tabId).classList.add('aktiv'); /* Gewählten Inhalt anzeigen */
+        document.querySelectorAll('.tab').forEach(el => el.classList.remove('aktiv'));
+        document.querySelectorAll('.tab-inhalt').forEach(el => el.classList.remove('aktiv'));
+        btn.classList.add('aktiv');
+        document.getElementById(tabId).classList.add('aktiv');
     }
 
-    /**
-     * Funktion: antwort
-     * Zweck: Verarbeitet Prüffragen mit drei Optionen
-     * Parameter: btn = geklickter Button, frageId = ID der Frage
-     */
     function antwort(btn, frageId) {
-        const frage = document.getElementById(frageId); /* Frage auswählen */
-        frage.querySelectorAll('.antwort-btn').forEach(el => el.classList.remove('aktiv')); /* Alle deaktivieren */
-        btn.classList.add('aktiv'); /* Gewählten aktivieren */
-        const mangelfeld = document.getElementById('mangel-' + frageId); /* Mangelfeld auswählen */
-        if (btn.classList.contains('passt-nicht')) { /* Wenn "Passt nicht" */
-            mangelfeld.style.display = 'block'; /* Mangelfeld einblenden */
+        const frage = document.getElementById(frageId);
+        frage.querySelectorAll('.antwort-btn').forEach(el => el.classList.remove('aktiv'));
+        btn.classList.add('aktiv');
+        const mangelfeld = document.getElementById('mangel-' + frageId);
+        if (btn.classList.contains('passt-nicht')) {
+            mangelfeld.style.display = 'block';
         } else {
-            mangelfeld.style.display = 'none'; /* Mangelfeld ausblenden */
+            mangelfeld.style.display = 'none';
         }
     }
 
-    /**
-     * Funktion: jaNein
-     * Zweck: Verarbeitet Ja/Nein Fragen
-     * Parameter: btn = geklickter Button, frageId = ID, antwortWert = "ja"/"nein"
-     */
     function jaNein(btn, frageId, antwortWert) {
-        const frage = document.getElementById(frageId); /* Frage auswählen */
-        frage.querySelectorAll('.ja-btn, .nein-btn').forEach(el => el.classList.remove('aktiv')); /* Alle deaktivieren */
-        btn.classList.add('aktiv'); /* Gewählten aktivieren */
+        const frage = document.getElementById(frageId);
+        frage.querySelectorAll('.ja-btn, .nein-btn').forEach(el => el.classList.remove('aktiv'));
+        btn.classList.add('aktiv');
     }
 
-    /**
-     * Funktion: holeAntwort
-     * Zweck: Liest die aktuelle Antwort einer Frage aus
-     * Parameter: frageId = ID der Frage
-     * Rückgabe: Text der Antwort oder "Nicht beantwortet"
-     */
     function holeAntwort(frageId) {
-        const frage = document.getElementById(frageId); /* Frage auswählen */
-        if (!frage) return 'Nicht beantwortet'; /* Frage nicht gefunden */
-        const aktiv = frage.querySelector('.aktiv'); /* Aktiven Button suchen */
-        if (!aktiv) return 'Nicht beantwortet'; /* Kein Button aktiv */
-        return aktiv.innerText.trim(); /* Text zurückgeben */
+        const frage = document.getElementById(frageId);
+        if (!frage) return 'Nicht beantwortet';
+        const aktiv = frage.querySelector('.aktiv');
+        if (!aktiv) return 'Nicht beantwortet';
+        return aktiv.innerText.trim();
     }
 
-    /**
-     * Funktion: holeMangel
-     * Zweck: Liest den Mangeltext einer Frage aus
-     * Parameter: frageId = ID der Frage
-     * Rückgabe: Mangeltext oder leerer String
-     */
     function holeMangel(frageId) {
-        const mangelfeld = document.getElementById('mangel-' + frageId); /* Mangelfeld auswählen */
-        if (!mangelfeld) return ''; /* Kein Mangelfeld */
-        const textarea = mangelfeld.querySelector('textarea'); /* Textfeld auswählen */
-        return textarea ? textarea.value.trim() : ''; /* Inhalt zurückgeben */
+        const mangelfeld = document.getElementById('mangel-' + frageId);
+        if (!mangelfeld) return '';
+        const textarea = mangelfeld.querySelector('textarea');
+        return textarea ? textarea.value.trim() : '';
     }
 
     /* Globale Variable für gewählte Rillenform */
@@ -662,160 +549,136 @@
 
     /**
      * Funktion: waehleRillenform
-     * Zweck: Speichert die gewählte Rillenform, zeigt Berechnungsbereich und passende Formel
-     * Parameter: btn = geklickter Button, rillenform = "gehaertet", "nicht_gehaertet" oder "halbrund"
+     * Zweck: Speichert Rillenform, zeigt Berechnungsbereich und passende Formel
+     * Parameter: btn = geklickter Button, rillenform = gewählte Rillenform
      */
     function waehleRillenform(btn, rillenform) {
-        document.querySelectorAll('.auswahl-btn').forEach(el => el.classList.remove('aktiv')); /* Alle Buttons deaktivieren */
-        btn.classList.add('aktiv'); /* Gewählten Button aktivieren */
-        gewaehlteRillenform = rillenform; /* Rillenform global speichern */
-        document.getElementById('berechnungBereich').classList.add('aktiv'); /* Berechnungsbereich einblenden */
+        document.querySelectorAll('.auswahl-btn').forEach(el => el.classList.remove('aktiv')); /* Alle deaktivieren */
+        btn.classList.add('aktiv'); /* Gewählten aktivieren */
+        gewaehlteRillenform = rillenform; /* Rillenform speichern */
+        document.getElementById('berechnungBereich').classList.add('aktiv'); /* Bereich einblenden */
 
-        /* Richtige Formel anzeigen je nach Rillenform */
-        if (rillenform === 'halbrund') { /* Wenn Halbrundrille gewählt */
-            document.getElementById('formelKeilrille').style.display = 'none'; /* Keilrille Formel verstecken */
-            document.getElementById('formelHalbrund').style.display = 'block'; /* Halbrundrille Formel anzeigen */
-        } else { /* Wenn Keilrille gewählt */
-            document.getElementById('formelKeilrille').style.display = 'block'; /* Keilrille Formel anzeigen */
-            document.getElementById('formelHalbrund').style.display = 'none'; /* Halbrundrille Formel verstecken */
+        /* Richtige Formel anzeigen */
+        if (rillenform === 'halbrund') { /* Halbrundrille gewählt */
+            document.getElementById('formelKeilrille').style.display = 'none'; /* Keilrille verstecken */
+            document.getElementById('formelHalbrund').style.display = 'block'; /* Halbrundrille anzeigen */
+        } else { /* Keilrille gewählt */
+            document.getElementById('formelKeilrille').style.display = 'block'; /* Keilrille anzeigen */
+            document.getElementById('formelHalbrund').style.display = 'none'; /* Halbrundrille verstecken */
         }
 
-        berechneAlles(); /* Sofort berechnen falls Werte schon eingegeben */
+        berechneAlles(); /* Sofort berechnen falls Werte eingegeben */
     }
 
     /**
      * Funktion: berechneAlles
-     * Zweck: Berechnet Reibwert f(μ) und Reibungszahl μ je nach gewählter Rillenform
-     * Wird aufgerufen wenn ein Eingabewert geändert wird
+     * Zweck: Berechnet f(μ) und μ je nach gewählter Rillenform
      */
     function berechneAlles() {
-        const v = parseFloat(document.getElementById('geschwindigkeit').value); /* Geschwindigkeit auslesen */
-        const gamma = parseFloat(document.getElementById('keilwinkel').value); /* Keilwinkel auslesen */
+        const v = parseFloat(document.getElementById('geschwindigkeit').value); /* Geschwindigkeit */
+        const gamma = parseFloat(document.getElementById('keilwinkel').value); /* Keilwinkel */
         const fmuEl = document.getElementById('ergebnis_fmu'); /* Reibwert Ergebnisfeld */
         const muEl = document.getElementById('ergebnis_mu'); /* Reibungszahl Ergebnisfeld */
 
-        /* ========== REIBWERT BERECHNEN ========== */
-        if (isNaN(v) || v < 0) { /* Wenn keine gültige Geschwindigkeit */
-            fmuEl.innerText = 'Bitte Geschwindigkeit eingeben'; /* Hinweis */
-            fmuEl.style.color = '#888'; /* Grauer Text */
-            muEl.innerText = 'Bitte Werte eingeben'; /* Hinweis */
-            muEl.style.color = '#888'; /* Grauer Text */
-            return; /* Funktion beenden */
+        if (isNaN(v) || v < 0) { /* Keine gültige Geschwindigkeit */
+            fmuEl.innerText = 'Bitte Geschwindigkeit eingeben';
+            fmuEl.style.color = '#888';
+            muEl.innerText = 'Bitte Werte eingeben';
+            muEl.style.color = '#888';
+            return;
         }
 
-        const fmu = 0.1 / (1 + v / 10); /* Reibwert berechnen: f(μ) = 0,1 / (1 + v/10) */
-        fmuEl.innerText = fmu.toFixed(4); /* Reibwert anzeigen */
-        fmuEl.style.color = '#0057a8'; /* Blaue Schrift */
+        const fmu = 0.1 / (1 + v / 10); /* Reibwert: f(μ) = 0,1 / (1 + v/10) */
+        fmuEl.innerText = fmu.toFixed(4);
+        fmuEl.style.color = '#0057a8';
 
-        /* ========== REIBUNGSZAHL BERECHNEN ========== */
-        if (isNaN(gamma) || gamma <= 0) { /* Wenn kein gültiger Keilwinkel */
-            muEl.innerText = 'Bitte Keilwinkel eingeben'; /* Hinweis */
-            muEl.style.color = '#888'; /* Grauer Text */
-            return; /* Funktion beenden */
+        if (isNaN(gamma) || gamma <= 0) { /* Kein gültiger Keilwinkel */
+            muEl.innerText = 'Bitte Keilwinkel eingeben';
+            muEl.style.color = '#888';
+            return;
         }
 
-        const gammaRad = (Math.PI / 180) * gamma; /* Keilwinkel von Grad in Bogenmaß: (π/180) × γ */
+        const gammaRad = (Math.PI / 180) * gamma; /* Grad in Bogenmaß: (π/180) × γ */
 
-        /* Je nach Rillenform andere Formel verwenden */
+        /* Je nach Rillenform andere Formel */
         const mu = gewaehlteRillenform === 'halbrund'
-            ? fmu * (4 * Math.sin(gammaRad / 2)) / (Math.PI - gammaRad - Math.sin(gammaRad)) /* Halbrundrille: μ = f(μ) × (4×sin((π/180×γ)/2)) / (π-(π/180×γ)-sin((π/180×γ))) */
-            : fmu / Math.sin(gammaRad / 2); /* Keilrille: μ = f(μ) / sin((π/180×γ)/2) */
+            ? 4 * fmu * (1 - Math.sin(gammaRad)) / (Math.PI - gammaRad - Math.sin(gammaRad)) /* Halbrundrille: 4×f(μ)×(1-sin((π/180)×γ)) / (π-(π/180)×γ-sin((π/180)×γ)) */
+            : fmu / Math.sin(gammaRad / 2); /* Keilrille: f(μ) / sin((π/180×γ)/2) */
 
-        muEl.innerText = mu.toFixed(4); /* Reibungszahl anzeigen */
-        muEl.style.color = '#0057a8'; /* Blaue Schrift */
+        muEl.innerText = mu.toFixed(4);
+        muEl.style.color = '#0057a8';
     }
 
     /**
      * Funktion: erstellePDF
-     * Zweck: Erstellt ein PDF Protokoll mit allen Prüfergebnissen
-     * Wird aufgerufen wenn der PDF Button geklickt wird
+     * Zweck: Erstellt ein PDF Protokoll
      */
     function erstellePDF() {
-        const { jsPDF } = window.jspdf; /* jsPDF Bibliothek laden */
-        const doc = new jsPDF(); /* Neues PDF erstellen */
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        let y = 20;
+        const zeilenAbstand = 8;
+        const seitenHoehe = 280;
 
-        let y = 20; /* Startposition */
-        const zeilenAbstand = 8; /* Zeilenabstand */
-        const seitenHoehe = 280; /* Maximale Seitenhöhe */
-
-        /**
-         * Hilfsfunktion: neueZeile
-         * Zweck: Fügt eine Zeile zum PDF hinzu
-         * Parameter: text = Zeilentext, einzug = Einrückung
-         */
         function neueZeile(text, einzug = 0) {
-            if (y > seitenHoehe) { /* Am Ende der Seite */
-                doc.addPage(); /* Neue Seite */
-                y = 20; /* Position zurücksetzen */
-            }
-            doc.text(text, 15 + einzug, y); /* Text platzieren */
-            y += zeilenAbstand; /* Position erhöhen */
+            if (y > seitenHoehe) { doc.addPage(); y = 20; }
+            doc.text(text, 15 + einzug, y);
+            y += zeilenAbstand;
         }
 
-        /* ========== KOPFZEILE ========== */
-        doc.setFontSize(18); /* Große Schrift */
-        doc.setTextColor(0, 87, 168); /* Blau */
-        neueZeile('Aufzug-App - Prüfprotokoll'); /* Titel */
-        doc.setFontSize(11); /* Normale Schrift */
-        doc.setTextColor(100, 100, 100); /* Grau */
-        neueZeile('Erstellt am: ' + new Date().toLocaleDateString('de-DE') + ' um ' + new Date().toLocaleTimeString('de-DE')); /* Datum */
-        neueZeile('Bauteil: ' + (document.getElementById('bauteilTitel').innerText || '-')); /* Bauteilname */
-        neueZeile('Bereich: ' + (document.getElementById('bereichTitel').innerText || '-')); /* Neubau/Umbau */
-        y += 5; /* Extra Abstand */
+        /* KOPFZEILE */
+        doc.setFontSize(18); doc.setTextColor(0, 87, 168);
+        neueZeile('Aufzug-App - Prüfprotokoll');
+        doc.setFontSize(11); doc.setTextColor(100, 100, 100);
+        neueZeile('Erstellt am: ' + new Date().toLocaleDateString('de-DE') + ' um ' + new Date().toLocaleTimeString('de-DE'));
+        neueZeile('Bauteil: ' + (document.getElementById('bauteilTitel').innerText || '-'));
+        neueZeile('Bereich: ' + (document.getElementById('bereichTitel').innerText || '-'));
+        y += 5;
 
-        /* ========== PRÜFUNG VOR ORT ========== */
-        doc.setFontSize(14); /* Überschrift */
-        doc.setTextColor(0, 87, 168); /* Blau */
-        neueZeile('1. Prüfung vor Ort'); /* Abschnittsüberschrift */
-        doc.setFontSize(10); /* Kleine Schrift */
-        doc.setTextColor(0, 0, 0); /* Schwarz */
-        neueZeile('1.0 Dokument vor Ort vorhanden: ' + holeAntwort('frage1_0')); /* Frage 1.0 */
-        neueZeile('1.1 Verhältnis Begrenzerseil/Rollendurchmesser 1:30: ' + holeAntwort('frage1_1')); /* Frage 1.1 */
-        const mangel11 = holeMangel('frage1_1'); /* Mangeltext */
-        if (mangel11) neueZeile('    Mangel: ' + mangel11, 5); /* Mangeltext */
-        neueZeile('1.2 Mindestbruchkraft = 8x Zugkraft Fangvorrichtung: ' + holeAntwort('frage1_2')); /* Frage 1.2 */
-        const mangel12 = holeMangel('frage1_2'); /* Mangeltext */
-        if (mangel12) neueZeile('    Mangel: ' + mangel12, 5); /* Mangeltext */
-        const messwert = document.getElementById('messwert1_3').value; /* Messwert */
-        neueZeile('1.3 Gemessener Seildurchmesser: ' + (messwert || 'Nicht erfasst') + ' mm'); /* Frage 1.3 */
-        neueZeile('1.4 Schrauben Seilklemmen (Frosch) fest: ' + holeAntwort('frage1_4')); /* Frage 1.4 */
-        const mangel14 = holeMangel('frage1_4'); /* Mangeltext */
-        if (mangel14) neueZeile('    Mangel: ' + mangel14, 5); /* Mangeltext */
-        y += 5; /* Extra Abstand */
+        /* PRÜFUNG VOR ORT */
+        doc.setFontSize(14); doc.setTextColor(0, 87, 168);
+        neueZeile('1. Prüfung vor Ort');
+        doc.setFontSize(10); doc.setTextColor(0, 0, 0);
+        neueZeile('1.0 Dokument vor Ort vorhanden: ' + holeAntwort('frage1_0'));
+        neueZeile('1.1 Verhältnis Begrenzerseil/Rollendurchmesser 1:30: ' + holeAntwort('frage1_1'));
+        const mangel11 = holeMangel('frage1_1');
+        if (mangel11) neueZeile('    Mangel: ' + mangel11, 5);
+        neueZeile('1.2 Mindestbruchkraft = 8x Zugkraft Fangvorrichtung: ' + holeAntwort('frage1_2'));
+        const mangel12 = holeMangel('frage1_2');
+        if (mangel12) neueZeile('    Mangel: ' + mangel12, 5);
+        const messwert = document.getElementById('messwert1_3').value;
+        neueZeile('1.3 Gemessener Seildurchmesser: ' + (messwert || 'Nicht erfasst') + ' mm');
+        neueZeile('1.4 Schrauben Seilklemmen (Frosch) fest: ' + holeAntwort('frage1_4'));
+        const mangel14 = holeMangel('frage1_4');
+        if (mangel14) neueZeile('    Mangel: ' + mangel14, 5);
+        y += 5;
 
-        /* ========== DOKUMENTE ========== */
-        doc.setFontSize(14); /* Überschrift */
-        doc.setTextColor(0, 87, 168); /* Blau */
-        neueZeile('2. Dokumente'); /* Abschnittsüberschrift */
-        doc.setFontSize(10); /* Kleine Schrift */
-        doc.setTextColor(0, 0, 0); /* Schwarz */
-        neueZeile('0.1 Datenblatt vorhanden: ' + holeAntwort('dok_datenblatt')); /* Datenblatt */
-        y += 5; /* Extra Abstand */
+        /* DOKUMENTE */
+        doc.setFontSize(14); doc.setTextColor(0, 87, 168);
+        neueZeile('2. Dokumente');
+        doc.setFontSize(10); doc.setTextColor(0, 0, 0);
+        neueZeile('0.1 Datenblatt vorhanden: ' + holeAntwort('dok_datenblatt'));
+        y += 5;
 
-        /* ========== BERECHNUNG ========== */
-        doc.setFontSize(14); /* Überschrift */
-        doc.setTextColor(0, 87, 168); /* Blau */
-        neueZeile('3. Berechnung (EN 81-50)'); /* Abschnittsüberschrift */
-        doc.setFontSize(10); /* Kleine Schrift */
-        doc.setTextColor(0, 0, 0); /* Schwarz */
+        /* BERECHNUNG */
+        doc.setFontSize(14); doc.setTextColor(0, 87, 168);
+        neueZeile('3. Berechnung (EN 81-50)');
+        doc.setFontSize(10); doc.setTextColor(0, 0, 0);
+        let rillenformText = 'Nicht gewählt';
+        if (gewaehlteRillenform === 'gehaertet') rillenformText = 'Keilrille gehärtet';
+        if (gewaehlteRillenform === 'nicht_gehaertet') rillenformText = 'Keilrille nicht gehärtet';
+        if (gewaehlteRillenform === 'halbrund') rillenformText = 'Halbrundrille mit Unterschnitt';
+        neueZeile('Rillenform: ' + rillenformText);
+        const v = document.getElementById('geschwindigkeit').value;
+        const gamma = document.getElementById('keilwinkel').value;
+        neueZeile('Nenngeschwindigkeit v: ' + (v || 'Nicht eingegeben') + ' m/s');
+        neueZeile('Keilwinkel gamma: ' + (gamma || 'Nicht eingegeben') + ' Grad');
+        neueZeile('Reibwert f(mu) = ' + document.getElementById('ergebnis_fmu').innerText);
+        neueZeile('Reibungszahl mu = ' + document.getElementById('ergebnis_mu').innerText);
 
-        /* Rillenform im PDF anzeigen */
-        let rillenformText = 'Nicht gewählt'; /* Standardwert */
-        if (gewaehlteRillenform === 'gehaertet') rillenformText = 'Keilrille gehärtet'; /* Keilrille gehärtet */
-        if (gewaehlteRillenform === 'nicht_gehaertet') rillenformText = 'Keilrille nicht gehärtet'; /* Keilrille nicht gehärtet */
-        if (gewaehlteRillenform === 'halbrund') rillenformText = 'Halbrundrille mit Unterschnitt'; /* Halbrundrille */
-
-        neueZeile('Rillenform: ' + rillenformText); /* Rillenform */
-        const v = document.getElementById('geschwindigkeit').value; /* Geschwindigkeit */
-        const gamma = document.getElementById('keilwinkel').value; /* Keilwinkel */
-        neueZeile('Nenngeschwindigkeit v: ' + (v || 'Nicht eingegeben') + ' m/s'); /* Geschwindigkeit */
-        neueZeile('Keilwinkel gamma: ' + (gamma || 'Nicht eingegeben') + ' Grad'); /* Keilwinkel */
-        neueZeile('Reibwert f(mu) = ' + document.getElementById('ergebnis_fmu').innerText); /* Reibwert */
-        neueZeile('Reibungszahl mu = ' + document.getElementById('ergebnis_mu').innerText); /* Reibungszahl */
-
-        /* ========== PDF SPEICHERN ========== */
-        const datum = new Date().toLocaleDateString('de-DE').replace(/\./g, '-'); /* Datum formatieren */
-        doc.save('Pruefprotokoll_Geschwindigkeitsbegrenzerseil_' + datum + '.pdf'); /* PDF herunterladen */
+        /* PDF SPEICHERN */
+        const datum = new Date().toLocaleDateString('de-DE').replace(/\./g, '-');
+        doc.save('Pruefprotokoll_Geschwindigkeitsbegrenzerseil_' + datum + '.pdf');
     }
 
 </script>
