@@ -1,10 +1,8 @@
-<!DOCTYPE html> <!-- Gibt dem Browser an dass dies eine HTML5 Seite ist -->
-<html lang="de"> <!-- Startet die HTML Seite, Sprache ist Deutsch -->
-<head> <!-- Kopfbereich - hier stehen Einstellungen die der Benutzer nicht sieht -->
+<!DOCTYPE html> <!-- Gibt dem Browser an dass dies eine HTML5 Seite ist --> <html lang="de"> <!-- Startet die HTML Seite, Sprache ist Deutsch --> <head> <!-- Kopfbereich - hier stehen Einstellungen die der Benutzer nicht sieht -->
     <meta charset="UTF-8"> <!-- Ermöglicht deutsche Sonderzeichen wie ä,ö,ü -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Macht die App auf dem Handy richtig darstellbar -->
     <title>Aufzug-App</title> <!-- Name der App der oben im Browser Tab erscheint -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> <!-- Externe Bibliothek für PDF Erstellung -->
+    <script src="https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcdnjs.cloudflare.com%2Fajax%2Flibs%2Fjspdf%2F2.5.1%2Fjspdf.umd.min.js&data=05%7C02%7Csteffen.pahl%40de.tuv.com%7C991e5559c7c1412e5d9208de796bf766%7C255bd3b384124e31a3ec56916c7ae8c0%7C0%7C0%7C639081701781169707%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=GINTNLc1ZFfgHMvx9Qffvn94fn808o%2BJD847MhHMOUs%3D&reserved=0"></script> <!-- Externe Bibliothek für PDF Erstellung -->
     <style> <!-- Hier beginnen alle Design Einstellungen -->
 
         /* ========== GRUNDEINSTELLUNGEN ========== */
@@ -189,14 +187,6 @@
             font-size: 15px; /* Schriftgröße */
             width: 120px; /* Breite */
         }
-        .eingabe-zeile select {
-            padding: 8px 12px; /* Innenabstand */
-            border: 2px solid #0057a8; /* Blauer Rahmen */
-            border-radius: 6px; /* Abgerundete Ecken */
-            font-size: 15px; /* Schriftgröße */
-            background: white; /* Weißer Hintergrund */
-            cursor: pointer; /* Hand Cursor */
-        }
         .einheit {
             font-size: 14px; /* Schriftgröße */
             color: #666; /* Grauer Text */
@@ -279,10 +269,10 @@
 
         /* ========== BERECHNUNG BEREICH ========== */
         .berechnung-bereich {
-            display: none; /* Standardmäßig versteckt - erscheint erst nach Auswahl */
+            display: none; /* Standardmäßig versteckt */
             margin-top: 20px; /* Abstand nach oben */
         }
-        .berechnung-bereich.aktiv { display: block; } /* Sichtbar wenn Auswahl getroffen */
+        .berechnung-bereich.aktiv { display: block; } /* Sichtbar nach Auswahl */
 
         /* ========== PDF BUTTON ========== */
         .pdf-bereich { margin-top: 30px; text-align: center; padding: 20px; } /* Container zentriert */
@@ -305,8 +295,7 @@
 <!-- ========== KOPFZEILE ========== -->
 <header>🛗 Aufzug-App</header> <!-- Blaue Kopfzeile -->
 
-<!-- ========== STARTSEITE ========== -->
-<div id="startseite" class="startseite"> <!-- Container Startseite -->
+<!-- ========== STARTSEITE ========== --> <div id="startseite" class="startseite"> <!-- Container Startseite -->
     <h2>Bitte wählen Sie einen Bereich:</h2> <!-- Aufforderung -->
     <div class="auswahl"> <!-- Container für Buttons -->
         <button class="btn" onclick="zeigeBauteile('Neubau')">Neubau</button> <!-- Neubau Button -->
@@ -314,8 +303,7 @@
     </div>
 </div>
 
-<!-- ========== BAUTEIL LISTE ========== -->
-<div id="bauteilSeite" class="seite"> <!-- Container Bauteil-Liste -->
+<!-- ========== BAUTEIL LISTE ========== --> <div id="bauteilSeite" class="seite"> <!-- Container Bauteil-Liste -->
     <button class="zuruck" onclick="zeige('startseite')">← Zurück</button> <!-- Zurück Button -->
     <h2 id="bereichTitel"></h2> <!-- Titel per JavaScript -->
     <div class="bauteil-liste"> <!-- Liste der Bauteile -->
@@ -325,8 +313,7 @@
     </div>
 </div>
 
-<!-- ========== BAUTEIL DETAIL SEITE ========== -->
-<div id="detailSeite" class="seite"> <!-- Container Detail Seite -->
+<!-- ========== BAUTEIL DETAIL SEITE ========== --> <div id="detailSeite" class="seite"> <!-- Container Detail Seite -->
     <button class="zuruck" onclick="zeige('bauteilSeite')">← Zurück</button> <!-- Zurück Button -->
     <h2 id="bauteilTitel"></h2> <!-- Bauteilname per JavaScript -->
 
@@ -419,16 +406,17 @@
     <!-- ========== BERECHNUNG ========== -->
     <div id="berechnung" class="tab-inhalt"> <!-- Berechnung Tab -->
 
-        <!-- SCHRITT 1: AUSWAHL RILLENFORM - kommt als erstes -->
+        <!-- SCHRITT 1: AUSWAHL RILLENFORM -->
         <div class="frage"> <!-- Container für Auswahl -->
             <h3>2.1 – Rillenform auswählen</h3> <!-- Überschrift -->
             <div class="auswahl-gruppe"> <!-- Container für Auswahl Buttons -->
-                <button class="auswahl-btn" onclick="waehleRillenform(this, 'gehaertet')">⚙️ Keilrille gehärtet</button> <!-- Keilrille gehärtet Button -->
-                <button class="auswahl-btn" onclick="waehleRillenform(this, 'nicht_gehaertet')">⚙️ Keilrille nicht gehärtet</button> <!-- Keilrille nicht gehärtet Button -->
+                <button class="auswahl-btn" onclick="waehleRillenform(this, 'gehaertet')">⚙️ Keilrille gehärtet</button> <!-- Keilrille gehärtet -->
+                <button class="auswahl-btn" onclick="waehleRillenform(this, 'nicht_gehaertet')">⚙️ Keilrille nicht gehärtet</button> <!-- Keilrille nicht gehärtet -->
+                <button class="auswahl-btn" onclick="waehleRillenform(this, 'halbrund')">⚙️ Halbrundrille mit Unterschnitt</button> <!-- Halbrundrille -->
             </div>
         </div>
 
-        <!-- SCHRITT 2: EINGABEN UND FORMELN - erscheint erst nach Auswahl -->
+        <!-- SCHRITT 2: EINGABEN UND FORMELN -->
         <div class="berechnung-bereich" id="berechnungBereich"> <!-- Wird nach Auswahl sichtbar -->
 
             <!-- EINGABE: Geschwindigkeit und Keilwinkel -->
@@ -444,7 +432,7 @@
                 <div class="eingabe-zeile"> <!-- Eingabezeile Keilwinkel -->
                     <label>Keilwinkel γ:</label> <!-- Beschriftung -->
                     <input type="number" id="keilwinkel" placeholder="Wert eingeben" step="0.1" min="0" oninput="berechneAlles()"> <!-- Eingabefeld -->
-                    <span class="einheit">Grad</span> <!-- Einheit Grad -->
+                    <span class="einheit">Grad</span> <!-- Einheit -->
                 </div>
             </div>
 
@@ -478,8 +466,8 @@
             <div class="frage"> <!-- Container für Formel 2 -->
                 <h3>2.4 – Reibungszahl μ</h3> <!-- Überschrift -->
 
-                <!-- Grafische Darstellung Formel 2 -->
-                <div class="formel-container"> <!-- Zentrierte Formel -->
+                <!-- Formel für Keilrille - standardmäßig sichtbar -->
+                <div class="formel-container" id="formelKeilrille"> <!-- Formel Keilrille -->
                     <span>μ = </span> <!-- Gleichheitszeichen -->
                     <span class="bruch"> <!-- Äußerer Bruch -->
                         <span class="zaehler">f(μ)</span> <!-- Zähler: Reibwert -->
@@ -488,17 +476,60 @@
                             <span style="font-size: 20px;">(</span> <!-- Große öffnende Klammer -->
                             <span class="bruch-klein"> <!-- Bruch im Nenner -->
                                 <span class="zaehler-klein"> <!-- Zähler des inneren Bruchs -->
-                                    <span style="font-size: 13px;">(</span> <!-- Kleine Klammer öffnen -->
+                                    <span style="font-size: 13px;">(</span> <!-- Kleine Klammer -->
                                     <span class="bruch-klein"> <!-- π/180 -->
                                         <span class="zaehler-klein">π</span> <!-- π oben -->
                                         <span class="nenner-klein">180</span> <!-- 180 unten -->
                                     </span>
-                                    <span style="font-size: 13px;">)</span> <!-- Kleine Klammer schließen -->
+                                    <span style="font-size: 13px;">)</span> <!-- Kleine Klammer zu -->
                                     × γ
                                 </span>
                                 <span class="nenner-klein">2</span> <!-- Geteilt durch 2 -->
                             </span>
                             <span style="font-size: 20px;">)</span> <!-- Große schließende Klammer -->
+                        </span>
+                    </span>
+                </div>
+
+                <!-- Formel für Halbrundrille - standardmäßig versteckt -->
+                <div class="formel-container" id="formelHalbrund" style="display:none;"> <!-- Formel Halbrundrille -->
+                    <span>μ = f(μ) × </span> <!-- Gleichheitszeichen -->
+                    <span class="bruch"> <!-- Äußerer Bruch -->
+                        <span class="zaehler"> <!-- Zähler: 4 × sin((π/180×γ)/2) -->
+                            4 × sin
+                            <span style="font-size:16px;">(</span> <!-- Klammer öffnen -->
+                            <span class="bruch-klein"> <!-- Bruch (π/180×γ)/2 -->
+                                <span class="zaehler-klein"> <!-- Zähler -->
+                                    <span style="font-size:13px;">(</span> <!-- Klammer -->
+                                    <span class="bruch-klein"> <!-- π/180 -->
+                                        <span class="zaehler-klein">π</span> <!-- π -->
+                                        <span class="nenner-klein">180</span> <!-- 180 -->
+                                    </span>
+                                    <span style="font-size:13px;">)</span> <!-- Klammer zu -->
+                                    × γ
+                                </span>
+                                <span class="nenner-klein">2</span> <!-- Geteilt durch 2 -->
+                            </span>
+                            <span style="font-size:16px;">)</span> <!-- Klammer schließen -->
+                        </span>
+                        <span class="nenner"> <!-- Nenner: π - (π/180×γ) - sin((π/180×γ)) -->
+                            π −
+                            <span style="font-size:13px;">(</span> <!-- Klammer -->
+                            <span class="bruch-klein"> <!-- π/180 -->
+                                <span class="zaehler-klein">π</span> <!-- π -->
+                                <span class="nenner-klein">180</span> <!-- 180 -->
+                            </span>
+                            <span style="font-size:13px;">)</span> <!-- Klammer zu -->
+                            × γ − sin
+                            <span style="font-size:16px;">(</span> <!-- Klammer -->
+                            <span style="font-size:13px;">(</span> <!-- Klammer -->
+                            <span class="bruch-klein"> <!-- π/180 -->
+                                <span class="zaehler-klein">π</span> <!-- π -->
+                                <span class="nenner-klein">180</span> <!-- 180 -->
+                            </span>
+                            <span style="font-size:13px;">)</span> <!-- Klammer zu -->
+                            × γ
+                            <span style="font-size:16px;">)</span> <!-- Klammer schließen -->
                         </span>
                     </span>
                 </div>
@@ -627,24 +658,34 @@
     }
 
     /* Globale Variable für gewählte Rillenform */
-    let gewaehlteRillenform = ''; /* Speichert ob Keilrille gehärtet oder nicht gehärtet */
+    let gewaehlteRillenform = ''; /* Speichert welche Rillenform gewählt wurde */
 
     /**
      * Funktion: waehleRillenform
-     * Zweck: Speichert die gewählte Rillenform und zeigt den Berechnungsbereich
-     * Parameter: btn = geklickter Button, rillenform = "gehaertet" oder "nicht_gehaertet"
+     * Zweck: Speichert die gewählte Rillenform, zeigt Berechnungsbereich und passende Formel
+     * Parameter: btn = geklickter Button, rillenform = "gehaertet", "nicht_gehaertet" oder "halbrund"
      */
     function waehleRillenform(btn, rillenform) {
         document.querySelectorAll('.auswahl-btn').forEach(el => el.classList.remove('aktiv')); /* Alle Buttons deaktivieren */
         btn.classList.add('aktiv'); /* Gewählten Button aktivieren */
-        gewaehlteRillenform = rillenform; /* Rillenform speichern */
+        gewaehlteRillenform = rillenform; /* Rillenform global speichern */
         document.getElementById('berechnungBereich').classList.add('aktiv'); /* Berechnungsbereich einblenden */
+
+        /* Richtige Formel anzeigen je nach Rillenform */
+        if (rillenform === 'halbrund') { /* Wenn Halbrundrille gewählt */
+            document.getElementById('formelKeilrille').style.display = 'none'; /* Keilrille Formel verstecken */
+            document.getElementById('formelHalbrund').style.display = 'block'; /* Halbrundrille Formel anzeigen */
+        } else { /* Wenn Keilrille gewählt */
+            document.getElementById('formelKeilrille').style.display = 'block'; /* Keilrille Formel anzeigen */
+            document.getElementById('formelHalbrund').style.display = 'none'; /* Halbrundrille Formel verstecken */
+        }
+
         berechneAlles(); /* Sofort berechnen falls Werte schon eingegeben */
     }
 
     /**
      * Funktion: berechneAlles
-     * Zweck: Berechnet Reibwert f(μ) und Reibungszahl μ
+     * Zweck: Berechnet Reibwert f(μ) und Reibungszahl μ je nach gewählter Rillenform
      * Wird aufgerufen wenn ein Eingabewert geändert wird
      */
     function berechneAlles() {
@@ -663,7 +704,7 @@
         }
 
         const fmu = 0.1 / (1 + v / 10); /* Reibwert berechnen: f(μ) = 0,1 / (1 + v/10) */
-        fmuEl.innerText = fmu.toFixed(4); /* Reibwert anzeigen mit 4 Nachkommastellen */
+        fmuEl.innerText = fmu.toFixed(4); /* Reibwert anzeigen */
         fmuEl.style.color = '#0057a8'; /* Blaue Schrift */
 
         /* ========== REIBUNGSZAHL BERECHNEN ========== */
@@ -673,9 +714,14 @@
             return; /* Funktion beenden */
         }
 
-        const gammaRad = (Math.PI / 180) * gamma; /* Keilwinkel von Grad in Bogenmaß umrechnen: (π/180) × γ */
-        const mu = fmu / Math.sin(gammaRad / 2); /* Reibungszahl berechnen: μ = f(μ) / sin((π/180 × γ) / 2) */
-        muEl.innerText = mu.toFixed(4); /* Reibungszahl anzeigen mit 4 Nachkommastellen */
+        const gammaRad = (Math.PI / 180) * gamma; /* Keilwinkel von Grad in Bogenmaß: (π/180) × γ */
+
+        /* Je nach Rillenform andere Formel verwenden */
+        const mu = gewaehlteRillenform === 'halbrund'
+            ? fmu * (4 * Math.sin(gammaRad / 2)) / (Math.PI - gammaRad - Math.sin(gammaRad)) /* Halbrundrille: μ = f(μ) × (4×sin((π/180×γ)/2)) / (π-(π/180×γ)-sin((π/180×γ))) */
+            : fmu / Math.sin(gammaRad / 2); /* Keilrille: μ = f(μ) / sin((π/180×γ)/2) */
+
+        muEl.innerText = mu.toFixed(4); /* Reibungszahl anzeigen */
         muEl.style.color = '#0057a8'; /* Blaue Schrift */
     }
 
@@ -710,7 +756,6 @@
         doc.setFontSize(18); /* Große Schrift */
         doc.setTextColor(0, 87, 168); /* Blau */
         neueZeile('Aufzug-App - Prüfprotokoll'); /* Titel */
-
         doc.setFontSize(11); /* Normale Schrift */
         doc.setTextColor(100, 100, 100); /* Grau */
         neueZeile('Erstellt am: ' + new Date().toLocaleDateString('de-DE') + ' um ' + new Date().toLocaleTimeString('de-DE')); /* Datum */
@@ -753,13 +798,20 @@
         neueZeile('3. Berechnung (EN 81-50)'); /* Abschnittsüberschrift */
         doc.setFontSize(10); /* Kleine Schrift */
         doc.setTextColor(0, 0, 0); /* Schwarz */
-        neueZeile('Rillenform: ' + (gewaehlteRillenform === 'gehaertet' ? 'Keilrille gehärtet' : gewaehlteRillenform === 'nicht_gehaertet' ? 'Keilrille nicht gehärtet' : 'Nicht gewählt')); /* Rillenform */
+
+        /* Rillenform im PDF anzeigen */
+        let rillenformText = 'Nicht gewählt'; /* Standardwert */
+        if (gewaehlteRillenform === 'gehaertet') rillenformText = 'Keilrille gehärtet'; /* Keilrille gehärtet */
+        if (gewaehlteRillenform === 'nicht_gehaertet') rillenformText = 'Keilrille nicht gehärtet'; /* Keilrille nicht gehärtet */
+        if (gewaehlteRillenform === 'halbrund') rillenformText = 'Halbrundrille mit Unterschnitt'; /* Halbrundrille */
+
+        neueZeile('Rillenform: ' + rillenformText); /* Rillenform */
         const v = document.getElementById('geschwindigkeit').value; /* Geschwindigkeit */
         const gamma = document.getElementById('keilwinkel').value; /* Keilwinkel */
         neueZeile('Nenngeschwindigkeit v: ' + (v || 'Nicht eingegeben') + ' m/s'); /* Geschwindigkeit */
         neueZeile('Keilwinkel gamma: ' + (gamma || 'Nicht eingegeben') + ' Grad'); /* Keilwinkel */
-        neueZeile('Reibwert f(mu) = 0,1 / (1 + v/10) = ' + document.getElementById('ergebnis_fmu').innerText); /* Reibwert */
-        neueZeile('Reibungszahl mu = f(mu) / sin(((pi/180) x gamma) / 2) = ' + document.getElementById('ergebnis_mu').innerText); /* Reibungszahl */
+        neueZeile('Reibwert f(mu) = ' + document.getElementById('ergebnis_fmu').innerText); /* Reibwert */
+        neueZeile('Reibungszahl mu = ' + document.getElementById('ergebnis_mu').innerText); /* Reibungszahl */
 
         /* ========== PDF SPEICHERN ========== */
         const datum = new Date().toLocaleDateString('de-DE').replace(/\./g, '-'); /* Datum formatieren */
@@ -770,3 +822,5 @@
 
 </body>
 </html>
+
+
