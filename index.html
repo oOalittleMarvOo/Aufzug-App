@@ -431,19 +431,25 @@
                 <div class="formel-container" id="formelHalbrund" style="display:none;">
                     <span>μ = 4 × f(μ) × </span>
                     <span class="bruch">
-                        <span class="zaehler"> <!-- Zähler: (1 - sin((π/180)×γ) -->
-                            (1 − sin
-                            <span style="font-size:16px;">(</span>
-                            <span style="font-size:13px;">(</span>
-                            <span class="bruch-klein">
-                                <span class="zaehler-klein">π</span>
-                                <span class="nenner-klein">180</span>
-                            </span>
-                            <span style="font-size:13px;">)</span>
-                            × γ
-                            <span style="font-size:16px;">)</span>
-                            )
-                        </span>
+                        <span class="zaehler"> <!-- Zähler: (1 - sin((π/180×γ)/2)) -->
+    (1 − sin
+    <span style="font-size:16px;">(</span>
+    <span class="bruch-klein">
+        <span class="zaehler-klein">
+            <span style="font-size:13px;">(</span>
+            <span class="bruch-klein">
+                <span class="zaehler-klein">π</span>
+                <span class="nenner-klein">180</span>
+            </span>
+            <span style="font-size:13px;">)</span>
+            × γ
+        </span>
+        <span class="nenner-klein">2</span>
+    </span>
+    <span style="font-size:16px;">)</span>
+    )
+</span>
+
                         <span class="nenner"> <!-- Nenner: π - (π/180×γ) - sin((π/180×γ)) -->
                             π −
                             <span style="font-size:13px;">(</span>
@@ -603,7 +609,7 @@
 
         /* Je nach Rillenform andere Formel */
         const mu = gewaehlteRillenform === 'halbrund'
-            ? 4 * fmu * (1 - Math.sin(gammaRad)) / (Math.PI - gammaRad - Math.sin(gammaRad)) /* Halbrundrille: 4×f(μ)×(1-sin((π/180)×γ)) / (π-(π/180)×γ-sin((π/180)×γ)) */
+            ? 4 * fmu * (1 - Math.sin(gammaRad /2)) / (Math.PI - gammaRad - Math.sin(gammaRad)) /* Halbrundrille: 4×f(μ)×(1-sin((π/180)×γ)) / (π-(π/180)×γ-sin((π/180)×γ)) */
             : fmu / Math.sin(gammaRad / 2); /* Keilrille: f(μ) / sin((π/180×γ)/2) */
 
         muEl.innerText = mu.toFixed(4);
