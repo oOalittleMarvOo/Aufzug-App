@@ -2,7 +2,7 @@
     <meta charset="UTF-8"> <!-- Ermöglicht deutsche Sonderzeichen wie ä,ö,ü -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Macht die App auf dem Handy richtig darstellbar -->
     <title>Aufzug-App</title> <!-- Name der App der oben im Browser Tab erscheint -->
-    <script src="https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcdnjs.cloudflare.com%2Fajax%2Flibs%2Fjspdf%2F2.5.1%2Fjspdf.umd.min.js&data=05%7C02%7Csteffen.pahl%40de.tuv.com%7C989d9995dee445526f6408de7affd38b%7C255bd3b384124e31a3ec56916c7ae8c0%7C0%7C0%7C639083436347570940%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=DsGtKo%2BGn%2B9I%2FN2viQpoBDfzlXxn73DVvbHCPIz6m%2BA%3D&reserved=0"></script> <!-- Externe Bibliothek für PDF Erstellung -->
+    <script src="https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcdnjs.cloudflare.com%2Fajax%2Flibs%2Fjspdf%2F2.5.1%2Fjspdf.umd.min.js&data=05%7C02%7Csteffen.pahl%40de.tuv.com%7Cb2e5906f03cf4c00a87508de7b0505ff%7C255bd3b384124e31a3ec56916c7ae8c0%7C0%7C0%7C639083458662353921%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=j8%2FZR7pCqDtN%2BraIBNSNUN8rSXd%2F5UCgqrG15Rib%2FsM%3D&reserved=0"></script> <!-- Externe Bibliothek für PDF Erstellung -->
     <style> <!-- Hier beginnen alle Design Einstellungen -->
 
         /* ========== GRUNDEINSTELLUNGEN ========== */
@@ -286,7 +286,8 @@
     <!-- ========== PRÜFUNG VOR ORT ========== -->
     <div id="pruefung" class="tab-inhalt aktiv">
 
-        <div class="frage" id="frage1_0">
+        <!-- FRAGE 1.0 -->
+        <div class="frage" id="frage1_0"> <!-- Container Frage 1.0 -->
             <h3>1.0 – Liegt das Dokument zur Ermittlung des Seildurchmessers mit dem Messschieber vor Ort vor?</h3>
             <div class="ja-nein-gruppe">
                 <button class="ja-btn" onclick="jaNein(this, 'frage1_0', 'ja')">✅ Ja</button>
@@ -294,7 +295,8 @@
             </div>
         </div>
 
-        <div class="frage" id="frage1_1">
+        <!-- FRAGE 1.1 -->
+        <div class="frage" id="frage1_1"> <!-- Container Frage 1.1 -->
             <h3>1.1 – Ist das Verhältnis von Begrenzerseil und Rollendurchmesser 1:30?</h3>
             <div class="antwort-gruppe">
                 <button class="antwort-btn passt" onclick="antwort(this, 'frage1_1')">🟢 Passt</button>
@@ -308,7 +310,8 @@
             </div>
         </div>
 
-        <div class="frage" id="frage1_2">
+        <!-- FRAGE 1.2 -->
+        <div class="frage" id="frage1_2"> <!-- Container Frage 1.2 -->
             <h3>1.2 – Beträgt die Mindestbruchkraft das Achtfache der Zugkraft der Fangvorrichtung?</h3>
             <div class="antwort-gruppe">
                 <button class="antwort-btn passt" onclick="antwort(this, 'frage1_2')">🟢 Passt</button>
@@ -322,7 +325,8 @@
             </div>
         </div>
 
-        <div class="frage" id="frage1_3">
+        <!-- FRAGE 1.3 -->
+        <div class="frage" id="frage1_3"> <!-- Container Frage 1.3 -->
             <h3>1.3 – Durchmesser mit dem Messschieber erfassen:</h3>
             <div class="messwert-gruppe">
                 <input type="number" id="messwert1_3" placeholder="Wert eingeben" step="0.01" min="0">
@@ -330,7 +334,8 @@
             </div>
         </div>
 
-        <div class="frage" id="frage1_4">
+        <!-- FRAGE 1.4 -->
+        <div class="frage" id="frage1_4"> <!-- Container Frage 1.4 -->
             <h3>1.4 – Sind die Schrauben fest wenn Seilklemmen (Frosch) verwendet wurden?</h3>
             <div class="antwort-gruppe">
                 <button class="antwort-btn passt" onclick="antwort(this, 'frage1_4')">🟢 Passt</button>
@@ -364,43 +369,43 @@
         <div class="frage">
             <h3>2.1 – Rillenform auswählen</h3>
             <div class="auswahl-gruppe">
-                <button class="auswahl-btn" onclick="waehleRillenform(this, 'gehaertet')">⚙️ Keilrille gehärtet</button>
-                <button class="auswahl-btn" onclick="waehleRillenform(this, 'nicht_gehaertet')">⚙️ Keilrille nicht gehärtet</button>
-                <button class="auswahl-btn" onclick="waehleRillenform(this, 'halbrund')">⚙️ Halbrundrille mit Unterschnitt</button>
+                <button class="auswahl-btn" onclick="waehleRillenform(this, 'gehaertet')">⚙️ Keilrille gehärtet</button> <!-- Keilrille gehärtet -->
+                <button class="auswahl-btn" onclick="waehleRillenform(this, 'nicht_gehaertet')">⚙️ Keilrille nicht gehärtet</button> <!-- Keilrille nicht gehärtet -->
+                <button class="auswahl-btn" onclick="waehleRillenform(this, 'halbrund')">⚙️ Halbrundrille mit Unterschnitt</button> <!-- Halbrundrille -->
             </div>
         </div>
 
-        <!-- SCHRITT 2: EINGABEN UND FORMELN -->
-        <div class="berechnung-bereich" id="berechnungBereich">
+        <!-- SCHRITT 2: EINGABEN UND FORMELN - erscheint nach Auswahl -->
+        <div class="berechnung-bereich" id="berechnungBereich"> <!-- Wird nach Auswahl sichtbar -->
 
-            <!-- EINGABE -->
+            <!-- EINGABE: Alle Werte -->
             <div class="frage">
                 <h3>2.2 – Eingabewerte</h3>
-                <div class="eingabe-zeile">
+                <div class="eingabe-zeile"> <!-- Geschwindigkeit -->
                     <label>Nenngeschwindigkeit v:</label>
                     <input type="number" id="geschwindigkeit" placeholder="Wert eingeben" step="0.01" min="0" oninput="berechneAlles()">
                     <span class="einheit">m/s</span>
                 </div>
-                <div class="eingabe-zeile">
+                <div class="eingabe-zeile"> <!-- Keilwinkel -->
                     <label>Keilwinkel γ:</label>
                     <input type="number" id="keilwinkel" placeholder="Wert eingeben" step="0.1" min="0" oninput="berechneAlles()">
                     <span class="einheit">Grad</span>
                 </div>
-                <div class="eingabe-zeile">
+                <div class="eingabe-zeile"> <!-- Spannkraft -->
                     <label>Spannkraft vom Spanngewicht G:</label>
                     <input type="number" id="spannkraft" placeholder="Wert eingeben" step="1" min="0" oninput="berechneAlles()">
                     <span class="einheit">N</span>
                 </div>
             </div>
 
-            <!-- FORMEL 1: μ (früher Reibwert f(μ)) -->
+            <!-- FORMEL 2.3: Reibwert μ -->
             <div class="frage">
-                <h3>2.3 – Reibwert μ</h3> <!-- Früher f(μ) jetzt μ -->
-                <div class="formel-container">
+                <h3>2.3 – Reibwert μ</h3> <!-- Überschrift -->
+                <div class="formel-container"> <!-- Grafische Formel -->
                     <span>μ = </span>
                     <span class="bruch">
-                        <span class="zaehler">0,1</span>
-                        <span class="nenner">
+                        <span class="zaehler">0,1</span> <!-- Zähler -->
+                        <span class="nenner"> <!-- Nenner -->
                             1 +
                             <span class="bruch-klein">
                                 <span class="zaehler-klein">v</span>
@@ -409,22 +414,22 @@
                         </span>
                     </span>
                 </div>
-                <div class="zwischenwert" style="margin-top: 15px;">
-                    <label>Ergebnis μ =</label> <!-- Früher f(μ) jetzt μ -->
+                <div class="zwischenwert" style="margin-top: 15px;"> <!-- Ergebnis -->
+                    <label>Ergebnis μ =</label>
                     <span id="ergebnis_mu" style="font-weight: bold; color: #888;">Bitte Werte eingeben</span>
                 </div>
             </div>
 
-            <!-- FORMEL 2: f(μ) (früher Reibungszahl μ) -->
+            <!-- FORMEL 2.4: Reibungszahl f(μ) -->
             <div class="frage">
-                <h3>2.4 – Reibungszahl f(μ)</h3> <!-- Früher μ jetzt f(μ) -->
+                <h3>2.4 – Reibungszahl f(μ)</h3> <!-- Überschrift -->
 
-                <!-- Formel Keilrille -->
-                <div class="formel-container" id="formelKeilrille">
-                    <span>f(μ) = </span> <!-- Früher μ jetzt f(μ) -->
+                <!-- Formel Keilrille - sichtbar bei Keilrille gehärtet/nicht gehärtet -->
+                <div class="formel-container" id="formelKeilrille"> <!-- Keilrille Formel -->
+                    <span>f(μ) = </span>
                     <span class="bruch">
-                        <span class="zaehler">μ</span> <!-- Früher f(μ) jetzt μ -->
-                        <span class="nenner">
+                        <span class="zaehler">μ</span> <!-- Zähler: μ -->
+                        <span class="nenner"> <!-- Nenner: sin(...) -->
                             sin
                             <span style="font-size: 20px;">(</span>
                             <span class="bruch-klein">
@@ -444,11 +449,11 @@
                     </span>
                 </div>
 
-                <!-- Formel Halbrundrille -->
-                <div class="formel-container" id="formelHalbrund" style="display:none;">
-                    <span>f(μ) = 4 × μ × </span> <!-- Früher μ = 4 × f(μ) jetzt f(μ) = 4 × μ -->
+                <!-- Formel Halbrundrille - sichtbar bei Halbrundrille mit Unterschnitt -->
+                <div class="formel-container" id="formelHalbrund" style="display:none;"> <!-- Halbrundrille Formel -->
+                    <span>f(μ) = 4 × μ × </span>
                     <span class="bruch">
-                        <span class="zaehler">
+                        <span class="zaehler"> <!-- Zähler: (1 - sin((π/180×γ)/2)) -->
                             (1 − sin
                             <span style="font-size:16px;">(</span>
                             <span class="bruch-klein">
@@ -466,7 +471,7 @@
                             <span style="font-size:16px;">)</span>
                             )
                         </span>
-                        <span class="nenner">
+                        <span class="nenner"> <!-- Nenner: π - (π/180×γ) - sin((π/180×γ)) -->
                             π −
                             <span style="font-size:13px;">(</span>
                             <span class="bruch-klein">
@@ -489,122 +494,161 @@
                     </span>
                 </div>
 
-                                <div class="zwischenwert" style="margin-top: 15px;">
-                    <label>Ergebnis F =</label>
-                    <span id="ergebnis_zugkraft" style="font-weight: bold; color: #888;">Bitte Werte eingeben</span>
+                <div class="zwischenwert" style="margin-top: 15px;"> <!-- Ergebnis -->
+                    <label>Ergebnis f(μ) =</label>
+                    <span id="ergebnis_fmu" style="font-weight: bold; color: #888;">Bitte Werte eingeben</span>
                 </div>
             </div>
 
-            <!-- PUNKT 2.6: VERGLEICH MIT 300 N -->
-            <div class="frage" id="vergleich_bereich" style="display:none;">
-                <h3>2.6 – Auswertung Zugkraft</h3>
-                <div id="vergleich_box" style="padding: 20px; border-radius: 10px; text-align: center; font-size: 18px; font-weight: bold; margin-bottom: 15px;">
-                </div>
-                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                    <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 15px; text-align: center; min-width: 120px;">
-                        <div style="font-size: 13px; color: #856404;">Mindest-Zugkraft</div>
-                        <div style="font-size: 22px; font-weight: bold; color: #856404;">300 N</div>
-                    </div>
-                    <div style="background: #f0f4f8; border: 2px solid #0057a8; border-radius: 8px; padding: 15px; text-align: center; min-width: 120px;">
-                        <div style="font-size: 13px; color: #0057a8;">Berechnete Zugkraft</div>
-                        <div id="vergleich_wert" style="font-size: 22px; font-weight: bold; color: #0057a8;">–</div>
-                    </div>
-                </div>
-            </div>
-
-
-
-
-            <!-- FORMEL 3: Zugkraft F -->
+            <!-- FORMEL 2.5: Zugkraft F -->
             <div class="frage">
-                <h3>2.5 – Zugkraft F</h3>
-                <div class="hinweis">ℹ️ Gilt wenn Geschwindigkeitsbegrenzer oben - Fang abwärts</div> <!-- Hinweis -->
-                <div class="formel-container">
+                <h3>2.5 – Zugkraft F</h3> <!-- Überschrift -->
+                <div class="hinweis">ℹ️ Gilt wenn Geschwindigkeitsbegrenzer oben – Fang abwärts</div> <!-- Hinweis -->
+                <div class="formel-container"> <!-- Grafische Formel -->
                     <span>F = </span>
                     <span class="bruch">
-                        <span class="zaehler">G</span>
-                        <span class="nenner">2</span>
+                        <span class="zaehler">G</span> <!-- Zähler: G -->
+                        <span class="nenner">2</span> <!-- Nenner: 2 -->
                     </span>
                     <span> × (e</span>
-                    <sup style="font-size: 13px;">f(μ) × π</sup> <!-- Exponent jetzt f(μ) -->
+                    <sup style="font-size: 13px;">f(μ) × π</sup> <!-- Exponent: f(μ) × π -->
                     <span> − 1)</span>
                 </div>
-                <div class="zwischenwert" style="margin-top: 15px;">
+                <div class="zwischenwert" style="margin-top: 15px;"> <!-- Ergebnis -->
                     <label>Ergebnis F =</label>
                     <span id="ergebnis_zugkraft" style="font-weight: bold; color: #888;">Bitte Werte eingeben</span>
                 </div>
             </div>
 
-        </div>
-    </div>
+            <!-- AUSWERTUNG 2.6: Vergleich mit 300 N -->
+            <div class="frage" id="vergleich_bereich" style="display:none;"> <!-- Standardmäßig versteckt -->
+                <h3>2.6 – Auswertung Zugkraft</h3> <!-- Überschrift -->
+
+                <!-- Farbige Bewertungsbox - rot/gelb/grün je nach Ergebnis -->
+                <div id="vergleich_box" style="padding: 20px; border-radius: 10px; text-align: center; font-size: 18px; font-weight: bold; margin-bottom: 15px;">
+                    <!-- Wird per JavaScript befüllt -->
+                </div>
+
+                <!-- Gegenüberstellung Mindest-Zugkraft vs berechnete Zugkraft -->
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;"> <!-- Flexbox nebeneinander -->
+
+                    <!-- Linke Box: Mindest-Zugkraft 300 N -->
+                    <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 15px; text-align: center; min-width: 120px;"> <!-- Gelbe Box -->
+                        <div style="font-size: 13px; color: #856404;">Mindest-Zugkraft</div> <!-- Beschriftung -->
+                        <div style="font-size: 22px; font-weight: bold; color: #856404;">300 N</div> <!-- Festwert -->
+                    </div>
+
+                    <!-- Rechte Box: Berechnete Zugkraft -->
+                    <div style="background: #f0f4f8; border: 2px solid #0057a8; border-radius: 8px; padding: 15px; text-align: center; min-width: 120px;"> <!-- Blaue Box -->
+                        <div style="font-size: 13px; color: #0057a8;">Berechnete Zugkraft</div> <!-- Beschriftung -->
+                        <div id="vergleich_wert" style="font-size: 22px; font-weight: bold; color: #0057a8;">–</div> <!-- Wird per JavaScript gesetzt -->
+                    </div>
+
+                </div> <!-- Ende Gegenüberstellung -->
+            </div> <!-- Ende Auswertung 2.6 -->
+
+        </div> <!-- Ende Berechnungsbereich -->
+    </div> <!-- Ende Berechnung Tab -->
 
     <!-- ========== PDF EXPORT BUTTON ========== -->
     <div class="pdf-bereich">
         <button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button>
     </div>
 
-</div>
+</div> <!-- Ende Detail Seite -->
 
-<script>
+<script> <!-- JavaScript Bereich -->
 
+    /**
+     * Funktion: zeige
+     * Zweck: Versteckt alle Seiten und zeigt nur die gewünschte
+     */
     function zeige(id) {
-        document.querySelectorAll('.startseite, .seite').forEach(el => { el.style.display = 'none'; });
-        const el = document.getElementById(id);
-        if (el) { el.style.display = id === 'startseite' ? 'flex' : 'block'; }
+        document.querySelectorAll('.startseite, .seite').forEach(el => { el.style.display = 'none'; }); /* Alle verstecken */
+        const el = document.getElementById(id); /* Gewünschte Seite auswählen */
+        if (el) { el.style.display = id === 'startseite' ? 'flex' : 'block'; } /* Anzeigen */
     }
 
+    /**
+     * Funktion: zeigeBauteile
+     * Zweck: Zeigt die Bauteil-Liste für den gewählten Bereich
+     */
     function zeigeBauteile(bereich) {
-        document.getElementById('bereichTitel').innerText = bereich;
-        zeige('bauteilSeite');
+        document.getElementById('bereichTitel').innerText = bereich; /* Titel setzen */
+        zeige('bauteilSeite'); /* Zur Bauteil-Liste wechseln */
     }
 
+    /**
+     * Funktion: zeigeBauteil
+     * Zweck: Öffnet die Detail-Seite für ein Bauteil
+     */
     function zeigeBauteil(name) {
-        document.getElementById('bauteilTitel').innerText = name;
-        zeige('detailSeite');
-        document.querySelector('.tab.aktiv')?.classList.remove('aktiv');
-        document.querySelector('.tab').classList.add('aktiv');
-        document.querySelectorAll('.tab-inhalt').forEach(el => el.classList.remove('aktiv'));
-        document.getElementById('pruefung').classList.add('aktiv');
+        document.getElementById('bauteilTitel').innerText = name; /* Titel setzen */
+        zeige('detailSeite'); /* Zur Detail-Seite wechseln */
+        document.querySelector('.tab.aktiv')?.classList.remove('aktiv'); /* Aktiven Tab deaktivieren */
+        document.querySelector('.tab').classList.add('aktiv'); /* Ersten Tab aktivieren */
+        document.querySelectorAll('.tab-inhalt').forEach(el => el.classList.remove('aktiv')); /* Alle Inhalte verstecken */
+        document.getElementById('pruefung').classList.add('aktiv'); /* Prüfung Tab anzeigen */
     }
 
+    /**
+     * Funktion: zeigeTab
+     * Zweck: Wechselt zwischen den Reitern
+     */
     function zeigeTab(btn, tabId) {
-        document.querySelectorAll('.tab').forEach(el => el.classList.remove('aktiv'));
-        document.querySelectorAll('.tab-inhalt').forEach(el => el.classList.remove('aktiv'));
-        btn.classList.add('aktiv');
-        document.getElementById(tabId).classList.add('aktiv');
+        document.querySelectorAll('.tab').forEach(el => el.classList.remove('aktiv')); /* Alle Tabs deaktivieren */
+        document.querySelectorAll('.tab-inhalt').forEach(el => el.classList.remove('aktiv')); /* Alle Inhalte verstecken */
+        btn.classList.add('aktiv'); /* Gewählten Tab aktivieren */
+        document.getElementById(tabId).classList.add('aktiv'); /* Gewählten Inhalt anzeigen */
     }
 
+    /**
+     * Funktion: antwort
+     * Zweck: Verarbeitet Prüffragen mit drei Optionen
+     */
     function antwort(btn, frageId) {
-        const frage = document.getElementById(frageId);
-        frage.querySelectorAll('.antwort-btn').forEach(el => el.classList.remove('aktiv'));
-        btn.classList.add('aktiv');
-        const mangelfeld = document.getElementById('mangel-' + frageId);
-        if (btn.classList.contains('passt-nicht')) {
-            mangelfeld.style.display = 'block';
+        const frage = document.getElementById(frageId); /* Frage auswählen */
+        frage.querySelectorAll('.antwort-btn').forEach(el => el.classList.remove('aktiv')); /* Alle deaktivieren */
+        btn.classList.add('aktiv'); /* Gewählten aktivieren */
+        const mangelfeld = document.getElementById('mangel-' + frageId); /* Mangelfeld auswählen */
+        if (btn.classList.contains('passt-nicht')) { /* Wenn Passt nicht */
+            mangelfeld.style.display = 'block'; /* Mangelfeld einblenden */
         } else {
-            mangelfeld.style.display = 'none';
+            mangelfeld.style.display = 'none'; /* Mangelfeld ausblenden */
         }
     }
 
+    /**
+     * Funktion: jaNein
+     * Zweck: Verarbeitet Ja/Nein Fragen
+     */
     function jaNein(btn, frageId, antwortWert) {
-        const frage = document.getElementById(frageId);
-        frage.querySelectorAll('.ja-btn, .nein-btn').forEach(el => el.classList.remove('aktiv'));
-        btn.classList.add('aktiv');
+        const frage = document.getElementById(frageId); /* Frage auswählen */
+        frage.querySelectorAll('.ja-btn, .nein-btn').forEach(el => el.classList.remove('aktiv')); /* Alle deaktivieren */
+        btn.classList.add('aktiv'); /* Gewählten aktivieren */
     }
 
+    /**
+     * Funktion: holeAntwort
+     * Zweck: Liest die aktuelle Antwort einer Frage aus
+     */
     function holeAntwort(frageId) {
-        const frage = document.getElementById(frageId);
-        if (!frage) return 'Nicht beantwortet';
-        const aktiv = frage.querySelector('.aktiv');
-        if (!aktiv) return 'Nicht beantwortet';
-        return aktiv.innerText.trim();
+        const frage = document.getElementById(frageId); /* Frage auswählen */
+        if (!frage) return 'Nicht beantwortet'; /* Frage nicht gefunden */
+        const aktiv = frage.querySelector('.aktiv'); /* Aktiven Button suchen */
+        if (!aktiv) return 'Nicht beantwortet'; /* Kein Button aktiv */
+        return aktiv.innerText.trim(); /* Text zurückgeben */
     }
 
+    /**
+     * Funktion: holeMangel
+     * Zweck: Liest den Mangeltext einer Frage aus
+     */
     function holeMangel(frageId) {
-        const mangelfeld = document.getElementById('mangel-' + frageId);
-        if (!mangelfeld) return '';
-        const textarea = mangelfeld.querySelector('textarea');
-        return textarea ? textarea.value.trim() : '';
+        const mangelfeld = document.getElementById('mangel-' + frageId); /* Mangelfeld auswählen */
+        if (!mangelfeld) return ''; /* Kein Mangelfeld */
+        const textarea = mangelfeld.querySelector('textarea'); /* Textfeld auswählen */
+        return textarea ? textarea.value.trim() : ''; /* Inhalt zurückgeben */
     }
 
     /* Globale Variable für gewählte Rillenform */
@@ -615,139 +659,146 @@
      * Zweck: Speichert Rillenform, zeigt Berechnungsbereich und passende Formel
      */
     function waehleRillenform(btn, rillenform) {
-        document.querySelectorAll('.auswahl-btn').forEach(el => el.classList.remove('aktiv'));
-        btn.classList.add('aktiv');
-        gewaehlteRillenform = rillenform;
-        document.getElementById('berechnungBereich').classList.add('aktiv');
+        document.querySelectorAll('.auswahl-btn').forEach(el => el.classList.remove('aktiv')); /* Alle deaktivieren */
+        btn.classList.add('aktiv'); /* Gewählten aktivieren */
+        gewaehlteRillenform = rillenform; /* Rillenform speichern */
+        document.getElementById('berechnungBereich').classList.add('aktiv'); /* Bereich einblenden */
 
-        if (rillenform === 'halbrund') {
-            document.getElementById('formelKeilrille').style.display = 'none';
-            document.getElementById('formelHalbrund').style.display = 'block';
-        } else {
-            document.getElementById('formelKeilrille').style.display = 'block';
-            document.getElementById('formelHalbrund').style.display = 'none';
+        /* Richtige Formel anzeigen je nach Rillenform */
+        if (rillenform === 'halbrund') { /* Halbrundrille gewählt */
+            document.getElementById('formelKeilrille').style.display = 'none'; /* Keilrille Formel verstecken */
+            document.getElementById('formelHalbrund').style.display = 'block'; /* Halbrundrille Formel anzeigen */
+        } else { /* Keilrille gewählt */
+            document.getElementById('formelKeilrille').style.display = 'block'; /* Keilrille Formel anzeigen */
+            document.getElementById('formelHalbrund').style.display = 'none'; /* Halbrundrille Formel verstecken */
         }
 
-        berechneAlles();
+        berechneAlles(); /* Sofort berechnen falls Werte schon eingegeben */
     }
 
     /**
      * Funktion: berechneAlles
-     * Zweck: Berechnet μ, f(μ) und Zugkraft F
+     * Zweck: Berechnet μ, f(μ), Zugkraft F und Auswertung
+     * Formeln:
      * μ = 0,1 / (1 + v/10)
      * f(μ) Keilrille = μ / sin((π/180 × γ) / 2)
      * f(μ) Halbrundrille = 4 × μ × (1 - sin((π/180×γ)/2)) / (π - (π/180×γ) - sin((π/180×γ)))
      * F = (G/2) × (e^(f(μ)×π) - 1)
      */
     function berechneAlles() {
-        const v = parseFloat(document.getElementById('geschwindigkeit').value); /* Geschwindigkeit */
-        const gamma = parseFloat(document.getElementById('keilwinkel').value); /* Keilwinkel */
-        const G = parseFloat(document.getElementById('spannkraft').value); /* Spannkraft */
+        const v = parseFloat(document.getElementById('geschwindigkeit').value); /* Geschwindigkeit auslesen */
+        const gamma = parseFloat(document.getElementById('keilwinkel').value); /* Keilwinkel auslesen */
+        const G = parseFloat(document.getElementById('spannkraft').value); /* Spannkraft auslesen */
         const muEl = document.getElementById('ergebnis_mu'); /* μ Ergebnisfeld */
         const fmuEl = document.getElementById('ergebnis_fmu'); /* f(μ) Ergebnisfeld */
         const zugkraftEl = document.getElementById('ergebnis_zugkraft'); /* Zugkraft Ergebnisfeld */
 
-        /* ========== μ BERECHNEN ========== */
-        if (isNaN(v) || v < 0) {
-            muEl.innerText = 'Bitte Geschwindigkeit eingeben';
-            muEl.style.color = '#888';
-            fmuEl.innerText = 'Bitte Werte eingeben';
-            fmuEl.style.color = '#888';
-            zugkraftEl.innerText = 'Bitte Werte eingeben';
-            zugkraftEl.style.color = '#888';
-            return;
+        /* ========== SCHRITT 1: μ BERECHNEN ========== */
+        if (isNaN(v) || v < 0) { /* Wenn keine gültige Geschwindigkeit eingegeben */
+            muEl.innerText = 'Bitte Geschwindigkeit eingeben'; /* Hinweis anzeigen */
+            muEl.style.color = '#888'; /* Grauer Text */
+            fmuEl.innerText = 'Bitte Werte eingeben'; /* Hinweis */
+            fmuEl.style.color = '#888'; /* Grauer Text */
+            zugkraftEl.innerText = 'Bitte Werte eingeben'; /* Hinweis */
+            zugkraftEl.style.color = '#888'; /* Grauer Text */
+            document.getElementById('vergleich_bereich').style.display = 'none'; /* Auswertung verstecken */
+            return; /* Funktion beenden */
         }
 
-        const mu = 0.1 / (1 + v / 10); /* μ = 0,1 / (1 + v/10) */
-        muEl.innerText = mu.toFixed(4);
-        muEl.style.color = '#0057a8';
+        const mu = 0.1 / (1 + v / 10); /* μ berechnen: μ = 0,1 / (1 + v/10) */
+        muEl.innerText = mu.toFixed(4); /* Ergebnis anzeigen mit 4 Nachkommastellen */
+        muEl.style.color = '#0057a8'; /* Blaue Schrift */
 
-        /* ========== f(μ) BERECHNEN ========== */
-        if (isNaN(gamma) || gamma <= 0) {
-            fmuEl.innerText = 'Bitte Keilwinkel eingeben';
-            fmuEl.style.color = '#888';
-            zugkraftEl.innerText = 'Bitte Werte eingeben';
-            zugkraftEl.style.color = '#888';
-            return;
+        /* ========== SCHRITT 2: f(μ) BERECHNEN ========== */
+        if (isNaN(gamma) || gamma <= 0) { /* Wenn kein gültiger Keilwinkel eingegeben */
+            fmuEl.innerText = 'Bitte Keilwinkel eingeben'; /* Hinweis anzeigen */
+            fmuEl.style.color = '#888'; /* Grauer Text */
+            zugkraftEl.innerText = 'Bitte Werte eingeben'; /* Hinweis */
+            zugkraftEl.style.color = '#888'; /* Grauer Text */
+            document.getElementById('vergleich_bereich').style.display = 'none'; /* Auswertung verstecken */
+            return; /* Funktion beenden */
         }
 
-        const gammaRad = (Math.PI / 180) * gamma; /* Grad in Bogenmaß */
+        const gammaRad = (Math.PI / 180) * gamma; /* Keilwinkel von Grad in Bogenmaß umrechnen */
 
+        /* Je nach Rillenform andere Formel für f(μ) */
         const fmu = gewaehlteRillenform === 'halbrund'
-            ? 4 * mu * (1 - Math.sin(gammaRad / 2)) / (Math.PI - gammaRad - Math.sin(gammaRad)) /* Halbrundrille */
-            : mu / Math.sin(gammaRad / 2); /* Keilrille */
+            ? 4 * mu * (1 - Math.sin(gammaRad / 2)) / (Math.PI - gammaRad - Math.sin(gammaRad)) /* Halbrundrille Formel */
+            : mu / Math.sin(gammaRad / 2); /* Keilrille Formel */
 
-        fmuEl.innerText = fmu.toFixed(4);
-        fmuEl.style.color = '#0057a8';
+        fmuEl.innerText = fmu.toFixed(4); /* Ergebnis anzeigen */
+        fmuEl.style.color = '#0057a8'; /* Blaue Schrift */
 
-        /* ========== ZUGKRAFT BERECHNEN ========== */
-        if (isNaN(G) || G <= 0) {
-            zugkraftEl.innerText = 'Bitte Spannkraft eingeben';
-            zugkraftEl.style.color = '#888';
-            return;
+        /* ========== SCHRITT 3: ZUGKRAFT BERECHNEN ========== */
+        if (isNaN(G) || G <= 0) { /* Wenn keine gültige Spannkraft eingegeben */
+            zugkraftEl.innerText = 'Bitte Spannkraft eingeben'; /* Hinweis anzeigen */
+            zugkraftEl.style.color = '#888'; /* Grauer Text */
+            document.getElementById('vergleich_bereich').style.display = 'none'; /* Auswertung verstecken */
+            return; /* Funktion beenden */
         }
 
-        const F = (G / 2) * (Math.exp(fmu * Math.PI) - 1); /* F = (G/2) × (e^(f(μ)×π) - 1) */
-               zugkraftEl.innerText = F.toFixed(2) + ' N';
-        zugkraftEl.style.color = '#0057a8';
+        const F = (G / 2) * (Math.exp(fmu * Math.PI) - 1); /* Zugkraft berechnen: F = (G/2) × (e^(f(μ)×π) - 1) */
+        zugkraftEl.innerText = F.toFixed(2) + ' N'; /* Ergebnis mit 2 Nachkommastellen und Einheit */
+        zugkraftEl.style.color = '#0057a8'; /* Blaue Schrift */
 
-        /* ========== VERGLEICH MIT 300 N ========== */
-        document.getElementById('vergleich_bereich').style.display = 'block'; /* Vergleich einblenden */
-        document.getElementById('vergleich_wert').innerText = F.toFixed(2) + ' N'; /* Wert anzeigen */
-        const box = document.getElementById('vergleich_box'); /* Vergleichsbox */
-        if (F < 300) { /* Zu niedrig - rot */
-            box.style.background = '#f8d7da';
-            box.style.border = '2px solid #dc3545';
-            box.style.color = '#dc3545';
-            box.innerText = '❌ Zugkraft zu niedrig! (' + F.toFixed(2) + ' N < 300 N)';
-        } else if (F <= 400) { /* Grenzbereich - gelb */
-            box.style.background = '#fff3cd';
-            box.style.border = '2px solid #ffc107';
-            box.style.color = '#856404';
-            box.innerText = '⚠️ Zugkraft im Grenzbereich (' + F.toFixed(2) + ' N)';
-        } else { /* Gut - grün */
-            box.style.background = '#d4edda';
-            box.style.border = '2px solid #28a745';
-            box.style.color = '#155724';
-            box.innerText = '✅ Zugkraft in Ordnung! (' + F.toFixed(2) + ' N > 400 N)';
+        /* ========== SCHRITT 4: AUSWERTUNG MIT 300 N VERGLEICHEN ========== */
+        document.getElementById('vergleich_bereich').style.display = 'block'; /* Auswertungsbereich einblenden */
+        document.getElementById('vergleich_wert').innerText = F.toFixed(2) + ' N'; /* Berechneten Wert in Gegenüberstellung anzeigen */
+        const box = document.getElementById('vergleich_box'); /* Bewertungsbox auswählen */
+
+        if (F < 300) { /* Zugkraft zu niedrig - ROT */
+            box.style.background = '#f8d7da'; /* Roter Hintergrund */
+            box.style.border = '2px solid #dc3545'; /* Roter Rahmen */
+            box.style.color = '#dc3545'; /* Rote Schrift */
+            box.innerText = '❌ Zugkraft zu niedrig! (' + F.toFixed(2) + ' N < 300 N)'; /* Fehlermeldung */
+        } else if (F <= 400) { /* Zugkraft im Grenzbereich - GELB */
+            box.style.background = '#fff3cd'; /* Gelber Hintergrund */
+            box.style.border = '2px solid #ffc107'; /* Gelber Rahmen */
+            box.style.color = '#856404'; /* Dunkelgelbe Schrift */
+            box.innerText = '⚠️ Zugkraft im Grenzbereich (' + F.toFixed(2) + ' N)'; /* Warnmeldung */
+        } else { /* Zugkraft in Ordnung - GRÜN */
+            box.style.background = '#d4edda'; /* Grüner Hintergrund */
+            box.style.border = '2px solid #28a745'; /* Grüner Rahmen */
+            box.style.color = '#155724'; /* Dunkelgrüne Schrift */
+            box.innerText = '✅ Zugkraft in Ordnung! (' + F.toFixed(2) + ' N > 400 N)'; /* Erfolgsmeldung */
         }
-
     }
 
     /**
      * Funktion: erstellePDF
-     * Zweck: Erstellt ein PDF Protokoll
+     * Zweck: Erstellt ein PDF Protokoll mit allen Prüfergebnissen und Berechnungen
      */
     function erstellePDF() {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        let y = 20;
-        const zeilenAbstand = 8;
-        const seitenHoehe = 280;
+        const { jsPDF } = window.jspdf; /* jsPDF Bibliothek laden */
+        const doc = new jsPDF(); /* Neues PDF erstellen */
+        let y = 20; /* Startposition oben */
+        const zeilenAbstand = 8; /* Abstand zwischen Zeilen */
+        const seitenHoehe = 280; /* Maximale Höhe vor neuer Seite */
 
+        /* Hilfsfunktion: Fügt eine Zeile zum PDF hinzu */
         function neueZeile(text, einzug = 0) {
-            if (y > seitenHoehe) { doc.addPage(); y = 20; }
-            doc.text(text, 15 + einzug, y);
-            y += zeilenAbstand;
+            if (y > seitenHoehe) { doc.addPage(); y = 20; } /* Neue Seite wenn nötig */
+            doc.text(text, 15 + einzug, y); /* Text platzieren */
+            y += zeilenAbstand; /* Position erhöhen */
         }
 
         /* KOPFZEILE */
-        doc.setFontSize(18); doc.setTextColor(0, 87, 168);
-        neueZeile('Aufzug-App - Prüfprotokoll');
-        doc.setFontSize(11); doc.setTextColor(100, 100, 100);
-        neueZeile('Erstellt am: ' + new Date().toLocaleDateString('de-DE') + ' um ' + new Date().toLocaleTimeString('de-DE'));
-        neueZeile('Bauteil: ' + (document.getElementById('bauteilTitel').innerText || '-'));
-        neueZeile('Bereich: ' + (document.getElementById('bereichTitel').innerText || '-'));
-        y += 5;
+        doc.setFontSize(18); doc.setTextColor(0, 87, 168); /* Groß und blau */
+        neueZeile('Aufzug-App - Prüfprotokoll'); /* Titel */
+        doc.setFontSize(11); doc.setTextColor(100, 100, 100); /* Klein und grau */
+        neueZeile('Erstellt am: ' + new Date().toLocaleDateString('de-DE') + ' um ' + new Date().toLocaleTimeString('de-DE')); /* Datum und Uhrzeit */
+        neueZeile('Bauteil: ' + (document.getElementById('bauteilTitel').innerText || '-')); /* Bauteilname */
+        neueZeile('Bereich: ' + (document.getElementById('bereichTitel').innerText || '-')); /* Neubau/Umbau */
+        y += 5; /* Extra Abstand */
 
         /* PRÜFUNG VOR ORT */
-        doc.setFontSize(14); doc.setTextColor(0, 87, 168);
+        doc.setFontSize(14); doc.setTextColor(0, 87, 168); /* Überschrift blau */
         neueZeile('1. Prüfung vor Ort');
-        doc.setFontSize(10); doc.setTextColor(0, 0, 0);
+        doc.setFontSize(10); doc.setTextColor(0, 0, 0); /* Text schwarz */
         neueZeile('1.0 Dokument vor Ort vorhanden: ' + holeAntwort('frage1_0'));
         neueZeile('1.1 Verhältnis Begrenzerseil/Rollendurchmesser 1:30: ' + holeAntwort('frage1_1'));
         const mangel11 = holeMangel('frage1_1');
-        if (mangel11) neueZeile('    Mangel: ' + mangel11, 5);
+        if (mangel11) neueZeile('    Mangel: ' + mangel11, 5); /* Mangeltext eingerückt */
         neueZeile('1.2 Mindestbruchkraft = 8x Zugkraft Fangvorrichtung: ' + holeAntwort('frage1_2'));
         const mangel12 = holeMangel('frage1_2');
         if (mangel12) neueZeile('    Mangel: ' + mangel12, 5);
@@ -769,24 +820,30 @@
         doc.setFontSize(14); doc.setTextColor(0, 87, 168);
         neueZeile('3. Berechnung (EN 81-50)');
         doc.setFontSize(10); doc.setTextColor(0, 0, 0);
-        let rillenformText = 'Nicht gewählt';
+
+        /* Rillenform Text bestimmen */
+        let rillenformText = 'Nicht gewählt'; /* Standardwert */
         if (gewaehlteRillenform === 'gehaertet') rillenformText = 'Keilrille gehärtet';
         if (gewaehlteRillenform === 'nicht_gehaertet') rillenformText = 'Keilrille nicht gehärtet';
         if (gewaehlteRillenform === 'halbrund') rillenformText = 'Halbrundrille mit Unterschnitt';
-        neueZeile('Rillenform: ' + rillenformText);
-        const v = document.getElementById('geschwindigkeit').value;
-        const gamma = document.getElementById('keilwinkel').value;
-        const G = document.getElementById('spannkraft').value;
-        neueZeile('Nenngeschwindigkeit v: ' + (v || 'Nicht eingegeben') + ' m/s');
-        neueZeile('Keilwinkel gamma: ' + (gamma || 'Nicht eingegeben') + ' Grad');
-        neueZeile('Spannkraft G: ' + (G || 'Nicht eingegeben') + ' N');
-        neueZeile('mu = ' + document.getElementById('ergebnis_mu').innerText);
-        neueZeile('f(mu) = ' + document.getElementById('ergebnis_fmu').innerText);
-        neueZeile('Zugkraft F (GB oben) = ' + document.getElementById('ergebnis_zugkraft').innerText);
+
+        neueZeile('Rillenform: ' + rillenformText); /* Rillenform */
+        neueZeile('Nenngeschwindigkeit v: ' + (document.getElementById('geschwindigkeit').value || 'Nicht eingegeben') + ' m/s');
+        neueZeile('Keilwinkel gamma: ' + (document.getElementById('keilwinkel').value || 'Nicht eingegeben') + ' Grad');
+        neueZeile('Spannkraft G: ' + (document.getElementById('spannkraft').value || 'Nicht eingegeben') + ' N');
+        neueZeile('Reibwert mu = ' + document.getElementById('ergebnis_mu').innerText); /* μ Ergebnis */
+        neueZeile('Reibungszahl f(mu) = ' + document.getElementById('ergebnis_fmu').innerText); /* f(μ) Ergebnis */
+        neueZeile('Zugkraft F (GB oben, Fang abwaerts) = ' + document.getElementById('ergebnis_zugkraft').innerText); /* Zugkraft */
+
+        /* Auswertung im PDF */
+        const box = document.getElementById('vergleich_box'); /* Bewertungsbox auslesen */
+        if (box && box.innerText) { /* Wenn Auswertung vorhanden */
+            neueZeile('Auswertung: ' + box.innerText.replace(/[❌⚠️✅]/g, '').trim()); /* Auswertungstext ohne Emoji */
+        }
 
         /* PDF SPEICHERN */
-        const datum = new Date().toLocaleDateString('de-DE').replace(/\./g, '-');
-        doc.save('Pruefprotokoll_Geschwindigkeitsbegrenzerseil_' + datum + '.pdf');
+        const datum = new Date().toLocaleDateString('de-DE').replace(/\./g, '-'); /* Datum formatieren */
+        doc.save('Pruefprotokoll_Geschwindigkeitsbegrenzerseil_' + datum + '.pdf'); /* PDF herunterladen */
     }
 
 </script>
