@@ -2,7 +2,7 @@
     <meta charset="UTF-8"> <!-- Ermöglicht deutsche Sonderzeichen wie ä,ö,ü -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Macht die App auf dem Handy richtig darstellbar -->
     <title>Aufzug-App</title> <!-- Name der App der oben im Browser Tab erscheint -->
-    <script src="https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcdnjs.cloudflare.com%2Fajax%2Flibs%2Fjspdf%2F2.5.1%2Fjspdf.umd.min.js&data=05%7C02%7Csteffen.pahl%40de.tuv.com%7Cf6142dff3527419866bc08de7afcd831%7C255bd3b384124e31a3ec56916c7ae8c0%7C0%7C0%7C639083423539910566%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=%2BEBQLyAHurA%2B1mRLMtKWUrgAtuRtrhQ38hpV8mUryUo%3D&reserved=0"></script> <!-- Externe Bibliothek für PDF Erstellung -->
+    <script src="https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcdnjs.cloudflare.com%2Fajax%2Flibs%2Fjspdf%2F2.5.1%2Fjspdf.umd.min.js&data=05%7C02%7Csteffen.pahl%40de.tuv.com%7C989d9995dee445526f6408de7affd38b%7C255bd3b384124e31a3ec56916c7ae8c0%7C0%7C0%7C639083436347570940%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=DsGtKo%2BGn%2B9I%2FN2viQpoBDfzlXxn73DVvbHCPIz6m%2BA%3D&reserved=0"></script> <!-- Externe Bibliothek für PDF Erstellung -->
     <style> <!-- Hier beginnen alle Design Einstellungen -->
 
         /* ========== GRUNDEINSTELLUNGEN ========== */
@@ -205,6 +205,18 @@
         .zaehler-klein { display: block; border-bottom: 2px solid #0057a8; padding-bottom: 2px; font-size: 15px; } /* Kleiner Zähler */
         .nenner-klein { display: block; padding-top: 2px; font-size: 15px; } /* Kleiner Nenner */
 
+        /* ========== HINWEIS BOX ========== */
+        .hinweis {
+            background: #e8f0fb; /* Heller blauer Hintergrund */
+            border-left: 4px solid #0057a8; /* Blauer linker Rand */
+            padding: 10px 15px; /* Innenabstand */
+            border-radius: 6px; /* Abgerundete Ecken */
+            margin-bottom: 15px; /* Abstand nach unten */
+            font-size: 14px; /* Schriftgröße */
+            color: #0057a8; /* Blaue Schrift */
+            font-weight: bold; /* Fettschrift */
+        }
+
         /* ========== AUSWAHL BUTTONS ========== */
         .auswahl-gruppe { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 10px; } /* Buttons nebeneinander */
         .auswahl-btn {
@@ -374,18 +386,18 @@
                     <input type="number" id="keilwinkel" placeholder="Wert eingeben" step="0.1" min="0" oninput="berechneAlles()">
                     <span class="einheit">Grad</span>
                 </div>
-                <div class="eingabe-zeile"> <!-- Neu: Spannkraft -->
-                    <label>Spannkraft vom Spanngewicht G:</label> <!-- Beschriftung -->
-                    <input type="number" id="spannkraft" placeholder="Wert eingeben" step="1" min="0" oninput="berechneAlles()"> <!-- Eingabefeld -->
-                    <span class="einheit">N</span> <!-- Einheit Newton -->
+                <div class="eingabe-zeile">
+                    <label>Spannkraft vom Spanngewicht G:</label>
+                    <input type="number" id="spannkraft" placeholder="Wert eingeben" step="1" min="0" oninput="berechneAlles()">
+                    <span class="einheit">N</span>
                 </div>
             </div>
 
-            <!-- FORMEL 1: Reibwert f(μ) -->
+            <!-- FORMEL 1: μ (früher Reibwert f(μ)) -->
             <div class="frage">
-                <h3>2.3 – Reibwert f(μ)</h3>
+                <h3>2.3 – μ</h3> <!-- Früher f(μ) jetzt μ -->
                 <div class="formel-container">
-                    <span>f(μ) = </span>
+                    <span>μ = </span>
                     <span class="bruch">
                         <span class="zaehler">0,1</span>
                         <span class="nenner">
@@ -398,20 +410,20 @@
                     </span>
                 </div>
                 <div class="zwischenwert" style="margin-top: 15px;">
-                    <label>Ergebnis f(μ) =</label>
-                    <span id="ergebnis_fmu" style="font-weight: bold; color: #888;">Bitte Werte eingeben</span>
+                    <label>Ergebnis μ =</label> <!-- Früher f(μ) jetzt μ -->
+                    <span id="ergebnis_mu" style="font-weight: bold; color: #888;">Bitte Werte eingeben</span>
                 </div>
             </div>
 
-            <!-- FORMEL 2: Reibungszahl μ -->
+            <!-- FORMEL 2: f(μ) (früher Reibungszahl μ) -->
             <div class="frage">
-                <h3>2.4 – Reibungszahl μ</h3>
+                <h3>2.4 – f(μ)</h3> <!-- Früher μ jetzt f(μ) -->
 
                 <!-- Formel Keilrille -->
                 <div class="formel-container" id="formelKeilrille">
-                    <span>μ = </span>
+                    <span>f(μ) = </span> <!-- Früher μ jetzt f(μ) -->
                     <span class="bruch">
-                        <span class="zaehler">f(μ)</span>
+                        <span class="zaehler">μ</span> <!-- Früher f(μ) jetzt μ -->
                         <span class="nenner">
                             sin
                             <span style="font-size: 20px;">(</span>
@@ -434,7 +446,7 @@
 
                 <!-- Formel Halbrundrille -->
                 <div class="formel-container" id="formelHalbrund" style="display:none;">
-                    <span>μ = 4 × f(μ) × </span>
+                    <span>f(μ) = 4 × μ × </span> <!-- Früher μ = 4 × f(μ) jetzt f(μ) = 4 × μ -->
                     <span class="bruch">
                         <span class="zaehler">
                             (1 − sin
@@ -478,30 +490,28 @@
                 </div>
 
                 <div class="zwischenwert" style="margin-top: 15px;">
-                    <label>Ergebnis μ =</label>
-                    <span id="ergebnis_mu" style="font-weight: bold; color: #888;">Bitte Werte eingeben</span>
+                    <label>Ergebnis f(μ) =</label> <!-- Früher μ jetzt f(μ) -->
+                    <span id="ergebnis_fmu" style="font-weight: bold; color: #888;">Bitte Werte eingeben</span>
                 </div>
             </div>
 
             <!-- FORMEL 3: Zugkraft F -->
-            <div class="frage"> <!-- Container für Zugkraft Formel -->
-                <h3>2.5 – Zugkraft F</h3> <!-- Überschrift -->
-
-                <!-- Grafische Darstellung Zugkraft Formel -->
-                <div class="formel-container"> <!-- Zentrierte Formel -->
-                    <span>F = </span> <!-- Gleichheitszeichen -->
-                    <span class="bruch"> <!-- Bruch G/2 -->
-                        <span class="zaehler">G</span> <!-- Zähler: G -->
-                        <span class="nenner">2</span> <!-- Nenner: 2 -->
+            <div class="frage">
+                <h3>2.5 – Zugkraft F</h3>
+                <div class="hinweis">ℹ️ Gilt wenn Geschwindigkeitsbegrenzer oben</div> <!-- Hinweis -->
+                <div class="formel-container">
+                    <span>F = </span>
+                    <span class="bruch">
+                        <span class="zaehler">G</span>
+                        <span class="nenner">2</span>
                     </span>
-                    <span> × (e</span> <!-- Eulersche Zahl -->
-                    <sup style="font-size: 13px;">μ × π</sup> <!-- Exponent μ × π -->
-                    <span> − 1)</span> <!-- Rest der Formel -->
+                    <span> × (e</span>
+                    <sup style="font-size: 13px;">f(μ) × π</sup> <!-- Exponent jetzt f(μ) -->
+                    <span> − 1)</span>
                 </div>
-
-                <div class="zwischenwert" style="margin-top: 15px;"> <!-- Ergebniszeile -->
-                    <label>Ergebnis F =</label> <!-- Beschriftung -->
-                    <span id="ergebnis_zugkraft" style="font-weight: bold; color: #888;">Bitte Werte eingeben</span> <!-- Ergebnis -->
+                <div class="zwischenwert" style="margin-top: 15px;">
+                    <label>Ergebnis F =</label>
+                    <span id="ergebnis_zugkraft" style="font-weight: bold; color: #888;">Bitte Werte eingeben</span>
                 </div>
             </div>
 
@@ -585,79 +595,81 @@
      * Zweck: Speichert Rillenform, zeigt Berechnungsbereich und passende Formel
      */
     function waehleRillenform(btn, rillenform) {
-        document.querySelectorAll('.auswahl-btn').forEach(el => el.classList.remove('aktiv')); /* Alle deaktivieren */
-        btn.classList.add('aktiv'); /* Gewählten aktivieren */
-        gewaehlteRillenform = rillenform; /* Rillenform speichern */
-        document.getElementById('berechnungBereich').classList.add('aktiv'); /* Bereich einblenden */
+        document.querySelectorAll('.auswahl-btn').forEach(el => el.classList.remove('aktiv'));
+        btn.classList.add('aktiv');
+        gewaehlteRillenform = rillenform;
+        document.getElementById('berechnungBereich').classList.add('aktiv');
 
-        /* Richtige Formel anzeigen */
-        if (rillenform === 'halbrund') { /* Halbrundrille gewählt */
-            document.getElementById('formelKeilrille').style.display = 'none'; /* Keilrille verstecken */
-            document.getElementById('formelHalbrund').style.display = 'block'; /* Halbrundrille anzeigen */
-        } else { /* Keilrille gewählt */
-            document.getElementById('formelKeilrille').style.display = 'block'; /* Keilrille anzeigen */
-            document.getElementById('formelHalbrund').style.display = 'none'; /* Halbrundrille verstecken */
+        if (rillenform === 'halbrund') {
+            document.getElementById('formelKeilrille').style.display = 'none';
+            document.getElementById('formelHalbrund').style.display = 'block';
+        } else {
+            document.getElementById('formelKeilrille').style.display = 'block';
+            document.getElementById('formelHalbrund').style.display = 'none';
         }
 
-        berechneAlles(); /* Sofort berechnen falls Werte eingegeben */
+        berechneAlles();
     }
 
     /**
      * Funktion: berechneAlles
-     * Zweck: Berechnet f(μ), μ und Zugkraft F je nach gewählter Rillenform
+     * Zweck: Berechnet μ, f(μ) und Zugkraft F
+     * μ = 0,1 / (1 + v/10)
+     * f(μ) Keilrille = μ / sin((π/180 × γ) / 2)
+     * f(μ) Halbrundrille = 4 × μ × (1 - sin((π/180×γ)/2)) / (π - (π/180×γ) - sin((π/180×γ)))
+     * F = (G/2) × (e^(f(μ)×π) - 1)
      */
     function berechneAlles() {
         const v = parseFloat(document.getElementById('geschwindigkeit').value); /* Geschwindigkeit */
         const gamma = parseFloat(document.getElementById('keilwinkel').value); /* Keilwinkel */
         const G = parseFloat(document.getElementById('spannkraft').value); /* Spannkraft */
-        const fmuEl = document.getElementById('ergebnis_fmu'); /* Reibwert Ergebnisfeld */
-        const muEl = document.getElementById('ergebnis_mu'); /* Reibungszahl Ergebnisfeld */
+        const muEl = document.getElementById('ergebnis_mu'); /* μ Ergebnisfeld */
+        const fmuEl = document.getElementById('ergebnis_fmu'); /* f(μ) Ergebnisfeld */
         const zugkraftEl = document.getElementById('ergebnis_zugkraft'); /* Zugkraft Ergebnisfeld */
 
-        /* ========== REIBWERT BERECHNEN ========== */
-        if (isNaN(v) || v < 0) { /* Keine gültige Geschwindigkeit */
-            fmuEl.innerText = 'Bitte Geschwindigkeit eingeben';
+        /* ========== μ BERECHNEN ========== */
+        if (isNaN(v) || v < 0) {
+            muEl.innerText = 'Bitte Geschwindigkeit eingeben';
+            muEl.style.color = '#888';
+            fmuEl.innerText = 'Bitte Werte eingeben';
             fmuEl.style.color = '#888';
-            muEl.innerText = 'Bitte Werte eingeben';
-            muEl.style.color = '#888';
             zugkraftEl.innerText = 'Bitte Werte eingeben';
             zugkraftEl.style.color = '#888';
             return;
         }
 
-        const fmu = 0.1 / (1 + v / 10); /* Reibwert: f(μ) = 0,1 / (1 + v/10) */
-        fmuEl.innerText = fmu.toFixed(4);
-        fmuEl.style.color = '#0057a8';
-
-        /* ========== REIBUNGSZAHL BERECHNEN ========== */
-        if (isNaN(gamma) || gamma <= 0) { /* Kein gültiger Keilwinkel */
-            muEl.innerText = 'Bitte Keilwinkel eingeben';
-            muEl.style.color = '#888';
-            zugkraftEl.innerText = 'Bitte Werte eingeben';
-            zugkraftEl.style.color = '#888';
-            return;
-        }
-
-        const gammaRad = (Math.PI / 180) * gamma; /* Grad in Bogenmaß: (π/180) × γ */
-
-        /* Je nach Rillenform andere Formel */
-        const mu = gewaehlteRillenform === 'halbrund'
-            ? 4 * fmu * (1 - Math.sin(gammaRad / 2)) / (Math.PI - gammaRad - Math.sin(gammaRad)) /* Halbrundrille */
-            : fmu / Math.sin(gammaRad / 2); /* Keilrille */
-
+        const mu = 0.1 / (1 + v / 10); /* μ = 0,1 / (1 + v/10) */
         muEl.innerText = mu.toFixed(4);
         muEl.style.color = '#0057a8';
 
+        /* ========== f(μ) BERECHNEN ========== */
+        if (isNaN(gamma) || gamma <= 0) {
+            fmuEl.innerText = 'Bitte Keilwinkel eingeben';
+            fmuEl.style.color = '#888';
+            zugkraftEl.innerText = 'Bitte Werte eingeben';
+            zugkraftEl.style.color = '#888';
+            return;
+        }
+
+        const gammaRad = (Math.PI / 180) * gamma; /* Grad in Bogenmaß */
+
+        const fmu = gewaehlteRillenform === 'halbrund'
+            ? 4 * mu * (1 - Math.sin(gammaRad / 2)) / (Math.PI - gammaRad - Math.sin(gammaRad)) /* Halbrundrille */
+            : mu / Math.sin(gammaRad / 2); /* Keilrille */
+
+        fmuEl.innerText = fmu.toFixed(4);
+        fmuEl.style.color = '#0057a8';
+
         /* ========== ZUGKRAFT BERECHNEN ========== */
-        if (isNaN(G) || G <= 0) { /* Keine gültige Spannkraft */
+        if (isNaN(G) || G <= 0) {
             zugkraftEl.innerText = 'Bitte Spannkraft eingeben';
             zugkraftEl.style.color = '#888';
             return;
         }
 
-        const F = (G / 2) * (Math.exp(mu * Math.PI) - 1); /* Zugkraft: F = (G/2) × (e^(μ×π) - 1) */
-        zugkraftEl.innerText = F.toFixed(2) + ' N'; /* Ergebnis mit 2 Nachkommastellen und Einheit */
-        zugkraftEl.style.color = '#0057a8'; /* Blaue Schrift */
+        const F = (G / 2) * (Math.exp(fmu * Math.PI) - 1); /* F = (G/2) × (e^(f(μ)×π) - 1) */
+        zugkraftEl.innerText = F.toFixed(2) + ' N';
+        zugkraftEl.style.color = '#0057a8';
     }
 
     /**
@@ -726,9 +738,9 @@
         neueZeile('Nenngeschwindigkeit v: ' + (v || 'Nicht eingegeben') + ' m/s');
         neueZeile('Keilwinkel gamma: ' + (gamma || 'Nicht eingegeben') + ' Grad');
         neueZeile('Spannkraft G: ' + (G || 'Nicht eingegeben') + ' N');
-        neueZeile('Reibwert f(mu) = ' + document.getElementById('ergebnis_fmu').innerText);
-        neueZeile('Reibungszahl mu = ' + document.getElementById('ergebnis_mu').innerText);
-        neueZeile('Zugkraft F = ' + document.getElementById('ergebnis_zugkraft').innerText);
+        neueZeile('mu = ' + document.getElementById('ergebnis_mu').innerText);
+        neueZeile('f(mu) = ' + document.getElementById('ergebnis_fmu').innerText);
+        neueZeile('Zugkraft F (GB oben) = ' + document.getElementById('ergebnis_zugkraft').innerText);
 
         /* PDF SPEICHERN */
         const datum = new Date().toLocaleDateString('de-DE').replace(/\./g, '-');
