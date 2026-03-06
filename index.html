@@ -898,6 +898,9 @@
         neueZeile('Zugkraft F (GB oben, Fang aufwaerts) = ' + document.getElementById('ergebnis_zugkraft_auf').innerText); /* Aufwärts */
         const box_auf_pdf = document.getElementById('vergleich_box_auf');
         if (box_auf_pdf && box_auf_pdf.innerText) neueZeile('Auswertung aufwaerts: ' + box_auf_pdf.innerText.replace(/[❌⚠️✅]/g, '').trim()); /* Auswertung aufwärts */
+        neueZeile('Zugkraft F (GB unten, Fang auf- und abwaerts) = ' + document.getElementById('ergebnis_zugkraft_unten').innerText); /* Zugkraft GB unten */
+        const box_unten_pdf = document.getElementById('vergleich_box_unten'); /* Bewertungsbox GB unten */
+        if (box_unten_pdf && box_unten_pdf.innerText) neueZeile('Auswertung GB unten: ' + box_unten_pdf.innerText.replace(/[❌⚠️✅]/g, '').trim()); /* Auswertung GB unten */
 
         /* PDF SPEICHERN */
         const datum = new Date().toLocaleDateString('de-DE').replace(/\./g, '-');
