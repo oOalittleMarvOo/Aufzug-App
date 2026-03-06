@@ -578,6 +578,26 @@
                     </div>
                 </div>
             </div>
+            <!-- FORMEL 2.9: Zugkraft F GB unten -->
+            <div class="frage">
+                <h3>2.9 – Zugkraft F</h3> <!-- Überschrift -->
+                <div class="hinweis">ℹ️ Gilt wenn Geschwindigkeitsbegrenzer unten – Fang auf- und abwärts</div> <!-- Hinweis -->
+                <div class="formel-container"> <!-- Grafische Formel -->
+                    <span>F = G × </span>
+                    <span class="bruch"> <!-- Bruch -->
+                        <span class="zaehler"> <!-- Zähler: e^(f(μ)×π) - 1 -->
+                            e<sup style="font-size: 13px;">f(μ) × π</sup> − 1
+                        </span>
+                        <span class="nenner"> <!-- Nenner: e^(f(μ)×π) + 1 -->
+                            e<sup style="font-size: 13px;">f(μ) × π</sup> + 1
+                        </span>
+                    </span>
+                </div>
+                <div class="zwischenwert" style="margin-top: 15px;"> <!-- Ergebnis -->
+                    <label>Ergebnis F =</label> <!-- Beschriftung -->
+                    <span id="ergebnis_zugkraft_unten" style="font-weight: bold; color: #888;">Bitte Werte eingeben</span> <!-- Ergebnis -->
+                </div>
+            </div>
 
         </div> <!-- Ende Berechnungsbereich -->
     </div> <!-- Ende Berechnung Tab -->
@@ -765,6 +785,12 @@
             box_auf.style.background = '#d4edda'; box_auf.style.border = '2px solid #28a745'; box_auf.style.color = '#155724';
             box_auf.innerText = '✅ Zugkraft in Ordnung! (' + F_auf.toFixed(2) + ' N > 400 N)';
         }
+                /* ========== SCHRITT 7: ZUGKRAFT GB UNTEN BERECHNEN ========== */
+        const F_unten = G * (Math.exp(fmu * Math.PI) - 1) / (Math.exp(fmu * Math.PI) + 1); /* F = G × (e^(f(μ)×π) - 1) / (e^(f(μ)×π) + 1) */
+        const zugkraftUntenEl = document.getElementById('ergebnis_zugkraft_unten'); /* Ergebnisfeld auswählen */
+        zugkraftUntenEl.innerText = F_unten.toFixed(2) + ' N'; /* Ergebnis anzeigen */
+        zugkraftUntenEl.style.color = '#0057a8'; /* Blaue Schrift */
+
     }
 
     function erstellePDF() {
