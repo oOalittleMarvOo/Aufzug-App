@@ -1,268 +1,436 @@
-<!DOCTYPE html> <!-- Gibt dem Browser an dass dies eine HTML5 Seite ist -->
-<html lang="de"> <!-- Startet die HTML Seite, Sprache ist Deutsch -->
-<head> <!-- Kopfbereich - hier stehen Einstellungen die der Benutzer nicht sieht -->
-    <meta charset="UTF-8"> <!-- Ermöglicht deutsche Sonderzeichen wie ä,ö,ü -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Macht die App auf dem Handy richtig darstellbar -->
-    <title>Aufzug-App</title> <!-- Name der App der oben im Browser Tab erscheint -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> <!-- Externe Bibliothek für PDF Erstellung -->
-    <style> <!-- Hier beginnen alle Design Einstellungen -->
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aufzug-App</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
 
         /* ========== GRUNDEINSTELLUNGEN ========== */
-        * { box-sizing: border-box; margin: 0; padding: 0; } /* Gilt für alle Elemente */
-        body { font-family: Arial, sans-serif; background-color: #f0f4f8; } /* Schrift und Hintergrund */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; background-color: #f0f4f8; }
+
+        /* ========== SPLASH SCREEN ========== */
+        #splashScreen {
+            position: fixed; /* Überdeckt alles */
+            top: 0; left: 0; /* Oben links */
+            width: 100%; height: 100%; /* Volle Größe */
+            background: linear-gradient(135deg, #0057a8, #003f7f); /* Blauer Verlauf */
+            display: flex; /* Flexbox */
+            flex-direction: column; /* Untereinander */
+            align-items: center; /* Zentriert */
+            justify-content: center; /* Vertikal zentriert */
+            z-index: 1000; /* Über allem */
+            cursor: pointer; /* Hand Cursor */
+        }
+        #splashScreen h1 {
+            color: white; /* Weiße Schrift */
+            font-size: 32px; /* Große Schrift */
+            margin-top: 30px; /* Abstand nach oben */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* Schatten */
+        }
+        #splashScreen p {
+            color: rgba(255,255,255,0.7); /* Helle weiße Schrift */
+            font-size: 16px; /* Kleine Schrift */
+            margin-top: 15px; /* Abstand nach oben */
+        }
 
         /* ========== KOPFZEILE ========== */
         header {
-            background-color: #0057a8; /* Blaue Hintergrundfarbe */
-            color: white; /* Weiße Schrift */
-            text-align: center; /* Mittig */
-            padding: 20px; /* Innenabstand */
-            font-size: 24px; /* Schriftgröße */
-            font-weight: bold; /* Fettschrift */
+            background-color: #0057a8;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
         }
 
         /* ========== STARTSEITE ========== */
         .startseite {
-            display: flex; /* Flexbox Layout */
-            flex-direction: column; /* Elemente untereinander */
-            align-items: center; /* Horizontal zentrieren */
-            margin-top: 60px; /* Abstand nach oben */
-            gap: 20px; /* Abstand zwischen Elementen */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 60px;
+            gap: 20px;
         }
-        .startseite h2 { color: #333; font-size: 20px; } /* Überschrift */
-        .auswahl { display: flex; gap: 20px; margin-top: 20px; } /* Container für Buttons */
+        .startseite h2 { color: #333; font-size: 20px; }
+        .auswahl { display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap; justify-content: center; }
 
         /* ========== HAUPTBUTTONS ========== */
         .btn {
+            background-color: #0057a8;
+            color: white;
+            padding: 25px 50px;
+            font-size: 20px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .btn:hover { background-color: #003f7f; }
+
+        /* ========== MODAL SERIENNUMMER ========== */
+        #modalSeriennummer {
+            display: none; /* Standardmäßig versteckt */
+            position: fixed; /* Über allem */
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); /* Dunkler Hintergrund */
+            z-index: 500; /* Über Inhalt */
+            align-items: center; /* Zentriert */
+            justify-content: center; /* Vertikal zentriert */
+        }
+        #modalSeriennummer.aktiv { display: flex; } /* Sichtbar wenn aktiv */
+        .modal-box {
+            background: white; /* Weißer Hintergrund */
+            border-radius: 16px; /* Abgerundete Ecken */
+            padding: 30px; /* Innenabstand */
+            width: 90%; /* Breite */
+            max-width: 400px; /* Maximale Breite */
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3); /* Schatten */
+        }
+        .modal-box h2 {
+            color: #0057a8; /* Blaue Schrift */
+            margin-bottom: 20px; /* Abstand nach unten */
+            font-size: 20px; /* Schriftgröße */
+        }
+        .modal-box input {
+            width: 100%; /* Volle Breite */
+            padding: 12px; /* Innenabstand */
+            border: 2px solid #0057a8; /* Blauer Rahmen */
+            border-radius: 8px; /* Abgerundete Ecken */
+            font-size: 16px; /* Schriftgröße */
+            margin-bottom: 20px; /* Abstand nach unten */
+        }
+        .modal-buttons { display: flex; gap: 10px; justify-content: flex-end; } /* Buttons rechts */
+        .modal-btn-ok {
             background-color: #0057a8; /* Blau */
             color: white; /* Weiße Schrift */
-            padding: 25px 50px; /* Innenabstand */
-            font-size: 20px; /* Schriftgröße */
             border: none; /* Kein Rahmen */
-            border-radius: 12px; /* Abgerundete Ecken */
+            padding: 10px 25px; /* Innenabstand */
+            border-radius: 8px; /* Abgerundete Ecken */
             cursor: pointer; /* Hand Cursor */
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Schatten */
+            font-size: 15px; /* Schriftgröße */
         }
-        .btn:hover { background-color: #003f7f; } /* Dunkleres Blau beim Darüberfahren */
-
-        /* ========== SEITEN NAVIGATION ========== */
-        .seite { display: none; padding: 20px; } /* Alle Unterseiten versteckt */
-        .seite.aktiv { display: block; } /* Aktive Seite sichtbar */
-
-        .zuruck {
+        .modal-btn-skip {
             background-color: #888; /* Grau */
             color: white; /* Weiße Schrift */
             border: none; /* Kein Rahmen */
-            padding: 10px 20px; /* Innenabstand */
+            padding: 10px 25px; /* Innenabstand */
             border-radius: 8px; /* Abgerundete Ecken */
             cursor: pointer; /* Hand Cursor */
-            margin-bottom: 20px; /* Abstand nach unten */
-            font-size: 16px; /* Schriftgröße */
+            font-size: 15px; /* Schriftgröße */
+        }
+
+        /* ========== SERIENNUMMER ANZEIGE ========== */
+        .seriennummer-bar {
+            background: #e8f0fb; /* Heller blauer Hintergrund */
+            border-bottom: 2px solid #0057a8; /* Blauer unterer Rand */
+            padding: 8px 20px; /* Innenabstand */
+            display: flex; /* Flexbox */
+            align-items: center; /* Vertikal zentriert */
+            gap: 10px; /* Abstand */
+            font-size: 14px; /* Schriftgröße */
+            color: #0057a8; /* Blaue Schrift */
+        }
+        .seriennummer-bar span { font-weight: bold; } /* Fettschrift für Wert */
+        .seriennummer-edit {
+            background: none; /* Kein Hintergrund */
+            border: none; /* Kein Rahmen */
+            color: #0057a8; /* Blaue Schrift */
+            cursor: pointer; /* Hand Cursor */
+            font-size: 14px; /* Schriftgröße */
+            text-decoration: underline; /* Unterstrichen */
+        }
+
+        /* ========== SEITEN NAVIGATION ========== */
+        .seite { display: none; padding: 20px; }
+        .seite.aktiv { display: block; }
+
+        .zuruck {
+            background-color: #888;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            font-size: 16px;
         }
 
         /* ========== BAUTEIL LISTE ========== */
-        .bauteil-liste { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; } /* Buttons untereinander */
+        .bauteil-liste { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
         .bauteil-btn {
-            background-color: white; /* Weißer Hintergrund */
-            border: 2px solid #0057a8; /* Blauer Rahmen */
-            color: #0057a8; /* Blaue Schrift */
-            padding: 20px; /* Innenabstand */
-            font-size: 18px; /* Schriftgröße */
-            border-radius: 10px; /* Abgerundete Ecken */
-            cursor: pointer; /* Hand Cursor */
-            text-align: left; /* Linksbündig */
+            background-color: white;
+            border: 2px solid #0057a8;
+            color: #0057a8;
+            padding: 20px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: left;
         }
-        .bauteil-btn:hover { background-color: #e8f0fb; } /* Helles Blau beim Darüberfahren */
+        .bauteil-btn:hover { background-color: #e8f0fb; }
 
         /* ========== TABS ========== */
-        .tabs { display: flex; gap: 10px; margin-top: 20px; margin-bottom: 20px; } /* Reiter nebeneinander */
+        .tabs { display: flex; gap: 10px; margin-top: 20px; margin-bottom: 20px; flex-wrap: wrap; }
         .tab {
-            background-color: #ddd; /* Grau */
-            border: none; /* Kein Rahmen */
-            padding: 12px 20px; /* Innenabstand */
-            border-radius: 8px; /* Abgerundete Ecken */
-            cursor: pointer; /* Hand Cursor */
-            font-size: 16px; /* Schriftgröße */
+            background-color: #ddd;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
         }
-        .tab.aktiv { background-color: #0057a8; color: white; } /* Aktiver Reiter blau */
-        .tab-inhalt { display: none; } /* Tab Inhalt versteckt */
-        .tab-inhalt.aktiv { display: block; background: white; padding: 20px; border-radius: 10px; } /* Aktiver Tab sichtbar */
+        .tab.aktiv { background-color: #0057a8; color: white; }
+        .tab-inhalt { display: none; }
+        .tab-inhalt.aktiv { display: block; background: white; padding: 20px; border-radius: 10px; }
 
         /* ========== PRÜFFRAGEN ========== */
         .frage {
-            background: white; /* Weißer Hintergrund */
-            border: 1px solid #ddd; /* Grauer Rahmen */
-            border-radius: 10px; /* Abgerundete Ecken */
-            padding: 20px; /* Innenabstand */
-            margin-bottom: 20px; /* Abstand zur nächsten Frage */
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
         }
-        .frage h3 { color: #0057a8; margin-bottom: 15px; font-size: 16px; } /* Fragetext blau */
+        .frage h3 { color: #0057a8; margin-bottom: 15px; font-size: 16px; }
 
         /* ========== JA/NEIN BUTTONS ========== */
-        .ja-nein-gruppe { display: flex; gap: 10px; } /* Buttons nebeneinander */
+        .ja-nein-gruppe { display: flex; gap: 10px; }
         .ja-btn {
-            padding: 10px 30px; /* Innenabstand */
-            border: 2px solid #28a745; /* Grüner Rahmen */
-            border-radius: 8px; /* Abgerundete Ecken */
-            cursor: pointer; /* Hand Cursor */
-            font-size: 15px; /* Schriftgröße */
-            background: white; /* Weißer Hintergrund */
-            color: #28a745; /* Grüne Schrift */
+            padding: 10px 30px;
+            border: 2px solid #28a745;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            background: white;
+            color: #28a745;
         }
-        .ja-btn.aktiv { background-color: #28a745; color: white; } /* Aktiv grün */
+        .ja-btn.aktiv { background-color: #28a745; color: white; }
         .nein-btn {
-            padding: 10px 30px; /* Innenabstand */
-            border: 2px solid #dc3545; /* Roter Rahmen */
-            border-radius: 8px; /* Abgerundete Ecken */
-            cursor: pointer; /* Hand Cursor */
-            font-size: 15px; /* Schriftgröße */
-            background: white; /* Weißer Hintergrund */
-            color: #dc3545; /* Rote Schrift */
+            padding: 10px 30px;
+            border: 2px solid #dc3545;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            background: white;
+            color: #dc3545;
         }
-        .nein-btn.aktiv { background-color: #dc3545; color: white; } /* Aktiv rot */
+        .nein-btn.aktiv { background-color: #dc3545; color: white; }
 
         /* ========== ANTWORT BUTTONS ========== */
-        .antwort-gruppe { display: flex; gap: 10px; flex-wrap: wrap; } /* Buttons nebeneinander */
+        .antwort-gruppe { display: flex; gap: 10px; flex-wrap: wrap; }
         .antwort-btn {
-            padding: 10px 20px; /* Innenabstand */
-            border: 2px solid #ddd; /* Grauer Rahmen */
-            border-radius: 8px; /* Abgerundete Ecken */
-            cursor: pointer; /* Hand Cursor */
-            font-size: 15px; /* Schriftgröße */
-            background: white; /* Weißer Hintergrund */
+            padding: 10px 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            background: white;
         }
-        .antwort-btn.passt { border-color: #28a745; color: #28a745; } /* Passt grün */
-        .antwort-btn.passt.aktiv { background-color: #28a745; color: white; } /* Passt aktiv */
-        .antwort-btn.passt-nicht { border-color: #dc3545; color: #dc3545; } /* Passt nicht rot */
-        .antwort-btn.passt-nicht.aktiv { background-color: #dc3545; color: white; } /* Passt nicht aktiv */
-        .antwort-btn.irrelevant { border-color: #888; color: #888; } /* Irrelevant grau */
-        .antwort-btn.irrelevant.aktiv { background-color: #888; color: white; } /* Irrelevant aktiv */
+        .antwort-btn.passt { border-color: #28a745; color: #28a745; }
+        .antwort-btn.passt.aktiv { background-color: #28a745; color: white; }
+        .antwort-btn.passt-nicht { border-color: #dc3545; color: #dc3545; }
+        .antwort-btn.passt-nicht.aktiv { background-color: #dc3545; color: white; }
+        .antwort-btn.irrelevant { border-color: #888; color: #888; }
+        .antwort-btn.irrelevant.aktiv { background-color: #888; color: white; }
 
         /* ========== MANGELFELD ========== */
         .mangelfeld {
-            display: none; /* Standardmäßig versteckt */
-            margin-top: 15px; /* Abstand nach oben */
-            padding: 15px; /* Innenabstand */
-            background: #fff3f3; /* Heller roter Hintergrund */
-            border: 1px solid #dc3545; /* Roter Rahmen */
-            border-radius: 8px; /* Abgerundete Ecken */
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #fff3f3;
+            border: 1px solid #dc3545;
+            border-radius: 8px;
         }
         .mangelfeld textarea {
-            width: 100%; /* Volle Breite */
-            padding: 10px; /* Innenabstand */
-            border: 1px solid #ddd; /* Grauer Rahmen */
-            border-radius: 6px; /* Abgerundete Ecken */
-            font-size: 15px; /* Schriftgröße */
-            margin-top: 10px; /* Abstand nach oben */
-            min-height: 80px; /* Mindesthöhe */
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 15px;
+            margin-top: 10px;
+            min-height: 80px;
         }
-        .mangel-hinweis { color: #dc3545; font-weight: bold; margin-bottom: 8px; } /* Roter Warnhinweis */
+        .mangel-hinweis { color: #dc3545; font-weight: bold; margin-bottom: 8px; }
 
         /* ========== MESSWERT EINGABE ========== */
-        .messwert-gruppe { display: flex; align-items: center; gap: 10px; margin-top: 10px; } /* Eingabe nebeneinander */
+        .messwert-gruppe { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
         .messwert-gruppe input {
-            padding: 10px; /* Innenabstand */
-            border: 2px solid #0057a8; /* Blauer Rahmen */
-            border-radius: 8px; /* Abgerundete Ecken */
-            font-size: 16px; /* Schriftgröße */
-            width: 150px; /* Breite */
+            padding: 10px;
+            border: 2px solid #0057a8;
+            border-radius: 8px;
+            font-size: 16px;
+            width: 150px;
         }
-        .messwert-gruppe span { font-size: 16px; color: #333; font-weight: bold; } /* Einheit */
+        .messwert-gruppe span { font-size: 16px; color: #333; font-weight: bold; }
 
         /* ========== EINGABE ZEILE BERECHNUNG ========== */
         .eingabe-zeile {
-            display: flex; /* Elemente nebeneinander */
-            align-items: center; /* Vertikal zentrieren */
-            margin-bottom: 12px; /* Abstand nach unten */
-            gap: 10px; /* Abstand zwischen Elementen */
-            flex-wrap: wrap; /* Umbrechen auf kleinen Bildschirmen */
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            gap: 10px;
+            flex-wrap: wrap;
         }
-        .eingabe-zeile label { min-width: 200px; font-size: 14px; color: #333; } /* Beschriftung */
+        .eingabe-zeile label { min-width: 200px; font-size: 14px; color: #333; }
         .eingabe-zeile input {
-            padding: 8px 12px; /* Innenabstand */
-            border: 2px solid #0057a8; /* Blauer Rahmen */
-            border-radius: 6px; /* Abgerundete Ecken */
-            font-size: 15px; /* Schriftgröße */
-            width: 120px; /* Breite */
+            padding: 8px 12px;
+            border: 2px solid #0057a8;
+            border-radius: 6px;
+            font-size: 15px;
+            width: 120px;
         }
-        .einheit { font-size: 14px; color: #666; font-weight: bold; } /* Einheit */
+        .einheit { font-size: 14px; color: #666; font-weight: bold; }
 
         /* ========== ZWISCHENWERT / ERGEBNIS ========== */
         .zwischenwert {
-            background: #f0f4f8; /* Heller blauer Hintergrund */
-            padding: 10px 12px; /* Innenabstand */
-            border-radius: 6px; /* Abgerundete Ecken */
-            margin-bottom: 8px; /* Abstand nach unten */
-            font-size: 14px; /* Schriftgröße */
-            display: flex; /* Elemente nebeneinander */
-            justify-content: space-between; /* Abstand zwischen Label und Wert */
+            background: #f0f4f8;
+            padding: 10px 12px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
         }
 
         /* ========== FORMEL DARSTELLUNG ========== */
-        .formel-container { text-align: center; padding: 20px; font-size: 20px; color: #333; } /* Zentriert */
-        .bruch { display: inline-block; vertical-align: middle; text-align: center; margin: 0 4px; } /* Bruch */
-        .zaehler { display: block; border-bottom: 2px solid #0057a8; padding-bottom: 4px; font-size: 18px; } /* Zähler */
-        .nenner { display: block; padding-top: 4px; font-size: 18px; } /* Nenner */
-        .bruch-klein { display: inline-block; vertical-align: middle; text-align: center; margin: 0 3px; } /* Kleiner Bruch */
-        .zaehler-klein { display: block; border-bottom: 2px solid #0057a8; padding-bottom: 2px; font-size: 15px; } /* Kleiner Zähler */
-        .nenner-klein { display: block; padding-top: 2px; font-size: 15px; } /* Kleiner Nenner */
+        .formel-container { text-align: center; padding: 20px; font-size: 20px; color: #333; }
+        .bruch { display: inline-block; vertical-align: middle; text-align: center; margin: 0 4px; }
+        .zaehler { display: block; border-bottom: 2px solid #0057a8; padding-bottom: 4px; font-size: 18px; }
+        .nenner { display: block; padding-top: 4px; font-size: 18px; }
+        .bruch-klein { display: inline-block; vertical-align: middle; text-align: center; margin: 0 3px; }
+        .zaehler-klein { display: block; border-bottom: 2px solid #0057a8; padding-bottom: 2px; font-size: 15px; }
+        .nenner-klein { display: block; padding-top: 2px; font-size: 15px; }
 
         /* ========== HINWEIS BOX ========== */
         .hinweis {
-            background: #e8f0fb; /* Heller blauer Hintergrund */
-            border-left: 4px solid #0057a8; /* Blauer linker Rand */
-            padding: 10px 15px; /* Innenabstand */
-            border-radius: 6px; /* Abgerundete Ecken */
-            margin-bottom: 15px; /* Abstand nach unten */
-            font-size: 14px; /* Schriftgröße */
-            color: #0057a8; /* Blaue Schrift */
-            font-weight: bold; /* Fettschrift */
+            background: #e8f0fb;
+            border-left: 4px solid #0057a8;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #0057a8;
+            font-weight: bold;
         }
 
         /* ========== AUSWAHL BUTTONS ========== */
-        .auswahl-gruppe { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 10px; } /* Buttons nebeneinander */
+        .auswahl-gruppe { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 10px; }
         .auswahl-btn {
-            padding: 12px 20px; /* Innenabstand */
-            border: 2px solid #0057a8; /* Blauer Rahmen */
-            border-radius: 8px; /* Abgerundete Ecken */
-            cursor: pointer; /* Hand Cursor */
-            font-size: 15px; /* Schriftgröße */
-            background: white; /* Weißer Hintergrund */
-            color: #0057a8; /* Blaue Schrift */
+            padding: 12px 20px;
+            border: 2px solid #0057a8;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            background: white;
+            color: #0057a8;
         }
-        .auswahl-btn.aktiv { background-color: #0057a8; color: white; } /* Aktiv blau */
+        .auswahl-btn.aktiv { background-color: #0057a8; color: white; }
 
         /* ========== BERECHNUNG BEREICH ========== */
-        .berechnung-bereich { display: none; margin-top: 20px; } /* Standardmäßig versteckt */
-        .berechnung-bereich.aktiv { display: block; } /* Sichtbar nach Auswahl */
+        .berechnung-bereich { display: none; margin-top: 20px; }
+        .berechnung-bereich.aktiv { display: block; }
 
         /* ========== PDF BUTTON ========== */
-        .pdf-bereich { margin-top: 30px; text-align: center; padding: 20px; } /* Container zentriert */
+        .pdf-bereich { margin-top: 30px; text-align: center; padding: 20px; }
         .pdf-btn {
-            background-color: #dc3545; /* Rot */
-            color: white; /* Weiße Schrift */
-            border: none; /* Kein Rahmen */
-            padding: 15px 40px; /* Innenabstand */
-            font-size: 18px; /* Schriftgröße */
-            border-radius: 10px; /* Abgerundete Ecken */
-            cursor: pointer; /* Hand Cursor */
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Schatten */
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
-        .pdf-btn:hover { background-color: #b02a37; } /* Dunkleres Rot */
+        .pdf-btn:hover { background-color: #b02a37; }
 
     </style>
 </head>
 <body>
 
+<!-- ========== SPLASH SCREEN - wird beim Start angezeigt und kann weggeklickt werden ========== -->
+<div id="splashScreen" onclick="schliesseSplash()"> <!-- Klick überall schließt den Splash -->
+
+    <!-- Comic-Stil SVG Illustration eines Geschwindigkeitsbegrenzers -->
+    <svg width="220" height="280" viewBox="0 0 220 280" xmlns="http://www.w3.org/2000/svg">
+
+        <!-- Sockel -->
+        <rect x="30" y="240" width="160" height="25" rx="5" fill="#222" stroke="#fff" stroke-width="3"/>
+        <rect x="50" y="225" width="120" height="18" rx="3" fill="#333" stroke="#fff" stroke-width="2"/>
+
+        <!-- Großes Schwungrad -->
+        <circle cx="110" cy="185" r="55" fill="none" stroke="#fff" stroke-width="5"/>
+        <circle cx="110" cy="185" r="45" fill="none" stroke="#fff" stroke-width="2"/>
+        <circle cx="110" cy="185" r="8" fill="#fff"/>
+        <!-- Speichen -->
+        <line x1="110" y1="140" x2="110" y2="230" stroke="#fff" stroke-width="3"/>
+        <line x1="65" y1="185" x2="155" y2="185" stroke="#fff" stroke-width="3"/>
+        <line x1="79" y1="154" x2="141" y2="216" stroke="#fff" stroke-width="3"/>
+        <line x1="141" y1="154" x2="79" y2="216" stroke="#fff" stroke-width="3"/>
+
+        <!-- Mittelsäule -->
+        <rect x="105" y="50" width="10" height="140" fill="#aaa" stroke="#fff" stroke-width="2"/>
+
+        <!-- Querarm oben -->
+        <rect x="50" y="48" width="120" height="10" rx="3" fill="#aaa" stroke="#fff" stroke-width="2"/>
+
+        <!-- Linker Arm mit Kugel -->
+        <line x1="75" y1="53" x2="45" y2="30" stroke="#aaa" stroke-width="5"/>
+        <circle cx="38" cy="24" r="14" fill="#555" stroke="#fff" stroke-width="3"/>
+
+        <!-- Rechter Arm mit Kugel -->
+        <line x1="145" y1="53" x2="175" y2="30" stroke="#aaa" stroke-width="5"/>
+        <circle cx="182" cy="24" r="14" fill="#555" stroke="#fff" stroke-width="3"/>
+
+        <!-- Kleines Zahnrad links -->
+        <circle cx="60" cy="200" r="18" fill="none" stroke="#fff" stroke-width="3"/>
+        <circle cx="60" cy="200" r="6" fill="#fff"/>
+
+        <!-- Comic Linien für Stil -->
+        <line x1="30" y1="185" x2="0" y2="185" stroke="#fff" stroke-width="1" stroke-dasharray="4,4" opacity="0.3"/>
+
+    </svg>
+
+    <h1>🛗 Aufzug-App</h1> <!-- Titel -->
+    <p>Tippen zum Starten...</p> <!-- Hinweis -->
+
+</div>
+
+<!-- ========== MODAL: SERIENNUMMER EINGABE ========== -->
+<div id="modalSeriennummer"> <!-- Modal Container -->
+    <div class="modal-box"> <!-- Weiße Box -->
+        <h2>🔧 Projekt Seriennummer</h2> <!-- Überschrift -->
+        <p style="color: #666; margin-bottom: 15px; font-size: 14px;">Bitte geben Sie die Seriennummer der Anlage ein. Diese wird im gesamten Protokoll verwendet.</p> <!-- Beschreibung -->
+        <input type="text" id="seriennummerInput" placeholder="z.B. AZ-2024-00123"> <!-- Eingabefeld -->
+        <div class="modal-buttons"> <!-- Buttons -->
+            <button class="modal-btn-skip" onclick="schliesseModal()">Überspringen</button> <!-- Überspringen -->
+            <button class="modal-btn-ok" onclick="speichereSeriennummer()">✅ Speichern</button> <!-- Speichern -->
+        </div>
+    </div>
+</div>
+
 <!-- ========== KOPFZEILE ========== -->
 <header>🛗 Aufzug-App</header>
+
+<!-- ========== SERIENNUMMER LEISTE - zeigt aktuelle Seriennummer ========== -->
+<div class="seriennummer-bar" id="seriennummerBar" style="display:none;"> <!-- Versteckt wenn keine Seriennummer -->
+    <span>📋 Projekt:</span> <!-- Label -->
+    <span id="seriennummerAnzeige">–</span> <!-- Seriennummer Anzeige -->
+    <button class="seriennummer-edit" onclick="oeffneModal()">✏️ ändern</button> <!-- Bearbeiten Button -->
+</div>
 
 <!-- ========== STARTSEITE ========== -->
 <div id="startseite" class="startseite">
     <h2>Bitte wählen Sie einen Bereich:</h2>
     <div class="auswahl">
-        <button class="btn" onclick="zeigeBauteile('Neubau')">Neubau</button>
-        <button class="btn" onclick="zeigeBauteile('Umbau')">Umbau</button>
+        <button class="btn" onclick="zeigeBauteile('Neubau')">🏗️ Neubau</button> <!-- Neubau -->
+        <button class="btn" onclick="zeigeUmbau()">🔧 Umbau</button> <!-- Umbau - öffnet Seriennummer Modal -->
+        <button class="btn" onclick="zeigeBauteile('Einzelne Teile')">🔩 Einzelne Teile</button> <!-- Einzelne Teile -->
     </div>
 </div>
 
@@ -365,7 +533,6 @@
     <!-- ========== BERECHNUNG ========== -->
     <div id="berechnung" class="tab-inhalt">
 
-        <!-- SCHRITT 1: AUSWAHL RILLENFORM -->
         <div class="frage">
             <h3>2.1 – Rillenform auswählen</h3>
             <div class="auswahl-gruppe">
@@ -375,10 +542,8 @@
             </div>
         </div>
 
-        <!-- SCHRITT 2: EINGABEN UND FORMELN -->
         <div class="berechnung-bereich" id="berechnungBereich">
 
-            <!-- EINGABE -->
             <div class="frage">
                 <h3>2.2 – Eingabewerte</h3>
                 <div class="eingabe-zeile">
@@ -398,7 +563,6 @@
                 </div>
             </div>
 
-            <!-- FORMEL 2.3: Reibwert μ -->
             <div class="frage">
                 <h3>2.3 – Reibwert μ</h3>
                 <div class="formel-container">
@@ -420,11 +584,8 @@
                 </div>
             </div>
 
-            <!-- FORMEL 2.4: Reibungszahl f(μ) -->
             <div class="frage">
                 <h3>2.4 – Reibungszahl f(μ)</h3>
-
-                <!-- Formel Keilrille -->
                 <div class="formel-container" id="formelKeilrille">
                     <span>f(μ) = </span>
                     <span class="bruch">
@@ -448,8 +609,6 @@
                         </span>
                     </span>
                 </div>
-
-                <!-- Formel Halbrundrille -->
                 <div class="formel-container" id="formelHalbrund" style="display:none;">
                     <span>f(μ) = 4 × μ × </span>
                     <span class="bruch">
@@ -493,17 +652,16 @@
                         </span>
                     </span>
                 </div>
-
                 <div class="zwischenwert" style="margin-top: 15px;">
                     <label>Ergebnis f(μ) =</label>
                     <span id="ergebnis_fmu" style="font-weight: bold; color: #888;">Bitte Werte eingeben</span>
                 </div>
             </div>
 
-            <!-- FORMEL 2.5: Zugkraft F abwärts -->
+            <!-- FORMEL 2.5: Zugkraft abwärts -->
             <div class="frage">
                 <h3>2.5 – Zugkraft F</h3>
-                <div class="hinweis">ℹ️ Gilt wenn Geschwindigkeitsbegrenzer oben – Fang abwärts</div> <!-- Hinweis abwärts -->
+                <div class="hinweis">ℹ️ Gilt wenn Geschwindigkeitsbegrenzer oben – Fang abwärts</div>
                 <div class="formel-container">
                     <span>F = </span>
                     <span class="bruch">
@@ -520,11 +678,10 @@
                 </div>
             </div>
 
-            <!-- AUSWERTUNG 2.6: Vergleich abwärts -->
+            <!-- AUSWERTUNG 2.6 -->
             <div class="frage" id="vergleich_bereich" style="display:none;">
                 <h3>2.6 – Auswertung Zugkraft (Fang abwärts)</h3>
-                <div id="vergleich_box" style="padding: 20px; border-radius: 10px; text-align: center; font-size: 18px; font-weight: bold; margin-bottom: 15px;">
-                </div>
+                <div id="vergleich_box" style="padding: 20px; border-radius: 10px; text-align: center; font-size: 18px; font-weight: bold; margin-bottom: 15px;"></div>
                 <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
                     <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 15px; text-align: center; min-width: 120px;">
                         <div style="font-size: 13px; color: #856404;">Mindest-Zugkraft</div>
@@ -537,22 +694,20 @@
                 </div>
             </div>
 
-            <!-- FORMEL 2.7: Zugkraft F aufwärts -->
+            <!-- FORMEL 2.7: Zugkraft aufwärts -->
             <div class="frage">
                 <h3>2.7 – Zugkraft F</h3>
-                <div class="hinweis">ℹ️ Gilt wenn Geschwindigkeitsbegrenzer oben – Fang aufwärts</div> <!-- Hinweis aufwärts -->
+                <div class="hinweis">ℹ️ Gilt wenn Geschwindigkeitsbegrenzer oben – Fang aufwärts</div>
                 <div class="formel-container">
                     <span>F = </span>
                     <span class="bruch">
-                        <span class="zaehler">G</span> <!-- Zähler: G -->
-                        <span class="nenner">2</span> <!-- Nenner: 2 -->
+                        <span class="zaehler">G</span>
+                        <span class="nenner">2</span>
                     </span>
                     <span> × (1 − </span>
-                    <span class="bruch"> <!-- Bruch 1/e^... -->
-                        <span class="zaehler">1</span> <!-- Zähler: 1 -->
-                        <span class="nenner"> <!-- Nenner: e^(f(μ)×π) -->
-                            e<sup style="font-size: 13px;">f(μ) × π</sup>
-                        </span>
+                    <span class="bruch">
+                        <span class="zaehler">1</span>
+                        <span class="nenner">e<sup style="font-size: 13px;">f(μ) × π</sup></span>
                     </span>
                     <span>)</span>
                 </div>
@@ -562,11 +717,10 @@
                 </div>
             </div>
 
-            <!-- AUSWERTUNG 2.8: Vergleich aufwärts -->
+            <!-- AUSWERTUNG 2.8 -->
             <div class="frage" id="vergleich_bereich_auf" style="display:none;">
                 <h3>2.8 – Auswertung Zugkraft (Fang aufwärts)</h3>
-                <div id="vergleich_box_auf" style="padding: 20px; border-radius: 10px; text-align: center; font-size: 18px; font-weight: bold; margin-bottom: 15px;">
-                </div>
+                <div id="vergleich_box_auf" style="padding: 20px; border-radius: 10px; text-align: center; font-size: 18px; font-weight: bold; margin-bottom: 15px;"></div>
                 <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
                     <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 15px; text-align: center; min-width: 120px;">
                         <div style="font-size: 13px; color: #856404;">Mindest-Zugkraft</div>
@@ -578,32 +732,28 @@
                     </div>
                 </div>
             </div>
-            <!-- FORMEL 2.9: Zugkraft F GB unten -->
+
+            <!-- FORMEL 2.9: Zugkraft GB unten -->
             <div class="frage">
-                <h3>2.9 – Zugkraft F</h3> <!-- Überschrift -->
-                <div class="hinweis">ℹ️ Gilt wenn Geschwindigkeitsbegrenzer unten – Fang auf- und abwärts</div> <!-- Hinweis -->
-                <div class="formel-container"> <!-- Grafische Formel -->
+                <h3>2.9 – Zugkraft F</h3>
+                <div class="hinweis">ℹ️ Gilt wenn Geschwindigkeitsbegrenzer unten – Fang auf- und abwärts</div>
+                <div class="formel-container">
                     <span>F = G × </span>
-                    <span class="bruch"> <!-- Bruch -->
-                        <span class="zaehler"> <!-- Zähler: e^(f(μ)×π) - 1 -->
-                            e<sup style="font-size: 13px;">f(μ) × π</sup> − 1
-                        </span>
-                        <span class="nenner"> <!-- Nenner: e^(f(μ)×π) + 1 -->
-                            e<sup style="font-size: 13px;">f(μ) × π</sup> + 1
-                        </span>
+                    <span class="bruch">
+                        <span class="zaehler">e<sup style="font-size: 13px;">f(μ) × π</sup> − 1</span>
+                        <span class="nenner">e<sup style="font-size: 13px;">f(μ) × π</sup> + 1</span>
                     </span>
                 </div>
-                <div class="zwischenwert" style="margin-top: 15px;"> <!-- Ergebnis -->
-                    <label>Ergebnis F =</label> <!-- Beschriftung -->
-                    <span id="ergebnis_zugkraft_unten" style="font-weight: bold; color: #888;">Bitte Werte eingeben</span> <!-- Ergebnis -->
+                <div class="zwischenwert" style="margin-top: 15px;">
+                    <label>Ergebnis F =</label>
+                    <span id="ergebnis_zugkraft_unten" style="font-weight: bold; color: #888;">Bitte Werte eingeben</span>
                 </div>
             </div>
-            <!-- AUSWERTUNG 2.10: Vergleich GB unten -->
-            <div class="frage" id="vergleich_bereich_unten" style="display:none;"> <!-- Standardmäßig versteckt -->
-                <h3>2.10 – Auswertung Zugkraft (GB unten)</h3> <!-- Überschrift -->
-                <div id="vergleich_box_unten" style="padding: 20px; border-radius: 10px; text-align: center; font-size: 18px; font-weight: bold; margin-bottom: 15px;">
-                    <!-- Wird per JavaScript befüllt -->
-                </div>
+
+            <!-- AUSWERTUNG 2.10 -->
+            <div class="frage" id="vergleich_bereich_unten" style="display:none;">
+                <h3>2.10 – Auswertung Zugkraft (GB unten)</h3>
+                <div id="vergleich_box_unten" style="padding: 20px; border-radius: 10px; text-align: center; font-size: 18px; font-weight: bold; margin-bottom: 15px;"></div>
                 <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
                     <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 15px; text-align: center; min-width: 120px;">
                         <div style="font-size: 13px; color: #856404;">Mindest-Zugkraft</div>
@@ -614,12 +764,12 @@
                         <div id="vergleich_wert_unten" style="font-size: 22px; font-weight: bold; color: #0057a8;">–</div>
                     </div>
                 </div>
-            </div> <!-- Ende Auswertung 2.10 -->
+            </div>
 
         </div> <!-- Ende Berechnungsbereich -->
     </div> <!-- Ende Berechnung Tab -->
 
-    <!-- ========== PDF EXPORT BUTTON ========== -->
+    <!-- PDF BUTTON -->
     <div class="pdf-bereich">
         <button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button>
     </div>
@@ -628,6 +778,62 @@
 
 <script>
 
+    /* ========== SPLASH SCREEN ========== */
+
+    /**
+     * Funktion: schliesseSplash
+     * Zweck: Versteckt den Splash Screen beim Antippen
+     */
+    function schliesseSplash() {
+        document.getElementById('splashScreen').style.display = 'none'; /* Splash Screen verstecken */
+    }
+
+    /* ========== SERIENNUMMER ========== */
+
+    let aktuelleSeriennummer = ''; /* Globale Variable für Seriennummer */
+
+    /**
+     * Funktion: oeffneModal
+     * Zweck: Öffnet das Seriennummer Modal
+     */
+    function oeffneModal() {
+        document.getElementById('seriennummerInput').value = aktuelleSeriennummer; /* Aktuellen Wert einsetzen */
+        document.getElementById('modalSeriennummer').classList.add('aktiv'); /* Modal anzeigen */
+    }
+
+    /**
+     * Funktion: schliesseModal
+     * Zweck: Schließt das Modal ohne zu speichern
+     */
+    function schliesseModal() {
+        document.getElementById('modalSeriennummer').classList.remove('aktiv'); /* Modal verstecken */
+        zeigeBauteile(document.getElementById('bereichTitel').innerText || 'Umbau'); /* Zur Bauteil Liste */
+    }
+
+    /**
+     * Funktion: speichereSeriennummer
+     * Zweck: Speichert die Seriennummer und schließt das Modal
+     */
+    function speichereSeriennummer() {
+        const eingabe = document.getElementById('seriennummerInput').value.trim(); /* Eingabe auslesen */
+        aktuelleSeriennummer = eingabe || '–'; /* Speichern oder Standardwert */
+        document.getElementById('seriennummerAnzeige').innerText = aktuelleSeriennummer; /* Anzeige aktualisieren */
+        document.getElementById('seriennummerBar').style.display = 'flex'; /* Leiste einblenden */
+        document.getElementById('modalSeriennummer').classList.remove('aktiv'); /* Modal schließen */
+        zeigeBauteile('Umbau'); /* Zur Bauteil Liste */
+    }
+
+    /**
+     * Funktion: zeigeUmbau
+     * Zweck: Öffnet Umbau und zeigt Seriennummer Modal
+     */
+    function zeigeUmbau() {
+        document.getElementById('bereichTitel').innerText = 'Umbau'; /* Titel setzen */
+        oeffneModal(); /* Modal öffnen */
+    }
+
+    /* ========== NAVIGATION ========== */
+
     function zeige(id) {
         document.querySelectorAll('.startseite, .seite').forEach(el => { el.style.display = 'none'; });
         const el = document.getElementById(id);
@@ -635,8 +841,8 @@
     }
 
     function zeigeBauteile(bereich) {
-        document.getElementById('bereichTitel').innerText = bereich;
-        zeige('bauteilSeite');
+        document.getElementById('bereichTitel').innerText = bereich; /* Titel setzen */
+        zeige('bauteilSeite'); /* Zur Bauteil Liste */
     }
 
     function zeigeBauteil(name) {
@@ -688,148 +894,116 @@
         return textarea ? textarea.value.trim() : '';
     }
 
-    /* Globale Variable für gewählte Rillenform */
-    let gewaehlteRillenform = ''; /* Speichert welche Rillenform gewählt wurde */
+    /* ========== BERECHNUNG ========== */
+
+    let gewaehlteRillenform = ''; /* Globale Variable Rillenform */
 
     function waehleRillenform(btn, rillenform) {
-        document.querySelectorAll('.auswahl-btn').forEach(el => el.classList.remove('aktiv')); /* Alle deaktivieren */
-        btn.classList.add('aktiv'); /* Gewählten aktivieren */
-        gewaehlteRillenform = rillenform; /* Rillenform speichern */
-        document.getElementById('berechnungBereich').classList.add('aktiv'); /* Bereich einblenden */
-
-        /* Richtige Formel anzeigen */
+        document.querySelectorAll('.auswahl-btn').forEach(el => el.classList.remove('aktiv'));
+        btn.classList.add('aktiv');
+        gewaehlteRillenform = rillenform;
+        document.getElementById('berechnungBereich').classList.add('aktiv');
         if (rillenform === 'halbrund') {
-            document.getElementById('formelKeilrille').style.display = 'none'; /* Keilrille verstecken */
-            document.getElementById('formelHalbrund').style.display = 'block'; /* Halbrundrille anzeigen */
+            document.getElementById('formelKeilrille').style.display = 'none';
+            document.getElementById('formelHalbrund').style.display = 'block';
         } else {
-            document.getElementById('formelKeilrille').style.display = 'block'; /* Keilrille anzeigen */
-            document.getElementById('formelHalbrund').style.display = 'none'; /* Halbrundrille verstecken */
+            document.getElementById('formelKeilrille').style.display = 'block';
+            document.getElementById('formelHalbrund').style.display = 'none';
         }
-
-        berechneAlles(); /* Sofort berechnen */
+        berechneAlles();
     }
 
     function berechneAlles() {
-        const v = parseFloat(document.getElementById('geschwindigkeit').value); /* Geschwindigkeit */
-        const gamma = parseFloat(document.getElementById('keilwinkel').value); /* Keilwinkel */
-        const G = parseFloat(document.getElementById('spannkraft').value); /* Spannkraft */
-        const muEl = document.getElementById('ergebnis_mu'); /* μ Ergebnisfeld */
-        const fmuEl = document.getElementById('ergebnis_fmu'); /* f(μ) Ergebnisfeld */
-        const zugkraftEl = document.getElementById('ergebnis_zugkraft'); /* Zugkraft abwärts Ergebnisfeld */
-        const zugkraftAufEl = document.getElementById('ergebnis_zugkraft_auf'); /* Zugkraft aufwärts Ergebnisfeld */
+        const v = parseFloat(document.getElementById('geschwindigkeit').value);
+        const gamma = parseFloat(document.getElementById('keilwinkel').value);
+        const G = parseFloat(document.getElementById('spannkraft').value);
+        const muEl = document.getElementById('ergebnis_mu');
+        const fmuEl = document.getElementById('ergebnis_fmu');
+        const zugkraftEl = document.getElementById('ergebnis_zugkraft');
+        const zugkraftAufEl = document.getElementById('ergebnis_zugkraft_auf');
+        const zugkraftUntenEl = document.getElementById('ergebnis_zugkraft_unten');
 
-        /* ========== SCHRITT 1: μ BERECHNEN ========== */
-        if (isNaN(v) || v < 0) { /* Keine gültige Geschwindigkeit */
+        /* SCHRITT 1: μ */
+        if (isNaN(v) || v < 0) {
             muEl.innerText = 'Bitte Geschwindigkeit eingeben'; muEl.style.color = '#888';
             fmuEl.innerText = 'Bitte Werte eingeben'; fmuEl.style.color = '#888';
             zugkraftEl.innerText = 'Bitte Werte eingeben'; zugkraftEl.style.color = '#888';
             zugkraftAufEl.innerText = 'Bitte Werte eingeben'; zugkraftAufEl.style.color = '#888';
-            document.getElementById('vergleich_bereich').style.display = 'none'; /* Auswertung verstecken */
-            document.getElementById('vergleich_bereich_auf').style.display = 'none'; /* Auswertung aufwärts verstecken */
+            zugkraftUntenEl.innerText = 'Bitte Werte eingeben'; zugkraftUntenEl.style.color = '#888';
+            document.getElementById('vergleich_bereich').style.display = 'none';
+            document.getElementById('vergleich_bereich_auf').style.display = 'none';
+            document.getElementById('vergleich_bereich_unten').style.display = 'none';
             return;
         }
+        const mu = 0.1 / (1 + v / 10);
+        muEl.innerText = mu.toFixed(4); muEl.style.color = '#0057a8';
 
-        const mu = 0.1 / (1 + v / 10); /* μ = 0,1 / (1 + v/10) */
-        muEl.innerText = mu.toFixed(4); /* Ergebnis anzeigen */
-        muEl.style.color = '#0057a8'; /* Blaue Schrift */
-
-        /* ========== SCHRITT 2: f(μ) BERECHNEN ========== */
-        if (isNaN(gamma) || gamma <= 0) { /* Kein gültiger Keilwinkel */
+        /* SCHRITT 2: f(μ) */
+        if (isNaN(gamma) || gamma <= 0) {
             fmuEl.innerText = 'Bitte Keilwinkel eingeben'; fmuEl.style.color = '#888';
             zugkraftEl.innerText = 'Bitte Werte eingeben'; zugkraftEl.style.color = '#888';
             zugkraftAufEl.innerText = 'Bitte Werte eingeben'; zugkraftAufEl.style.color = '#888';
+            zugkraftUntenEl.innerText = 'Bitte Werte eingeben'; zugkraftUntenEl.style.color = '#888';
             document.getElementById('vergleich_bereich').style.display = 'none';
             document.getElementById('vergleich_bereich_auf').style.display = 'none';
+            document.getElementById('vergleich_bereich_unten').style.display = 'none';
             return;
         }
-
-        const gammaRad = (Math.PI / 180) * gamma; /* Grad in Bogenmaß */
-
-        /* Je nach Rillenform andere Formel */
+        const gammaRad = (Math.PI / 180) * gamma;
         const fmu = gewaehlteRillenform === 'halbrund'
-            ? 4 * mu * (1 - Math.sin(gammaRad / 2)) / (Math.PI - gammaRad - Math.sin(gammaRad)) /* Halbrundrille */
-            : mu / Math.sin(gammaRad / 2); /* Keilrille */
+            ? 4 * mu * (1 - Math.sin(gammaRad / 2)) / (Math.PI - gammaRad - Math.sin(gammaRad))
+            : mu / Math.sin(gammaRad / 2);
+        fmuEl.innerText = fmu.toFixed(4); fmuEl.style.color = '#0057a8';
 
-        fmuEl.innerText = fmu.toFixed(4); /* Ergebnis anzeigen */
-        fmuEl.style.color = '#0057a8'; /* Blaue Schrift */
-
-        /* ========== SCHRITT 3: ZUGKRAFT ABWÄRTS BERECHNEN ========== */
-        if (isNaN(G) || G <= 0) { /* Keine gültige Spannkraft */
+        /* SCHRITT 3: Spannkraft prüfen */
+        if (isNaN(G) || G <= 0) {
             zugkraftEl.innerText = 'Bitte Spannkraft eingeben'; zugkraftEl.style.color = '#888';
             zugkraftAufEl.innerText = 'Bitte Spannkraft eingeben'; zugkraftAufEl.style.color = '#888';
+            zugkraftUntenEl.innerText = 'Bitte Spannkraft eingeben'; zugkraftUntenEl.style.color = '#888';
             document.getElementById('vergleich_bereich').style.display = 'none';
             document.getElementById('vergleich_bereich_auf').style.display = 'none';
+            document.getElementById('vergleich_bereich_unten').style.display = 'none';
             return;
         }
 
-        const F = (G / 2) * (Math.exp(fmu * Math.PI) - 1); /* F abwärts = (G/2) × (e^(f(μ)×π) - 1) */
-        zugkraftEl.innerText = F.toFixed(2) + ' N'; /* Ergebnis anzeigen */
-        zugkraftEl.style.color = '#0057a8'; /* Blaue Schrift */
+        /* SCHRITT 4: Zugkraft abwärts */
+        const F = (G / 2) * (Math.exp(fmu * Math.PI) - 1);
+        zugkraftEl.innerText = F.toFixed(2) + ' N'; zugkraftEl.style.color = '#0057a8';
+        zeigeAuswertung('vergleich_bereich', 'vergleich_box', 'vergleich_wert', F);
 
-        /* ========== SCHRITT 4: AUSWERTUNG ABWÄRTS ========== */
-        document.getElementById('vergleich_bereich').style.display = 'block'; /* Auswertung einblenden */
-        document.getElementById('vergleich_wert').innerText = F.toFixed(2) + ' N'; /* Wert in Gegenüberstellung */
-        const box = document.getElementById('vergleich_box'); /* Bewertungsbox */
+        /* SCHRITT 5: Zugkraft aufwärts */
+        const F_auf = (G / 2) * (1 - 1 / Math.exp(fmu * Math.PI));
+        zugkraftAufEl.innerText = F_auf.toFixed(2) + ' N'; zugkraftAufEl.style.color = '#0057a8';
+        zeigeAuswertung('vergleich_bereich_auf', 'vergleich_box_auf', 'vergleich_wert_auf', F_auf);
 
-        if (F < 300) { /* Zu niedrig - ROT */
+        /* SCHRITT 6: Zugkraft GB unten */
+        const F_unten = G * (Math.exp(fmu * Math.PI) - 1) / (Math.exp(fmu * Math.PI) + 1);
+        zugkraftUntenEl.innerText = F_unten.toFixed(2) + ' N'; zugkraftUntenEl.style.color = '#0057a8';
+        zeigeAuswertung('vergleich_bereich_unten', 'vergleich_box_unten', 'vergleich_wert_unten', F_unten);
+    }
+
+    /**
+     * Funktion: zeigeAuswertung
+     * Zweck: Zeigt die farbige Auswertung für eine Zugkraft
+     * Parameter: bereichId, boxId, wertId, F = berechnete Zugkraft
+     */
+    function zeigeAuswertung(bereichId, boxId, wertId, F) {
+        document.getElementById(bereichId).style.display = 'block'; /* Auswertung einblenden */
+        document.getElementById(wertId).innerText = F.toFixed(2) + ' N'; /* Wert anzeigen */
+        const box = document.getElementById(boxId); /* Bewertungsbox */
+        if (F < 300) { /* ROT */
             box.style.background = '#f8d7da'; box.style.border = '2px solid #dc3545'; box.style.color = '#dc3545';
             box.innerText = '❌ Zugkraft zu niedrig! (' + F.toFixed(2) + ' N < 300 N)';
-        } else if (F <= 400) { /* Grenzbereich - GELB */
+        } else if (F <= 400) { /* GELB */
             box.style.background = '#fff3cd'; box.style.border = '2px solid #ffc107'; box.style.color = '#856404';
             box.innerText = '⚠️ Zugkraft im Grenzbereich (' + F.toFixed(2) + ' N)';
-        } else { /* In Ordnung - GRÜN */
+        } else { /* GRÜN */
             box.style.background = '#d4edda'; box.style.border = '2px solid #28a745'; box.style.color = '#155724';
             box.innerText = '✅ Zugkraft in Ordnung! (' + F.toFixed(2) + ' N > 400 N)';
         }
-
-        /* ========== SCHRITT 5: ZUGKRAFT AUFWÄRTS BERECHNEN ========== */
-        const F_auf = (G / 2) * (1 - 1 / Math.exp(fmu * Math.PI)); /* F aufwärts = (G/2) × (1 - 1/e^(f(μ)×π)) */
-        zugkraftAufEl.innerText = F_auf.toFixed(2) + ' N'; /* Ergebnis anzeigen */
-        zugkraftAufEl.style.color = '#0057a8'; /* Blaue Schrift */
-
-        /* ========== SCHRITT 6: AUSWERTUNG AUFWÄRTS ========== */
-        document.getElementById('vergleich_bereich_auf').style.display = 'block'; /* Auswertung einblenden */
-        document.getElementById('vergleich_wert_auf').innerText = F_auf.toFixed(2) + ' N'; /* Wert in Gegenüberstellung */
-        const box_auf = document.getElementById('vergleich_box_auf'); /* Bewertungsbox */
-
-        if (F_auf < 300) { /* Zu niedrig - ROT */
-            box_auf.style.background = '#f8d7da'; box_auf.style.border = '2px solid #dc3545'; box_auf.style.color = '#dc3545';
-            box_auf.innerText = '❌ Zugkraft zu niedrig! (' + F_auf.toFixed(2) + ' N < 300 N)';
-        } else if (F_auf <= 400) { /* Grenzbereich - GELB */
-            box_auf.style.background = '#fff3cd'; box_auf.style.border = '2px solid #ffc107'; box_auf.style.color = '#856404';
-            box_auf.innerText = '⚠️ Zugkraft im Grenzbereich (' + F_auf.toFixed(2) + ' N)';
-        } else { /* In Ordnung - GRÜN */
-            box_auf.style.background = '#d4edda'; box_auf.style.border = '2px solid #28a745'; box_auf.style.color = '#155724';
-            box_auf.innerText = '✅ Zugkraft in Ordnung! (' + F_auf.toFixed(2) + ' N > 400 N)';
-        }
-                /* ========== SCHRITT 7: ZUGKRAFT GB UNTEN BERECHNEN ========== */
-        const F_unten = G * (Math.exp(fmu * Math.PI) - 1) / (Math.exp(fmu * Math.PI) + 1); /* F = G × (e^(f(μ)×π) - 1) / (e^(f(μ)×π) + 1) */
-        const zugkraftUntenEl = document.getElementById('ergebnis_zugkraft_unten'); /* Ergebnisfeld auswählen */
-        zugkraftUntenEl.innerText = F_unten.toFixed(2) + ' N'; /* Ergebnis anzeigen */
-        zugkraftUntenEl.style.color = '#0057a8'; /* Blaue Schrift */
-        /* ========== SCHRITT 8: AUSWERTUNG GB UNTEN ========== */
-        document.getElementById('vergleich_bereich_unten').style.display = 'block'; /* Auswertung einblenden */
-        document.getElementById('vergleich_wert_unten').innerText = F_unten.toFixed(2) + ' N'; /* Wert in Gegenüberstellung */
-        const box_unten = document.getElementById('vergleich_box_unten'); /* Bewertungsbox */
-
-        if (F_unten < 300) { /* Zu niedrig - ROT */
-            box_unten.style.background = '#f8d7da'; /* Roter Hintergrund */
-            box_unten.style.border = '2px solid #dc3545'; /* Roter Rahmen */
-            box_unten.style.color = '#dc3545'; /* Rote Schrift */
-            box_unten.innerText = '❌ Zugkraft zu niedrig! (' + F_unten.toFixed(2) + ' N < 300 N)'; /* Fehlermeldung */
-        } else if (F_unten <= 400) { /* Grenzbereich - GELB */
-            box_unten.style.background = '#fff3cd'; /* Gelber Hintergrund */
-            box_unten.style.border = '2px solid #ffc107'; /* Gelber Rahmen */
-            box_unten.style.color = '#856404'; /* Dunkelgelbe Schrift */
-            box_unten.innerText = '⚠️ Zugkraft im Grenzbereich (' + F_unten.toFixed(2) + ' N)'; /* Warnmeldung */
-        } else { /* In Ordnung - GRÜN */
-            box_unten.style.background = '#d4edda'; /* Grüner Hintergrund */
-            box_unten.style.border = '2px solid #28a745'; /* Grüner Rahmen */
-            box_unten.style.color = '#155724'; /* Dunkelgrüne Schrift */
-            box_unten.innerText = '✅ Zugkraft in Ordnung! (' + F_unten.toFixed(2) + ' N > 400 N)'; /* Erfolgsmeldung */
-        }
-
     }
+
+    /* ========== PDF ========== */
 
     function erstellePDF() {
         const { jsPDF } = window.jspdf;
@@ -839,9 +1013,9 @@
         const seitenHoehe = 280;
 
         function neueZeile(text, einzug = 0) {
-            if (y > seitenHoehe) { doc.addPage(); y = 20; } /* Neue Seite wenn nötig */
-            doc.text(text, 15 + einzug, y); /* Text platzieren */
-            y += zeilenAbstand; /* Position erhöhen */
+            if (y > seitenHoehe) { doc.addPage(); y = 20; }
+            doc.text(text, 15 + einzug, y);
+            y += zeilenAbstand;
         }
 
         /* KOPFZEILE */
@@ -851,6 +1025,7 @@
         neueZeile('Erstellt am: ' + new Date().toLocaleDateString('de-DE') + ' um ' + new Date().toLocaleTimeString('de-DE'));
         neueZeile('Bauteil: ' + (document.getElementById('bauteilTitel').innerText || '-'));
         neueZeile('Bereich: ' + (document.getElementById('bereichTitel').innerText || '-'));
+        if (aktuelleSeriennummer) neueZeile('Seriennummer: ' + aktuelleSeriennummer); /* Seriennummer im PDF */
         y += 5;
 
         /* PRÜFUNG VOR ORT */
@@ -890,17 +1065,17 @@
         neueZeile('Nenngeschwindigkeit v: ' + (document.getElementById('geschwindigkeit').value || 'Nicht eingegeben') + ' m/s');
         neueZeile('Keilwinkel gamma: ' + (document.getElementById('keilwinkel').value || 'Nicht eingegeben') + ' Grad');
         neueZeile('Spannkraft G: ' + (document.getElementById('spannkraft').value || 'Nicht eingegeben') + ' N');
-        neueZeile('Reibwert mu = ' + document.getElementById('ergebnis_mu').innerText); /* μ */
-        neueZeile('Reibungszahl f(mu) = ' + document.getElementById('ergebnis_fmu').innerText); /* f(μ) */
-        neueZeile('Zugkraft F (GB oben, Fang abwaerts) = ' + document.getElementById('ergebnis_zugkraft').innerText); /* Abwärts */
+        neueZeile('Reibwert mu = ' + document.getElementById('ergebnis_mu').innerText);
+        neueZeile('Reibungszahl f(mu) = ' + document.getElementById('ergebnis_fmu').innerText);
+        neueZeile('Zugkraft F (GB oben, Fang abwaerts) = ' + document.getElementById('ergebnis_zugkraft').innerText);
         const box_ab = document.getElementById('vergleich_box');
-        if (box_ab && box_ab.innerText) neueZeile('Auswertung abwaerts: ' + box_ab.innerText.replace(/[❌⚠️✅]/g, '').trim()); /* Auswertung abwärts */
-        neueZeile('Zugkraft F (GB oben, Fang aufwaerts) = ' + document.getElementById('ergebnis_zugkraft_auf').innerText); /* Aufwärts */
+        if (box_ab && box_ab.innerText) neueZeile('Auswertung abwaerts: ' + box_ab.innerText.replace(/[❌⚠️✅]/g, '').trim());
+        neueZeile('Zugkraft F (GB oben, Fang aufwaerts) = ' + document.getElementById('ergebnis_zugkraft_auf').innerText);
         const box_auf_pdf = document.getElementById('vergleich_box_auf');
-        if (box_auf_pdf && box_auf_pdf.innerText) neueZeile('Auswertung aufwaerts: ' + box_auf_pdf.innerText.replace(/[❌⚠️✅]/g, '').trim()); /* Auswertung aufwärts */
-        neueZeile('Zugkraft F (GB unten, Fang auf- und abwaerts) = ' + document.getElementById('ergebnis_zugkraft_unten').innerText); /* Zugkraft GB unten */
-        const box_unten_pdf = document.getElementById('vergleich_box_unten'); /* Bewertungsbox GB unten */
-        if (box_unten_pdf && box_unten_pdf.innerText) neueZeile('Auswertung GB unten: ' + box_unten_pdf.innerText.replace(/[❌⚠️✅]/g, '').trim()); /* Auswertung GB unten */
+        if (box_auf_pdf && box_auf_pdf.innerText) neueZeile('Auswertung aufwaerts: ' + box_auf_pdf.innerText.replace(/[❌⚠️✅]/g, '').trim());
+        neueZeile('Zugkraft F (GB unten, Fang auf- und abwaerts) = ' + document.getElementById('ergebnis_zugkraft_unten').innerText);
+        const box_unten_pdf = document.getElementById('vergleich_box_unten');
+        if (box_unten_pdf && box_unten_pdf.innerText) neueZeile('Auswertung GB unten: ' + box_unten_pdf.innerText.replace(/[❌⚠️✅]/g, '').trim());
 
         /* PDF SPEICHERN */
         const datum = new Date().toLocaleDateString('de-DE').replace(/\./g, '-');
