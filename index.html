@@ -160,7 +160,8 @@
 
 <!-- STARTSEITE -->
 
-<div id="startseite" class="startseite">
+<div id="startseite" class="startseite" style="display:none;">
+
     <h2>Bitte wählen Sie einen Bereich:</h2>
     <div class="auswahl">
         <button class="btn" onclick="zeigeBauteile('Neubau')">🏗️ Neubau</button>
@@ -474,8 +475,10 @@
 
     /* ========== SPLASH SCREEN ========== */
     function schliesseSplash() {
-        document.getElementById('splashScreen').style.display = 'none';
-    }
+    document.getElementById('splashScreen').style.display = 'none';
+    document.getElementById('startseite').style.display = 'flex';
+}
+
 
     /* ========== SERIENNUMMER ========== */
     let aktuelleSeriennummer = '';
