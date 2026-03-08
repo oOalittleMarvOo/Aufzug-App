@@ -771,6 +771,17 @@
             ? 4 * mu * (1 - Math.sin(gammaRad / 2)) / (Math.PI - gammaRad - Math.sin(gammaRad))
             : mu / Math.sin(gammaRad / 2);
         fmuEl.innerText = fmu.toFixed(4); fmuEl.style.color = '#0057a8';
+                /* Reibungszahl Sicherheitsfaktor - nur für Keilrille */
+        const fmuSFEl = document.getElementById('ergebnis_fmu_sf'); /* Ergebnisfeld SF */
+        if (gewaehlteRillenform === 'gehaertet' || gewaehlteRillenform === 'nicht_gehaertet') { /* Nur bei Keilrille */
+            const fmu_sf = 0.2 / Math.sin(gammaRad / 2); /* f(μ)SF = 0,2 / sin((π/180×γ)/2) */
+            fmuSFEl.innerText = fmu_sf.toFixed(4); /* Ergebnis anzeigen */
+            fmuSFEl.style.color = '#0057a8'; /* Blaue Schrift */
+        } else {
+            fmuSFEl.innerText = 'Nicht anwendbar'; /* Bei Halbrundrille nicht anzeigen */
+            fmuSFEl.style.color = '#888'; /* Grauer Text */
+        }
+
 
         if (isNaN(G) || G <= 0) {
             zugkraftEl.innerText = 'Bitte Spannkraft eingeben'; zugkraftEl.style.color = '#888';
