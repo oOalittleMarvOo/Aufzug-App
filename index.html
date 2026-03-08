@@ -654,17 +654,42 @@
         zugkraftEl.innerText = F.toFixed(2) + ' N'; zugkraftEl.style.color = '#0057a8';
         zeigeAuswertung('vergleich_bereich', 'vergleich_box', 'vergleich_wert', F);
 
-        if (gewaehlteRillenform === 'gehaertet' || gewaehlteRillenform === 'nicht_gehaertet') {
+              if (gewaehlteRillenform === 'gehaertet' || gewaehlteRillenform === 'nicht_gehaertet') {
             const fmu_sf = 0.2 / Math.sin(gammaRad / 2);
             const SF_ab = (G / 2) * Math.exp(fmu_sf * Math.PI);
             document.getElementById('ergebnis_sf_ab').innerText = SF_ab.toFixed(2) + ' N';
             document.getElementById('ergebnis_sf_ab').style.color = '#0057a8';
             document.getElementById('zeile_sf_ab').style.display = 'flex';
             document.getElementById('formel_sf_ab').style.display = 'block';
+
+            const mbk = parseFloat(document.getElementById('mindestbruchkraft').value);
+            if (!isNaN(mbk) && mbk > 0) {
+                const SF_ergebnis = (mbk * 1000) / SF_ab;
+                const sfEl = document.getElementById('ergebnis_sicherheitsfaktor');
+                const sfBox = document.getElementById('sicherheitsfaktor_box');
+                const sfBereich = document.getElementById('sicherheitsfaktor_bereich');
+                sfEl.innerText = SF_ergebnis.toFixed(2);
+                sfEl.style.color = '#0057a8';
+                sfBereich.style.display = 'block';
+                if (SF_ergebnis <= 8) {
+                    sfBox.style.background = '#f8d7da'; sfBox.style.border = '2px solid #dc3545'; sfBox.style.color = '#dc3545';
+                    sfBox.innerText = '❌ Sicherheitsfaktor zu niedrig! (' + SF_ergebnis.toFixed(2) + ' ≤ 8)';
+                } else if (SF_ergebnis <= 10) {
+                    sfBox.style.background = '#fff3cd'; sfBox.style.border = '2px solid #ffc107'; sfBox.style.color = '#856404';
+                    sfBox.innerText = '⚠️ Sicherheitsfaktor im Grenzbereich (' + SF_ergebnis.toFixed(2) + ')';
+                } else {
+                    sfBox.style.background = '#d4edda'; sfBox.style.border = '2px solid #28a745'; sfBox.style.color = '#155724';
+                    sfBox.innerText = '✅ Sicherheitsfaktor in Ordnung! (' + SF_ergebnis.toFixed(2) + ' > 10)';
+                }
+            } else {
+                document.getElementById('sicherheitsfaktor_bereich').style.display = 'none';
+            }
         } else {
             document.getElementById('zeile_sf_ab').style.display = 'none';
             document.getElementById('formel_sf_ab').style.display = 'none';
+            document.getElementById('sicherheitsfaktor_bereich').style.display = 'none';
         }
+
 
     }
 
