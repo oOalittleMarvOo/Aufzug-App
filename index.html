@@ -7,66 +7,194 @@
     <title>Aufzug-App</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: Arial, sans-serif; background-color: #f0f4f8; }
 
 ```
+    /* ==========================================
+       ALLGEMEIN / RESET
+    ========================================== */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background-color: #f0f4f8; }
+
+    /* ==========================================
+       SPLASH SCREEN
+       - Vollbild, dunkler Hintergrund
+       - Bild zentriert mit Glüheffekt
+       - Wegtippen startet die App
+    ========================================== */
     #splashScreen img {
         width: 260px; height: auto;
         filter: contrast(1.8) brightness(1.1) saturate(0.2) sepia(0.3);
         border: 4px solid #fff; border-radius: 12px;
         box-shadow: 0 0 30px rgba(0,87,168,0.8), 0 0 60px rgba(0,87,168,0.4);
     }
-    #splashScreen h1 { color: white; font-size: 32px; margin-top: 25px; text-shadow: 2px 2px 8px rgba(0,0,0,0.8); letter-spacing: 2px; }
-    #splashScreen p { color: rgba(255,255,255,0.7); font-size: 15px; margin-top: 12px; letter-spacing: 1px; }
+    #splashScreen h1 {
+        color: white; font-size: 32px; margin-top: 25px;
+        text-shadow: 2px 2px 8px rgba(0,0,0,0.8); letter-spacing: 2px;
+    }
+    #splashScreen p {
+        color: rgba(255,255,255,0.7); font-size: 15px;
+        margin-top: 12px; letter-spacing: 1px;
+    }
 
-    header { background-color: #0057a8; color: white; text-align: center; padding: 20px; font-size: 24px; font-weight: bold; }
+    /* ==========================================
+       HEADER
+    ========================================== */
+    header {
+        background-color: #0057a8; color: white;
+        text-align: center; padding: 20px;
+        font-size: 24px; font-weight: bold;
+    }
 
-    .startseite { display: none; flex-direction: column; align-items: center; margin-top: 60px; gap: 20px; }
+    /* ==========================================
+       STARTSEITE
+       - Drei Hauptbuttons: Neubau / Umbau / Einzelprüfung
+    ========================================== */
+    .startseite {
+        display: none; flex-direction: column;
+        align-items: center; margin-top: 60px; gap: 20px;
+    }
     .startseite h2 { color: #333; font-size: 20px; }
-    .auswahl { display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap; justify-content: center; }
+    .auswahl {
+        display: flex; gap: 20px; margin-top: 20px;
+        flex-wrap: wrap; justify-content: center;
+    }
 
-    .btn { background-color: #0057a8; color: white; padding: 25px 50px; font-size: 20px; border: none; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+    /* ==========================================
+       BUTTONS ALLGEMEIN
+    ========================================== */
+    .btn {
+        background-color: #0057a8; color: white;
+        padding: 25px 50px; font-size: 20px;
+        border: none; border-radius: 12px; cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
     .btn:hover { background-color: #003f7f; }
 
-    #modalSeriennummer { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 500; align-items: center; justify-content: center; }
+    /* ==========================================
+       MODAL – SERIENNUMMER EINGABE
+       - Erscheint beim Start von "Umbau"
+       - Kann übersprungen oder gespeichert werden
+    ========================================== */
+    #modalSeriennummer {
+        display: none; position: fixed; top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.5); z-index: 500;
+        align-items: center; justify-content: center;
+    }
     #modalSeriennummer.aktiv { display: flex; }
-    .modal-box { background: white; border-radius: 16px; padding: 30px; width: 90%; max-width: 400px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+    .modal-box {
+        background: white; border-radius: 16px; padding: 30px;
+        width: 90%; max-width: 400px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
     .modal-box h2 { color: #0057a8; margin-bottom: 20px; font-size: 20px; }
-    .modal-box input { width: 100%; padding: 12px; border: 2px solid #0057a8; border-radius: 8px; font-size: 16px; margin-bottom: 20px; }
+    .modal-box input {
+        width: 100%; padding: 12px; border: 2px solid #0057a8;
+        border-radius: 8px; font-size: 16px; margin-bottom: 20px;
+    }
     .modal-buttons { display: flex; gap: 10px; justify-content: flex-end; }
-    .modal-btn-ok { background-color: #0057a8; color: white; border: none; padding: 10px 25px; border-radius: 8px; cursor: pointer; font-size: 15px; }
-    .modal-btn-skip { background-color: #888; color: white; border: none; padding: 10px 25px; border-radius: 8px; cursor: pointer; font-size: 15px; }
+    .modal-btn-ok {
+        background-color: #0057a8; color: white; border: none;
+        padding: 10px 25px; border-radius: 8px; cursor: pointer; font-size: 15px;
+    }
+    .modal-btn-skip {
+        background-color: #888; color: white; border: none;
+        padding: 10px 25px; border-radius: 8px; cursor: pointer; font-size: 15px;
+    }
 
-    .seriennummer-bar { background: #e8f0fb; border-bottom: 2px solid #0057a8; padding: 8px 20px; display: flex; align-items: center; gap: 10px; font-size: 14px; color: #0057a8; }
+    /* ==========================================
+       SERIENNUMMER-LEISTE
+       - Erscheint oben nach Eingabe der Seriennummer
+       - Zeigt aktuelle Nummer + Bearbeiten-Button
+    ========================================== */
+    .seriennummer-bar {
+        background: #e8f0fb; border-bottom: 2px solid #0057a8;
+        padding: 8px 20px; display: flex;
+        align-items: center; gap: 10px;
+        font-size: 14px; color: #0057a8;
+    }
     .seriennummer-bar span { font-weight: bold; }
-    .seriennummer-edit { background: none; border: none; color: #0057a8; cursor: pointer; font-size: 14px; text-decoration: underline; }
+    .seriennummer-edit {
+        background: none; border: none; color: #0057a8;
+        cursor: pointer; font-size: 14px; text-decoration: underline;
+    }
 
+    /* ==========================================
+       SEITEN / NAVIGATION
+       - .seite = versteckt
+       - .seite.aktiv = sichtbar
+    ========================================== */
     .seite { display: none; padding: 20px; }
     .seite.aktiv { display: block; }
-    .zuruck { background-color: #888; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; margin-bottom: 20px; font-size: 16px; }
+    .zuruck {
+        background-color: #888; color: white; border: none;
+        padding: 10px 20px; border-radius: 8px;
+        cursor: pointer; margin-bottom: 20px; font-size: 16px;
+    }
 
+    /* ==========================================
+       BAUTEIL-LISTE
+       - Liste der verfügbaren Bauteile
+    ========================================== */
     .bauteil-liste { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
-    .bauteil-btn { background-color: white; border: 2px solid #0057a8; color: #0057a8; padding: 20px; font-size: 18px; border-radius: 10px; cursor: pointer; text-align: left; }
+    .bauteil-btn {
+        background-color: white; border: 2px solid #0057a8;
+        color: #0057a8; padding: 20px; font-size: 18px;
+        border-radius: 10px; cursor: pointer; text-align: left;
+    }
     .bauteil-btn:hover { background-color: #e8f0fb; }
 
+    /* ==========================================
+       TABS (Prüfung / Dokumente / Berechnung)
+    ========================================== */
     .tabs { display: flex; gap: 10px; margin-top: 20px; margin-bottom: 20px; flex-wrap: wrap; }
-    .tab { background-color: #ddd; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-size: 16px; }
+    .tab {
+        background-color: #ddd; border: none;
+        padding: 12px 20px; border-radius: 8px;
+        cursor: pointer; font-size: 16px;
+    }
     .tab.aktiv { background-color: #0057a8; color: white; }
     .tab-inhalt { display: none; }
-    .tab-inhalt.aktiv { display: block; background: white; padding: 20px; border-radius: 10px; }
+    .tab-inhalt.aktiv {
+        display: block; background: white;
+        padding: 20px; border-radius: 10px;
+    }
 
-    .frage { background: white; border: 1px solid #ddd; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+    /* ==========================================
+       FRAGE-KARTEN
+    ========================================== */
+    .frage {
+        background: white; border: 1px solid #ddd;
+        border-radius: 10px; padding: 20px; margin-bottom: 20px;
+    }
     .frage h3 { color: #0057a8; margin-bottom: 15px; font-size: 16px; }
 
+    /* ==========================================
+       JA/NEIN BUTTONS
+    ========================================== */
     .ja-nein-gruppe { display: flex; gap: 10px; }
-    .ja-btn { padding: 10px 30px; border: 2px solid #28a745; border-radius: 8px; cursor: pointer; font-size: 15px; background: white; color: #28a745; }
+    .ja-btn {
+        padding: 10px 30px; border: 2px solid #28a745;
+        border-radius: 8px; cursor: pointer;
+        font-size: 15px; background: white; color: #28a745;
+    }
     .ja-btn.aktiv { background-color: #28a745; color: white; }
-    .nein-btn { padding: 10px 30px; border: 2px solid #dc3545; border-radius: 8px; cursor: pointer; font-size: 15px; background: white; color: #dc3545; }
+    .nein-btn {
+        padding: 10px 30px; border: 2px solid #dc3545;
+        border-radius: 8px; cursor: pointer;
+        font-size: 15px; background: white; color: #dc3545;
+    }
     .nein-btn.aktiv { background-color: #dc3545; color: white; }
 
+    /* ==========================================
+       PASST / PASST NICHT / IRRELEVANT BUTTONS
+    ========================================== */
     .antwort-gruppe { display: flex; gap: 10px; flex-wrap: wrap; }
-    .antwort-btn { padding: 10px 20px; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 15px; background: white; }
+    .antwort-btn {
+        padding: 10px 20px; border: 2px solid #ddd;
+        border-radius: 8px; cursor: pointer;
+        font-size: 15px; background: white;
+    }
     .antwort-btn.passt { border-color: #28a745; color: #28a745; }
     .antwort-btn.passt.aktiv { background-color: #28a745; color: white; }
     .antwort-btn.passt-nicht { border-color: #dc3545; color: #dc3545; }
@@ -74,21 +202,57 @@
     .antwort-btn.irrelevant { border-color: #888; color: #888; }
     .antwort-btn.irrelevant.aktiv { background-color: #888; color: white; }
 
-    .mangelfeld { display: none; margin-top: 15px; padding: 15px; background: #fff3f3; border: 1px solid #dc3545; border-radius: 8px; }
-    .mangelfeld textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 15px; margin-top: 10px; min-height: 80px; }
+    /* ==========================================
+       MANGELFELD
+       - Erscheint wenn "Passt nicht" gewählt
+    ========================================== */
+    .mangelfeld {
+        display: none; margin-top: 15px; padding: 15px;
+        background: #fff3f3; border: 1px solid #dc3545; border-radius: 8px;
+    }
+    .mangelfeld textarea {
+        width: 100%; padding: 10px; border: 1px solid #ddd;
+        border-radius: 6px; font-size: 15px;
+        margin-top: 10px; min-height: 80px;
+    }
     .mangel-hinweis { color: #dc3545; font-weight: bold; margin-bottom: 8px; }
 
+    /* ==========================================
+       MESSWERT-EINGABE (z.B. Seildurchmesser)
+    ========================================== */
     .messwert-gruppe { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
-    .messwert-gruppe input { padding: 10px; border: 2px solid #0057a8; border-radius: 8px; font-size: 16px; width: 150px; }
+    .messwert-gruppe input {
+        padding: 10px; border: 2px solid #0057a8;
+        border-radius: 8px; font-size: 16px; width: 150px;
+    }
     .messwert-gruppe span { font-size: 16px; color: #333; font-weight: bold; }
 
-    .eingabe-zeile { display: flex; align-items: center; margin-bottom: 12px; gap: 10px; flex-wrap: wrap; }
+    /* ==========================================
+       EINGABE-ZEILEN (Berechnung)
+    ========================================== */
+    .eingabe-zeile {
+        display: flex; align-items: center;
+        margin-bottom: 12px; gap: 10px; flex-wrap: wrap;
+    }
     .eingabe-zeile label { min-width: 200px; font-size: 14px; color: #333; }
-    .eingabe-zeile input { padding: 8px 12px; border: 2px solid #0057a8; border-radius: 6px; font-size: 15px; width: 120px; }
+    .eingabe-zeile input {
+        padding: 8px 12px; border: 2px solid #0057a8;
+        border-radius: 6px; font-size: 15px; width: 120px;
+    }
     .einheit { font-size: 14px; color: #666; font-weight: bold; }
 
-    .zwischenwert { background: #f0f4f8; padding: 10px 12px; border-radius: 6px; margin-bottom: 8px; font-size: 14px; display: flex; justify-content: space-between; }
+    /* ==========================================
+       ZWISCHENWERT-ANZEIGE (Berechnungsergebnisse)
+    ========================================== */
+    .zwischenwert {
+        background: #f0f4f8; padding: 10px 12px;
+        border-radius: 6px; margin-bottom: 8px;
+        font-size: 14px; display: flex; justify-content: space-between;
+    }
 
+    /* ==========================================
+       FORMEL-DARSTELLUNG (grafische Brüche)
+    ========================================== */
     .formel-container { text-align: center; padding: 20px; font-size: 20px; color: #333; }
     .bruch { display: inline-block; vertical-align: middle; text-align: center; margin: 0 4px; }
     .zaehler { display: block; border-bottom: 2px solid #0057a8; padding-bottom: 4px; font-size: 18px; }
@@ -97,32 +261,82 @@
     .zaehler-klein { display: block; border-bottom: 2px solid #0057a8; padding-bottom: 2px; font-size: 15px; }
     .nenner-klein { display: block; padding-top: 2px; font-size: 15px; }
 
-    .hinweis { background: #e8f0fb; border-left: 4px solid #0057a8; padding: 10px 15px; border-radius: 6px; margin-bottom: 15px; font-size: 14px; color: #0057a8; font-weight: bold; }
+    /* ==========================================
+       HINWEIS-BOX (blau, mit Skizze)
+    ========================================== */
+    .hinweis {
+        background: #e8f0fb; border-left: 4px solid #0057a8;
+        padding: 10px 15px; border-radius: 6px;
+        margin-bottom: 15px; font-size: 14px;
+        color: #0057a8; font-weight: bold;
+    }
 
+    /* ==========================================
+       RILLENFORM-AUSWAHL BUTTONS
+    ========================================== */
     .auswahl-gruppe { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 10px; }
-    .auswahl-btn { padding: 12px 20px; border: 2px solid #0057a8; border-radius: 8px; cursor: pointer; font-size: 15px; background: white; color: #0057a8; }
+    .auswahl-btn {
+        padding: 12px 20px; border: 2px solid #0057a8;
+        border-radius: 8px; cursor: pointer;
+        font-size: 15px; background: white; color: #0057a8;
+    }
     .auswahl-btn.aktiv { background-color: #0057a8; color: white; }
 
+    /* ==========================================
+       BERECHNUNGSBEREICH
+       - Wird erst sichtbar wenn Rillenform gewählt
+    ========================================== */
     .berechnung-bereich { display: none; margin-top: 20px; }
     .berechnung-bereich.aktiv { display: block; }
 
+    /* ==========================================
+       PDF-BUTTON
+    ========================================== */
     .pdf-bereich { margin-top: 30px; text-align: center; padding: 20px; }
-    .pdf-btn { background-color: #dc3545; color: white; border: none; padding: 15px 40px; font-size: 18px; border-radius: 10px; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+    .pdf-btn {
+        background-color: #dc3545; color: white; border: none;
+        padding: 15px 40px; font-size: 18px; border-radius: 10px;
+        cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
     .pdf-btn:hover { background-color: #b02a37; }
 
+    /* ==========================================
+       FORMELN NEBENEINANDER (z.B. Zugkraft + SF)
+    ========================================== */
     .formel-gruppe { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
     .formel-gruppe .formel-container { flex: 1; min-width: 250px; }
+
+    /* ==========================================
+       SKIZZEN-BOX (SVG Zeichnungen)
+    ========================================== */
+    .skizze-box {
+        display: flex; align-items: center; justify-content: center;
+        margin-bottom: 10px;
+    }
+
 </style>
 ```
 
 </head>
 <body>
 
+<!-- ==========================================
+     SPLASH SCREEN
+     - Zeigt Bild + App-Name beim Start
+     - Wegtippen öffnet die Startseite
+========================================== -->
+
 <div id="splashScreen" onclick="schliesseSplash()" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background-color:#0a0a1a;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;cursor:pointer;">
     <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAGQASwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD7LoooYZUg5wRjg4oAKKFGFAGcAY5OaKACiiigAooooAKKKKACiiigApHOB36joPelpGAIwc9c8HFAC0UUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFI7BBkhvwUn+VAC0UUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAV8LftJePdItv2jfHGi/EO3vde0Oz0AWfh/Twm+CzvZre3kWYoJI/4mky4O/BUA4C7fumvy6/a1m1mf9ozxm+u2kFrdi+VI0hOVNusSLbufmb5mhETHnqx4X7oBo+hNN8K65L8NdL8c2vxG8Vw6LPpmmG2isvF50nSLIuRFMk089zcSZjbCsqInOEQFsheN1H4q6TLrkxv/iXqFvqnnMkw0/xFrcmhtHtbc0Rx9oinzgKwE0PfYRgV8umKUQrOY3ETsUVyp2swAJAPqNy5+o9aZVqfkGx9J698RdFiRrjTvin45vZGYBLOy+Imoxn8GudKRQP956itfjNJ4V06x8QWnin4l3epyXt3Zy6fP4+tdQSGOOOBlmKyWUiMHMzqp28GFsEnOPnGioEfbXhfxP8AtGa/8OLC/wBN8U2994q1W2N/Y6WNR0u2uhZlyiXDWktiN0Z253icAhlwAcivaP2YfiHd/EnwTqmrXN//AGjFYavJYW162nizluI1ghffJEskiq26RxlSAQFO1SSK/OWL4iePo9Ki0j/hNPEEmlxRLCunzahLJa+UoAWIwsxjaPAA2FSuOMYr9A/2J/B134O+A9lDqdhqenapqV9c3t7aX8Rikhff5KgIyhlUxwxtg5J3E5wQBTd0B7bRRRUgFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQBw3x4+IFr8Mvhdq/iuZoWu4YvJ06CUgie6fiJNpZSyg/OwU7tiOR0r8wfCOmXnjn4jaTo97qc/2vX9Wht576YGeQPPKFaVskFzlixyRn1717L+3X8TI/G3xRHhixghGneE5Z7Rbgb/ADJ7h9guMhgMKjxhAADkozbiGAHr/wDwTt+HP9m+GdR+JmoIRc6uGsNNGelqjjzX4Yj55UC4ZQV8nIJD0Aj6T+HHhe18FeAtD8J2ZhaLSrGK2aWKAQrM6qN8pQE4Z33OeScsSSTzXyt/wUzlYQeAYdqbWbUGJKDcCBbDg9QPmOR0OBnoK+ya+M/+Cmn/ADT7/uJf+2tAJ2Pln4T6XYa58U/CWiapB9osNQ1uytbqLey+ZFJOiuuVIIypIyCD6V+uVfk18Cf+S3+A/wDsZNO/9KY6/WWgD81P20fh/deCPjbql+Fmk0vxHI+q2k7gkeZIxM8ZbaF3LISdozhHiycmvrz9ibxxc+NfgZYxXtrDBP4elGigxvnzooYYzHIV/hOxwp5OShPGdom/bI+GzfEP4O3babp73fiDRW+3aasMYaWQDiaEfKWIaPJCLgs6RdcYr4t/ZH8fH4ffGjS7xobaW21h00e8ad/LWGCaWPMwfOFKMiMcggqGGVJDBN2Gfp3RRRTEFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAcv8AFjxHd+Evhvr3iPTxpzXthZvJbLqFwILdpeiB2JAwWIGMjccLkZyPlv8A4aV+M8HyXWjfDSZzyGstUW4THoWhuZFB9iwPTjkE+uftlw3uq/D/AMNeD7XUDYW/irxbp2jXsqxByIZC7cA+jxxtwRnbjOCa+Mv2qtRkv/2gvF02nWs9jaw3aWccWAg/0eFLclQONpMRI9sVSsB+ni9TS03oadUgFFFFABRRRQAUUUUAFFFFABRRRQAV5Z+1H8TJPhZ8JrvXLOCaTVL6X+zdNePZtguJI5GWZ9wIKoEZsbTuIVTgEsPU6/Mj9r/4h2/xE+NWoXmmvFLpOkxjS7CaMgidI2YvLuVmVg0jOVZcZTZkZzQBx/wY8BX3xL+JGk+DrG4W0+2OzT3LIzLBCil3fA6nCkKDgFioJGcj9W9C0uw0PQ7DRNLg+z2Gn20draxb2by4o1CouWJJwoAyST6188/sH/CqTwd4Cl8a61bQjWPEsUUtoQySNDYFQ8YyFyjSE72UMQQsWQGUgfSVAwr4z/4Kaf8ANPv+4l/7a19mV8Z/8FNP+aff9xL/ANtaBHhH7I2kwa1+0d4Ms7hiqR3j3YIGfmghkmUf99Riv1Dr8zf2Jf8Ak53wj/2+/wDpFPX6ZUDu7WCvy8/as+H0Xw4+NGq6PY2/kaTeBdQ0xNykLBKTlQB0VJFkQA84QHvk/qHXzz+3j8O7rxn8Jote0q1hm1HwxLLeyNJOUYWRjJuAgztZvkifnnEbBTk7WVuoX0sdN+xz4wTxh8APD7sYhdaNH/Y9ykUbKqmABY/vE5JhMLEg43McY6D2Cvzl/YX8f3nhP4zWnh1ruzg0bxMwtb3z05MqJIbfY3BDGRtmOQfMPGdpH6NUwCiiigQUUUUAFFFFABRRRQAUUUUAFFFFAHi/7TGh+Pdc1v4dv4T8MHXtM0XxBHrWpxx3kFvKHtynkqrTOoIYPNkAHoOV7/OuhfsteKtStZrzW/C0miXklxKxtf7QinRVLErsMbHChSFwxLZUnoRX3lRVxko7q4rDc5p1MHWn1LGFFFFIAooooAKKKKACiiigAooqK8ubeztJru7nit7aCNpJZZXCpGijLMzHgAAEkmgD40/ax/aI8e+EfjQ3hPwrNb6dp+heS9yrIJP7RaWFJCJDwyIFk2gIVbO5t2dmz5p+Htho3iDx14X00eH9R1Ge915VvtNtJQI5rNnixDCWcMrY88F3kAA2HcuGarHx88cWvxH+LmveM7GxmsbTUJYxBDMwaQJHEkSs2OAzCMMVBIBOMtjJ5LQriws9csLvVNO/tOwguY5Lqy89oftMSsC8XmLym5QV3DkZyKB3P2FsLS1sLG3sbG2htbS2iWGCCGMJHEijCoqjhVAAAA4AFStnadoBbHAJwKzfCet2viXwrpPiOxjmjtNVsYb2BJgBIqSoHUMASA2GGcEjPc1p0CCvjP8A4KaEZ+HwyM/8TLj/AMBa+zK+Af8Ago6T/wALu0YZOB4bgOP+3m5oA4v9iX/k53wj/wBvv/pFPX6ZV+Zv7Ev/ACc74R/7ff8A0inr9MqACob+0tb+xuLG+tobq0uYmhngmjDxyowwyMp4ZSCQQeCDU1Q313a2FlPfX1zDa2tvG0s88zhI4kUZZmY8BQASSeABQB+WfxD8K6P8NPjNqei3N7bazpenT3Elkba4hvN5XzPs8Nyo2hWEiokyEKwAfaCCpP358M/iN4mX+zPDfxb8MT+FvElxESL5jANLvJWmKRW8MyzPm5Zfm8n7x2OwGMV+ZniLVr3XvEGo65qUvm3uo3Ut3cvtC7pJHLscAADJJ4AAr6P/AGbfiRcfEj4v6HonxW8SQPaW91HqmmILWG2N/rMIWO2aeaOMO7iIsFDMAxjiU7idrHQZ99UUUUCCiiigAooooAKKKKACiiigAooooAKKKKAGev0p9RoSRzjrjgds1IDkU2AUUUUgCiiigAoopu/DEMCoBADEjBz6UAOooooAK+YP2+firH4c8Ej4daVczR63r0ayXhRXXyrDcwbDhgMyOmzb8wKeYGA3Ln6M8Va/o3hbw7e+IfEOow6dpdjH5txcSn5UGcAADlmJIAUAliQACSBX5T/F7x1qvxG+IOq+LNVmmY3UzfZYJHDfZbcE+VCuABhVwMgDccseWJKA7j9kX4ZXHxD+Kthd3mlm98M6JcR3GsNviKj5JHhjaN8mRJJItjKqt8pOcZBrp/2/fAsPhf4vweI9Psvs9h4ltjcuVMYQ3kZ2z7UUAjKmGRiwO55XOTyB9Z/sqfDD/hWHwostP1LS7K08S32bjWZYH8xncuxijZ+h8uNlXC/IG3lc7izQ/tf/AA/uviJ8EtRsdMWaTVNKlXVbGCIEm4eJXDRbVVmZmjeQKq4JfZyBmmByX/BP7xjYa58FR4VjTyr/AMNXMkc65Y+ZFcSSTRy52gDLGVNoLH91k43AV9GV+Y/7JfxPl+G3xWsGvdSntfDeqSi31eOONGDjY6wuxblVSSQMSpB27uv3T+nFABXxf+1ik0v7aXwyht7qSzlmh0uJLiNI3eEtqEy71Eism4ZyNykZA4NfaFfGH7VwlP7bHwuEDokpXSAjOpZVb+0psEgEZHtkfUUbgdpbyarcfHn4P3Ora7qGrSjW/GdqjXawjYkDzQpjy416qi5zkDHAUcV9N18yWPmf8Lt+D3msjN/wknjzlV2j/j4uO2T3z/nmvpmNw4JyvUjg56HFNgOryH9sLxbaeE/gB4ia4llS41eE6TaJHwZJJ1IYZKOABGJWOQMhSoZWKketvKqJvIfG4LwhJyTjoBnGe/THPTmvz3/b4+ID+J/i0PCthfmXSfDkQhaON0aNrxvmmbK8kqCkZVj8rRuMDLZljR55+zt8J9T+Lfj6LRYftVro9upl1XUYog62seG2L8xA3uy7VHJ+820hGrM8XaNrfwe+M8+m+ZG+p+GdVjuLSaRF2zBGWWCUoGYAOvlvs3Ejdg8g196/sX/D+18EfBLS74rDJqniOKPVbudACdkigwRBtqttWMg7TkB3lwcGvLP+Ci/w8+06XpXxPtJb2Wa08rSb23WHfFHAWleOYsOUxIxQ5yGMkYG0j5mI+mfhR4mHjL4aeHPFLTWUs+pabBcXP2NsxJOUHmxrySNsm5SpJIKkHkGumr4m/wCCdvxKsNPvNR+F2ojyptTuW1DSpEhY+ZKIf38bsDgfu4UZflA+WTLZKA/bNABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFAEadPx/rT16UxOn4/1p69KbAWiiikAUHgUUUAAORkVxHxi+Jei/DTw/Df6ja3uo6hfTC10rTLKFnmvrgkBY1wCB1BJPboGbCntiTuAwcYOTX5gfHb4k23j3xR4m1O4vbvVLw6i1jot21rAtsuirPLLGgQxLLHMG8oiTO5keRGxyGGB6H8Wv2ifiVeeJtV8P69qOo+BbfyPLFjoQgmntWIWaJnnLB3dg3luqPDs4OCQ8beceGF0jU9JivD4L+FsSs2w/2hr2oQzZBRcmP7aCM7s5244b0ryurOnXP2e5G9pPIfCzojY3pkEr9DgVUNNHqNs+i9Y8BaTc/Cy8XSdO+HUt5qd/pzWNroHjO++0yysUURra3BdJJSJpACxDRh5OG7+dW9pH8OvjJY6hc+CvENk/hvVI57jS9Q1SEMskWx4s3YhCFWcbsiPDIVCsdwYamla3rfws8WWGraDPa3UkcNwsYj1axuN4mJ5URSzKzqyqQ395ACDjFeZ+LtZutd1+71G6u9Su3mlLebqNz9ouT/vyYGTx6ACtKkfdTEj9T/hP8TPCXxP0STVvCVzeTwQbEuRPZSw+TKy7jEXZdjuoI3BGYDKnOGUnsq/Jn4L+P9S+GXxF0zxfp0QuPsxZLi2Z2VLiF1Kuh2kc4O5c5AZVJBxiv1Y0XVbHWtDsNc0u4+0affW0d3byiNgZIXQMjBSAwyCDgjPbGaxGfmR+1P8ADy0+Gnxl1PQdKtJ7bRZ4473S1mmEp8mRfmAPXasqyoN3zYQEls7j94/sr/EO4+JHwY0zXdWvYrnWbeWSx1R1iMY89G+XIwFLNG0Tnb8uXIGMYHnv/BQHwHP4n+Fdl4usTK9z4YmeSSEA4e1n2LIwUKSWVkibJKgIJCckCvBv2Fvid/wh3xNXwvq+o6gNF8QbbW2tYxvhXUJJIlilZc/LlQULL1ym7hcqWEfoVJIFUlsgbgufXJA4/OvjP9rC4jt/21fhjcSCTZCmku+yNnYgajMTtVQSxx2AJPTrX2I0sckGfNT5JlRyTgbg4GOvfsPcV8M/tJ6q+u/tyeHdLkVIU0y/0ewR35BV5I59xHGBm4Ixnt19CbstC4xT3PWLIyH45fCIOiqo8TePAhDZLD7RPyeODnIxz0B74HvCa7cXdpaTaRavdTXAlnjhuSbUvCkgU5yjEHDqQCFJ43FcnHyb8PtWvrr9s3Q9Hni8m007xL4qeDJX940v2lnbA+boEGTgELx3r6s1m0MFvJpml6pDoup3sNzbadePbCdop5fMlDBGOH2iNn2scHbVpLX+v61CK11RgftE/EC4+Gvwg1rxRa/YRqaeXBp0c8vEs0jKvAIG8qC77B1WMk4GcfAP7K/gV/iB8btB0uSCKbTrGUalqSzQrLGbeFlYo6MQGWRikR648zJBAIrpv22fHcXif4ry+GdMnnk0fwtJPaxmaZ5We7kk33TbpBvADgRBNzIBCNmFIFfSn7A/w8/4RT4UP4tuZb1b/wAV7J3tp4fLWGCF5VhKg8tvVzJv6FXTA43NBJ9GV5v+0frPgfTvhVqulePtWj0nTddhk02G7l02W8SK4eNmjfYin5kK+YuccpwQRmn/ALQ3xQs/hL8PJPEdzZXF5c3EpstPjjQMn2poZHjMuXUiPMfzFSW54FfmN428U67408T3nibxNffb9WvNn2ifykj37EVF+VAFGFVRwO3rQI0/hRfXGk+M7fUtN1PX9O1m1Bk0ubRrBLyYzgjKtG0iBozH5gYfMD0KlSa+x5PjH8btR8H3fi/wlb/D/VtMh3eVY3VncWmrSeWQsv8Aov2pwCr5G0SFmG3AywWvhKwu7qwvIryyup7W4ibdHNC5R0PqCOQa97+HvjL44fDrw3capoktkNJto45ZbK4ijbMUkInWYD+6UYNw38XANb0oKad1/X9eQz6M+Gf7QnjXWtasdK8XfBrxBo0Koq6lqNvBdTGJzHIVdLRbdpSjSRMvBYJn5mOOfbvCXi7w54qS5/sPU0uJ7Rtl5aSRvBdWrEsAJoJAssROxsB1GQMjI5r86Pjx8e9U+LCaTHfeH7PTYbIk3MUUpkW7wwKZJUMm3Ljhv4z0rO+HHxPTwPcN4l8KBPD3iK1hW1S2S0W4stQtPNWSSKYuTIJWcAmRWXCJtXbxUSjHowsfqJRWZ4T1u18S+FdJ8R2Mc0dpqtjDewJMAJFSVA6hgCQGwwzgkZ7mtOsxBRRRQAUUUUAFFFFABRRRQBBC29CR7jg5GQT+vFTA9qq2ZLIXYLncRwOwY4q0vf8AKrmrMHuLRRRUAFBAIwaKMc5oATJ3AYOMda/H/wAa6HJ4Y8Za34amuEuJdJ1CexeZFwshikZCwB6A7c1+wNfG37avwB1e+vLv4meE5ta1ueWWNL7ScPdSQqd+6aJmcv5YOweSqkJuZhtQYUA+MKKKKACiiigAr9bPgxaXen/B7wXYX9tNa3dt4fsIZ4JkKSRSLboGVlPIYEEEHkEV8I/sk/AjUfiP4lt/Eeu293Z+EtPlSZ5D5sD6gcyAJbyhcELJHiQqwZQcAhiCP0XmP7tsq5G052nn8PegCnr+nWOt6Te6Bqlo9zp+pWk1tdIGKq0TrsdCykMCyscEc8HkcV+UXizStY+GHxXv9MguJ4dT8OasTaXUlt5TOYpN0M4jbIAYBJADuBDDkg5P6yecPIkEbruiHI5kYcdwDknrxmvg3/go2bR/i74fmjluPtT+Ho/MieAKiR/aJyhDbtxYkuCpUbdq8tuIUfYD66+HPjlfGnwr8M+Mo7RrqS/is/PNnZlljuXmEFwER23qkT+Zuc5AQFgXANfEX7VVzFZftlateTzxwQwX+lyySyFgqKttbEsdqs2ABnhWPoD0pms638dvh98FNDWwsIvBXgvUYrdobvSJIkn1CWZTMk8kwkecSukfOCgCqqFVGFPkU/ijV7jxBD4hvJo9R1ZB++udSQX5um5AaVbjerkKQoBGMIvGckzbQrQ+6/hja3lz+3b8TdRWBJbBNBtIpp0UMivJDZtGu7r8ypIeODtz2Feg/tGfEP8A4Vf8HNT11bhY9VmT+z9KMduR/pjq+1wGDLhArSYb5T5ZGTuAr87Lb4oeM7O4nuNK1C00Ka4iSGafQtLtdMnaNX37BJbRIygnBOD821d2dq42dV8TePvi/rWmeA9K1XxBq1m1y0ul6brWtR3EvnGL5i9y6xLI3yvs3AbQxVeWO5+giD9nP4c/8LQ+Kdh4cuZpLfSoo3vdVuI9u6K2jxuxkjG5ikeedpfdggEV+qVfG/7AenaRofiXxfot/wCFdWXx3o73NvfX8bB7WK3Dwr9jLCTy/NM0UjA7eQjYfAIr6ru4J9MM2qWum6nqN1vZFtodSaQNGz7y2yaRI1bqB/dGFB28UxpX0PkD/gpbe3cniLwXpz6dJHZwWl1PFelvkmkkeNXjA9UEcZP/AF1HpXyHX6Af8FAfAF94l+Gun+KbBnnn8MyzSywgks9vNs8wqiodxTy1cklQsaSE5xx+f9NkhXY6R8T/AIh6db21lB4+8YQafbRrFFbWuuTwrHGowqIAxCgAAAAYAFcdRQnZ3Ava1rGr63dC71nVL7UrgLtEt3cPM4XJOMsScZJP4mq1pJHFdRSTRmWNXBdAQCwzyMkED8j9Kirufgp8Mte+Kfje08PaRHNBatIBfakbZ5YLGPazbnKjALBGCBioZsDIzkF23dgfef7EOjppH7OegltPubK6vpLi8uRPG6GUvKwjkAf+FoVhIK/KRz1JNe2VmeE9EtfDXhXSfDljJNJaaVYw2UDzEGRkiQIpYgAFsKM4AGewrTpAFFFFABRRRQAUUUUAFFFFAFGzkwPLKuMljkgY+97H/a/SroPXrVGAHIODjB7f7Qq7WlTcHuLn2NAOTjBooH3vwrMBaKKKACmSSpGrM52qvUkcAev0p9RuucKwZwWzngbcHI/DgUAfnR+3XpUGnfHG9lsvBj6FaXCq51EJIsWr3BjR5ZkyBHlTIqsEySwZmJZ+PPPgp8L9f+LPiq58OeHLzTLW7trF713v5HSMorxoQCiOd2ZF7YwDzX6keJtA0LxLbR6b4h0DTdYtEcTpHqFnHcRK4yu4K4IDYZgDjoT71X8NeF/DfhqC5Hhjwzo3h43JXzhZ2EUIlK52lhFjdjLYz0yaAPiOw/Yq+I8mowQ33ifwjBbGRPtDwT3EsscZPLKhhUMcZwCygkYyOtexfDH9jnwN4a1O21XxRrN54qubW586O3e3S3spFAG1ZYsuz4bLH5wrcAqRnd9Kw42DBLDsxOd2ec0+gCvptpb2Gn29jaWlvZ21tEsMNvbqFjiRRhUUAABQAAAAAOlPdZQvyMCwHylv4jgjnA6dOlS0U0wIJmcMHEYkRMlhg7s4429j3FeefHn4W+HPir4WtbLxDY6s0mnTNdWzaY9tHd52lTCrzAqFfKkjIBMaEkYFVv2mPH5+Gvwym8VQWFtd6jbXQt9OW5nMQE8sTqJFAB83aGYlDjIVuRgGvzw174i3/izxHNr3jzSNL8S6hcG3WW6eI2c3lxE5UG2MaFmUhC8iOwVVAICiou22gN34+aPH4DvoPhppnxR1PxhY6VK73VkInhsdPuMt8ka+c6mUb5N+0DaWIyWLhfM7CGO5vre3mu4bOKWVUe4mDmOEE4LsEVmKjqdqscDgE8V0keteFX8ES6bqng95/EUszTwa9baxIkhB3DZPAwkRxu5+Xy2IC88ktylUB6lbfB1LyLUprH4keD5E06cQTxSx6jDdB2kEaqLdrTzXbcyqQitgnBrlfGfh/R/DUVpDp/jC21rVWeeLULe1sLq3Sz2kKql7hI2Zmy4K7Bt24JOai1jxP4nvPBGieFtTdG0PTzJNpavYRK6B5HMmyfYJGQuz5XcVyBx8oxzlU3G2iBprc6C+XwiPAWmSWY1P/hKmvp0v1kuVa2W3VUMTonkghnLsv+tbHkMSP3i7aXiTxDr/AIlvkvvEeuanrN3HEIUnv7t7iRUBJCBnJIXLMcdMk+tU720urKZYby2mtpWijmVJYyjFJEDo4B/hZGVgehDAjg1BUgfYv7B3jDxFpfgzxJb6zqtiPCttIltottqs4t0n1KUO/wBmt53+UbguXjwxBkVwBuffo/Gz9kzS9futQ1v4Vala2mpJeynUdFu541t4WZBKsUPlr+5bDIRG/G2VTlAAG5X4V/tEfCXw54Ms/DE/w88QeH49Jka50690u+ivLl7uSCWCW6lZxCpl2SkDKuvIAVQiCvRPBH7RXw8TS7aPR/FWq3OsG6FjbQ+ObprbyYHCFnNzbW8yspdUyZ2yMOdyKBuEh3PlHXvgj8XdF1J9PvPhz4klmQAlrKxe7iORkYkhDIfcA8dDWVf/AAy+JNhY3F9ffD3xba2ltE00882jXCRxIoyzsxTCqACSTwAK/RHwz4t+I+oPbXMNtpfifSpWjP8Aafh6ytWspACPOSKWTVA7YIePeYhhlztIGDo2/iWbxf4caDxB4J8Qx6B4ndtKXT5tOkgvbSJ0eOZ70B/3cbYO14ycKynqeGotiPywr9U/2dIvCC/C2xufAvg3UvCmg3cj3NtbahGFnuA2P37HzJGYMMBWdslVXHybK5vwN8A/gn4c8T6rBb+D4r29IEix6yrXcKQOFwIFlyjBWjI3HdIpLAttZc+xxTW10XEFwkphl2SeXJnY46q2DweRwfWlYCaiiigAooooAKKKKACiiigAooooAyrQ4ZdsOMsclVAP3x33d+vv+laKH5B3OBXP6fcGaIF3t5QXbBVE42zbcYJByOATzyM/XdgkWSMspBwSOnfJBH5g10VotMbJQexpeetNHPagZ7VhYQ7J9vypN2Ou38Tij5vT9KPm/wAigA3+6/8AfVG72P4UZb/IpMEn/wCtQA7d7H8qNy/3h+dM7gDHX0p2W/yKLAG478fKVx1B5z9KCDu4c9OmOlHJ4PT6VWmdo18+6UyCHMgEMbMU+Vs8AkucZAAGSSOKT8gPHNf/AGpfgjp1tdlfFEmqzW4ZTbWmnTs0zA42ozosZzzyXA9+a4y7/bU+GkGnz/2b4Y8WS3KRsbeGWC2ijd8HarOsrFVJxlgrEdcHpXw0tzo48MSWZ0q4bWXvVlXUDefuktwjAwiHZ95mYMXLnhFAUfMTm0lcbPZfjX8fdS+IukXug2/hHQdE0q7uoLqSTyzdahK8UexTJdScseoDBVcJhNxXcG8nu9J1Wz0ux1S70y9t7DUPM+xXUsDLFc+W22Ty3Iw+1iAcE4PBqlRTtYTdwp8EjQzxzIELRsGAdA6kg55Uggj2IwaZRQCdjo4/GOpxaXc6bDp/h9ILpGWVn0S0mlBZdrGOWSNpIfUCNkCnJUKSTXOUVteBNC/4SjxxoPhn7V9k/tfUrex+0eX5nlebKqb9uRuxuzjIzjqKErDlJyd2YtFafizTbXRvFWraRY6pDq1pY301tBfw48u6RHKrKuCw2sAGGCRg9T1rMoEFFFFAE9hd3VhfW99Y3M1rd20qzQTwyFJInU5V1YcqwIBBHIIr1DwR8ePGGjapZT+KYNP8fWlpOZoYvEsIvZrZmaMu1vcPmSFiIlAwSgPzbCa8oooA+9Phb+0j4D8VX2iw3jReH9StpYIjbeJtSaW1t4Ujulae2vWRibkxuodp/L8wNsDEksfpawe7a4uzcTr88qtDbmNQ8EWAuGKsd25ldg3GAwGPlOfx1r1H4MfHDxb8Nbi3t41t9f0KGVJI9J1MtJFbMHLGS2Of3EpDyDcoIO8llYgYGwP1GXOPmAByehzS15P8G/2gfh18T7uDStI1Cew16WN5Bpd9EUlYIAW2OMo/GWAVt20MSoAOPWKACiiigAooooAKKKKACiiigDhtLvFkkhVBeXDNKQFEUgPFyoJzv27UAz0GQOM5rrbZ32AMJDzglhjHy5xz+Xf+dcTo8pcRIcrGWc4km2ouyclj1wuRx33ZGdnbr7FtzpgIULZBSQkY2jp1GOTxnHGa9DEQ6gXqDg43BTg5G7nFLz6Gk54x/PFcIB8v91Pyo+X+6n5UvPr/AOPGjn1/8eNMBMr/AHU/KgABQoACgYAHSl5/yxppJXHyk5bHB+v+FAC+1Lj/AGF/75qqJCYdwYksu7IJIyAMYUE5HHTP86ol9UEoj+0W4ZuQP7Nkx37+bgdP5eoquRjsa52jGQqjIGcY+lch4u8XL4N0nUde1dEj0fSrBbm9DyFGRNsoRYXddk87yKkfll0xuQ5y6hneLDfnToYpINOvZZL+3ijiuNBuLiJiTn5vLZ/KHT9+wKRn72e3w9+2f8VH8T+L7jwFok+pReHtDvphd2t8quz6lHPcrJKkhZ5PK2yYVSwUDgIoAAzldOw7JI8W8f6lpOseOdd1bQNOXTdJvNRnnsbRYhGIIWkYomxSVUhSPlU7R0HGKw6KnsLS6v763sbG2muru5lWGCCGMvJK7HCoqjlmJIAA5JNIkgrb8MR+FGh1CXxNea3HKlu/2CDTrWJ1nmMb7PNleQeUgfyydqSFl3AbTg12XxY+Fv8Awr/4eeB9cvNS+06t4j+2veWyDCWPkmFRbsCAwmRnkWUHG1wUxlCzeZUASXDrLcSSJCkCuxZYkLFUBP3RuJOB05JPuajoooAK2vAmu/8ACL+ONB8TfZftf9kalb332fzNnm+VKr7N2DtztxnBxnoaxaKANSfQNSittKnVbW5Oqki0htbyG4nYhguGijZpIySQAHVS3OM4NZddMttqvibwxqOu6p4tsn/4Ry2tLS1sdT1FjdzQM5RIrSNs7ki5ZlBARTkDmuZoA1/Bfh+98WeLdK8M6dLaw3mqXcdpA91L5cSu7BQWb056AEnoASQD9meD/hX4G0uCa/0fwTorTwRyWNvcaoo1a0uJ4pJIS07SS7HWRkEoMMVu6FQpO1mQ/P8A+x9AIPjIvim4S1ew8K6Tfa1erO2AY44GQbeD8wkljPTjBI5AB+w7fT5ob++u1somN1fTr5lu7O24Xkj7RKVPOSRjZ0O3nFdeFpRm25C6nkHj/wDZ18Ia1cLcWTXmg3UayyalfaBpjX1hK/nEKsOnRzy3SFt5G4MI1EBwg3gj56+Jvwd8beAWvZ9QtbXVdLsZzbXOqaROLq1gmAjzHKQA0Dgyou2VUJJ+XI5r7/1tdej8MagbbTtTmuBEqotyDIjLvjWTIlwqgpvJJOMbuCetey8G3HhrUNT1jwfqmu6RbSWv2Ww0l9RS40eTzB5gaxjJIt5NwUB5EMa7nAidSDSr0YxfugfmNRX3D8df2b/CmvXSy+Hx/YXjO7tppodL0XS2fS5vKVykTbfltXIMEZndo43ILCMMzBfjXxZ4Z1/wpqp0vxFpN1pt1t3osyYWWPcVEkbD5ZIyVbDoSrY4JrmasMoWd9e2aXCWd5cW6XMYinWKQoJUDq4VsH5l3IjYPGVU9QK+2P2e/wBqON4dJ8OfEifWbq+1AbLC9j0QsznzZVVWaF2a5LbY41aOBDvDBg3L18P1IjoInjaFGLEESHO5Mdcc459wenakNH7KUgYEkAgkHB56V8Bfso/He4+GEkng/wAVO+o+Ei32kXds7T/2UrgHeFUH927ugKfKUdmyAxZT9+kEspDEAdQMYNAmrC0UUUAFFFFABRRRQB55oH/LD/t4/wDRwrsojiINjdhM49a47RY2jSNjHcOu6QJIrKyHdOu7PyrjG7HU9Dnpz1dq3nRBUkLqcr5kDcKVPQnJ5zx74PFeniNUkOJbDKsh2iPJ2j74z1wP5nHr7VMjhiw6FcZBIz9ev1/Kohy5PseM8dRTosopC4AzjB5AwB09K4mriZJS0zc3+z+VI+XGGCkZB6ehyKiwCeaGG4Kvl9nLDBzjGPz9qTe3BO0KH69B1IHOT7f54pdi7i3OT9PQD09qYq7Zc5JOTyeT948fSr0GiCUeZC8JUMHjZGWQ7s5UcNznv71m6eF0+0i0i2toY4IbBMRLwnmEgBQeSM575PIx050nCiBcymFEw5YNtAAB6+1ZXnaxAs2rWraXPZyWfmxxPuMxuWcZHm7goiChV+6DkAk8VrdJFpnjH7Vvja08K/CXWNQuYLSbVNfhk0Xw4WZWb7BdW1s13JsDqwUGNvmw2H8nI2tX57V9H/t4+Ibc+N/D3w4sPns/BulRwGSRG81ppo42ILE4ZfKSAjAB3M+SeMfOFcm+pM3roFet/sgRX7ftBeHrvT1uy9lHd3T/AGcJllS1lOxi6sqq5xGWxkeZ8pVsEeSV71+xm8NhrXj/AFrUtW/sDSrfwddW02tyW5lisZZpYViJHR3JVikf3nKlQCaaJOm/bZns7nwF8Lryzl1FxfnWNQkTUcfaI5LieGV0YBVwFd3VcKBtUYz1r5fr0f44/EyPx9faZpui6Hb+H/CegxSQaLpkYBeNXIMssr9XkkZQzcnp/ExZ384oe4BRRRSAdGUDHzFZhg4Ctg5xweh4zj6+3Wu38b/Ezxd8Q0Fv4z1myuESWS8WddHtYpWnEIQZkhiVzvEcUZycYSPP3Fxw1FABRRRQB7L+y0WH/C0yjFGHw41Ygg4PBhr681JYJPGOt6g9jBNJd3gEkrBNxiinEQQsJB8uCwOV+u6vmD9lbSLc/Dr4ta48dwdQn8PSaJpqBiqXDTwzSzIuFO6RVt0bHpnONwI+k9X0zTVv76Fl1trmGZxI0niMtIpdzLu2yL8o3kY46cDpXZhYvV2E99yWHSdJhsYJm8H6QpQRHD2aElozuGcdASgG7J7nHBre8J6X4X0fXZ9V0vwtZ214VjiuL2ASB2AdkOAVKjgk4G04474rmNRv9OsYbqS3S0kkSMrCjMMsu8oAn3SwBHcfXrWq8FtBrBhthFK8M8MUZuds+wtIHB5J/ids/p616DpxkrWGj0xNatIbSC2mMlvbiMxuz7yVxGjDaVUE4DH5sgjGfp598QPhja/FvwM+j+KXnv2klN3oPiOF4JJLRZFZlIRI4j5JCRgx/OWEi/OSokSnarPPqGlaRLd6XZWlz5sdxcaZY/Y7yJTbOqyJMrko4ZeoXncBxXWabBez6bHp0uo6ddrvEobVdMa8lkkErosjsGiDFQiAEKCAvU5GOKvQdtFqCdtGfnR8bPhjr/ws8a3fh/V4pp7RZSLDUxavFBfJtRt0ZYYLKJFDqpYK2Rk8E8LX6e/FrwfofxB0NdA8cvb3wnFvHZS6Xo+zUbd5J4N8sEsrShY/u+btX5Y8ljgV+dHxL8Far4B8TnQtUuLK8320N3a31i7SWl5BKgdJYZGVfMTkruAxuVgCcVwtNaNAzDsnshHLDeQyfvCmyeM/NFhvm+U8OCpb5cqc7TuABDfXX7J3x3tdKJ0DV5dL0zw4Xt7ax0m2huGmtLmVrg7LOJFuJ7sSMsbO0jqEeTC9VD/HdXLae9aNpIbhYxa2zJ/rFRvLdirKoJBfPmtkDJwWPQHBzaAfsZRXzB+yV8XIPEVnpPgDU57SLxDpWjCDRrq0MgsLi2S2tGMLo8qma8TB3gKAoSTawUtu+n6QBRRRQAUUUUAea6BELmAXCWUrxqZMSNbFJg0c4k4Bzvy3C4IyNp710unXQe3F/wDZb0x25fc91CyzAbQPlGCWGRjkjGCST1PHeEJrWK0utOcRQ37tLK1srbTMjNHtYjPIKkZxu+/kgZxXTaCFTw9qVtHHhx5oeNZA+wgFATwuPuHIx+NerUvJajSN5LgeYw8u4wNoJMBA+bB49cd/SpIJjJI8flTAr82THgHJxwe/SmtgyOR03H+dUb+3W4kxstJGCKCs9p9owMsc4DAj/wCtXG0mhqzdjW+b+435U0uAwVgQx6DjOPXr/nNYR0xR1tNIH/cEb/45WlpMaxWnlpHAiiU/6i28lDx/dye+efaos+qG4pLRlwumSPmyP9mow4aY8NgZ5Ix/EePWhmXe3zDjGefYUKCXYgEj5un1p20JGMJFjXDIpBXJ3EYGRnnHpmsPWLnTvtNromtWltcwa3qEmlwxpakDAtZZyJMtwNsBwy5zhOBnK9D8yclW6gDg+tcn4kNrpur+CYrwqpGvXDrK7lBuNhfsWOMg/KGJ3EDnOcjBmcvdGnqfmP8AFzxU3jf4neI/FfmXUkOpahLNbfaQBKlvuxCjAEgFYwi4BP3ep61y1FFZEhV201bVbPS77S7TU723sNQ8v7baxTssVz5bbo/MQHD7WJIyDg8ijRLK21DVIbO71ay0iGTduvLxJmijwpI3CFHfkgAYU8kZwMkGt2Vtp+qTWdpq1lq8Me3beWaTLFJlQTtEyI/BJByo5BxkYJAKVT2FpdX99b2NjbTXV3cyrDBBDGXkldjhUVRyzEkAAckmoK6b4U6zpXh34l+G/EWtterYaVqUF9KLOBZZX8lxIEVWdB8zKFJLcAk4OMEA5miruvXMN5ruoXdts8ie5kkj2WqWy7WYkYiQlYxg/cUkL0BIFQ2FpdX99b2NjbTXV3cyrDBBDGXkldjhUVRyzEkAAckmgCCip7+0urC+uLC/tprW7tpWhngmjKSROpwysp5VgQQQeQRUFAGxZ3Hh/wD4RO/srrTroa4biKa0v0l3R+WuVe3aPgKG37/Ny5zEiBQHZhj0UUAfZH7GUt3H8LvDaWcUM8svxEvU8maUxxyf8SGY7XYKxAyB/CenSvqmTRtKu0uNUlNrI2pBJJf3iyRFfKCfKSvzKQAcjBOB0r5F/Y18VWK/CLxfZXNukWoeCmufE+mzowXez2M0Db1VctsG7klifMUcbBn7Ds49OOjQWmlyx29mEMVuoU5IAZCCHIydxzz1/Gt6KtrcV7HLzaVpqajAklxpi22ZpHh+1PEJF3yYwQ+FUfeOF7AZ6VxemHWjYW8WrHw6ZkB81bHxH9scDe7DbF5C9EDYG7HygcV7I9oZnys7AFGSTYx4JTqBuwp59D1FYmoQ2v2HE2qiO3JdyHz8gKyEthiOmCenbvXbGopbv+tRq/Q8rvtbHlXOlW0Oux397bMluZdH2Qqcg/vJRIyIrBWA3DkcjPArY0O8S3RUUeVHGkcZjghjOWSVg/TAJwh55zgHPNJrn9iQadeXaa3ZzQW0SOQ7+btkkkEbuBkEnI3KFB+9txjAoS/tGnM1hqkOpSx5n8yyukXzgFeUjbHyR8xAXd269q3Wj3Bs0r7ULiX+2bGxhzIunWL3i6pqL6PDbL+82zpcRRyHzCynJCj7sYzxzwf7VXgGLxx8M3nvtVurjxDYzyXWgS3MsKxzvIimTTLZY0R7gsId0Z8ouxCjfjcK6x7DxFJqD2Ok6bcW07wvCqT6i8EUqIhVBJEY28z5VBC7l6n5uTVwtrWmaXdJ4Z063tbeCR3t7nUbFLOLTIE3iUCUs4aYGRgjFNn3gRtyTxVaafr/AF/XyGrXPzHor339tzwZomhfEqDxb4WkS40TxULi6aeO7WeNr+OZlu1TBJADFCQcgM7gYA2r4FXCI7PTtR1PwvdeFtU8MeImGo+e2oWUv22ILZylxCyywtlYnJhyS7FXiaIkAZFfp98LPGmk/EPwHp3jHQ7a8ttP1AymKO7RUlGyV423BWYcshPBPBFfkdX1N/wTy+IX9i+O774e3cd5ND4i/f2TLNmK2ngikeQmM8DzIxguOcxICCDlQqUuY+8qKKKCQooooA+dvgbf6refDPwldWjXWqQzWfiOWewSUBbsHUlCkhsglQzBQf75+h9b0rS4rbw7bxP4Wg05NGdpLC2DLMwwp+ZNuAHYM478nPNfKumNDpHgy60q9P8Awh0ml6vFbaXDo+qy+H/EOoxzeX9plMREy3is5gWNsLuWFjmPG2u60Wfx1o8tlpegx+GvGjqDejRvGfiT7T4mctgSxRlkRIAgXlSGAO47jnaNuZpbFrc+iAWjkMZDsq45LZbljnJLcjn8Md88KsgKtLETIApHyPuXPXpuAz0rxe6+K2u+HLyyt/iD8PdG8FWsjJiZ/F0TbW+U5EUcfK8nPUfI2Mkc9LZ/E/4eaql7fWHxZ8GQrLmOy+0SxQTROD8wfzJAZEPGBtH1NW5xtdhZbnpKyc5XGC2Mhxjhsde59sdRiqN7LdJdDYASqLhn0ySY9/41cD8Md6474o+I/wDhCYbXU/Emq+HbTwxLH5d9LJez2GoGRWUg2/kBzPxvPlDYeeWxmtDRI72YPfTWEuuWuoNJeWVwbE6fJbW7NGI7aRHPmSOAZHLuqk9MckhQlFys72LirK5uG71DGMp/4JZv/jlJuvH3E2YkJdiGOmYzkj1k+n1xVbVG0m2gklkGk2ajBJubHzCo4zkAgn7w9MZqmtzoEcPnIPB8jSAMZjcrbl9y5BxsYgng4JNa2UdUF7rU1rZLpGZTYoqsUBUacFzye4kxx+nWsPxtY6Zdx2nhi9t0+y+K7q50e4a0PklYmsr2Rj3y2EcZx1OccU83ugyXcQx4RLCVNjJqas4IbjaBGMtk8DPXFY+vx+JF+I3gE6nLZT2c2uz3EQtdGkt3gH9l34CzSmeRWb58fdXJPHpWVS7iZt22Py6q3o1mNR1ez09r20sVurhITc3blIYNzBd8jAEhFzkkA4APBqO/tLqwvrixvraa1u7aVoZ4JoykkTqcMjKeVYEEEHkEVo+DtPm1LxBDHDbzXC20c19PHDci3kMFvE882yQqwRvLicg7W5xweh535CW+p6Ro3wMvPEerWuleCPFejeM7yCWVddi0eVFawRJQnmQ/anh+1oVYEOmE3fKWAKsx8X/hp8Q7nxJ4k8Ualp3ie5jtFe71nV/EGmwaVGZRIUKxETvFMCdgQROS2QEUjGeFKeHtQ1HVNRjstQjt/OaSCwF2GYJI0mwG4ZTyhMIIKZk+flDiu+8a23wr034a3VtoWjeIJ9VktbUQ6je6NLbn7QLh8z+YblkSGSESoIgjEsgbcNpqL62LcdNGeN0UVKkLvbyThowkZUMDIoY5zjCk5bpyQDjjOMirMy94c8Pa/wCJb57Dw5oep6zdpGZXgsLR7iRUBALFUBIXLKM9MketZlPgllgnjngkeKWNg6OjFWVgcggjoQe9fX/7Ov7Qfhb/AIR7W9B8QJpHgXxLc6ZcSt4ptNMtxHeXC+a6SSwRRKDKgbKoSwkIYDDOqswPj2ivR/GfgLwb4b0fW3PxNgvdcs7oxWGkL4fvoJbmNZvLYytMiCCRcOWj+fBQruJrzikAUUUUAe3fsNXtxa/tLeHIIHVY7yG8hnBRWLILaWQAEjKndGpyMHgjoSD+i+nQ6vBALe71GG7mV5GM5s9gZGkYxrgPjKphWP8AEfmwudo/Jz4beMdY8AeNdO8XaD9nOo6eZDCLiPfGd8bRsCARn5XbuK+1fhF+1n4O8SWFlp3jgjQfEswKzXIR4NMd/OKxIJA8jp8jhmaQBAQxLAYpp2C1z6WZbzYMSQk8f8sD/wDF1HKzqC6TMnVjubdjC4xgdQD1GetZMviWx1Pw4+ueE9W0jV7CIyGe8tZGvViVEZmKRwbjPJuCDywVOGJBJAVr+nXY1GFpbA3UKM+QLy1khYcKxxHIqsQd2DnoeO2K0jLuUloYHiVNRj8OazKmrXULwWxdJ1dQyMDkkfOVA+U9RkA8dMHF8TW7Tu1tc3y3CFyFgkmJDH7Mp3E+aGHMjcA4IOegFdJeXkd/YalaRRSmzmtDjUY7zzrdxI0sYWM7stKNoJQAAb1AYmi+xc3OQ926PNy1vcmMRhrdMswYgtxkgKCRj3NdlKrd3t/WgpKzPI5vDGi2t1qNtdWGltLcQSpsVHZ5WyV4xKGU5LYHGQe/Suv8Pafo2n6ot2NJs4X3QgtC4BjKF0AwqgqTjcQc8ggml1G3kXTtPiT7bFC12Ula4vVdGQtIoG1nyOCWwcHjnpWbpM95NqsW5tNkiF2EPk6QI2UFjuDOXO8ZfOPl6E89K6nFa6E3Of8AjnpC+OPA3ibwjOmqz6peWUc+hb9CnkjN5bPc3LxpMMQpNJGGiJ2RPhsEzfdH54V+kXn6Pop0u/tJdCl1eDXlvLW1vdQxdbrox2AkJQMxjYXB52gD5DzjFfCHxx8Lf8IV8XvFPhlLH7DbWepS/Y4PN8zZaud8HzZJOYmjPJ3c885rya0UpuwzjK0PD2qPouuafqsdpZ3jWV3FdC3u4vMhlMbBgjjglDjDAEZFZ9FZAnY/YvQNVsdd0LT9b0uYz2GoWsd3aylCu+KRQ6NhgCMgg4IBq7Xjn7G/i/8A4TD4C6DI0lv52jwjR7iKKF08t7cAJksTuJhMDEjjcW/3V9joBhRRRQB8feAPix41h0aGLTLjSPHy2F5cyzW9/C1rdWILDMf22SbZGF8xwrGMjamAQMBdzSPiemr6PNBqPwl8e6hZXd5K16NHlXxbZ3cJXHlLdPKUiAkAYxICBsXGN3Hk2nzTapeRySfDqfx39iRIRqltp02sm15OIWtleFF2ABdrFs7cbua6XSvAXijVPD+r6xr1jp3gexuJLCLS/E3iN10m80PybhZJXgg+d/MlJIBaaMnbjcBitXpsaM9Z0H4m+GL7QdQuvhbqPgJ4NNjH2y91LSbnRtOsw8irGsk7A5Zt2AgHzbTyvAPnPjL47eErK0TStc8TeFddtzcTG/0Hw74O+16dJNuzumlup0FwoYb1eHy8uNxyMAh8AY02VPGfiLxl8VNPWaOVofFz6n4a0vSkG5WvHuLkN5jjeqBEOdskh2tjKw+KP2dPB2veIdMj8IaFDPYXGnZbVrDxQLDTr28Eku+G3jlhvJWk2xsxCvsVUOSCDnB66MpzbR1DeB/h4L+/vPDd5r3gDVp7B9UufDvhDxU0Gt3haMTpBLprriN0jZisUbYUuVG4YI0/CHg7W/Ddlpvhn4Yww+HbC409NWfRdV8Rm21iadlWFru6iW3mKpxGGSN1UEH5Vb5R8/fFb4Eab4YtV1jxf8S7zQtd1u7maxtfEull3uyrxmWSW5s5roLxKDuYZZuoAJIZo7fG/wCGsv8AZXw5+JeheKYpUWVbTw7rVtqzFuVKx2kgMrMFG5vLiICgEn5DtUZSTViXy22Pqbxd8R/ib4Xa7sNQ+F+qanqciytpcmh2TapYSOQTEZbjfE8IVmVGDQg4QspIbC9L4b1nWNcsbCS+sfFWlaxe2yT3VusYS1t5zDFvjSRlYeWCCQwyMswzk7R84eGPGnj/AOG+lrrXibwp8GPAlzBY288nnaYkeu6jDJ8peO0tpVYyEg5RxCoYkEoquU2NP/aF/tbxrBpFv8LvGfijVLQt/biWa3NkYwJmjlDaVHLNG+xGRMyyZL4DbcLW1OpZ3YKy3PetZ146Y+quuo6nrF3pJiNxpeiXSX17GX5j8y3EasoYc8sMjPPes/X1bSntfEuraFA+p2yC08PS2OiNLcReZlAgi83KuEZs5YKF3ZxhhWf4d1nw2+uxJca34c8Ja5rUUR1LRr2eCO/vLtlRbZZrIyuYhtIIjWQuwdQSCMVSu7/U/Cty2vXPhhvCOmWERn1fXbyOyiivZEDBbfIuZpbe1ZgiokcczkyKFClSX19qkhcq6M+OP2xPDq+HP2ifFMMNlcW1rfTpqMLShsTGdFeV0J+8vnGUccAqV/hryKvXPjF4++G/izW/DFvo3hHxEmiaBYNYNPc6wEv7+H76BiySxwlJXmPAfcr4+QBQvA+INZ0W909LHSvCGnaUIptyXourma8ljG4BJS0nkseQSyQx5K8BQStc/Uk6rT/i38RPDfizUfGGh+MIY9V8RL5+piC3R4w/mMVV4pY/L3rt3BlB2h8Bsswqj8Qfi98SPH1v9m8VeK7u9tiio8EccdvFKFbcvmJEqrJtbkbgdpJxjJrh5EMcjIxUlSQdrBh+BHB+optFrDlJtthWveaf4gj1f/hDZI7q4u7XUZLePToJPPH2tmWJxGqEqzsY0XKZ3bV5OBUGmvo0T3Q1K2v7xXtGFqba4SAxXBA2s4ZH3xg5BUbC3BDL0Nawu7qwvre+sbma1u7aVZoJ4ZCkkTqcq6sOVYEAgjkEU2rOxJHNHJDK8M0bxyIxV0YYKkcEEdjTKKKQHVa54qsfEVxaT69oEfn29kYZLnT7pori+nMpka5uZJRL5sjF33HCk5GCFULXK0UU7gFFFFIAorb8N3+nwXdut5oOi3yx7ywv5bpEmODhWMMqkckYI2jIGTjNdja6t4V8UafFa6j4a0Hw1bWVvKVfTmBkfLpwgmmWV5cvnM80ihVOxBtIMuVjVUr7M4DRNW1XQ9Uh1TRNTvdMv4N3lXVnO0Mse5Sp2upBGVJBwehIr174fftPfFXwgpWS+0/xGRD5Mcut27Tzou9nx56ssrjLHh3YAYAAxXBeL9O8NhoxoOm6lpBWB5nGo65bXxmHGwARQxGI4DHB3ZyvQcnkaadyHGUdz7Z8DftX/C+4uoLnxB4P1jw9rJ22CatC6alLFZ+Ysn7y5lxOybyxMYR+BkZJwPcdD+IvhLxrZW0ngfW4fFcjne9pazwR3scQzE8skUzRSRRg7csBuPmDauCDX5a0VcZuOxL1P1Rm1AWV5b2F3o99Zym8Ike2juJLeDlnzLNtWMRlWVQVLNmT7o2tjn7611iaae4tLW11h7YKLlIL9TdxyMFKb02KDjapX5gcOMDqT8E+EPjD8UfCb2v9heO9dghtIvJt7Wa6NxbRpjAUQy7o8AdPl47Yr0jQ/wBpCxRLY658NLOOSxha208eFtevdAighd/MkUxwOytufDEjGSOc8Y6vrj7a/wBdxWR9Ry6rYRXJsdT1iaW5nuxptunh3VRMy3sU0MhtzGyiOOdRHl8t90MME4r5L/bWtSfivpniCezv7HUPEPh2y1LULS8QI8E+HgKbR90bYF4JJyTz2Hpdh+0p8L/Dng06HpGkePfEKWt4l7YW+r3Udqwk8zcyy3EMrGSIA5CPG+4ghywb5fmT4j+LLnxt4vu/Ed1p2naY08cMMdnp8Rjt7eKGJIo0jUk7QEjXjp1wAOKyrVFMZztFFFYAfeH/AATf1K0uPhd4k0MLKbm01sXchKEJslhjVMN3OYHyO3y+tfVFfG3/AATMbMXj9PRtOP5/af8ACvsmhXG7dAooooEfmt8YPG3jTw5H4Qh8N+KvE3h+zutA897Gzv5rWJZBeXUTOEVh9/yg+4/e3Z4BAEHw/wD2kviB4ZuIpdVTTfFkkSeTDeazE0l/bwsxMqRXassq78/xF8bVwBjB2P2w/Ab+Dk8EXT6lrWoC+06WKOTUtSF15ccbI6xRr5amNF844BZuCAMbct8/09U2O9j3zxB+0TZNdSX/AIY+HFlbajcQSQ3F14i1q715gCVKtEtwwSNlYZyVbPHGAQfOda+K/wARNV0pdHl8U3llpQgktzp2lqmn2jxyFmkVoLdUjbcXbOVJOTmuQsrS6vZmhs7aa5lWKSZkijLsEjQu7kD+FUVmJ6AKSeBU+hy6TDqcUmuWV7e2ADeZDZ3a20rcHGJGjkAwcE/IcjI4zkTYblJqzZ1Pw0t/C9tLbeIdbudYeew1GJlso/DUepWVwoIZUlL3UWQxDKUxyMYPJ2+qT2vgvXPHOsWM/wAK9ak18stzNo9p4Eu4nsoRHGikW9vq0Xlo3ySHchIaYjcw2mvA9cn0ybUJDotpe2Wm5Bht7y7W5lQ7QG3SLHGGyQTwgwMDnGTQotqNtWsj6IF94b0rxBrOieFfhE9nex3a2yDxnPDf6lZWly25IrHSbhoxJKrMHRczMd+GYiTNQePtd8ZeLdQ1PT/iV8UvF9ppcWnLJ9jXQdjbluWVIL2yglWO3mJXzQXLEp5Z3coK8+i+KmvrodtorXF9BpVtDFbf2Tp961jp1zAOJUuIYdrTNKMh5C4c7jz0xy/iXX59clh36dpGnwW6lLeDT9PigEadlZ1HmSkDA3ys7nqWJJJSu9y3yRe9/Q3vFVna6B4Fs9Hexit9Yvr8Xd5HM8c1xDCltGYMOp/drIbiZjGVB+SPJO2qV14/8Tz6VrelLPptpYa6lvHqVvY6TaWscwgkMkXyxRqEIY5JXBbjdkAVy1FNKxm5XYVppoOpv4Vl8TpFC2lw3yWEsguYzIkzo0iAxbvMCssb4crtJRgDkEVmUUyQooooAKKKKACiiigAooooAK9K+APw7svH+t6sdYmvbfStLsPNLQMIRcXcsiQ2lqbhldIDLLIMMytwjcdWXzWvor9m2KfRfhlq97eNFbjXvEWiPpkcx2/aksb6NrhhuwCqm5hHUZO4D7pxUVd2YB8Q/hjpN/4SisPDvhrWvDGq6PbQ3AtL/wAPTr9vaZYEuGn1SSXydkJR28xo4Ics2wfMTXl0/wALPE4uDBY3vhXVZSB5UWneKNOuJp2IzsiiWbzJHJ+UIqlmPCg5Gfpy3k8NJ4euNNuIriz0O6to5LrQtOuVstPdVj8yOYI6NKs4k8rLK6bmRQ2dvOtpmuaXNZC3XX9f1Z9WvI7kJ4h1D+0XtmSSQRSWLIUFtKHbh1DAbV4OM1v9Wbloyj40svB/imTxd/wibaNqFlre1jJZ3ULwyxoIjKzOjAMAIwX6cryM17P8WPgZ8VtF8DaJaf8ACL+FvFEcNy8ceo+E9PeS9jXy0AjuPKjj81DsLCR0dg27LjeA3u9tLe3OmWelQeLfGMVtGyskdlqFus1pcNuLMZZLYSyOxMpbLyLiQnA+TGro114vtricQanptitzIl3cQWPhJYlnmkZWN5PtmzLPjy2LBkXI+ZWGMDwc76Bey2PmTWP2X/GMGmJc6N4h8Oa1P9nhlEUU0tvFdmUsyfY7mdEguVEIWRmVxt+ZSOFL+feJPhH8TvDpun1TwLrq21pD9onvLe0a4tFi2By/nxboioU5JDEDBzgg1976d4rl025F5q2teHWt78GXVIbDw5cafqUwa3LIQ32pz5i7PmIBO0DGODXR+HtU8Pa3q97qema34gt76/wFW6vZttsxTywEtHby0xuVsmMgscnJqFh6jWwm49D8rqK/TX4xeGPCj6Xa6t8THn8S6Pak2StqCWkMFmZjsa5lmjhSWHPyrlG2lth2AhSPD/i1+zb8PH8++8NXOseD/NgjuLf7Y4v7CMeW2RKIy89tFlVd7qVmjQFsgfKKh03a4j46orofiB4P1rwP4kk0PW44TJ5az211byeZbXtu/Mc8Eg4eNxyGHuCAwIHPVABRRRQB91/8E9BaaZ8Gdd1lLISXl14mjspZFOGaPZbKmfZTPI34mvq2vDf2LfBU3hj4BaI12rxya3I+s3ELuGOZDH9nZGQ4VTDFExU5OXOSuCte5UFN3Ciiigk+HP22je6z4B0fUZ7a0jHh/XTpErpISxM+nWtzGVG0ZBQfNzwwAGRyPkqvq/8AaZ1iDXfgRrF9a3KXEK/EKzgDL0Vo9ChR0+qurA+4NfKFOStJ+o2+gV0Wo+Lb7WLDUY/EcEWu6ldukkesX0sr30DDy1P73eDKpSNU2y7wg5TYSxbnant7S6uYbma3tpporWITXDxxllhQuqB3I+6u90XJ4yyjqRSEQUUUUAFFaPiGVbrUP7Qh0O20W2u0Elva23nGEKMoWQzO7sCyNklj824DAGBnUA1YK0bXUo7fRrqwXS7B57hgTeyRs86JxmNctsUEgHcE38YDBSQc6igabWwUUUUCCiiigAooooAKKKKACiiigAr7E+F9rq9r8NvAWnalbQwTadpl6La3tJvtk99b6hcWlyrtFGQYWVGJCMSW2Z+Xgj47r7K1rw2kGr2+lP4q0TULPSYtI0mOUxq8QcWdpECCZVyhfL57bm54ON8OrzA9M0bR9C1Kzt47i48QxkLDlbvTXgtw4jEygo5I3YQnLcANjr0oTeGrFtLtk07/AIQyS0uYSlo9z4vktpnQtlG2/ZW2urMBtGeSMkkVy3hS7sbZlk0/XLQRpAwzbQNbLEBaugRtyFyCffjPBOOO48LPqMul+H7e21C5utlsVj2SSSTK63K4YswaPI5UkY5wor0HByVk/wAhKyOd1HTZJE+yWt58JbV5QqW6N45mPAZXUbVtl3YVCBjHDEjFQ2GqaJr80V8nhfXbW1vNhhh/sFpWG392VDK4DA7QwfIyvzcE4r2vTX1C2sH8yw1SIKEdE3Hy1ZYUHcqzLvAG1jzlsjg1fvI9U1cTWeraHLb20pYOV8pwVJxnduJBCgHod3GApHGceaD1at8gaTPEbVvDuleTrenB59V0wyXFlp82mvBDK5VEZZSWbDKxODx9xsdatwXB1C0ZBbwWUZQA+VdhZVBBGyTEakMdqAjd94NXV6x4N8GXd2Ro1/bP4nmty+l27yJvQqpLEjjLBZm5Jzt45AxUfiXwzY6FKtxe6rYWEFv/AKQDPMI3hVIS7fdQ8797YzyF4zzVxlFt3YbGDFp1x4e1Ya5p8uqXdxJH5VtMbWBIreZo23FrplkS2jZUUEmNs70AyQMUtZn0fUZtQlsp9OXVtYgmd7fxDY/a5lszGi3cVtc708i2O92Z3BzvkbbjBNjT7SG5kv7uy1iGae0tftdrfQL/AKJbO0e/dcb3zGhUEAkY4z1TmprfiA6ppniPS9UurLU/DCW8usajp9j4lePVf7OhUfalWFIUCRSMwBjeVdwD4JzkZVVGN5INzw39sK2itfC3gK3mtLG2vra5120iWGQSSLp0V9tsk3FQxhVNyx54KgkclgPnOux+L/j/AFD4jeL/AO27y1jsbW3to7HTbKNzILS0jz5cW9vmkbklnbksxOAMKOOrzn5FMK6D4deENZ8e+NdM8I+H0hbUdRlKRGaTZGgVS7ux/uqisxwCSBgAnAPP19q/8E+fhpHZaXd/FDX9Ns2a9cWvh+4Zy8sShpI7hwo+VNzbYwT83yuOFb5wR9daVYWml6bbabp9vFbWVpCkFtBGu1Yo0UKqAegAwKs0UUAFFFFAHzv8a/hh8IPEWjafZeM9TuNC1tI0Sz1NZHZgrghEbIKGPKkBTgjbhSM8+CeMv2RPE8Ft/aHw/wDFmg+MbRkUxRLMttcSuW5VMs0TBUIYsZFyN2F4G76l8QeC2uLOVW/4R2/Typr+Z/FWgnViqnGY4m86IJGAqYQ5wCPw8l8W6j4e+HHw21jxB4hs/CN3pXiOEWdpoOhWMuiXGoSLcYmAmilkaOGNFO4AbXyqkjcA+1SPvOT/ADLbWx8e6n4N8V6d4zn8GXXh/UR4igmMDadFAZZmcDd8qpneCvzArkFSGBIINdDrXgzxb8MvI1TV9bXwl4kNstzZaaJbiPUZLeXMfmK8SGOMEGRWSSRHwjgryA3WW/x58Qa1De+Hdb1OHwp4LuosPonhfw9ALd+U3wkedDKscgDlyJsncV+63Hl3iLxLf61Z2unPDZWWmWU00tlY2dusccBlK7/m5eQ4SNd8rO5VFBY4rDW4tEYtKNuwkk7sjAxxjvz+VXND1S60bVYNTsks3uICSgu7OK6i5BHMUqsjdeMqcHBHIBqlTJCiiigAooooAKKKKACiiigAooooAKKKKACiiigDsfgdHHL8avA0UqLJG/iPT1ZWGQwNzHkEdxX3H4Xl0vxfFN4tubfWkXWLhpbIPGUZreO4njYOFR1ZyFBAK527MEYr4J+HWtweGfiD4c8SXUMk9vpWq2t9LHHje6xSq5UZ4yQuOa+lfA3inwZrPhdIPDLfB2S8s77yILTxr4RSxujFLIWQpLHcyJIFLleACNuWxkFt6NX2d2Frn0rfxeH004LqF3fPBFEoMN5GWZlXZI0S7kXG6LKhRjvx1NV7HwvYapp1rcW895eafJIhgWQb9qJMMrlpAfMaTcSx4+9wM4rkrT4hweHNOg0XxP8AC7W9IvXgZnvdD8Ni40iQEbl2eVK27KquRzjkEgHNdX4bkl1jTtJ1+2u4LmxvrGSaGy/4RnybpZBIGzu8392cZXaeCQWzgV2xqp2sxWZQvPht4RvtBuYrnQrKNUt40KzWrkgLGsqbCkvALl8/MxIG3IAFdYvh/SoNauL06VaRE3EUjypbKVLhisj/ADbvL+VVJIx0XngkUrKW4msbRJvC/i618ySMEhox5CrGHBA8wlQCOeCSwIwSwFZg8cWd/osWq2N8upabqVtItlrOleFLm6hhZZREIzGheTzNzEBSMHaxyOFI5pbP+tBO6Oq1RrbUdFmg10WN9YmBlu4L3ZNayfIjFnTacgOpwv8AtHtgBsDS6Xo6QafYwaRosG0WbaIqyCRcLtCw+UQqnkYBGMdec1xnjDxLJaeFY9asZr+PSWjLX3ibV7WIWensszJIj2M8sVwzb1MYiC/KWXbubKnxj4k/tH/DSxttPm0LQrTxp4osljlh1Mac2m2MU4hkj37SfOkVdyjyW+UrjDgqDWDnTtcZ7F42vLG30m68U+P5XsfDkrx2t409j/Z08gt5yoMzpK8syNmR4oo4huJ5KqwI+IPjh8Vr3x/dwaXYG8tvDOnlPs0V06td38qRLD9tvXXia6dEUFjkKPlX+Jm5z4kfEDxZ8QtcfVfFOrTXbea8kFsCVt7XfjcIoh8qA7VyRyxGWLNknlq5qk+djCiiumh8C+JH+Hl148lsvsuhwXMNtFNdEw/bGkMo/wBHLACfY0LBwhLLkHGAxXMDpfgb8Nrvxfq0Ou6nbQ/8Itp99El2s8/kvqsgIc6dacqZbqSMNtRWXGQSy5XP6Z+GvD8OjaVFp5nM8VuTHbIq+VFBbpK7W8KxqdgESMse7GWEalskDHg/7CVndaL+zmuoi28salrslwjSShxJHvigdwABsx5TgAluV3ZwQo+j4RlFkPll2QbmTofofTk/nTs7XKaaQ+iiikSFFFFAHkdzbJaa1qOtzo0ljHp7W0htVaW6ty6uznDDKbgqbSDt+YnGDXy1+2m+mWejeFfDSams2pafqOs34ijgk8trS+vGngZZCAp2qqqVBODkdq+sfEWs6YltL4Mh1vRrPV9VDrdR3bliiSLhW2fL1QAA5wD65zXP+OPCmh3ngrV7Lxpo2j3/AIYsYLJze2mn3FzcNFFKSCggfzMosk6+YCNmWZlZGda7a/vp/wBdf6+X3ln5r0V7x4/+CXg5Wiv/AAB8TdJk0+4tZri3TxD5ljHcGIIGjtr54ktrp/MZlIBj2cBujFfH/EfhjxD4dW3k1rSLuzt7ouLS5ZM292EIDNBMMpMnK/OjMpDAgkEVxEGPRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFKGIUqCcE5I7UlFAHT+EfiF468IxxQ+GfF+uaTbxTi4FtbX0iQNJxy0WdjZwAQwIIGDkV2em/G6fz9Nn1zwB4Ov7u0vftc2q2FrJpGpzsWYsftFlJFtbaxAOwjIDFWIyfJaKFoB73rn7SU1xcTw2Xw60HUNLmEZ+y+Lb++8QMjpu+ZGuJtqfeP3UGeMk4GOV8R/Hj4hanqepX2l3GleFm1GOOOb/hH9MhspQiFSFW4VTcYLLuIMp6kfdOK8uoouBpeIvEGveJL9b/xFrepaxeLGIlnv7p55AgJIUM5JwCSce5rNoooAKnsLS6v763sbG2muru5lWGCCGMvJK7HCoqjlmJIAA5JNafg3StI1jXI7TXfE9l4asOGmvbm2nnwu5QwSOFGLPtJYBtqnaQWXIr6Y8CnQPhHceHtVttL1bwzpmswSae3jy31K0v/ALRIrSO6PFEbq3ETukICIFkj8lv3kvz00mwMT4Ofs6SMq6t48htLqZvJhOgLeqkumNcA7LjUh5sTxqiFJFt43E0m4D5Nriuw/bCuUb9nrSI4NZl1DTbjxFZ3OkRHRhYRWtodOcrDAFAV4V3Db1ZQdjM5XdXu3gTV7C90K403wVZa9rWi2epvYzTSXvn+RPG8XmLDPcSiSSFcOQxDZLYBCjaPmf8AbasL/SvhV8ENL1SB7e/s9Dlt7qJyC0cqQWSupI4JBBFaTgooaasfTf7M1rb+G/gx8P8Aw3EzyG90FtWDs3IMjxzOuMdA11j2AHXrXq2cttGcjBPBx+deUfDh4NJ8E/DG4v7y0tmi8GJbYeUfMzJYfdIBDY2HpnPHUcj1FLgG2juDjbJs4Bz94gD+dZxi3G62LnG1nYsUUUUjMKKKKAPO31O5ntJrSN7kwujoUEqbP3mEGSUXGWY4Xfnk88cUhaW1zrNjq8FnDDd6ddTTIwRPMVp1ZGKsMqoxLyGz0FYt5apZajLNYys0/mRvIL0C5jjXygwcIxQRqGVv4mPzZxhqtajLcWvgvW7iC1sJr6C1gaBDbM8SEOqbtpBB4AzzwVHHevXk1FPQ0OgS8v5kW4N7qsLSklWOZEJKSY6ImACVOBj7o9Ca4vxrPZQXGinUvGF/rGmeIdYGmS6HcT2c8N15csjbBDNayF+iq214+qfNnaabrkQ+1BJVtLQ/uiv2KzgR1BgTH7x238ZD5+Uj5uTtFczfqZrOyTaZVfUQz/brqS5S3YMxV1fPySfKBuHIKrzXPVipRtb+v6/pgjynx58F/AGr6HY69pa6h4MOpxZsb2COXUtEu5gNojJUG4tWdzkb9yqqkAE8V4B4v8E6p4Zjea61Lw3f26z+Ssml69Z3pbrhvLikaRUOPvMoAyAcEgV9XTadHepdXySalf6peW+ybVXu/Ou3jMMSRwPLtx5LeYwZCoJHLHjNXZNQ8RwR2es6TrmsaXFpZOnWsVteRR2lkkZAMKW0sbjf5QUbn8wYxgKa41AGj4eor6k+Inhaw8TWSa5rehaLrGpTSMr3Gjzw6Pe3J3uzSzy75Ld2O8F3+zKW3D51C4Plvir4TM2o258F6kt5bzooltdali0u4s7lncGzDXLRpdum3aXgyCwPyrlc5tpbkWZ5bRV7XdG1fQdSk0zXdKvtKvowC9te27wyqCMglHAIyCCOKo0xBRRRQAUUUUAFFFFABRRRQAUVq6LoF/q9lf3lpJpscNhGHmN3qVvasQQxAjWV1MrYVvlQMenHIrKoAKViCeABx2pKKACiiigAoors/hz8MvG/jtJrrw34au9Qsbdtk1yZ47WAPlQIxNMRHvzInyZLEMOO9AIzfh/f+HdM8Rpf+KPCk/inTYYnL6dHqD2YckYDPIis21c5wNvIGTjIP0EPiV4Q8F/CLxDr3wa06x0LW18RWlrDe29iWuIrK6tPO8md7wTmTbJbzRssbIpeJZFABw/zt4n8J+KvC/2f/hJvDWtaJ9p3fZ/7RsZbfzduN23eo3Y3LnHTI9aqLrGojRrzSPtJNne3cN5cIygmSaJZVRixGeBPL3wd3OcDAPQ9dtfjzZ63b3EHxS+F3hHxq9xEFm1KO3Gm6nK6upjLXMK8KqKI9qKpKhQSRkN1eg6h8C7/AFC+T4cfFL4h/B25vrm3Vorou9nOuHUKDBKWXaxyXmlwu9scE7fmiilYLn2Ho3gr4mre3Wr6Fo/wY+NunzXjRT3MdnYNcrg7jJLKBH++kVgWLPMcnJz1Pinx5n0i78WeEdNPgnxF8OtMstHitZtO1GGWaaBGvLiSSWHzmV5k/etjcUyysvAANeXWF3dWF9b31jczWt3bSrNBPDIUkidTlXVhyrAgEEcgity98b+KNV1vTNV8Sa1feJJNNnWWCLWrh72LAYMUKSMQUbaAy9CODUqNiuZPQ/QzT/jjpHiC5eXw9rvg++sZkMGn2sGtKmrXs7Sxoii0uhbhD/rODMScrjPAO/B8YfC0fiI+EdWbUtF8UI0YfTruzM7okg3CVnty8SxgHLOXAQD5iOM/Flx8W/hF44vHu/if8HYrbVbqGZbvWvC969u5kdnZZltWIjaTLjLyO5JGTkYQegeGrPw94hs7a2+FP7S2s2m2wh0+38K+MczxTSTq0S2pikAhkTawjKRwzKhGckFcac+mobvRH2D4a8R6HrUP/En1vRNT2MUzp14kqgAA9FJwcEcfStsNkZwfpXyVLa/EnwHcXV1dfBK20u9eZ7a1174fq9zbxAxfLINJ80CQnaymWTy8Bh3ADr4d+Mon8UW+heHviDPZXjSTW1xp/wARZjE0MvmyGRZY4rMLuXOEX7WnRUKg8Ur6XG1Fuy/zPrWivJdH+Kmrs/2htA0vxdosAWK61nwTqq6mYpS6IDJZYEqKQxkKxtOyAY+f71dN4T+KfgPxVpj6loPiKG7tkmaFy0EsTI64yrJIqsDyOo7imotuyIsVbO1vZ4RGJLFyrSRRq+qyxghm5BVEXnqMZbHHPFcZrbX0N5M88vhn7LGI5bqT+3082VMoQ+zykO5sDkuORxk4NdN4o8WeHfDnmjUNa0y0RVZiLuV1IO1dyg+W2OQx4yR2HIAigul13RtQk0q7m1qWW0Ro4LS42SsWYEMC5jKDgtztDY46jPpO+6Zeq3PPdWurK0b7NfR3DOEQzRW2nm6hLgY3swlDZ2j7x42k45INUbaKaSaW8uIL8rNII4blbbzXPmMkgkEbMCnJIJ3g8/dwKvfFaQ6RfE6oX06aS2lMSyuuX4CgiKEtkjO7hmPPIAAFcxptxFqEX9oW0MdzZSr5i3g3rBsWdAGLhU+XBY84+lc7l71rjXRj9UubJ4y1zDqMsvkrKqTaOzyIPs0ZwCGIdflzgkfeJxwprM1nV7a3UabBHrEsTObxkk0orFFI0vllgxfqGUYTK5/GqWp61pUEK291qVjZs1tGSGu5pmYiKLLbUbLAB1GRkgxjIwuay5fHPhuCCPTpNV0yaZmiuhLLfs6RBhhEjaRSd4wG4GzkfMCCKyc1tcq50Np4km13Q4NOtB4wjW5j8uK+1rQ/slsgOw7pLkzybBwh3bSvzDpzXLa1oPhvVbm5tPGmhWOmyxyrFDrHgO3lvp7qE/MwnYMUZyWUtKU3E5GBmqOi6Nr2tSLfadpupu99IqpdwRxRNMzsHXJbHKldyruxnHQr8sutSXmj3kWiaraz22sFY4GtElYStMvmE5VJCqE7lKjPJHHPFZOTavILGINJj0bT76PS9U8Batosdpd3X9neKdQguL6ZQgAjjj8qO6t53TbtSORfmUfNwCeE1vw58P8AU9WI0LXNX8OxS6Wt1bjXNKk8u8ujOyvHCLczvFEI/uFzISyMGbkNXo2pLrVprAhutOvIbmGCRLe1nLvFcNtSRUfEuGjZpxGw5G0EZ9K2m+M/Emo3MmjeINbtNE0m8DyX1jdap9n0k5Ky7Y4Y7eQqWz0G47txOB1wXu7bBa55L4m+HPjrw3ZSahrHhbU4dNjWNm1COHzrPEgUpi4j3RHO5Rw3U4PPFcrXtOlaV4YW9lsvDOu+C72S8RQYJobuSztyhUebNcXaRCM/MxUiN1zkNgEVc8b/AA2vYLHU9R1/wFeaVLC9yV1CO5t9OsGLsDA/nHMFyoBUCO3ht9wyc5BItT7mcoWPCqK7TUfh5fxWYm0rXdA1yczxW/2CyuXS9aSXZ5Yjtp0jlm3GRQDErjqegzXMa3pOq6Hqk2l63pl7pl/Bt821vIGhlj3KGG5GAIypBGR0INUnclqxSooopiCp7BrVL63e+hmntFlUzxQyiKR0z8yq5VgrEZAYqwB5welQUUAT37Wr31w9jDNBaNKxgimlEsiJn5VZwqhmAwCwVQTzgdKgoooAKK90+HHwk8KXvhPTvEuuW/xA8X22pxNtTwLpkVwNPmQjfBctKd6SgMp2mJVIYMjyDkcN8ZvhxdfDTU9A02+1KO9utV0K31aZY1XZbtK0imEOrssoXy/9Ypw2eBjkgWOEooooAK6HwX4s1/wvcSto/iXxBo0E5Q3KaTfvbNcBTwrMpA6FsEhsZ6HJrn0VnOFUscE4AzwBkn8qSgadtT3/AOH/AO0j49g1i0s/Ektr4t0mS3+w3tpf29rbtqMTRmNILm6dGxEjPI+5s7tz7zhzt2YU+CHi+51LWPE3w+1jwVoslw9vearoVlPd2enXKuDhLyOd7d1fAUKlngeaNpwBIfnbTJby0aO/jFzHHBKDHcx7gYJMghkYEYcYBHPYV6B4Is7LUdYtNYsf7L129a5QXTeJbu2ixK0ijKWrXAa4GGB5JBIOQOalJ30NG1Y725/Z08LeJE1C7+GHxa03VrSzT7bcSapp89taWVmV3jzb1VaLzlUpujKo2N5KptK15Zrfwo8cafDdXtjpS+I9JtpJkfVfD06alZgRAFmaSAt5Q2lXxIEbaQSBXU6VNpNx4/S61fR2kkv7tYdO/wCEPtY7bV7G4tnT5oLaCby4y5JIZ1kzs/d7eo6rxf8AELx/4M1G5sNV0q+8ReE53N1p2lfFSzjurxHCqpmCswkyPnVdp2Yd/lySaetrk8up850V9Rah8Y/C/wAQNIstW+Jfg9bhL3VIdP1C/vdHWe2tbdNsrpZ3lt5NxCwLO3ks052lcsQzbrGn/BH4I/EbRbnUPhn4x8Tm+t7u1GpQW+ly3kFgLguAqxOkUrRqykb98jKq5bPLCrMmx8q10/wx8C+I/iN4wtfC/hey+0Xs/wA0kjkrFbRAjdLK2DtRcjnBJJCgFiAe48f/ALOvxQ8NX14+m+GdV8Q6PFfPaW19Y2TmS427vnNtzMi/KRuKlCcbXdWRm95+BXgnwho3g+XwRaa/bJ4l1iystS8R7bo/b2WNpJZ9Ijt45FeBoxEscpY7m85gQPlVBRb0QJF7RvA3gvQbVbbw3D4hkttBvFu/DPiDwloP2nVNWDRZfzdUjje2eLzJp4TE6oAsKbiV4LLfwdonxYuL+28aNrdp4z1xYUjt9R04eHbpbS22iQCRY5UvmJVXYlWA2LhYAFAzte8b6N4vms/DXinxPb/DLwha2MU2gWVqS9wYwGjj8w+WyggIWwGUgSIOeWb0jVpfEPhuQ654w0TSLbVtAiltvD/iu7tfNtIonBMizRRXAdSyoqKwGVMhH97dTopq3U1UrPU8s8R/sbalZPFrHw08fRyXUd2lzYm9ZrdreMbmV1nhDF5AfKwwVBwT3AFJvCX7UiRx2mv3D3U1ovkW800sVw8kKk7WMiElskscyfP69q+0dMt5raxhguGtXeNApNtbmGPjgbULNgAYGMnpT1tF3OxeQlmz8zk4+meg9qIKKd2Z3szHgv7m5lCRXLRY3Ko4bkHb8yhemRkc5rnvH+j6Tq3gDxB/wkOi6t4o059PjNxpkKHzrwRnzUWMIQ+8HGMFeexNdPA8rAK5jC+YR8iYyAUxnnB6kU2YJbxG/VW/0AEqgYhdpQDG1VOcZP0rrkk1ZIrQ8a1TQLvQdHl/4V9oDeANLjDSzzGEwyMqwwMCyqzbzliD0ICSZyQc+Z2S6Vda7rNxpXjS78TeKfsLrrPmWkjfZIy4XfHuTYWLEfLnHIOOOfprWtAtdZlkunudZuUkDBIU16e1gdSCcbYSAVIcDkEjHtk8/q3w+t9R1htS022sNHmhu1u2m0aQ6de3RG4mG6uVDtLC+4MVwuSgJPHOck2r2/EFoeHt4q8Rac/l2d/PbyMsckccWoQ2yowRWPyFWdwSuw9AC+D0xVdtd1zWxHrD61cyPbMujJIgjLbYnDHa6xDAKkDAGTuyT2r0LxN4O8V2t0sVtfTXcMM7uq3d007Oy7mxuRY8EmQ59+SRgGuJ8QaR4k0K/h8PQSRX8Lafb6mt1NaNczNdttR41naSJmB3h9pU4DKO2aiUZXK0PJ9K8P6XNqenzTaNp13NJqcTCSUPGXyynZuRwgBbjOSBn2AEET31vrfiDwh4N1/xFY6fc6ldJf6ZbxEaM5C7Srv5v7uNlDKW+bKhTzgV1kFsxuCZ5LhSB5O6xY2LSOsPLFWUgMV2scMSC455BG7q2q61DoDaVp/iPUbXT5lYXMNxqEN5DdCRpAz7QCz5IyegPHSublTQ2rnIaL4VfVPF+oeEfDWi/D1Z9PJudQ/tO6kaxYx7gqhlOd3DZXcQRgnABx02jR+KdL2axpWk/Afw+8hLwPHfxxzLvR3icb2ZRggKoIzuwCMZIin0XR9a0qLw/rng/wALxwW99H5CaTYLpV3kfxTFnZ5I8cNxk7TghgGre1HwJ4Pl1G8uLzwjobu9wZfIsYTpiKp2Kqg+bwPnbKLkH860jBtWtoGqdzl/Ft/4vt4YPFHjj/hAtVh0tTFLNpFxaSanB55AGBEqqwZnJ4DYDMeDknjbMeG7G5ha28K3tpPHKsHnxJIspkXPrlSWWTOBjjByAvHqzfC3whZi4uPDGgRWGp2lxbJbXB1cXETpLKI3WSLZ83yo2D6sPTNNisjpk86vp2h3ZVkgnSPTgspZQuD5m4+W5LFw3cRngZqPq6S7f1/X6FJ9zjdMt9W8U6VqGjWV1rcuh6TD5OqJK/ySGbAUs7Dcijy0JOHxuzUc2g2uhaWdO16+8I67oQH2eODUJk1O8gTdHJGLaWP7LOgJPEazhDvkyvzE161o/g/T/F+r61LceGvFVo/h99MNpBBrcsUb+axdtu2Abym5mLfNkPhdvU+ieLPB2o63pVlp1lqvirQjZgFF0jxOLH5AsabJCEdm2gDkqCSx79NYUHJNR6ef+f8AmQ2nsfHsPws03xXfyWkOgeJvBerR2k1y9umi3d/aMMR/ZgYUMt1arJlyzu0wJBK4HyDzu5+HviIz20WjnTPEbXkpSzi0TUYb25uBsZ94tY2Nwi7ELHzI0K9GCnivvHxb8PGu7VNZ1bxFYjTjbwQQWniTThNewtCSXYXxcSKZAGJyp+90GcUzw98P4Nb0ctpfxN8cwx3F4Vfd4vd2s1y6KlufK7gAryDg4yRnMyhLsQ46n5yUV9l+Lfha2uHWLvxL8LfEXiiSPVrmG78TafBb6HqQhjlV2mislLRXu8vJiYoGcehCkeEeNfgtqmiXNu2na9pEttcxh0i1y6h0K/i4GRLa3kiEckgMjOrAZzzgS9CeVnljkM5YKFBOQozge3NJWn4k8Pa/4avksfEeh6no13JEJkgv7R7eRkJIDhXAJXKsM9Mg+lZlAja0Hwl4q1+xub7QfDOtaraWv/HxPZWMs0cPGfnZFIXjnntVHVYZ7S7k0+5sJLGa2kdJIZkKzK2eRJkA7hwMYA46Ak5v2fiER2ul2d9oWiala6dJI6Ry2phecOclZpYDHLKAeRucleikDioPE2sya7qZvX0/TNORUEcVtp9osEUUYztXj5nIBxvcs7YG5mPNKzuVoloZdFdF8O/BmuePfFEHhzw8tk9/MNyrc3kVuu0EbiC7DeQDuKpubAYgHBr6Ht/g14J8O2/iPQ9X8NX2s3OgX8A/4SB9WbT5bxnj8zyY7JopNsYCldx3lySyMAQFG2tlcIxbPA/B/gDxD4hv7vytL1FtK0uaNdYv7O1N0tnG0qxswVT+9YbiQinLBWI+UFh6b4o+Hnw/utXtvC0V1J4O8Q2t6tpPpcthc3V60LsgjkldZpIri4ZNrCC3SLLSsv8ACK9A1C18T+JPAF1c+G9cuNEvLZGgh0bQr5tO0UW4Y7z9h2SGZ33OW3Oobcc/dw0/inwz4xvrhhZaxYRWWm2LW1naaIP7LthbbSZA0OJC+ZCPvOrcsceiiptXsa8iT/pngepfCD4k6Zafa7DRLjUrS6vH01P7LmS4mkmVTK0L28bGaN1WMs0ciKyFcMARiuh8IatP4qFpqOkfBa08W6xYeWms6hPLqGqz3LsCElNqlwoC7UIOQUzgfLlVr1e00jxj4X8PaufDreELXxNbxxppt/F4eRr6IGc27xwXBlbYpTcA3lsSCw+T7wi8XHUpL3QdE13xP4u117n7IzQ6j4iW50y5n+WQRzWiW6+bGZQq7WlUkMPnBHD5XZcwapu2x5ANXtI/D+paJ4au9X0+ZtQuJb/R7q8aO1RCjl5orJ0ZYpIgsaB2unlHl52kE7cHSrTxp4YmbU9Bu/sfzeZ5ttKq7hlgMMwCuPvfdyOM+le0/EnwcfGetW0F14ptdMnS3d/DmlaVbS32m38iqV8q00+JXNiF8kGUs0oYvv4AZR514m8LfE3wpaXI1DwtoWraNpd3Nb3l9o2m2NwsLwkCRZbm3QyQMAynEpRhkZXgip5+X3ZdP69AaT1Wj/r5lfxB4oN/DDqfjyTUr3xp9oVftsm3d/Zvk4TBVgrPu3DJBbBJ3cVVL3viS8sp20zS9fiJ+z2EN3C0U7ktvKFbVoyQ0jOuSWx82CMZrc0690nV9Nmt9NYXWiI6W7Xb+ArC1uEu5N5gg86GdpFRgjkyFyV2qCrAmsvwxc+HNUv73SJx8QlubtYot2i363at/CRJC0aNJ97puHJYd63U1J3ZL2sdp4TuPET2V5pln8UrrQm0aNI1h1bxJL/wjwKbGa2VXjYTnYWQWpU8KWMjgbT7B4d+KmqeJ9N1rwz4w03wLBpkNvFZG7HihdO0gpIHMMYTZLJFKUjkIUkblQggALnwTTNTt/FGrJai+1bxZcSSNo8ljeMkWp3GmoRLEkcjttDl0xtUO455IIWvWfhRo1w0njnT7TS/GFhpejazpL6ZBLoK3WpsoecSgPx/eZg5Y7BtZRn5TaSWxDTNX4xWN/d2+ieBtGvZ7jSNLurfw7os0sqo1t4liAlW6mIG7a8LsqjJUEk7DwR12l2Gg6l8SvhRceENKtpPBFtb65FbXsEMqiGfMsVx8xYhVkcgruznDY61l+IdaTXvCXir7Ne6jZa8LyS3sEj8OSRFDiMfaUQyjF384JudykLKvykYxH4WxonijwX8KzJ40sD4qtLi71K41SdnkspbUSPi1Zz5cRkdJWlwjblkT+9uFSTjqU+7Po7RIo7XRLcpb28TGASSJFH5Sbyg3cH7vIPXpV62uFlgWRdpBz91ww6nuOKydE1YXmgWd8kqamZ4VYmwhKDlC3Cs2VHBAyc5YCk0fWLu5jnE2hahYeTMY0S7YM8i4BD5BIwc+p6GptzdAknrfckgS4RyJEtwocsCk5YlcpyRtGDgHjP41E88EtwumuXf7Y7ocwZRdseecnn7uQcYp62zW+4vkRli24bFSPdwW7nPXnGMkk4yak/tGzbfbx31s11LCBGjXG53J4B8sYwM9x6HPSt3fpqK/Yhs7yOeeW1t4r1m2YD3NvLEkhCrjLsMAncBnbk4PHFZl42qXBns9T/sW3HzNbiPVmJnbklWzCPK525I39+Kfp+saTL4glsbbU7E3CkIYI/MU8lNuecHAXAIOATjviq/jHUtb0m9tv7J8JXniX+0L1La5U3KLHYxjJE5V+oywBAxwvXgVO3mXaztY821fQtZ1LWEaVfCATzWJS38cSiTYQm7Yv2NQG2sD1/iXkcGs3w/K9hpX9h+JI9QGrnUGvo5YrF7q3tbVoHKBJSyqih0AAPHyINmMEevaxq2jw6HdnW9S/4RKPyGRg88cBgVgUDsylkHCcE5wAOmcVyvhjRPD/iF7m98NeNR4n0wKbJrl9TE7faEJIhLxqBsCvkHLHkY4xlJ6+8/6/r+ug7dbHCPo8WmzCZr/wABRWdvKoiSfx+8artY/eBs22sVUAgNgbOM4qnp+napNe6pPNa6HcRNePa+fp2vPqVxvYZbYvkxhlIlOTkHcqgj5a9j/wCESvLbMyzNHGqYZmu3KiM8kY2K3y7mIO44xjAp66d4iaxtPLg028RRBJFI8Z3SBQSCSQSDkoSCc7QQNx6uMF/NoSu54n4hE72ubXSZo7V2zLDf232aOKB/LeeWMxuvKq6/IMZ+Y7smph4T8FR+YLS/16dI7iSFZG00eWkICDOPNVyANrb/AFIO3IxXp08WoacHtWvPDlvNLbSQhxK9vIqeVECyL5ZKY2BuP7ntUUPgyJbaJLbUoHVYfMSWOdplSISR55CHI3Bju4Jx6A4bppu7K1tc841Xwv4HvNOlV9T8VXVjPIsrzrpKzeeFdihUOSwCswySvP4gje8DvoWgXUf9nDxReHyliEcuhSIpjYIcIXfK8qxGDgnIHBGfQI/B32jV2RtU/fusr+ahLnAOOflG3HmLxnnGexzJZ6RaaLef6del0SYzLFctI6qSSvmEAAKSDJgHggEe4cIxi7p/gJ3Z0FhrLauZ1+xahaC3lCFLu0MXm5yOMk5XqM8dKr3FxqpeRANLe3KsEY6yykghyPlMRHbruPQ+lalk9nPORbPmaHC3DeWyMzDkbunOcnnsW9auywEwFUdlYA7CSWI4IBOTz171nKSjpsZppdDz3xVp1rMDrV3oHha71uUpFMuraw0Vm8cRLYWQRNuZck8xDB9gK5bxH4o0WRrTR9d+EuvTxz7GuLnw9oZ1OwdNvyhLmLazgbyc+XwQQBxk+l6nDq0d5qKfYI9W0ieONYtPKp1b5XDbxjbxnBwOfy5LVfBnh6bxtpl5q/iG8inW5jlttCcxbWwXMeAuWGWVmzu243jAySFJ+7uaLe6PO9S8Q38ypb+EbXwX44FleubLS/DviZJdtmJmMDS2IiVMorIrP5nXkkjiuW1C50jQNSsZ9Tu7D4a6ne3iJb6Np14dAj+6xD3flw3K7CrgFyVXOM8crf8AGfw8u9P0V7nwH4Ss/EdvbanqnmnwbraWUtnueHZDKeTJIoHKqpIMS5ABwdD4Vaj4Y8e6Xe6d8Q/hrFYXyXA06KLxK63Wo3spiY+TBJMsLRPjJBH3fUcYzcXPr/X9epL0Ry2t27yJepdRXWq6Nqk8jXtxqJXxJoAZQ8K3B1HdBLbyKDL/AKsqyDBPoePufgl4D8VvZ3GjXeu6Cwg2ahP4f0m48SaM10qxhoraSFmmTgmQiQuPnKhhs59/sPCniTwpYS/8K6vbvXdOsv3J8F38cKpbH5iFaV5AGILAFtzAldwLYqC/8L+LPEuhWkFg9r4FvIdRju7rwvtjZZbGMNFIyld252QgA4C5UKcdaXLf1Bx7nyzrPwEtYNTuINO+LPgaCCKVYhH4jmm0S/X5V3M9rcR7lUEnBBbcBkc5A3fC3wC8O6eYdT8UeNDr8UU4cW3hbQb3VLK6iAU83qCNBgn50Q7towrBmGPZdQ8JaHoE0t1c+Lbn4Taxc3EgFxql1HPHqDEgu8KuVCgOzE4PAdeMEYgt9fHh2y1JfiE9jaXWoX63mhajPcMkGqWRw00sXlbxGB9/YcECUcDpUunq0/6/JjUeolzqFxP4ah8J6O+s+A/CNpG0CWGgpEbvVOg3tIdz2OXGW8xpWcOck4Nc1qPhfTNQ1FdEhv5rDS9EYJqFm9wHvF/0cMPKCgm6bHDD9390+vHo1kTrWkPeaXo8t/YuhBu7bUX8tByC3KFsDrnH4Vc8MWdx4kn1zxNpMGqzWusmRlS0k3xh1CwsF3yrkbouuAPmwBwatUFa3T9PkVrE800LSPD0vxOsX8NXHiiygkRWmg1nQmiLqoL7VGF3Nlo8HgbFYfMOadoOjWfiPQbTUtGv5zZoxDR+JfKspkQYEj/JuAIZ1IIIOGJGT13Lm0j07xrdG5vhbXqyjZE92yygskqcDeefkUYzgqeOua2rvwrf6fqceg6bYS28SyiO1iFkqK3mo8jucyMwYn0PBHbBNEYJ9Bp3OT8N6FnVLLXJdX0I2Nnmaa3HiVlvp0ZvMLpbLD88u2VMDzMNuXGGbitoXwkdbHU18R2jxazfEixTT71pbSBGjRfLluGjIgKkL8+HwFIGSOeu8W+CJ/A2j3Ota1ewWXhiyt86j9usUubY+azwoBCh3SOGeNsZCnaOCSBXLWWtfDPUJlj03xP4NvpHAZVg8EDdg4PIMw29f4sY6daXKuq/IFrsVdB8CXtv4P1fR9Y8Q6QdCNpEmpLoniZLxpokkYxxrbiFWwHOQBInylgCSeJfAF/cz3sF7a6hrV6+kqlvY6brVq3h3TYsAkK7b5lndmQkh8FjHjIGK7Xwbox1LWdStNI022ufN05Uke28MiwjI3qwWR/tWJMnPy4I+Xt1p/jTRrb4c6fbalLHDotqEIH2lUKs6oSE3ROA2AzYyAc5AJ4NCgvQLdL6nAaL4Y8Ky+L7lNR8CeAYL2a1M2/T3m+xx3mC6xpMbhokB+U4SL5Qw4wOOXsfA3hzw/rmoXGpzeEPEVzYQTXlrHPrb6lZReUVcB1jSELHkMpVs7ipUjFeq6Z/Zzac3w80a+iv9cnlbxAZrEpMpsGLlEblQcbwNuQcFTV+104xQQeFku7c+IbZdlrE8TCTzGEZEbsXf5S8TFhlhtYg7A1Cp2VtBNHj3jP9nrR9REupafeReDvtFh/baXt3fC68NeRPNGkUC3/lQmGUF2IjKTbl8sh+TWF8OvC7+A/i7pmtW00+s+D7aGaJ/E2q+DpLvSxMgkZGtwrsXUSxx7JUeNiSei53e0aH4C8Q+Hoo7bTPGqLperao2na/4T8ZRxxxarcgMZRYMwJ2yF/3e3GflZnbAFU/But3XgLxXrn9l+I7j4ceGNBmiibwn4uYTRStcGVi1q6sW27lLqEZ8kMSdp4zUdmjPYn+Hd/8aPF19oOny+PfG+hX0NmkjDVvAyRWNy6qjOn2rfl1OMBiuWwT/FXuPhu/+KFlr7R+MIvDE2mPBIlmNKaYyvMHyGmkkVUjG3C7VDEsc9sV5voukfE6x1iy1zSfB1yoht2jC3slsZoyMR7RlxjcgDGQZJwwOd1eieH/AIm6VrHinTfCl5btYarqFvc3RhMmTCbebayOcA7sBTjHTdzxztay7oq3Y7Cz1CSWF2vLOeB1Kgqv79ckdAUBPH07irVu4fexknOWziSMrtBAIAyoyPz5yM8Vl6fqVnqtmZrS4hmDRKxELFsbgcHOF/Pjp2q5DbSouDIre6ptB/U1coJb6ENEgkfqLaU+hGP/AIqobovMix7ZUJdMFpQoBDBhnlu646c5xx1rHa2Z5mcCwB3hjvsFJIzzz3OAeferS/ajtYvZB1fchFs5A+XuC/XJPetfZ8ruNLUsrOyRrAZ55N67VVT823KL2GehyTnOcn2FSwhWC7upLeJbXzbZVxCgUBt7HIOMH7498HNQ39ql1ZyxSiTOCSIpjAH+VSMAFucqBlvT35lhnljvYYtkZjdsZROUXIHLF+20HoPYYzV8qtoC0RJcXEzCN7e6uUyTsdGR1fKqeC24epzjsfXlgubqOOQSO10i3b7d7BmB2ljGFCc4ycZP8IFVNWc6XZRtHDJIhXEwmle7JAwANoJZs4Xpx1zjJNW4IxZ5htTGbYzvcFZV85i7SF2IYsNo3E8YOM/KcYqeXrYrS1iHRrC2SSO4jsI4XeRcyr0kIY8hsjOdvpyGqNbZDqGoLD43kilku3kWJJIiLb5VUxhGB44Zu3LE96IdNtElUrLqKKIhEoS7KhQFCg8DJIwSNxPJJpssVuNOt3awsJSltGX+12ZldCFO4nnLMAWGAMnOM9qc1Jsd+7LR2+ZC/wDwnEyiSQCOJjb4kLE7VPyBjkOnAIPAPetQJvaQG4uMrIA/bHyhthI7Ybr79a5IeHfDOqQq0+iWu+C8ilja1ie0CPGY2V1Q91wBu9mHbnVgt7Iu81vNqkwecTH7RcSLtbKt91hyo2gAc9ccY4jkadv8hOzRrX1jBd2n2W7iE0OU3RzLuQ7WBUkk89B3785p0ESWsAihZolIxH8x/ugcZyOx47Y6VgW9lrUWupPJNoDaakTJKkelsl2ZCgIZZPNK4yeRt9eRirk9sJllBeSIkyKTCQu8bnxnIOfvE+h+nFJRb0ZLjpa+htNdwbpgZQTDt8xQclATxkD6foagju0uZpbZVLABQ4JZSAwBHVR2LdD29emEkdvYahIBJqEkmrkhjJcO6w+WpxtbGIQSSQOFyeMdKXR9D0uxv5b+K68RO8sgYR3Os3U0SjcrLtjdyqAZwQAMjcDkVHs3HoPlQvijxJpvhZB9uj1p5rjY8o0zTri78teFL7URgijABwMgcnkiuMuPFXhbw7fQeFra5+If2W8YFp4dNuZYomckAea0ZkQsQcBO+cc16Np11PIZnmabzSipuUbIhgBiyq2cN+9IOcg+X2xiud8J6/qNvpF7Lf2mqBLe5eRVu5UmnkgO9gqbcfMCAuDnjHJJzTVOck9ClLlVih8Q/hdoXji50ebULa2uzpp8+3keSaOYHIZSHR8jcVyWxnOTg548u+IXh/wb45gGq/EW4u4fEEepp4e03UrScytYyCNp1lCQFAcsHALKcHHUcjrbGw1jStP8v+1bsT6neajf3T3ZFygYx+ZAGCsgKBsJ5ZC7wCPl60aFoWu+O/AOleJL+81TQfE95oEy20VjqF1Yafpt784hdrMSH5lDgEsSGwcqMgBTi49PwJep5bYW0fgHxe+hfF34h+KYYXkkHhXXtQhfas4IDyb/AJjy0yufMwq7Bljk1peJ/GGqaJb2934z8faBam4hddL+Jnh2yhvJrtI5A39mywRxkqMsZDtYR8IMk7ifSLPw9NBosng74rXU/j+21RIW3zxLKkU/3JChjiTyV53KWbK9mPJGRafAjTdDhuU8HjVvC+l3hSSQeHb1U1oSF1UobydsC0CgOYeWLLkMc7DnKk0vIIrqjlLD4yfC/wARxrGY/DrzyD5tT1XwW5tlYEFjI3nsScBe/ULz0q7ot14V0u8fU9E+KX7P3h6eJ5ISNM8OQR/ao8jG9jdhwMjOEOPdu0/ij4YfGjwvdNrHw5+IGv6nNbvlY/EXi43iXCZIKG2e0WNSRg7vN45xzg1k+JbH4hDWPCeqeLvB/hXxB4gZRp8p01IruyNm6/6QLmKaSFI7jBwrB2jbdIvycboTu9tQWqIB4f8ABnxGiu9d07wR4a+IXim2CvLc+G9ebSdr7UwxRyuCWDHeQ2M4yadrNpf31jY6Z4y8K3CXWmQiK4g13UUv5LZTvcObpGj8/wCQqfVSSOTzXU3Hwz8DeIy8XiH4L6JarE7eVNamDTA2XK/OLW4kYjCg55+8DheTVXXLCDw1FB4a8O2Ok6Z4espEWKC3sXuZocmQlo7st5mQ+X3FGI80j5hjOvspX12BEvhO/g0fS/NW7ubGG3xJ9nEccUMgKshRNxIPQ5G7kqcdcid/h7oNn4ymsJLLTxDHJsniWyIV1ZImPPmAqArdR93HHeuah8HaTq+t3ehw6x49XSLxg9xdN4oKGII6MiqHhG4cn5MsAcnIIzXa3NlZ3uunxHM97FqrlHz8jRKVAxmMFQxyASeMnPQVpGHPutEM0LvwtoPh2bQ/F0Flb2DaV5TtLbxusuLiOOA/vHLhwMqzbhkge+a021vSdYtms9Q8Q6gFnGZUeQLlWkaFVA2RqeWy23cBs4PQnEgk1KXU7SB5vD0jXDNHIqeFxCsqeWR++f7UV27gpwcZxgKcYrUtLeW2IW5g02OLehUWWnx25dg5Ib93NIFxkfe4PXB/hqNNdAsYniHwL8NL23trx9LgvLjWZDaxm+RpgiMjSbY1UgADeCCOcLxk1neGPhv8UfDtxInh7WNJ0jR5SS1pp2nJAWChsYd3YruZieFHCqCME10Os6fI1jaR6LNY2t5cXbC7fUrT7RHsCttEYDARODtxJ0OfmPZcWP4eM/iH7cvxH+IUtt55CQ/8JY0cKlMsMwi3ACMFUdSCWPpkxOl2iA3xfaJrfiaJ/wDhXkfjjT4NASCW6ldZNt2JVke3YlC4Ozbg4/iII6ZuJb3FrYnTZfgokkCEjyV2yrIipJHgEAKCY4oR3yXPTv0Fvpni5tx0nxVpdlao2xIItGjQeaAm52Z5MsDg5bByRkcVFceEdbusw3njjxAxjibM9prJtTMchdzLHbEBgqrgBjyT9aTg46pfkBl+EPD+iWl1dXFhpVrpb3GVmtoYsPaR7hugciTCjEa5YAHco4J4rV1O+1PS7GGOLxDLp1pHbJHIGuYSltF5kPmP5mGJIDY3sGwNzeore0nwvexWVmH1fVJQtqiy+XqGJZpch2Mr7RkEjbuUK2CeDng1XwQ15JYMNW8QCO2v4LsrHrsoDeUWAjZWTa8TBsupxu6ZOBVSaWg2+54va/Bz4e+MtFMPgvRPDP8AaKKnk+If7cn1HauVJk2YQSOMbcNgA/jXrnwy8M614bisbDxjrL+LteiWdbXWzowiNnEyxl4TJuOQWGQeN2MY+Wu0voZru3niN1cQpLx+5k2OowvRsEjoemOp781g6V4Vg0mOV7a91+5kd1J+1a1PcZXIyAJG2jHJ+pPsKyjBcwXVnqdLbgbFDGRtoA+bdj+E9+D/APr96nUADgdeeTmsVLCIbSIr2MBVzi55AAT5M5JyNnUHHXmr9vEiK2xpNpbgMxIGOMAHoOOlVOK7mTt0P//Z" alt="Geschwindigkeitsbegrenzer">
     <h1>🛗 Aufzug-App</h1>
     <p>Tippen zum Starten...</p>
 </div>
+
+<!-- ==========================================
+     MODAL – SERIENNUMMER
+     - Öffnet sich beim Klick auf "Umbau"
+     - Seriennummer wird in der Leiste angezeigt
+========================================== -->
 
 <div id="modalSeriennummer">
     <div class="modal-box">
@@ -136,13 +350,25 @@
     </div>
 </div>
 
+<!-- HEADER -->
+
 <header>🛗 Aufzug-App</header>
+
+<!-- ==========================================
+     SERIENNUMMER-LEISTE
+     - Erscheint nach Eingabe der Seriennummer
+========================================== -->
 
 <div class="seriennummer-bar" id="seriennummerBar" style="display:none;">
     <span>📋 Projekt:</span>
     <span id="seriennummerAnzeige">–</span>
     <button class="seriennummer-edit" onclick="oeffneModal()">✏️ ändern</button>
 </div>
+
+<!-- ==========================================
+     STARTSEITE
+     - Drei Hauptbereiche zur Auswahl
+========================================== -->
 
 <div id="startseite" class="startseite">
     <h2>Bitte wählen Sie einen Bereich:</h2>
@@ -153,6 +379,11 @@
     </div>
 </div>
 
+<!-- ==========================================
+     BAUTEIL-LISTE
+     - Liste aller Bauteile im gewählten Bereich
+========================================== -->
+
 <div id="bauteilSeite" class="seite">
     <button class="zuruck" onclick="zeige('startseite')">← Zurück</button>
     <h2 id="bereichTitel"></h2>
@@ -161,18 +392,29 @@
     </div>
 </div>
 
+<!-- ==========================================
+     DETAIL-SEITE EINES BAUTEILS
+     - Drei Tabs: Prüfung / Dokumente / Berechnung
+========================================== -->
+
 <div id="detailSeite" class="seite">
     <button class="zuruck" onclick="zeige('bauteilSeite')">← Zurück</button>
     <h2 id="bauteilTitel"></h2>
 
 ```
+<!-- TABS -->
 <div class="tabs">
     <button class="tab aktiv" onclick="zeigeTab(this, 'pruefung')">📋 Prüfung vor Ort</button>
     <button class="tab" onclick="zeigeTab(this, 'dokumente')">📄 Dokumente</button>
     <button class="tab" onclick="zeigeTab(this, 'berechnung')">🔢 Berechnung</button>
 </div>
 
+<!-- ==========================================
+     TAB: PRÜFUNG VOR ORT
+========================================== -->
 <div id="pruefung" class="tab-inhalt aktiv">
+
+    <!-- Frage 1.0: Dokument vorhanden? -->
     <div class="frage" id="frage1_0">
         <h3>1.0 – Liegt das Dokument zur Ermittlung des Seildurchmessers mit dem Messschieber vor Ort vor?</h3>
         <div class="ja-nein-gruppe">
@@ -180,6 +422,8 @@
             <button class="nein-btn" onclick="jaNein(this, 'frage1_0', 'nein')">❌ Nein</button>
         </div>
     </div>
+
+    <!-- Frage 1.1: Verhältnis 1:30 -->
     <div class="frage" id="frage1_1">
         <h3>1.1 – Ist das Verhältnis von Begrenzerseil und Rollendurchmesser 1:30?</h3>
         <div class="antwort-gruppe">
@@ -193,6 +437,8 @@
             <textarea placeholder="Beschreibung des Mangels..."></textarea>
         </div>
     </div>
+
+    <!-- Frage 1.2: Mindestbruchkraft -->
     <div class="frage" id="frage1_2">
         <h3>1.2 – Beträgt die Mindestbruchkraft das Achtfache der Zugkraft der Fangvorrichtung?</h3>
         <div class="antwort-gruppe">
@@ -206,6 +452,8 @@
             <textarea placeholder="Beschreibung des Mangels..."></textarea>
         </div>
     </div>
+
+    <!-- Frage 1.3: Seildurchmesser messen -->
     <div class="frage" id="frage1_3">
         <h3>1.3 – Durchmesser mit dem Messschieber erfassen:</h3>
         <div class="messwert-gruppe">
@@ -213,6 +461,8 @@
             <span>mm</span>
         </div>
     </div>
+
+    <!-- Frage 1.4: Seilklemmen -->
     <div class="frage" id="frage1_4">
         <h3>1.4 – Sind die Schrauben fest wenn Seilklemmen (Frosch) verwendet wurden?</h3>
         <div class="antwort-gruppe">
@@ -226,9 +476,15 @@
             <textarea placeholder="Beschreibung des Mangels..."></textarea>
         </div>
     </div>
+
 </div>
 
+<!-- ==========================================
+     TAB: DOKUMENTE
+========================================== -->
 <div id="dokumente" class="tab-inhalt">
+
+    <!-- Frage 0.1: Datenblatt vorhanden? -->
     <div class="frage" id="dok_datenblatt">
         <h3>0.1 – Liegt das Datenblatt vor?</h3>
         <div class="ja-nein-gruppe">
@@ -236,10 +492,16 @@
             <button class="nein-btn" onclick="jaNein(this, 'dok_datenblatt', 'nein')">❌ Nein</button>
         </div>
     </div>
+
 </div>
 
+<!-- ==========================================
+     TAB: BERECHNUNG (EN 81-50)
+========================================== -->
 <div id="berechnung" class="tab-inhalt">
 
+    <!-- 2.1 RILLENFORM AUSWAHL
+         Bestimmt welche Formel für f(μ) verwendet wird -->
     <div class="frage">
         <h3>2.1 – Rillenform auswählen</h3>
         <div class="auswahl-gruppe">
@@ -249,30 +511,42 @@
         </div>
     </div>
 
+    <!-- BERECHNUNGSBEREICH – wird nach Rillenformwahl sichtbar -->
     <div class="berechnung-bereich" id="berechnungBereich">
 
+        <!-- 2.2 EINGABEWERTE -->
         <div class="frage">
             <h3>2.2 – Eingabewerte</h3>
+
+            <!-- Nenngeschwindigkeit -->
             <div class="eingabe-zeile">
                 <label>Nenngeschwindigkeit v:</label>
                 <input type="number" id="geschwindigkeit" placeholder="Wert eingeben" step="0.01" min="0" oninput="berechneAlles()">
                 <span class="einheit">m/s</span>
             </div>
+
+            <!-- Keilwinkel -->
             <div class="eingabe-zeile">
                 <label>Keilwinkel γ:</label>
                 <input type="number" id="keilwinkel" placeholder="Wert eingeben" step="0.1" min="0" oninput="berechneAlles()">
                 <span class="einheit">Grad</span>
             </div>
+
+            <!-- Spannkraft -->
             <div class="eingabe-zeile">
                 <label>Spannkraft vom Spanngewicht G:</label>
                 <input type="number" id="spannkraft" placeholder="Wert eingeben" step="1" min="0" oninput="berechneAlles()">
                 <span class="einheit">N</span>
             </div>
+
+            <!-- Mindestbruchkraft (für Sicherheitsfaktor) -->
             <div class="eingabe-zeile">
                 <label>Mindestbruchkraft Seil:</label>
                 <input type="number" id="mindestbruchkraft" placeholder="Wert eingeben" step="0.01" min="0" oninput="berechneAlles()">
                 <span class="einheit">kN</span>
             </div>
+
+            <!-- Fixwert Reibwert für Sicherheitsfaktor (nicht änderbar) -->
             <div class="eingabe-zeile">
                 <label>Reibwert für Sicherheitsfaktor μ:</label>
                 <input type="number" value="0.2" readonly style="background:#f0f4f8;color:#0057a8;font-weight:bold;cursor:not-allowed;">
@@ -280,6 +554,8 @@
             </div>
         </div>
 
+        <!-- 2.3 REIBWERT μ
+             Formel: μ = 0,1 / (1 + v/10) -->
         <div class="frage">
             <h3>2.3 – Reibwert μ</h3>
             <div class="formel-container">
@@ -295,8 +571,13 @@
             </div>
         </div>
 
+        <!-- 2.4 REIBUNGSZAHL f(μ)
+             Keilrille: zwei Formeln nebeneinander (Zugkraft + Sicherheitsfaktor)
+             Halbrundrille: eine Formel -->
         <div class="frage">
             <h3>2.4 – Reibungszahl f(μ)</h3>
+
+            <!-- Keilrille: Zugkraft-Formel + SF-Formel nebeneinander -->
             <div id="formelKeilrilleGruppe" class="formel-gruppe">
                 <div class="formel-container">
                     <div style="font-size:13px;color:#0057a8;font-weight:bold;margin-bottom:5px;">Für Zugkraft</div>
@@ -315,6 +596,8 @@
                     </span>
                 </div>
             </div>
+
+            <!-- Halbrundrille: nur eine Formel -->
             <div class="formel-container" id="formelHalbrund" style="display:none;">
                 <span>f(μ) = 4 × μ × </span>
                 <span class="bruch">
@@ -322,6 +605,8 @@
                     <span class="nenner">π − <span style="font-size:13px;">(</span><span class="bruch-klein"><span class="zaehler-klein">π</span><span class="nenner-klein">180</span></span> × γ<span style="font-size:13px;">)</span> − sin<span style="font-size:16px;">(</span><span style="font-size:13px;">(</span><span class="bruch-klein"><span class="zaehler-klein">π</span><span class="nenner-klein">180</span></span> × γ<span style="font-size:13px;">)</span><span style="font-size:16px;">)</span></span>
                 </span>
             </div>
+
+            <!-- Ergebnisse f(μ) und f(μ)_SF -->
             <div class="zwischenwert" style="margin-top:15px;">
                 <label>Ergebnis f(μ) =</label>
                 <span id="ergebnis_fmu" style="font-weight:bold;color:#888;">Bitte Werte eingeben</span>
@@ -332,9 +617,30 @@
             </div>
         </div>
 
+        <!-- ==========================================
+             2.5 – ZUGKRAFT: GB OBEN, FANG ABWÄRTS
+             Formel Zugkraft: F = (G/2) × (e^(f(μ)×π) - 1)
+             Formel SF:       SF = (G/2) × e^(f(μ)_SF × π)
+        ========================================== -->
         <div class="frage">
             <h3>2.5 – Zugkraft F (GB oben, Fang abwärts)</h3>
-            <div class="hinweis">ℹ️ Gilt wenn Geschwindigkeitsbegrenzer oben – Fang abwärts</div>
+
+            <!-- Skizze: GB oben, Kabine fährt abwärts -->
+            <div class="skizze-box">
+                <svg width="120" height="200" viewBox="0 0 120 200">
+                    <rect x="20" y="10" width="80" height="180" rx="4" fill="none" stroke="#333" stroke-width="2"/>
+                    <rect x="40" y="15" width="40" height="20" rx="4" fill="#0057a8"/>
+                    <text x="60" y="29" text-anchor="middle" fill="white" font-size="9">GB</text>
+                    <line x1="60" y1="35" x2="60" y2="90" stroke="#888" stroke-width="2" stroke-dasharray="4,2"/>
+                    <rect x="30" y="90" width="60" height="50" rx="4" fill="#e8f0fb" stroke="#0057a8" stroke-width="2"/>
+                    <text x="60" y="120" text-anchor="middle" fill="#0057a8" font-size="11">Kabine</text>
+                    <line x1="60" y1="148" x2="60" y2="175" stroke="#dc3545" stroke-width="3"/>
+                    <polygon points="60,183 53,168 67,168" fill="#dc3545"/>
+                    <text x="60" y="197" text-anchor="middle" fill="#dc3545" font-size="10" font-weight="bold">abwärts</text>
+                </svg>
+            </div>
+
+            <!-- Formeln nebeneinander: Zugkraft + Sicherheitsfaktor -->
             <div class="formel-gruppe">
                 <div class="formel-container">
                     <div style="font-size:13px;color:#0057a8;font-weight:bold;margin-bottom:5px;">Zugkraft</div>
@@ -347,6 +653,8 @@
                     <span> × e</span><sup style="font-size:13px;">f(μ)<sub>SF</sub> × π</sup>
                 </div>
             </div>
+
+            <!-- Ergebniszeilen -->
             <div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:15px;">
                 <div class="zwischenwert" style="flex:1;">
                     <label>Ergebnis F =</label>
@@ -359,6 +667,7 @@
             </div>
         </div>
 
+        <!-- 2.6 – AUSWERTUNG ZUGKRAFT (Fang abwärts) -->
         <div class="frage" id="vergleich_bereich" style="display:none;">
             <h3>2.6 – Auswertung Zugkraft (Fang abwärts)</h3>
             <div id="vergleich_box" style="padding:20px;border-radius:10px;text-align:center;font-size:18px;font-weight:bold;margin-bottom:15px;"></div>
@@ -374,9 +683,11 @@
             </div>
         </div>
 
+        <!-- 2.6b – SICHERHEITSFAKTOR AUSWERTUNG
+             S = Mindestbruchkraft × 1000 / SF_ab
+             Grenzwerte: ≤8 = rot, 8.1–10 = gelb, >10 = grün -->
         <div class="frage" id="sicherheitsfaktor_bereich" style="display:none;">
-            <h3>2.6b – Sicherheitsfaktor (Fang abwärts)</h3>
-            <div class="hinweis">ℹ️ DIN EN 81-50 5.6.2.2.1.3 b) – Sicherheitsfaktor muss größer als 8 sein</div>
+            <h3>2.6b – Sicherheitsfaktor (DIN EN 81-50 5.6.2.2.1.3 b)</h3>
             <div class="formel-container">
                 <span>S = </span>
                 <span class="bruch">
@@ -391,9 +702,28 @@
             <div id="sicherheitsfaktor_box" style="padding:20px;border-radius:10px;text-align:center;font-size:18px;font-weight:bold;margin-top:15px;"></div>
         </div>
 
+        <!-- ==========================================
+             2.7 – ZUGKRAFT: GB OBEN, FANG AUFWÄRTS
+             Formel: F = (G/2) × (1 - 1/e^(f(μ)×π))
+        ========================================== -->
         <div class="frage">
             <h3>2.7 – Zugkraft F (GB oben, Fang aufwärts)</h3>
-            <div class="hinweis">ℹ️ Gilt wenn Geschwindigkeitsbegrenzer oben – Fang aufwärts</div>
+
+            <!-- Skizze: GB oben, Kabine fährt aufwärts -->
+            <div class="skizze-box">
+                <svg width="120" height="200" viewBox="0 0 120 200">
+                    <rect x="20" y="10" width="80" height="180" rx="4" fill="none" stroke="#333" stroke-width="2"/>
+                    <rect x="40" y="15" width="40" height="20" rx="4" fill="#0057a8"/>
+                    <text x="60" y="29" text-anchor="middle" fill="white" font-size="9">GB</text>
+                    <line x1="60" y1="35" x2="60" y2="90" stroke="#888" stroke-width="2" stroke-dasharray="4,2"/>
+                    <rect x="30" y="90" width="60" height="50" rx="4" fill="#e8f0fb" stroke="#0057a8" stroke-width="2"/>
+                    <text x="60" y="120" text-anchor="middle" fill="#0057a8" font-size="11">Kabine</text>
+                    <line x1="60" y1="183" x2="60" y2="156" stroke="#28a745" stroke-width="3"/>
+                    <polygon points="60,148 53,163 67,163" fill="#28a745"/>
+                    <text x="60" y="197" text-anchor="middle" fill="#28a745" font-size="10" font-weight="bold">aufwärts</text>
+                </svg>
+            </div>
+
             <div class="formel-container">
                 <span>F = </span><span class="bruch"><span class="zaehler">G</span><span class="nenner">2</span></span>
                 <span> × (1 − </span><span class="bruch"><span class="zaehler">1</span><span class="nenner">e<sup style="font-size:13px;">f(μ) × π</sup></span></span><span>)</span>
@@ -404,6 +734,7 @@
             </div>
         </div>
 
+        <!-- 2.8 – AUSWERTUNG ZUGKRAFT (Fang aufwärts) -->
         <div class="frage" id="vergleich_bereich_auf" style="display:none;">
             <h3>2.8 – Auswertung Zugkraft (Fang aufwärts)</h3>
             <div id="vergleich_box_auf" style="padding:20px;border-radius:10px;text-align:center;font-size:18px;font-weight:bold;margin-bottom:15px;"></div>
@@ -419,9 +750,29 @@
             </div>
         </div>
 
+        <!-- ==========================================
+             2.9 – ZUGKRAFT: GB UNTEN, FANG AUF- UND ABWÄRTS
+             Formel: F = G × (e^(f(μ)×π) - 1) / (e^(f(μ)×π) + 1)
+        ========================================== -->
         <div class="frage">
             <h3>2.9 – Zugkraft F (GB unten, Fang auf- und abwärts)</h3>
-            <div class="hinweis">ℹ️ Gilt wenn Geschwindigkeitsbegrenzer unten – Fang auf- und abwärts</div>
+
+            <!-- Skizze: GB unten, Pfeile beide Richtungen -->
+            <div class="skizze-box">
+                <svg width="120" height="200" viewBox="0 0 120 200">
+                    <rect x="20" y="10" width="80" height="180" rx="4" fill="none" stroke="#333" stroke-width="2"/>
+                    <rect x="30" y="30" width="60" height="50" rx="4" fill="#e8f0fb" stroke="#0057a8" stroke-width="2"/>
+                    <text x="60" y="60" text-anchor="middle" fill="#0057a8" font-size="11">Kabine</text>
+                    <line x1="60" y1="80" x2="60" y2="148" stroke="#888" stroke-width="2" stroke-dasharray="4,2"/>
+                    <rect x="40" y="155" width="40" height="20" rx="4" fill="#0057a8"/>
+                    <text x="60" y="169" text-anchor="middle" fill="white" font-size="9">GB</text>
+                    <line x1="45" y1="110" x2="45" y2="88" stroke="#28a745" stroke-width="2.5"/>
+                    <polygon points="45,80 38,95 52,95" fill="#28a745"/>
+                    <line x1="75" y1="88" x2="75" y2="110" stroke="#dc3545" stroke-width="2.5"/>
+                    <polygon points="75,118 68,103 82,103" fill="#dc3545"/>
+                </svg>
+            </div>
+
             <div class="formel-container">
                 <span>F = G × </span>
                 <span class="bruch">
@@ -435,6 +786,7 @@
             </div>
         </div>
 
+        <!-- 2.10 – AUSWERTUNG ZUGKRAFT (GB unten) -->
         <div class="frage" id="vergleich_bereich_unten" style="display:none;">
             <h3>2.10 – Auswertung Zugkraft (GB unten)</h3>
             <div id="vergleich_box_unten" style="padding:20px;border-radius:10px;text-align:center;font-size:18px;font-weight:bold;margin-bottom:15px;"></div>
@@ -450,22 +802,35 @@
             </div>
         </div>
 
-    </div>
-</div>
+    </div><!-- Ende berechnungBereich -->
+</div><!-- Ende Tab Berechnung -->
 
+<!-- PDF EXPORT BUTTON -->
 <div class="pdf-bereich">
     <button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button>
 </div>
 ```
 
-</div>
+</div><!-- Ende detailSeite -->
+
+<!-- ==========================================
+     JAVASCRIPT
+========================================== -->
 
 <script>
+
+    /* ------------------------------------------
+       SPLASH SCREEN
+       Blendet Splash aus und zeigt Startseite
+    ------------------------------------------ */
     function schliesseSplash() {
         document.getElementById('splashScreen').style.display = 'none';
         document.getElementById('startseite').style.display = 'flex';
     }
 
+    /* ------------------------------------------
+       SERIENNUMMER
+    ------------------------------------------ */
     let aktuelleSeriennummer = '';
 
     function oeffneModal() {
@@ -492,6 +857,10 @@
         oeffneModal();
     }
 
+    /* ------------------------------------------
+       NAVIGATION
+       Blendet alle Seiten aus und zeigt nur die gewünschte
+    ------------------------------------------ */
     function zeige(id) {
         document.querySelectorAll('.startseite, .seite').forEach(el => { el.style.display = 'none'; });
         const el = document.getElementById(id);
@@ -519,6 +888,10 @@
         document.getElementById(tabId).classList.add('aktiv');
     }
 
+    /* ------------------------------------------
+       PRÜFFRAGEN
+       Passt / Passt nicht / Irrelevant
+    ------------------------------------------ */
     function antwort(btn, frageId) {
         const frage = document.getElementById(frageId);
         frage.querySelectorAll('.antwort-btn').forEach(el => el.classList.remove('aktiv'));
@@ -528,12 +901,18 @@
         else { mangelfeld.style.display = 'none'; }
     }
 
+    /* ------------------------------------------
+       JA / NEIN FRAGEN
+    ------------------------------------------ */
     function jaNein(btn, frageId, antwortWert) {
         const frage = document.getElementById(frageId);
         frage.querySelectorAll('.ja-btn, .nein-btn').forEach(el => el.classList.remove('aktiv'));
         btn.classList.add('aktiv');
     }
 
+    /* ------------------------------------------
+       HILFSFUNKTIONEN FÜR PDF
+    ------------------------------------------ */
     function holeAntwort(frageId) {
         const frage = document.getElementById(frageId);
         if (!frage) return 'Nicht beantwortet';
@@ -549,13 +928,18 @@
         return textarea ? textarea.value.trim() : '';
     }
 
+    /* ------------------------------------------
+       BERECHNUNG
+    ------------------------------------------ */
     let gewaehlteRillenform = '';
 
+    /* Rillenform auswählen und passende Formeln anzeigen */
     function waehleRillenform(btn, rillenform) {
         document.querySelectorAll('.auswahl-btn').forEach(el => el.classList.remove('aktiv'));
         btn.classList.add('aktiv');
         gewaehlteRillenform = rillenform;
         document.getElementById('berechnungBereich').classList.add('aktiv');
+
         if (rillenform === 'halbrund') {
             document.getElementById('formelKeilrilleGruppe').style.display = 'none';
             document.getElementById('formelHalbrund').style.display = 'block';
@@ -568,18 +952,21 @@
         berechneAlles();
     }
 
+    /* Hauptberechnung – wird bei jeder Eingabe aufgerufen */
     function berechneAlles() {
-        const v = parseFloat(document.getElementById('geschwindigkeit').value);
+        const v    = parseFloat(document.getElementById('geschwindigkeit').value);
         const gamma = parseFloat(document.getElementById('keilwinkel').value);
-        const G = parseFloat(document.getElementById('spannkraft').value);
-        const mbk = parseFloat(document.getElementById('mindestbruchkraft').value);
-        const muEl = document.getElementById('ergebnis_mu');
-        const fmuEl = document.getElementById('ergebnis_fmu');
-        const fmuSFEl = document.getElementById('ergebnis_fmu_sf');
-        const zugkraftEl = document.getElementById('ergebnis_zugkraft');
+        const G    = parseFloat(document.getElementById('spannkraft').value);
+        const mbk  = parseFloat(document.getElementById('mindestbruchkraft').value);
+
+        const muEl          = document.getElementById('ergebnis_mu');
+        const fmuEl         = document.getElementById('ergebnis_fmu');
+        const fmuSFEl       = document.getElementById('ergebnis_fmu_sf');
+        const zugkraftEl    = document.getElementById('ergebnis_zugkraft');
         const zugkraftAufEl = document.getElementById('ergebnis_zugkraft_auf');
         const zugkraftUntenEl = document.getElementById('ergebnis_zugkraft_unten');
 
+        /* SCHRITT 1: Geschwindigkeit prüfen → μ berechnen */
         if (isNaN(v) || v < 0) {
             muEl.innerText = 'Bitte Geschwindigkeit eingeben'; muEl.style.color = '#888';
             fmuEl.innerText = 'Bitte Werte eingeben'; fmuEl.style.color = '#888';
@@ -593,9 +980,11 @@
             document.getElementById('sicherheitsfaktor_bereich').style.display = 'none';
             return;
         }
+        /* μ = 0,1 / (1 + v/10) */
         const mu = 0.1 / (1 + v / 10);
         muEl.innerText = mu.toFixed(4); muEl.style.color = '#0057a8';
 
+        /* SCHRITT 2: Keilwinkel prüfen → f(μ) berechnen */
         if (isNaN(gamma) || gamma <= 0) {
             fmuEl.innerText = 'Bitte Keilwinkel eingeben'; fmuEl.style.color = '#888';
             fmuSFEl.innerText = 'Bitte Keilwinkel eingeben'; fmuSFEl.style.color = '#888';
@@ -609,11 +998,14 @@
             return;
         }
         const gammaRad = (Math.PI / 180) * gamma;
+
+        /* f(μ) je nach Rillenform */
         const fmu = gewaehlteRillenform === 'halbrund'
             ? 4 * mu * (1 - Math.sin(gammaRad / 2)) / (Math.PI - gammaRad - Math.sin(gammaRad))
             : mu / Math.sin(gammaRad / 2);
         fmuEl.innerText = fmu.toFixed(4); fmuEl.style.color = '#0057a8';
 
+        /* f(μ)_SF nur bei Keilrille (Fixwert μ = 0,2) */
         if (gewaehlteRillenform === 'gehaertet' || gewaehlteRillenform === 'nicht_gehaertet') {
             const fmu_sf = 0.2 / Math.sin(gammaRad / 2);
             fmuSFEl.innerText = fmu_sf.toFixed(4); fmuSFEl.style.color = '#0057a8';
@@ -621,6 +1013,7 @@
             fmuSFEl.innerText = 'Nicht anwendbar'; fmuSFEl.style.color = '#888';
         }
 
+        /* SCHRITT 3: Spannkraft prüfen */
         if (isNaN(G) || G <= 0) {
             zugkraftEl.innerText = 'Bitte Spannkraft eingeben'; zugkraftEl.style.color = '#888';
             zugkraftAufEl.innerText = 'Bitte Spannkraft eingeben'; zugkraftAufEl.style.color = '#888';
@@ -632,10 +1025,12 @@
             return;
         }
 
+        /* SCHRITT 4: Zugkraft GB oben, Fang abwärts */
         const F = (G / 2) * (Math.exp(fmu * Math.PI) - 1);
         zugkraftEl.innerText = F.toFixed(2) + ' N'; zugkraftEl.style.color = '#0057a8';
         zeigeAuswertung('vergleich_bereich', 'vergleich_box', 'vergleich_wert', F);
 
+        /* SF-Wert und Sicherheitsfaktor (nur Keilrille) */
         if (gewaehlteRillenform === 'gehaertet' || gewaehlteRillenform === 'nicht_gehaertet') {
             const fmu_sf = 0.2 / Math.sin(gammaRad / 2);
             const SF_ab = (G / 2) * Math.exp(fmu_sf * Math.PI);
@@ -644,6 +1039,7 @@
             document.getElementById('zeile_sf_ab').style.display = 'flex';
             document.getElementById('formel_sf_ab').style.display = 'block';
 
+            /* Sicherheitsfaktor S = Mindestbruchkraft × 1000 / SF_ab */
             if (!isNaN(mbk) && mbk > 0) {
                 const S = (mbk * 1000) / SF_ab;
                 document.getElementById('ergebnis_sicherheitsfaktor').innerText = S.toFixed(2);
@@ -669,15 +1065,19 @@
             document.getElementById('sicherheitsfaktor_bereich').style.display = 'none';
         }
 
+        /* SCHRITT 5: Zugkraft GB oben, Fang aufwärts */
         const F_auf = (G / 2) * (1 - 1 / Math.exp(fmu * Math.PI));
         zugkraftAufEl.innerText = F_auf.toFixed(2) + ' N'; zugkraftAufEl.style.color = '#0057a8';
         zeigeAuswertung('vergleich_bereich_auf', 'vergleich_box_auf', 'vergleich_wert_auf', F_auf);
 
+        /* SCHRITT 6: Zugkraft GB unten, Fang auf- und abwärts */
         const F_unten = G * (Math.exp(fmu * Math.PI) - 1) / (Math.exp(fmu * Math.PI) + 1);
         zugkraftUntenEl.innerText = F_unten.toFixed(2) + ' N'; zugkraftUntenEl.style.color = '#0057a8';
         zeigeAuswertung('vergleich_bereich_unten', 'vergleich_box_unten', 'vergleich_wert_unten', F_unten);
     }
 
+    /* Farbige Auswertungsbox für Zugkraft
+       < 300 N = rot, 300–400 N = gelb, > 400 N = grün */
     function zeigeAuswertung(bereichId, boxId, wertId, F) {
         document.getElementById(bereichId).style.display = 'block';
         document.getElementById(wertId).innerText = F.toFixed(2) + ' N';
@@ -694,6 +1094,10 @@
         }
     }
 
+    /* ------------------------------------------
+       PDF EXPORT
+       Erstellt Prüfprotokoll als PDF
+    ------------------------------------------ */
     function erstellePDF() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
@@ -707,6 +1111,7 @@
             y += zeilenAbstand;
         }
 
+        /* Kopfzeile */
         doc.setFontSize(18); doc.setTextColor(0, 87, 168);
         neueZeile('Aufzug-App - Pruefprotokoll');
         doc.setFontSize(11); doc.setTextColor(100, 100, 100);
@@ -716,29 +1121,32 @@
         if (aktuelleSeriennummer) neueZeile('Seriennummer: ' + aktuelleSeriennummer);
         y += 5;
 
+        /* Prüfung vor Ort */
         doc.setFontSize(14); doc.setTextColor(0, 87, 168);
         neueZeile('1. Pruefung vor Ort');
         doc.setFontSize(10); doc.setTextColor(0, 0, 0);
         neueZeile('1.0 Dokument vor Ort vorhanden: ' + holeAntwort('frage1_0'));
-        neueZeile('1.1 Verhaeltnis Begrenzerseil/Rollendurchmesser 1:30: ' + holeAntwort('frage1_1'));
+        neueZeile('1.1 Verhaeltnis 1:30: ' + holeAntwort('frage1_1'));
         const mangel11 = holeMangel('frage1_1');
         if (mangel11) neueZeile('    Mangel: ' + mangel11, 5);
-        neueZeile('1.2 Mindestbruchkraft = 8x Zugkraft Fangvorrichtung: ' + holeAntwort('frage1_2'));
+        neueZeile('1.2 Mindestbruchkraft = 8x Zugkraft: ' + holeAntwort('frage1_2'));
         const mangel12 = holeMangel('frage1_2');
         if (mangel12) neueZeile('    Mangel: ' + mangel12, 5);
         const messwert = document.getElementById('messwert1_3').value;
-        neueZeile('1.3 Gemessener Seildurchmesser: ' + (messwert || 'Nicht erfasst') + ' mm');
-        neueZeile('1.4 Schrauben Seilklemmen (Frosch) fest: ' + holeAntwort('frage1_4'));
+        neueZeile('1.3 Seildurchmesser: ' + (messwert || 'Nicht erfasst') + ' mm');
+        neueZeile('1.4 Seilklemmen fest: ' + holeAntwort('frage1_4'));
         const mangel14 = holeMangel('frage1_4');
         if (mangel14) neueZeile('    Mangel: ' + mangel14, 5);
         y += 5;
 
+        /* Dokumente */
         doc.setFontSize(14); doc.setTextColor(0, 87, 168);
         neueZeile('2. Dokumente');
         doc.setFontSize(10); doc.setTextColor(0, 0, 0);
         neueZeile('0.1 Datenblatt vorhanden: ' + holeAntwort('dok_datenblatt'));
         y += 5;
 
+        /* Berechnung */
         doc.setFontSize(14); doc.setTextColor(0, 87, 168);
         neueZeile('3. Berechnung (EN 81-50)');
         doc.setFontSize(10); doc.setTextColor(0, 0, 0);
@@ -747,15 +1155,15 @@
         if (gewaehlteRillenform === 'nicht_gehaertet') rillenformText = 'Keilrille nicht gehaertet';
         if (gewaehlteRillenform === 'halbrund') rillenformText = 'Halbrundrille mit Unterschnitt';
         neueZeile('Rillenform: ' + rillenformText);
-        neueZeile('Nenngeschwindigkeit v: ' + (document.getElementById('geschwindigkeit').value || 'Nicht eingegeben') + ' m/s');
-        neueZeile('Keilwinkel gamma: ' + (document.getElementById('keilwinkel').value || 'Nicht eingegeben') + ' Grad');
-        neueZeile('Spannkraft G: ' + (document.getElementById('spannkraft').value || 'Nicht eingegeben') + ' N');
-        neueZeile('Mindestbruchkraft: ' + (document.getElementById('mindestbruchkraft').value || 'Nicht eingegeben') + ' kN');
+        neueZeile('Nenngeschwindigkeit v: ' + (document.getElementById('geschwindigkeit').value || '-') + ' m/s');
+        neueZeile('Keilwinkel gamma: ' + (document.getElementById('keilwinkel').value || '-') + ' Grad');
+        neueZeile('Spannkraft G: ' + (document.getElementById('spannkraft').value || '-') + ' N');
+        neueZeile('Mindestbruchkraft: ' + (document.getElementById('mindestbruchkraft').value || '-') + ' kN');
         neueZeile('Reibwert mu = ' + document.getElementById('ergebnis_mu').innerText);
         neueZeile('Reibungszahl f(mu) = ' + document.getElementById('ergebnis_fmu').innerText);
-        neueZeile('Reibungszahl f(mu) SF = ' + document.getElementById('ergebnis_fmu_sf').innerText);
+        neueZeile('Reibungszahl f(mu)_SF = ' + document.getElementById('ergebnis_fmu_sf').innerText);
         neueZeile('Zugkraft F (GB oben, Fang abwaerts) = ' + document.getElementById('ergebnis_zugkraft').innerText);
-        neueZeile('SF-Wert (Fang abwaerts) = ' + document.getElementById('ergebnis_sf_ab').innerText);
+        neueZeile('SF-Wert (abwaerts) = ' + document.getElementById('ergebnis_sf_ab').innerText);
         neueZeile('Sicherheitsfaktor S = ' + document.getElementById('ergebnis_sicherheitsfaktor').innerText);
         const sfBox = document.getElementById('sicherheitsfaktor_box');
         if (sfBox && sfBox.innerText) neueZeile('Auswertung SF: ' + sfBox.innerText.replace(/[❌⚠️✅]/g, '').trim());
@@ -771,6 +1179,7 @@
         const datum = new Date().toLocaleDateString('de-DE').replace(/\./g, '-');
         doc.save('Pruefprotokoll_' + datum + '.pdf');
     }
+
 </script>
 
 </body>
