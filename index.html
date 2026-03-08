@@ -359,16 +359,34 @@
 
         <div class="frage">
             <h3>2.5 – Zugkraft F</h3>
+                 <!-- 2.5 ZUGKRAFT ABWÄRTS -->
+        <div class="frage">
+            <h3>2.5 – Zugkraft F</h3>
             <div class="hinweis">ℹ️ Gilt wenn Geschwindigkeitsbegrenzer oben – Fang abwärts</div>
-            <div class="formel-container">
-                <span>F = </span><span class="bruch"><span class="zaehler">G</span><span class="nenner">2</span></span>
-                <span> × (e</span><sup style="font-size:13px;">f(μ) × π</sup><span> − 1)</span>
+            <div class="formel-gruppe">
+                <div class="formel-container">
+                    <div style="font-size:13px;color:#0057a8;font-weight:bold;margin-bottom:5px;">Zugkraft</div>
+                    <span>F = </span><span class="bruch"><span class="zaehler">G</span><span class="nenner">2</span></span>
+                    <span> × (e</span><sup style="font-size:13px;">f(μ) × π</sup><span> − 1)</span>
+                </div>
+                <div class="formel-container" id="formel_sf_ab">
+                    <div style="font-size:13px;color:#0057a8;font-weight:bold;margin-bottom:5px;">Sicherheitsfaktor</div>
+                    <span>SF = </span><span class="bruch"><span class="zaehler">G</span><span class="nenner">2</span></span>
+                    <span> × e</span><sup style="font-size:13px;">f(μ)<sub>SF</sub> × π</sup>
+                </div>
             </div>
-            <div class="zwischenwert" style="margin-top:15px;">
-                <label>Ergebnis F =</label>
-                <span id="ergebnis_zugkraft" style="font-weight:bold;color:#888;">Bitte Werte eingeben</span>
+            <div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:15px;">
+                <div class="zwischenwert" style="flex:1;">
+                    <label>Ergebnis F =</label>
+                    <span id="ergebnis_zugkraft" style="font-weight:bold;color:#888;">Bitte Werte eingeben</span>
+                </div>
+                <div class="zwischenwert" id="zeile_sf_ab" style="flex:1;">
+                    <label>Ergebnis SF =</label>
+                    <span id="ergebnis_sf_ab" style="font-weight:bold;color:#888;">Bitte Werte eingeben</span>
+                </div>
             </div>
         </div>
+
 
         <div class="frage" id="vergleich_bereich" style="display:none;">
             <h3>2.6 – Auswertung Zugkraft (Fang abwärts)</h3>
