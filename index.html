@@ -643,17 +643,22 @@
             return;
         }
 
-        const F = (G / 2) * (Math.exp(fmu * Math.PI) - 1);
+                const F = (G / 2) * (Math.exp(fmu * Math.PI) - 1);
         zugkraftEl.innerText = F.toFixed(2) + ' N'; zugkraftEl.style.color = '#0057a8';
         zeigeAuswertung('vergleich_bereich', 'vergleich_box', 'vergleich_wert', F);
 
-        const F_auf = (G / 2) * (1 - 1 / Math.exp(fmu * Math.PI));
-        zugkraftAufEl.innerText = F_auf.toFixed(2) + ' N'; zugkraftAufEl.style.color = '#0057a8';
-        zeigeAuswertung('vergleich_bereich_auf', 'vergleich_box_auf', 'vergleich_wert_auf', F_auf);
+        if (gewaehlteRillenform === 'gehaertet' || gewaehlteRillenform === 'nicht_gehaertet') {
+            const fmu_sf = 0.2 / Math.sin(gammaRad / 2);
+            const SF_ab = (G / 2) * Math.exp(fmu_sf * Math.PI);
+            document.getElementById('ergebnis_sf_ab').innerText = SF_ab.toFixed(2) + ' N';
+            document.getElementById('ergebnis_sf_ab').style.color = '#0057a8';
+            document.getElementById('zeile_sf_ab').style.display = 'flex';
+            document.getElementById('formel_sf_ab').style.display = 'block';
+        } else {
+            document.getElementById('zeile_sf_ab').style.display = 'none';
+            document.getElementById('formel_sf_ab').style.display = 'none';
+        }
 
-        const F_unten = G * (Math.exp(fmu * Math.PI) - 1) / (Math.exp(fmu * Math.PI) + 1);
-        zugkraftUntenEl.innerText = F_unten.toFixed(2) + ' N'; zugkraftUntenEl.style.color = '#0057a8';
-        zeigeAuswertung('vergleich_bereich_unten', 'vergleich_box_unten', 'vergleich_wert_unten', F_unten);
     }
 
     function zeigeAuswertung(bereichId, boxId, wertId, F) {
