@@ -1142,34 +1142,8 @@
                 <span id="ergebnis_zugkraft_auf" style="font-weight:bold;color:#888;">Bitte Werte eingeben</span>
             </div>
         </div>
-<!-- 2.7b – SICHERHEITSFAKTOR AUSWERTUNG (Fang aufwärts) -->
-<div class="frage" id="sicherheitsfaktor_bereich_auf" style="display:none;"> <!-- Versteckt – wird per JavaScript eingeblendet -->
-    <h3>2.7b – Sicherheitsfaktor (Fang aufwärts)</h3> <!-- Überschrift -->
-    <div class="hinweis">ℹ️ DIN EN 81-50 5.6.2.2.1.3 b) – Sicherheitsfaktor muss größer oder gleich 8 sein</div> <!-- Norm-Hinweis -->
-    <!-- Grafische Formeldarstellung: SF = G/2 -->
-    <div class="formel-container"> <!-- Zentrierter Formel-Container -->
-        <span>SF = </span> <!-- Formelbezeichnung -->
-        <span class="bruch"> <!-- Bruchdarstellung -->
-            <span class="zaehler">G</span> <!-- Zähler: Spannkraft G -->
-            <span class="nenner">2</span>  <!-- Nenner: 2 -->
-        </span>
-    </div>
-        <!-- 2.8 – AUSWERTUNG ZUGKRAFT (Fang aufwärts) – gleiche Logik wie 2.6 -->
-        
-    <!-- Ergebniszeile SF -->
-    <div class="zwischenwert" style="margin-top:15px;"> <!-- Hellgrauer Ergebnisbalken -->
-        <label>Ergebnis SF =</label> <!-- Bezeichnung links -->
-        <span id="ergebnis_sf_auf" style="font-weight:bold;color:#888;">Bitte Werte eingeben</span> <!-- Wert rechts, per JavaScript befüllt -->
-    </div>
-    <!-- Ergebniszeile Sicherheitsfaktor -->
-    <div class="zwischenwert"> <!-- Zweiter hellgrauer Ergebnisbalken -->
-        <label>Ergebnis Sicherheitsfaktor =</label> <!-- Bezeichnung links -->
-        <span id="ergebnis_sicherheitsfaktor_auf" style="font-weight:bold;color:#888;">Bitte Werte eingeben</span> <!-- Wert rechts, per JavaScript befüllt -->
-    </div>
-    <!-- Farbige Auswertungsbox: rot wenn < 8, grün wenn ≥ 8 -->
-    <div id="sicherheitsfaktor_box_auf" style="padding:20px;border-radius:10px;text-align:center;font-size:18px;font-weight:bold;margin-top:15px;"></div> <!-- Farbe und Text per JavaScript gesetzt -->
-</div>
 
+        <!-- 2.8 – AUSWERTUNG ZUGKRAFT (Fang aufwärts) – gleiche Logik wie 2.6 -->
         <div class="frage" id="vergleich_bereich_auf" style="display:none;">
             <h3>2.8 – Auswertung Zugkraft (Fang aufwärts)</h3>
             <div id="vergleich_box_auf" style="padding:20px;border-radius:10px;text-align:center;font-size:18px;font-weight:bold;margin-bottom:15px;"></div>
@@ -1183,6 +1157,36 @@
                     <div id="vergleich_wert_auf" style="font-size:22px;font-weight:bold;color:#0057a8;">–</div>
                 </div>
             </div>
+        </div>
+
+        <!-- 2.7b – SICHERHEITSFAKTOR AUSWERTUNG (Fang aufwärts)
+             Formel: SF = G/2
+             S = Mindestbruchkraft × 1000 / SF
+             Grenzwert: < 8 = rot, ≥ 8 = grün
+             Nur sichtbar wenn Mindestbruchkraft eingegeben wurde -->
+        <div class="frage" id="sicherheitsfaktor_bereich_auf" style="display:none;"> <!-- Versteckt – wird per JavaScript eingeblendet -->
+            <h3>2.7b – Sicherheitsfaktor (Fang aufwärts)</h3> <!-- Überschrift -->
+            <div class="hinweis">ℹ️ DIN EN 81-50 5.6.2.2.1.3 b) – Sicherheitsfaktor muss größer oder gleich 8 sein</div> <!-- Norm-Hinweis -->
+            <!-- Grafische Formeldarstellung: SF = G/2 -->
+            <div class="formel-container"> <!-- Zentrierter Formel-Container -->
+                <span>SF = </span> <!-- Formelbezeichnung -->
+                <span class="bruch"> <!-- Bruchdarstellung -->
+                    <span class="zaehler">G</span> <!-- Zähler: Spannkraft G -->
+                    <span class="nenner">2</span>  <!-- Nenner: 2 -->
+                </span>
+            </div>
+            <!-- Ergebniszeile SF -->
+            <div class="zwischenwert" style="margin-top:15px;"> <!-- Hellgrauer Ergebnisbalken -->
+                <label>Ergebnis SF =</label> <!-- Bezeichnung links -->
+                <span id="ergebnis_sf_auf" style="font-weight:bold;color:#888;">Bitte Werte eingeben</span> <!-- Wert rechts, per JavaScript befüllt -->
+            </div>
+            <!-- Ergebniszeile Sicherheitsfaktor -->
+            <div class="zwischenwert"> <!-- Zweiter hellgrauer Ergebnisbalken -->
+                <label>Ergebnis Sicherheitsfaktor =</label> <!-- Bezeichnung links -->
+                <span id="ergebnis_sicherheitsfaktor_auf" style="font-weight:bold;color:#888;">Bitte Werte eingeben</span> <!-- Wert rechts, per JavaScript befüllt -->
+            </div>
+            <!-- Farbige Auswertungsbox: rot wenn < 8, grün wenn ≥ 8 -->
+            <div id="sicherheitsfaktor_box_auf" style="padding:20px;border-radius:10px;text-align:center;font-size:18px;font-weight:bold;margin-top:15px;"></div> <!-- Farbe und Text per JavaScript gesetzt -->
         </div>
 
         <!-- ==========================================
@@ -1572,20 +1576,16 @@
                    S 8.1–10 → gelb (Grenzbereich)
                    S > 10 → grün (in Ordnung) */
                 const sfBox = document.getElementById('sicherheitsfaktor_box');
-                if (S < 8) {
-    /* Rot: Sicherheitsfaktor zu niedrig – nicht ausreichend nach DIN EN 81-50 */
-    sfBox.style.background = '#f8d7da'; /* Hintergrundfarbe: Hellrot */
-    sfBox.style.border = '2px solid #dc3545'; /* Rahmen: Rot */
-    sfBox.style.color = '#dc3545'; /* Textfarbe: Rot */
-    sfBox.innerText = '❌ Sicherheitsfaktor zu niedrig! (' + S.toFixed(2) + ' < 8)';
-} else {
-    /* Grün: Sicherheitsfaktor ausreichend */
-    sfBox.style.background = '#d4edda'; /* Hintergrundfarbe: Hellgrün */
-    sfBox.style.border = '2px solid #28a745'; /* Rahmen: Grün */
-    sfBox.style.color = '#155724'; /* Textfarbe: Dunkelgrün */
-    sfBox.innerText = '✅ Sicherheitsfaktor in Ordnung! (' + S.toFixed(2) + ' ≥ 8)';
-}
-
+                if (S <= 8) {
+                    sfBox.style.background = '#f8d7da'; sfBox.style.border = '2px solid #dc3545'; sfBox.style.color = '#dc3545';
+                    sfBox.innerText = '❌ Sicherheitsfaktor zu niedrig! (' + S.toFixed(2) + ' ≤ 8)';
+                } else if (S <= 10) {
+                    sfBox.style.background = '#fff3cd'; sfBox.style.border = '2px solid #ffc107'; sfBox.style.color = '#856404';
+                    sfBox.innerText = '⚠️ Sicherheitsfaktor im Grenzbereich (' + S.toFixed(2) + ')';
+                } else {
+                    sfBox.style.background = '#d4edda'; sfBox.style.border = '2px solid #28a745'; sfBox.style.color = '#155724';
+                    sfBox.innerText = '✅ Sicherheitsfaktor in Ordnung! (' + S.toFixed(2) + ' > 10)';
+                }
             } else {
                 /* Kein Mindestbruchkraft-Wert → SF-Bereich verstecken */
                 document.getElementById('sicherheitsfaktor_bereich').style.display = 'none';
@@ -1602,33 +1602,32 @@
         const F_auf = (G / 2) * (1 - 1 / Math.exp(fmu * Math.PI));
         zugkraftAufEl.innerText = F_auf.toFixed(2) + ' N'; zugkraftAufEl.style.color = '#0057a8';
         zeigeAuswertung('vergleich_bereich_auf', 'vergleich_box_auf', 'vergleich_wert_auf', F_auf);
-        
-        /* SCHRITT 5b: Sicherheitsfaktor Fang aufwärts
-   SF = G/2 → S = Mindestbruchkraft × 1000 / SF */
-if (!isNaN(mbk) && mbk > 0) {                                          /* Nur berechnen wenn Mindestbruchkraft eingegeben */
-    const SF_auf = G / 2;                                               /* SF = halbe Spannkraft */
-    document.getElementById('ergebnis_sf_auf').innerText = SF_auf.toFixed(2) + ' N'; /* SF-Wert anzeigen */
-    document.getElementById('ergebnis_sf_auf').style.color = '#0057a8'; /* Textfarbe: Firmenblau */
-    const S_auf = (mbk * 1000) / SF_auf;                                /* Sicherheitsfaktor: Mindestbruchkraft in N geteilt durch SF */
-    document.getElementById('ergebnis_sicherheitsfaktor_auf').innerText = S_auf.toFixed(2); /* Sicherheitsfaktor anzeigen */
-    document.getElementById('ergebnis_sicherheitsfaktor_auf').style.color = '#0057a8';      /* Textfarbe: Firmenblau */
-    document.getElementById('sicherheitsfaktor_bereich_auf').style.display = 'block';       /* Bereich einblenden */
-    const sfBox_auf = document.getElementById('sicherheitsfaktor_box_auf');                 /* Referenz auf Auswertungsbox */
-    if (S_auf < 8) {                                                     /* Sicherheitsfaktor zu niedrig */
-        sfBox_auf.style.background = '#f8d7da';          /* Hintergrund: Hellrot */
-        sfBox_auf.style.border = '2px solid #dc3545';    /* Rahmen: Rot */
-        sfBox_auf.style.color = '#dc3545';               /* Textfarbe: Rot */
-        sfBox_auf.innerText = '❌ Sicherheitsfaktor zu niedrig! (' + S_auf.toFixed(2) + ' < 8)';
-    } else {                                                             /* Sicherheitsfaktor ausreichend */
-        sfBox_auf.style.background = '#d4edda';          /* Hintergrund: Hellgrün */
-        sfBox_auf.style.border = '2px solid #28a745';    /* Rahmen: Grün */
-        sfBox_auf.style.color = '#155724';               /* Textfarbe: Dunkelgrün */
-        sfBox_auf.innerText = '✅ Sicherheitsfaktor in Ordnung! (' + S_auf.toFixed(2) + ' ≥ 8)';
-    }
-} else {
-    document.getElementById('sicherheitsfaktor_bereich_auf').style.display = 'none'; /* Bereich ausblenden wenn keine Mindestbruchkraft */
-}
 
+        /* SCHRITT 5b: Sicherheitsfaktor Fang aufwärts
+           SF = G/2 → S = Mindestbruchkraft × 1000 / SF */
+        if (!isNaN(mbk) && mbk > 0) {                                               /* Nur berechnen wenn Mindestbruchkraft eingegeben */
+            const SF_auf = G / 2;                                                    /* SF = halbe Spannkraft */
+            document.getElementById('ergebnis_sf_auf').innerText = SF_auf.toFixed(2) + ' N'; /* SF-Wert anzeigen */
+            document.getElementById('ergebnis_sf_auf').style.color = '#0057a8';     /* Textfarbe: Firmenblau */
+            const S_auf = (mbk * 1000) / SF_auf;                                    /* Sicherheitsfaktor: Mindestbruchkraft in N geteilt durch SF */
+            document.getElementById('ergebnis_sicherheitsfaktor_auf').innerText = S_auf.toFixed(2); /* Sicherheitsfaktor anzeigen */
+            document.getElementById('ergebnis_sicherheitsfaktor_auf').style.color = '#0057a8';      /* Textfarbe: Firmenblau */
+            document.getElementById('sicherheitsfaktor_bereich_auf').style.display = 'block';       /* Bereich einblenden */
+            const sfBox_auf = document.getElementById('sicherheitsfaktor_box_auf'); /* Referenz auf Auswertungsbox */
+            if (S_auf < 8) {                                                         /* Sicherheitsfaktor zu niedrig */
+                sfBox_auf.style.background = '#f8d7da';       /* Hintergrund: Hellrot */
+                sfBox_auf.style.border = '2px solid #dc3545'; /* Rahmen: Rot */
+                sfBox_auf.style.color = '#dc3545';            /* Textfarbe: Rot */
+                sfBox_auf.innerText = '❌ Sicherheitsfaktor zu niedrig! (' + S_auf.toFixed(2) + ' < 8)';
+            } else {                                                                  /* Sicherheitsfaktor ausreichend */
+                sfBox_auf.style.background = '#d4edda';       /* Hintergrund: Hellgrün */
+                sfBox_auf.style.border = '2px solid #28a745'; /* Rahmen: Grün */
+                sfBox_auf.style.color = '#155724';            /* Textfarbe: Dunkelgrün */
+                sfBox_auf.innerText = '✅ Sicherheitsfaktor in Ordnung! (' + S_auf.toFixed(2) + ' ≥ 8)';
+            }
+        } else {
+            document.getElementById('sicherheitsfaktor_bereich_auf').style.display = 'none'; /* Bereich ausblenden wenn keine Mindestbruchkraft */
+        }
 
         /* SCHRITT 6: Zugkraft GB unten, Fang auf- und abwärts
            F = G × (e^(f(μ)×π) - 1) / (e^(f(μ)×π) + 1) */
