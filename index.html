@@ -801,7 +801,7 @@
 
     <!-- FRAGE 1.4 – Seilklemmen (Frosch) fest? (Passt/Mangel/Trifft nicht zu) -->
     <div class="frage" id="frage1_4">
-        <h3>1.4 – Wenn vorhanden sind die Verschraubungen fest an den Seilklemmen (Frosch)?</h3>
+        <h3>1.4 – Sind die Schrauben fest wenn Seilklemmen (Frosch) verwendet wurden?</h3>
         <div class="antwort-gruppe">
             <button class="antwort-btn passt" onclick="antwort(this, 'frage1_4')">🟢 Passt</button>
             <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage1_4')">🔴 Mangel</button>
@@ -1263,8 +1263,7 @@
             <div class="formel-container"> <!-- Zentrierter Formel-Container -->
                 <span>SF = G × </span> <!-- Spannkraft G -->
                 <span class="bruch"> <!-- Bruchdarstellung -->
-                    <span class="zaehler">e<sup style="font-size:13px;">f(μ)<sub>SF</sub> × π</sup></span> <!-- Zähler: e^(f(μ)_SF×π) ohne -1 -->
- <!-- Zähler: e^(f(μ)_SF×π) - 1 -->
+                    <span class="zaehler">e<sup style="font-size:13px;">f(μ)<sub>SF</sub> × π</sup> − 1</span> <!-- Zähler: e^(f(μ)_SF×π) - 1 -->
                     <span class="nenner">e<sup style="font-size:13px;">f(μ)<sub>SF</sub> × π</sup> + 1</span> <!-- Nenner: e^(f(μ)_SF×π) + 1 -->
                 </span>
             </div>
@@ -1471,16 +1470,13 @@
 
         /* Halbrundrille: eigene Formel anzeigen, Keilrille-Formeln verstecken */
         if (rillenform === 'halbrund') {
-            document.getElementById('formelKeilrilleGruppe').style.display = 'none';
-            document.getElementById('formelHalbrund').style.display = 'block';
-            /* SF-Zeile bei Halbrundrille verstecken (kein SF für diese Rillenform) */
-            document.getElementById('zeile_fmu_sf').style.display = 'none';
+            document.getElementById('formelKeilrilleGruppe').style.display = 'none'; /* Keilrille-Formeln verstecken */
+            document.getElementById('formelHalbrund').style.display = 'block';       /* Halbrundrille-Formel anzeigen */
+            document.getElementById('zeile_fmu_sf').style.display = 'flex';          /* SF-Zeile anzeigen – gilt auch für Halbrundrille */
         } else {
-            /* Keilrille: Keilrille-Formeln anzeigen, Halbrundrille-Formel verstecken */
-            document.getElementById('formelKeilrilleGruppe').style.display = 'flex';
-            document.getElementById('formelHalbrund').style.display = 'none';
-            /* SF-Zeile bei Keilrille anzeigen */
-            document.getElementById('zeile_fmu_sf').style.display = 'flex';
+            document.getElementById('formelKeilrilleGruppe').style.display = 'flex'; /* Keilrille-Formeln anzeigen */
+            document.getElementById('formelHalbrund').style.display = 'none';        /* Halbrundrille-Formel verstecken */
+            document.getElementById('zeile_fmu_sf').style.display = 'flex';          /* SF-Zeile anzeigen */
         }
         /* Berechnung sofort starten mit aktuellen Eingabewerten */
         berechneAlles();
@@ -1554,13 +1550,10 @@
 
         /* f(μ)_SF berechnen – nur bei Keilrille (Fixwert μ = 0,2 statt berechnetem μ)
            f(μ)_SF = 0,2 / sin(γ/2) */
-        if (gewaehlteRillenform === 'gehaertet' || gewaehlteRillenform === 'nicht_gehaertet') {
-            const fmu_sf = 0.2 / Math.sin(gammaRad / 2);
-            fmuSFEl.innerText = fmu_sf.toFixed(4); fmuSFEl.style.color = '#0057a8';
-        } else {
-            /* Halbrundrille: kein SF, Hinweistext anzeigen */
-            fmuSFEl.innerText = 'Nicht anwendbar'; fmuSFEl.style.color = '#888';
-        }
+        /* f(μ)_SF gilt für alle Rillenformen – Formel ist immer 0,2 / sin(γ/2) */
+        const fmu_sf = 0.2 / Math.sin(gammaRad / 2); /* Fixwert 0,2 statt berechnetem μ – gilt für Keilrille UND Halbrundrille */
+        fmuSFEl.innerText = fmu_sf.toFixed(4); /* Ergebnis anzeigen */
+        fmuSFEl.style.color = '#0057a8'; /* Textfarbe: Firmenblau */
 
         /* SCHRITT 3: Spannkraft prüfen
            Wenn keine gültige Spannkraft → Zugkräfte zurücksetzen */
@@ -1582,49 +1575,34 @@
         /* Auswertungsbox rot/gelb/grün anzeigen */
         zeigeAuswertung('vergleich_bereich', 'vergleich_box', 'vergleich_wert', F);
 
-        /* SCHRITT 4b: SF-Wert und Sicherheitsfaktor (nur bei Keilrille) */
-        if (gewaehlteRillenform === 'gehaertet' || gewaehlteRillenform === 'nicht_gehaertet') {
-            /* SF = (G/2) × e^(f(μ)_SF × π) – mit Fixwert μ = 0,2 */
-            const fmu_sf = 0.2 / Math.sin(gammaRad / 2);
-            const SF_ab = (G / 2) * Math.exp(fmu_sf * Math.PI);
-            document.getElementById('ergebnis_sf_ab').innerText = SF_ab.toFixed(2) + ' N';
-            document.getElementById('ergebnis_sf_ab').style.color = '#0057a8';
-            /* SF-Ergebniszeile und SF-Formel einblenden */
-            document.getElementById('zeile_sf_ab').style.display = 'flex';
-            document.getElementById('formel_sf_ab').style.display = 'block';
+        /* SCHRITT 4b: SF-Wert und Sicherheitsfaktor (gilt für alle Rillenformen) */
+        const SF_ab = (G / 2) * Math.exp(fmu_sf * Math.PI); /* SF = (G/2) × e^(f(μ)_SF × π) */
+        document.getElementById('ergebnis_sf_ab').innerText = SF_ab.toFixed(2) + ' N'; /* SF-Wert anzeigen */
+        document.getElementById('ergebnis_sf_ab').style.color = '#0057a8';             /* Textfarbe: Firmenblau */
+        document.getElementById('zeile_sf_ab').style.display = 'flex';                 /* SF-Ergebniszeile einblenden */
+        document.getElementById('formel_sf_ab').style.display = 'block';               /* SF-Formel einblenden */
 
-            /* Sicherheitsfaktor: S = Mindestbruchkraft (kN → N) / SF_ab
-               Nur berechnen wenn Mindestbruchkraft eingegeben wurde */
-            if (!isNaN(mbk) && mbk > 0) {
-                const S = (mbk * 1000) / SF_ab;
-                document.getElementById('ergebnis_sicherheitsfaktor').innerText = S.toFixed(2);
-                document.getElementById('ergebnis_sicherheitsfaktor').style.color = '#0057a8';
-                document.getElementById('sicherheitsfaktor_bereich').style.display = 'block';
-
-                /* Farbige Auswertung nach DIN EN 81-50:
-                   S ≤ 8 → rot (nicht ausreichend)
-                   S 8.1–10 → gelb (Grenzbereich)
-                   S > 10 → grün (in Ordnung) */
-                const sfBox = document.getElementById('sicherheitsfaktor_box');
-                if (S <= 8) {
-                    sfBox.style.background = '#f8d7da'; sfBox.style.border = '2px solid #dc3545'; sfBox.style.color = '#dc3545';
-                    sfBox.innerText = '❌ Sicherheitsfaktor zu niedrig! (' + S.toFixed(2) + ' ≤ 8)';
-                } else if (S <= 10) {
-                    sfBox.style.background = '#fff3cd'; sfBox.style.border = '2px solid #ffc107'; sfBox.style.color = '#856404';
-                    sfBox.innerText = '⚠️ Sicherheitsfaktor im Grenzbereich (' + S.toFixed(2) + ')';
-                } else {
-                    sfBox.style.background = '#d4edda'; sfBox.style.border = '2px solid #28a745'; sfBox.style.color = '#155724';
-                    sfBox.innerText = '✅ Sicherheitsfaktor in Ordnung! (' + S.toFixed(2) + ' > 10)';
-                }
+        /* Sicherheitsfaktor: S = Mindestbruchkraft (kN → N) / SF_ab
+           Nur berechnen wenn Mindestbruchkraft eingegeben wurde */
+        if (!isNaN(mbk) && mbk > 0) {
+            const S = (mbk * 1000) / SF_ab;                                            /* Sicherheitsfaktor berechnen */
+            document.getElementById('ergebnis_sicherheitsfaktor').innerText = S.toFixed(2); /* Ergebnis anzeigen */
+            document.getElementById('ergebnis_sicherheitsfaktor').style.color = '#0057a8';  /* Textfarbe: Firmenblau */
+            document.getElementById('sicherheitsfaktor_bereich').style.display = 'block';   /* Bereich einblenden */
+            const sfBox = document.getElementById('sicherheitsfaktor_box');
+            if (S < 8) {
+                sfBox.style.background = '#f8d7da';       /* Hintergrund: Hellrot */
+                sfBox.style.border = '2px solid #dc3545'; /* Rahmen: Rot */
+                sfBox.style.color = '#dc3545';            /* Textfarbe: Rot */
+                sfBox.innerText = '❌ Sicherheitsfaktor zu niedrig! (' + S.toFixed(2) + ' < 8)';
             } else {
-                /* Kein Mindestbruchkraft-Wert → SF-Bereich verstecken */
-                document.getElementById('sicherheitsfaktor_bereich').style.display = 'none';
+                sfBox.style.background = '#d4edda';       /* Hintergrund: Hellgrün */
+                sfBox.style.border = '2px solid #28a745'; /* Rahmen: Grün */
+                sfBox.style.color = '#155724';            /* Textfarbe: Dunkelgrün */
+                sfBox.innerText = '✅ Sicherheitsfaktor in Ordnung! (' + S.toFixed(2) + ' ≥ 8)';
             }
         } else {
-            /* Halbrundrille: SF-Felder ausblenden */
-            document.getElementById('zeile_sf_ab').style.display = 'none';
-            document.getElementById('formel_sf_ab').style.display = 'none';
-            document.getElementById('sicherheitsfaktor_bereich').style.display = 'none';
+            document.getElementById('sicherheitsfaktor_bereich').style.display = 'none'; /* Bereich ausblenden wenn keine Mindestbruchkraft */
         }
 
         /* SCHRITT 5: Zugkraft GB oben, Fang aufwärts
@@ -1668,10 +1646,9 @@
         /* SCHRITT 6b: Sicherheitsfaktor GB unten, Fang auf- und abwärts
            SF = G × (e^(f(μ)_SF×π) - 1) / (e^(f(μ)_SF×π) + 1)
            Nur bei Keilrille und wenn Mindestbruchkraft eingegeben */
-        if ((gewaehlteRillenform === 'gehaertet' || gewaehlteRillenform === 'nicht_gehaertet') && !isNaN(mbk) && mbk > 0) {
+        if (!isNaN(mbk) && mbk > 0) {                                               /* Nur berechnen wenn Mindestbruchkraft eingegeben */
             const fmu_sf = 0.2 / Math.sin(gammaRad / 2);                /* f(μ)_SF mit Fixwert 0,2 */
-            const SF_unten = G * Math.exp(fmu_sf * Math.PI) / (Math.exp(fmu_sf * Math.PI) + 1); /* SF-Formel GB unten: G × e^(f(μ)_SF×π) / (e^(f(μ)_SF×π) + 1) */
- /* SF-Formel GB unten */
+            const SF_unten = G * (Math.exp(fmu_sf * Math.PI) - 1) / (Math.exp(fmu_sf * Math.PI) + 1); /* SF-Formel GB unten */
             document.getElementById('ergebnis_sf_unten').innerText = SF_unten.toFixed(2) + ' N'; /* SF-Wert anzeigen */
             document.getElementById('ergebnis_sf_unten').style.color = '#0057a8';                /* Textfarbe: Firmenblau */
             const S_unten = (mbk * 1000) / SF_unten;                    /* Sicherheitsfaktor: Mindestbruchkraft in N / SF */
