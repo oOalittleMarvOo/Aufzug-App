@@ -964,16 +964,33 @@
                 </div>
             </div>
 
-            <!-- Halbrundrille-Formel: standardmäßig versteckt, bei Halbrundrille sichtbar
-                 f(μ) = 4μ × (1 - sin(γ/2)) / (π - γ - sin(γ)) -->
-            <div class="formel-container" id="formelHalbrund" style="display:none;">
-                <span>f(μ) = 4 × μ × </span>
-                <span class="bruch">
-                    <!-- Zähler: (1 − sin((π/180 × γ)/2)) -->
-                    <span class="zaehler">(1 − sin<span style="font-size:16px;">(</span><span class="bruch-klein"><span class="zaehler-klein"><span style="font-size:13px;">(</span><span class="bruch-klein"><span class="zaehler-klein">π</span><span class="nenner-klein">180</span></span><span style="font-size:13px;">)</span> × γ</span><span class="nenner-klein">2</span></span><span style="font-size:16px;">)</span>)</span>
-                    <!-- Nenner: π − (π/180 × γ) − sin((π/180 × γ)) -->
-                    <span class="nenner">π − <span style="font-size:13px;">(</span><span class="bruch-klein"><span class="zaehler-klein">π</span><span class="nenner-klein">180</span></span> × γ<span style="font-size:13px;">)</span> − sin<span style="font-size:16px;">(</span><span style="font-size:13px;">(</span><span class="bruch-klein"><span class="zaehler-klein">π</span><span class="nenner-klein">180</span></span> × γ<span style="font-size:13px;">)</span><span style="font-size:16px;">)</span></span>
-                </span>
+            <!-- Halbrundrille-Formeln: zwei nebeneinander (Zugkraft + SF), standardmäßig versteckt -->
+            <div class="formel-gruppe" id="formelHalbrund" style="display:none;">
+
+                <!-- Links: Formel für Zugkraft (mit berechnetem μ) -->
+                <div class="formel-container">
+                    <div style="font-size:13px;color:#0057a8;font-weight:bold;margin-bottom:5px;">Für Zugkraft</div> <!-- Beschriftung -->
+                    <span>f(μ) = 4 × μ × </span> <!-- Formel mit μ -->
+                    <span class="bruch"> <!-- Bruchdarstellung -->
+                        <!-- Zähler: (1 − sin((π/180 × γ)/2)) -->
+                        <span class="zaehler">(1 − sin<span style="font-size:16px;">(</span><span class="bruch-klein"><span class="zaehler-klein"><span style="font-size:13px;">(</span><span class="bruch-klein"><span class="zaehler-klein">π</span><span class="nenner-klein">180</span></span><span style="font-size:13px;">)</span> × γ</span><span class="nenner-klein">2</span></span><span style="font-size:16px;">)</span>)</span>
+                        <!-- Nenner: π − (π/180 × γ) − sin((π/180 × γ)) -->
+                        <span class="nenner">π − <span style="font-size:13px;">(</span><span class="bruch-klein"><span class="zaehler-klein">π</span><span class="nenner-klein">180</span></span> × γ<span style="font-size:13px;">)</span> − sin<span style="font-size:16px;">(</span><span style="font-size:13px;">(</span><span class="bruch-klein"><span class="zaehler-klein">π</span><span class="nenner-klein">180</span></span> × γ<span style="font-size:13px;">)</span><span style="font-size:16px;">)</span></span>
+                    </span>
+                </div>
+
+                <!-- Rechts: Formel für Sicherheitsfaktor (mit Fixwert 0,2 statt μ) -->
+                <div class="formel-container">
+                    <div style="font-size:13px;color:#0057a8;font-weight:bold;margin-bottom:5px;">Für Sicherheitsfaktor</div> <!-- Beschriftung -->
+                    <span>f(μ)<sub>SF</sub> = 4 × 0,2 × </span> <!-- Formel mit Fixwert 0,2 -->
+                    <span class="bruch"> <!-- Bruchdarstellung -->
+                        <!-- Zähler: (1 − sin((π/180 × γ)/2)) – identisch zur Zugkraft-Formel -->
+                        <span class="zaehler">(1 − sin<span style="font-size:16px;">(</span><span class="bruch-klein"><span class="zaehler-klein"><span style="font-size:13px;">(</span><span class="bruch-klein"><span class="zaehler-klein">π</span><span class="nenner-klein">180</span></span><span style="font-size:13px;">)</span> × γ</span><span class="nenner-klein">2</span></span><span style="font-size:16px;">)</span>)</span>
+                        <!-- Nenner: π − (π/180 × γ) − sin((π/180 × γ)) – identisch zur Zugkraft-Formel -->
+                        <span class="nenner">π − <span style="font-size:13px;">(</span><span class="bruch-klein"><span class="zaehler-klein">π</span><span class="nenner-klein">180</span></span> × γ<span style="font-size:13px;">)</span> − sin<span style="font-size:16px;">(</span><span style="font-size:13px;">(</span><span class="bruch-klein"><span class="zaehler-klein">π</span><span class="nenner-klein">180</span></span> × γ<span style="font-size:13px;">)</span><span style="font-size:16px;">)</span></span>
+                    </span>
+                </div>
+
             </div>
 
             <!-- Ergebniszeile f(μ) – für Zugkraft -->
@@ -1471,7 +1488,7 @@
         /* Halbrundrille: eigene Formel anzeigen, Keilrille-Formeln verstecken */
         if (rillenform === 'halbrund') {
             document.getElementById('formelKeilrilleGruppe').style.display = 'none'; /* Keilrille-Formeln verstecken */
-            document.getElementById('formelHalbrund').style.display = 'block';       /* Halbrundrille-Formel anzeigen */
+            document.getElementById('formelHalbrund').style.display = 'flex';        /* Halbrundrille-Formeln anzeigen (flex für nebeneinander) */
             document.getElementById('zeile_fmu_sf').style.display = 'flex';          /* SF-Zeile anzeigen – gilt auch für Halbrundrille */
         } else {
             document.getElementById('formelKeilrilleGruppe').style.display = 'flex'; /* Keilrille-Formeln anzeigen */
@@ -1548,10 +1565,12 @@
             : mu / Math.sin(gammaRad / 2);
         fmuEl.innerText = fmu.toFixed(4); fmuEl.style.color = '#0057a8';
 
-        /* f(μ)_SF berechnen – nur bei Keilrille (Fixwert μ = 0,2 statt berechnetem μ)
-           f(μ)_SF = 0,2 / sin(γ/2) */
-        /* f(μ)_SF gilt für alle Rillenformen – Formel ist immer 0,2 / sin(γ/2) */
-        const fmu_sf = 0.2 / Math.sin(gammaRad / 2); /* Fixwert 0,2 statt berechnetem μ – gilt für Keilrille UND Halbrundrille */
+        /* f(μ)_SF berechnen – je nach Rillenform unterschiedliche Formel, immer mit Fixwert 0,2:
+           Keilrille:     f(μ)_SF = 0,2 / sin(γ/2)
+           Halbrundrille: f(μ)_SF = 4 × 0,2 × (1 - sin(γ/2)) / (π - γ - sin(γ)) */
+        const fmu_sf = gewaehlteRillenform === 'halbrund'
+            ? 4 * 0.2 * (1 - Math.sin(gammaRad / 2)) / (Math.PI - gammaRad - Math.sin(gammaRad)) /* Halbrundrille: eigene Formel mit Fixwert 0,2 */
+            : 0.2 / Math.sin(gammaRad / 2); /* Keilrille: Fixwert 0,2 statt berechnetem μ */
         fmuSFEl.innerText = fmu_sf.toFixed(4); /* Ergebnis anzeigen */
         fmuSFEl.style.color = '#0057a8'; /* Textfarbe: Firmenblau */
 
