@@ -189,7 +189,9 @@
     /* ==========================================
        PASST / PASST NICHT / IRRELEVANT BUTTONS
     ========================================== */
-    .antwort-gruppe { display: flex; gap: 10px; flex-wrap: wrap; }
+  /* PASST / MANGEL / TRIFFT NICHT ZU – Buttons untereinander */
+.antwort-gruppe { display: flex; flex-direction: column; gap: 10px; }
+
     .antwort-btn {
         padding: 10px 20px; border: 2px solid #ddd;
         border-radius: 8px; cursor: pointer;
