@@ -1252,6 +1252,35 @@
             </div>
         </div>
 
+        <!-- 2.9b – SICHERHEITSFAKTOR AUSWERTUNG (GB unten, Fang auf- und abwärts)
+             Formel: SF = G × (e^(f(μ)_SF × π) - 1) / (e^(f(μ)_SF × π) + 1)
+             S = Mindestbruchkraft × 1000 / SF
+             Grenzwert: < 8 = rot, ≥ 8 = grün -->
+        <div class="frage" id="sicherheitsfaktor_bereich_unten" style="display:none;"> <!-- Versteckt – wird per JavaScript eingeblendet -->
+            <h3>2.9b – Sicherheitsfaktor (GB unten, Fang auf- und abwärts)</h3> <!-- Überschrift -->
+            <div class="hinweis">ℹ️ DIN EN 81-50 5.6.2.2.1.3 b) – Sicherheitsfaktor muss größer oder gleich 8 sein</div> <!-- Norm-Hinweis -->
+            <!-- Grafische Formeldarstellung -->
+            <div class="formel-container"> <!-- Zentrierter Formel-Container -->
+                <span>SF = G × </span> <!-- Spannkraft G -->
+                <span class="bruch"> <!-- Bruchdarstellung -->
+                    <span class="zaehler">e<sup style="font-size:13px;">f(μ)<sub>SF</sub> × π</sup> − 1</span> <!-- Zähler: e^(f(μ)_SF×π) - 1 -->
+                    <span class="nenner">e<sup style="font-size:13px;">f(μ)<sub>SF</sub> × π</sup> + 1</span> <!-- Nenner: e^(f(μ)_SF×π) + 1 -->
+                </span>
+            </div>
+            <!-- Ergebniszeile SF -->
+            <div class="zwischenwert" style="margin-top:15px;"> <!-- Hellgrauer Ergebnisbalken -->
+                <label>Ergebnis SF =</label> <!-- Bezeichnung links -->
+                <span id="ergebnis_sf_unten" style="font-weight:bold;color:#888;">Bitte Werte eingeben</span> <!-- Wert rechts, per JavaScript befüllt -->
+            </div>
+            <!-- Ergebniszeile Sicherheitsfaktor -->
+            <div class="zwischenwert"> <!-- Zweiter hellgrauer Ergebnisbalken -->
+                <label>Ergebnis Sicherheitsfaktor =</label> <!-- Bezeichnung links -->
+                <span id="ergebnis_sicherheitsfaktor_unten" style="font-weight:bold;color:#888;">Bitte Werte eingeben</span> <!-- Wert rechts, per JavaScript befüllt -->
+            </div>
+            <!-- Farbige Auswertungsbox: rot wenn < 8, grün wenn ≥ 8 -->
+            <div id="sicherheitsfaktor_box_unten" style="padding:20px;border-radius:10px;text-align:center;font-size:18px;font-weight:bold;margin-top:15px;"></div> <!-- Farbe und Text per JavaScript gesetzt -->
+        </div>
+
     </div><!-- Ende berechnungBereich -->
 </div><!-- Ende Tab Berechnung -->
 
@@ -1634,6 +1663,34 @@
         const F_unten = G * (Math.exp(fmu * Math.PI) - 1) / (Math.exp(fmu * Math.PI) + 1);
         zugkraftUntenEl.innerText = F_unten.toFixed(2) + ' N'; zugkraftUntenEl.style.color = '#0057a8';
         zeigeAuswertung('vergleich_bereich_unten', 'vergleich_box_unten', 'vergleich_wert_unten', F_unten);
+
+        /* SCHRITT 6b: Sicherheitsfaktor GB unten, Fang auf- und abwärts
+           SF = G × (e^(f(μ)_SF×π) - 1) / (e^(f(μ)_SF×π) + 1)
+           Nur bei Keilrille und wenn Mindestbruchkraft eingegeben */
+        if ((gewaehlteRillenform === 'gehaertet' || gewaehlteRillenform === 'nicht_gehaertet') && !isNaN(mbk) && mbk > 0) {
+            const fmu_sf = 0.2 / Math.sin(gammaRad / 2);                /* f(μ)_SF mit Fixwert 0,2 */
+            const SF_unten = G * (Math.exp(fmu_sf * Math.PI) - 1) / (Math.exp(fmu_sf * Math.PI) + 1); /* SF-Formel GB unten */
+            document.getElementById('ergebnis_sf_unten').innerText = SF_unten.toFixed(2) + ' N'; /* SF-Wert anzeigen */
+            document.getElementById('ergebnis_sf_unten').style.color = '#0057a8';                /* Textfarbe: Firmenblau */
+            const S_unten = (mbk * 1000) / SF_unten;                    /* Sicherheitsfaktor: Mindestbruchkraft in N / SF */
+            document.getElementById('ergebnis_sicherheitsfaktor_unten').innerText = S_unten.toFixed(2); /* Sicherheitsfaktor anzeigen */
+            document.getElementById('ergebnis_sicherheitsfaktor_unten').style.color = '#0057a8';        /* Textfarbe: Firmenblau */
+            document.getElementById('sicherheitsfaktor_bereich_unten').style.display = 'block';         /* Bereich einblenden */
+            const sfBox_unten = document.getElementById('sicherheitsfaktor_box_unten');          /* Referenz auf Auswertungsbox */
+            if (S_unten < 8) {                                           /* Sicherheitsfaktor zu niedrig */
+                sfBox_unten.style.background = '#f8d7da';       /* Hintergrund: Hellrot */
+                sfBox_unten.style.border = '2px solid #dc3545'; /* Rahmen: Rot */
+                sfBox_unten.style.color = '#dc3545';            /* Textfarbe: Rot */
+                sfBox_unten.innerText = '❌ Sicherheitsfaktor zu niedrig! (' + S_unten.toFixed(2) + ' < 8)';
+            } else {                                                      /* Sicherheitsfaktor ausreichend */
+                sfBox_unten.style.background = '#d4edda';       /* Hintergrund: Hellgrün */
+                sfBox_unten.style.border = '2px solid #28a745'; /* Rahmen: Grün */
+                sfBox_unten.style.color = '#155724';            /* Textfarbe: Dunkelgrün */
+                sfBox_unten.innerText = '✅ Sicherheitsfaktor in Ordnung! (' + S_unten.toFixed(2) + ' ≥ 8)';
+            }
+        } else {
+            document.getElementById('sicherheitsfaktor_bereich_unten').style.display = 'none'; /* Bereich ausblenden */
+        }
     }
 
     /* ------------------------------------------
