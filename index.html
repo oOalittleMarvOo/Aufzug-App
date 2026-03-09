@@ -1263,7 +1263,8 @@
             <div class="formel-container"> <!-- Zentrierter Formel-Container -->
                 <span>SF = G × </span> <!-- Spannkraft G -->
                 <span class="bruch"> <!-- Bruchdarstellung -->
-                    <span class="zaehler">e<sup style="font-size:13px;">f(μ)<sub>SF</sub> × π</sup> − 1</span> <!-- Zähler: e^(f(μ)_SF×π) - 1 -->
+                    <span class="zaehler">e<sup style="font-size:13px;">f(μ)<sub>SF</sub> × π</sup></span> <!-- Zähler: e^(f(μ)_SF×π) ohne -1 -->
+ <!-- Zähler: e^(f(μ)_SF×π) - 1 -->
                     <span class="nenner">e<sup style="font-size:13px;">f(μ)<sub>SF</sub> × π</sup> + 1</span> <!-- Nenner: e^(f(μ)_SF×π) + 1 -->
                 </span>
             </div>
@@ -1669,7 +1670,8 @@
            Nur bei Keilrille und wenn Mindestbruchkraft eingegeben */
         if ((gewaehlteRillenform === 'gehaertet' || gewaehlteRillenform === 'nicht_gehaertet') && !isNaN(mbk) && mbk > 0) {
             const fmu_sf = 0.2 / Math.sin(gammaRad / 2);                /* f(μ)_SF mit Fixwert 0,2 */
-            const SF_unten = G * (Math.exp(fmu_sf * Math.PI) - 1) / (Math.exp(fmu_sf * Math.PI) + 1); /* SF-Formel GB unten */
+            const SF_unten = G * Math.exp(fmu_sf * Math.PI) / (Math.exp(fmu_sf * Math.PI) + 1); /* SF-Formel GB unten: G × e^(f(μ)_SF×π) / (e^(f(μ)_SF×π) + 1) */
+ /* SF-Formel GB unten */
             document.getElementById('ergebnis_sf_unten').innerText = SF_unten.toFixed(2) + ' N'; /* SF-Wert anzeigen */
             document.getElementById('ergebnis_sf_unten').style.color = '#0057a8';                /* Textfarbe: Firmenblau */
             const S_unten = (mbk * 1000) / SF_unten;                    /* Sicherheitsfaktor: Mindestbruchkraft in N / SF */
