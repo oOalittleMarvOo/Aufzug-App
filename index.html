@@ -1546,16 +1546,20 @@
                    S 8.1–10 → gelb (Grenzbereich)
                    S > 10 → grün (in Ordnung) */
                 const sfBox = document.getElementById('sicherheitsfaktor_box');
-                if (S <= 8) {
-                    sfBox.style.background = '#f8d7da'; sfBox.style.border = '2px solid #dc3545'; sfBox.style.color = '#dc3545';
-                    sfBox.innerText = '❌ Sicherheitsfaktor zu niedrig! (' + S.toFixed(2) + ' ≤ 8)';
-                } else if (S <= 10) {
-                    sfBox.style.background = '#fff3cd'; sfBox.style.border = '2px solid #ffc107'; sfBox.style.color = '#856404';
-                    sfBox.innerText = '⚠️ Sicherheitsfaktor im Grenzbereich (' + S.toFixed(2) + ')';
-                } else {
-                    sfBox.style.background = '#d4edda'; sfBox.style.border = '2px solid #28a745'; sfBox.style.color = '#155724';
-                    sfBox.innerText = '✅ Sicherheitsfaktor in Ordnung! (' + S.toFixed(2) + ' > 10)';
-                }
+                if (S < 8) {
+    /* Rot: Sicherheitsfaktor zu niedrig – nicht ausreichend nach DIN EN 81-50 */
+    sfBox.style.background = '#f8d7da'; /* Hintergrundfarbe: Hellrot */
+    sfBox.style.border = '2px solid #dc3545'; /* Rahmen: Rot */
+    sfBox.style.color = '#dc3545'; /* Textfarbe: Rot */
+    sfBox.innerText = '❌ Sicherheitsfaktor zu niedrig! (' + S.toFixed(2) + ' < 8)';
+} else {
+    /* Grün: Sicherheitsfaktor ausreichend */
+    sfBox.style.background = '#d4edda'; /* Hintergrundfarbe: Hellgrün */
+    sfBox.style.border = '2px solid #28a745'; /* Rahmen: Grün */
+    sfBox.style.color = '#155724'; /* Textfarbe: Dunkelgrün */
+    sfBox.innerText = '✅ Sicherheitsfaktor in Ordnung! (' + S.toFixed(2) + ' ≥ 8)';
+}
+
             } else {
                 /* Kein Mindestbruchkraft-Wert → SF-Bereich verstecken */
                 document.getElementById('sicherheitsfaktor_bereich').style.display = 'none';
