@@ -1602,6 +1602,33 @@
         const F_auf = (G / 2) * (1 - 1 / Math.exp(fmu * Math.PI));
         zugkraftAufEl.innerText = F_auf.toFixed(2) + ' N'; zugkraftAufEl.style.color = '#0057a8';
         zeigeAuswertung('vergleich_bereich_auf', 'vergleich_box_auf', 'vergleich_wert_auf', F_auf);
+        
+        /* SCHRITT 5b: Sicherheitsfaktor Fang aufwärts
+   SF = G/2 → S = Mindestbruchkraft × 1000 / SF */
+if (!isNaN(mbk) && mbk > 0) {                                          /* Nur berechnen wenn Mindestbruchkraft eingegeben */
+    const SF_auf = G / 2;                                               /* SF = halbe Spannkraft */
+    document.getElementById('ergebnis_sf_auf').innerText = SF_auf.toFixed(2) + ' N'; /* SF-Wert anzeigen */
+    document.getElementById('ergebnis_sf_auf').style.color = '#0057a8'; /* Textfarbe: Firmenblau */
+    const S_auf = (mbk * 1000) / SF_auf;                                /* Sicherheitsfaktor: Mindestbruchkraft in N geteilt durch SF */
+    document.getElementById('ergebnis_sicherheitsfaktor_auf').innerText = S_auf.toFixed(2); /* Sicherheitsfaktor anzeigen */
+    document.getElementById('ergebnis_sicherheitsfaktor_auf').style.color = '#0057a8';      /* Textfarbe: Firmenblau */
+    document.getElementById('sicherheitsfaktor_bereich_auf').style.display = 'block';       /* Bereich einblenden */
+    const sfBox_auf = document.getElementById('sicherheitsfaktor_box_auf');                 /* Referenz auf Auswertungsbox */
+    if (S_auf < 8) {                                                     /* Sicherheitsfaktor zu niedrig */
+        sfBox_auf.style.background = '#f8d7da';          /* Hintergrund: Hellrot */
+        sfBox_auf.style.border = '2px solid #dc3545';    /* Rahmen: Rot */
+        sfBox_auf.style.color = '#dc3545';               /* Textfarbe: Rot */
+        sfBox_auf.innerText = '❌ Sicherheitsfaktor zu niedrig! (' + S_auf.toFixed(2) + ' < 8)';
+    } else {                                                             /* Sicherheitsfaktor ausreichend */
+        sfBox_auf.style.background = '#d4edda';          /* Hintergrund: Hellgrün */
+        sfBox_auf.style.border = '2px solid #28a745';    /* Rahmen: Grün */
+        sfBox_auf.style.color = '#155724';               /* Textfarbe: Dunkelgrün */
+        sfBox_auf.innerText = '✅ Sicherheitsfaktor in Ordnung! (' + S_auf.toFixed(2) + ' ≥ 8)';
+    }
+} else {
+    document.getElementById('sicherheitsfaktor_bereich_auf').style.display = 'none'; /* Bereich ausblenden wenn keine Mindestbruchkraft */
+}
+
 
         /* SCHRITT 6: Zugkraft GB unten, Fang auf- und abwärts
            F = G × (e^(f(μ)×π) - 1) / (e^(f(μ)×π) + 1) */
