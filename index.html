@@ -701,8 +701,9 @@
     <h2 id="bereichTitel"></h2>
     <div class="bauteil-liste">
         <!-- Bauteil 1: Geschwindigkeitsbegrenzerseil -->
-        <button class="bauteil-btn" onclick="zeigeBauteil('Geschwindigkeitsbegrenzerseil')">1 – 🔩 Geschwindigkeitsbegrenzerseil</button>
-        <!-- Weitere Bauteile können hier ergänzt werden -->
+        <button class="bauteil-btn" onclick="zeigeBauteil('seil')">1 – 🔩 Geschwindigkeitsbegrenzerseil</button>
+        <!-- Bauteil 2: Geschwindigkeitsbegrenzer -->
+        <button class="bauteil-btn" onclick="zeigeBauteil('begrenzer')">2 – ⚙️ Geschwindigkeitsbegrenzer</button>
     </div>
 </div>
 
@@ -712,7 +713,7 @@
      id="bauteilTitel" wird per JavaScript mit dem Bauteilnamen befüllt
 ========================================== -->
 
-<div id="detailSeite" class="seite">
+<div id="detailSeil" class="seite">
     <!-- Zurück zur Bauteil-Liste -->
     <button class="zuruck" onclick="zeige('bauteilSeite')">← Zurück</button>
     <h2 id="bauteilTitel"></h2>
@@ -1307,7 +1308,106 @@
 </div>
 ```
 
-</div><!-- Ende detailSeite -->
+</div><!-- Ende detailSeil -->
+
+<!-- ==========================================
+     DETAIL-SEITE BAUTEIL 2: GESCHWINDIGKEITSBEGRENZER
+     Vier Tabs: Prüfung vor Ort / Dokumente / Berechnung / Elektro Prüfung
+========================================== -->
+
+<div id="detailBegrenzer" class="seite"> <!-- Versteckt – wird per JavaScript eingeblendet -->
+    <!-- Zurück zur Bauteil-Liste -->
+    <button class="zuruck" onclick="zeige('bauteilSeite')">← Zurück</button> <!-- Grauer Zurück-Button -->
+    <h2 id="bauteilTitelBegrenzer"></h2> <!-- Titel: wird per JavaScript befüllt -->
+
+```
+<!-- TAB-LEISTE: Vier Tabs – erster Tab standardmäßig aktiv -->
+<div class="tabs">
+    <button class="tab aktiv" onclick="zeigeTabBegrenzer(this, 'pruefung_begrenzer')">📋 Prüfung vor Ort</button> <!-- Tab 1 aktiv -->
+    <button class="tab" onclick="zeigeTabBegrenzer(this, 'dokumente_begrenzer')">📄 Dokumente</button> <!-- Tab 2 -->
+    <button class="tab" onclick="zeigeTabBegrenzer(this, 'berechnung_begrenzer')">🔢 Berechnung</button> <!-- Tab 3 -->
+    <button class="tab" onclick="zeigeTabBegrenzer(this, 'elektro_begrenzer')">⚡ Elektro Prüfung</button> <!-- Tab 4 -->
+</div>
+
+<!-- ==========================================
+     TAB: PRÜFUNG VOR ORT (2.1.x)
+========================================== -->
+<div id="pruefung_begrenzer" class="tab-inhalt aktiv"> <!-- Standardmäßig aktiv -->
+
+    <!-- FRAGE 2.1.1 – Rollendurchmesser des GB messen
+         Wird mit 1.1.3 (Seildurchmesser) verglichen: Verhältnis muss ≥ 1:30 sein -->
+    <div class="frage" id="frage2_1_1">
+        <h3>2.1.1 – Rollendurchmesser des Geschwindigkeitsbegrenzers erfassen:</h3> <!-- Fragetitel -->
+        <div class="hinweis">ℹ️ DIN 81:20 5.6.2.2.1.3 c) – Verhältnis Rollendurchmesser zu Seildurchmesser muss mindestens 1:30 betragen</div> <!-- Norm-Hinweis -->
+        <!-- Eingabefeld Rollendurchmesser -->
+        <div class="messwert-gruppe">
+            <input type="number" id="messwert_rollendurchmesser" placeholder="Wert eingeben" step="0.1" min="0" oninput="pruefeVerhaeltnis()"> <!-- Eingabe in mm, startet Prüfung sofort -->
+            <span>mm</span> <!-- Einheit -->
+        </div>
+
+        <!-- Auswertungsbereich: erscheint sobald beide Werte vorhanden -->
+        <div id="verhaeltnis_bereich" style="display:none; margin-top:15px;"> <!-- Versteckt bis beide Werte da -->
+
+            <!-- Vergleichskarten nebeneinander -->
+            <div style="display:flex; gap:15px; flex-wrap:wrap; justify-content:center; margin-bottom:15px;">
+                <!-- Karte Seildurchmesser (aus 1.1.3) -->
+                <div style="border:2px solid #0057a8; border-radius:8px; padding:15px; text-align:center; min-width:140px;">
+                    <div style="font-size:13px; color:#0057a8; margin-bottom:5px;">Seildurchmesser (1.1.3)</div> <!-- Bezeichnung -->
+                    <div id="anzeige_seildurchmesser" style="font-size:22px; font-weight:bold; color:#0057a8;">– mm</div> <!-- Wert aus 1.1.3 -->
+                </div>
+                <!-- Karte Rollendurchmesser (aktuell eingegeben) -->
+                <div style="border:2px solid #0057a8; border-radius:8px; padding:15px; text-align:center; min-width:140px;">
+                    <div style="font-size:13px; color:#0057a8; margin-bottom:5px;">Rollendurchmesser (2.1.1)</div> <!-- Bezeichnung -->
+                    <div id="anzeige_rollendurchmesser" style="font-size:22px; font-weight:bold; color:#0057a8;">– mm</div> <!-- Aktuell eingegebener Wert -->
+                </div>
+                <!-- Karte berechnetes Verhältnis -->
+                <div style="border:2px solid #0057a8; border-radius:8px; padding:15px; text-align:center; min-width:140px;">
+                    <div style="font-size:13px; color:#0057a8; margin-bottom:5px;">Verhältnis 1 :</div> <!-- Bezeichnung -->
+                    <div id="anzeige_verhaeltnis" style="font-size:22px; font-weight:bold; color:#0057a8;">–</div> <!-- Berechnetes Verhältnis -->
+                </div>
+            </div>
+
+            <!-- Farbige Auswertungsbox: grün wenn ≥ 30, rot wenn < 30 -->
+            <div id="verhaeltnis_box" style="padding:20px; border-radius:10px; text-align:center; font-size:18px; font-weight:bold;"></div> <!-- Farbe und Text per JavaScript -->
+        </div>
+    </div>
+
+</div><!-- Ende Tab Prüfung vor Ort -->
+
+<!-- ==========================================
+     TAB: DOKUMENTE (2.0.x) – Platzhalter
+========================================== -->
+<div id="dokumente_begrenzer" class="tab-inhalt"> <!-- Versteckt -->
+    <div class="frage">
+        <h3>Dokumente folgen...</h3> <!-- Platzhalter für spätere Erweiterung -->
+    </div>
+</div>
+
+<!-- ==========================================
+     TAB: BERECHNUNG (2.2.x) – Platzhalter
+========================================== -->
+<div id="berechnung_begrenzer" class="tab-inhalt"> <!-- Versteckt -->
+    <div class="frage">
+        <h3>Berechnung folgt...</h3> <!-- Platzhalter für spätere Erweiterung -->
+    </div>
+</div>
+
+<!-- ==========================================
+     TAB: ELEKTRO PRÜFUNG (2.3.x) – Platzhalter
+========================================== -->
+<div id="elektro_begrenzer" class="tab-inhalt"> <!-- Versteckt -->
+    <div class="frage">
+        <h3>Elektro Prüfung folgt...</h3> <!-- Platzhalter für spätere Erweiterung -->
+    </div>
+</div>
+
+<!-- PDF EXPORT BUTTON -->
+<div class="pdf-bereich">
+    <button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button> <!-- Roter PDF-Button -->
+</div>
+```
+
+</div><!-- Ende detailBegrenzer -->
 
 <!-- ==========================================
      JAVASCRIPT
@@ -1387,19 +1487,98 @@
     }
 
     /* Detail-Seite eines Bauteils anzeigen
-       Setzt den Titel und aktiviert den ersten Tab (Prüfung vor Ort) */
-    function zeigeBauteil(name) {
-        document.getElementById('bauteilTitel').innerText = name;
-        zeige('detailSeite');
-        /* Alle Tabs zurücksetzen, ersten Tab aktivieren */
-        document.querySelector('.tab.aktiv')?.classList.remove('aktiv');
-        document.querySelector('.tab').classList.add('aktiv');
-        document.querySelectorAll('.tab-inhalt').forEach(el => el.classList.remove('aktiv'));
-        document.getElementById('pruefung').classList.add('aktiv');
+       'seil' → öffnet detailSeil
+       'begrenzer' → öffnet detailBegrenzer */
+    function zeigeBauteil(bauteil) {
+        if (bauteil === 'seil') {
+            document.getElementById('bauteilTitel').innerText = '1 – Geschwindigkeitsbegrenzerseil'; /* Titel setzen */
+            zeige('detailSeil'); /* Seil-Detailseite anzeigen */
+            /* Ersten Tab aktivieren */
+            const tabs = document.querySelectorAll('#detailSeil .tab');
+            const inhalte = document.querySelectorAll('#detailSeil .tab-inhalt');
+            tabs.forEach(el => el.classList.remove('aktiv'));
+            inhalte.forEach(el => el.classList.remove('aktiv'));
+            tabs[0].classList.add('aktiv');
+            document.getElementById('pruefung').classList.add('aktiv');
+        } else if (bauteil === 'begrenzer') {
+            document.getElementById('bauteilTitelBegrenzer').innerText = '2 – Geschwindigkeitsbegrenzer'; /* Titel setzen */
+            zeige('detailBegrenzer'); /* Begrenzer-Detailseite anzeigen */
+            /* Ersten Tab aktivieren */
+            const tabs = document.querySelectorAll('#detailBegrenzer .tab');
+            const inhalte = document.querySelectorAll('#detailBegrenzer .tab-inhalt');
+            tabs.forEach(el => el.classList.remove('aktiv'));
+            inhalte.forEach(el => el.classList.remove('aktiv'));
+            tabs[0].classList.add('aktiv');
+            document.getElementById('pruefung_begrenzer').classList.add('aktiv');
+        }
     }
 
-    /* Tab wechseln: alle Tabs/Inhalte deaktivieren, gewünschten aktivieren */
+    /* Tab wechseln für Bauteil 1 (Geschwindigkeitsbegrenzerseil)
+       Nur Tabs innerhalb von #detailSeil werden umgeschaltet */
     function zeigeTab(btn, tabId) {
+        document.querySelectorAll('#detailSeil .tab').forEach(el => el.classList.remove('aktiv')); /* Alle Tabs deaktivieren */
+        document.querySelectorAll('#detailSeil .tab-inhalt').forEach(el => el.classList.remove('aktiv')); /* Alle Inhalte verstecken */
+        btn.classList.add('aktiv');                            /* Geklickten Tab aktivieren */
+        document.getElementById(tabId).classList.add('aktiv'); /* Zugehörigen Inhalt anzeigen */
+    }
+
+    /* Tab wechseln für Bauteil 2 (Geschwindigkeitsbegrenzer)
+       Nur Tabs innerhalb von #detailBegrenzer werden umgeschaltet */
+    function zeigeTabBegrenzer(btn, tabId) {
+        document.querySelectorAll('#detailBegrenzer .tab').forEach(el => el.classList.remove('aktiv')); /* Alle Tabs deaktivieren */
+        document.querySelectorAll('#detailBegrenzer .tab-inhalt').forEach(el => el.classList.remove('aktiv')); /* Alle Inhalte verstecken */
+        btn.classList.add('aktiv');                          /* Geklickten Tab aktivieren */
+        document.getElementById(tabId).classList.add('aktiv'); /* Zugehörigen Inhalt anzeigen */
+    }
+
+    /* ------------------------------------------
+       VERHÄLTNIS PRÜFUNG
+       Vergleicht Rollendurchmesser (2.1.1) mit Seildurchmesser (1.1.3)
+       Verhältnis muss ≥ 30 sein (DIN 81:20 5.6.2.2.1.3 c)
+    ------------------------------------------ */
+    function pruefeVerhaeltnis() {
+        const seildurchmesser   = parseFloat(document.getElementById('messwert1_3').value);       /* Seildurchmesser aus 1.1.3 auslesen */
+        const rollendurchmesser = parseFloat(document.getElementById('messwert_rollendurchmesser').value); /* Rollendurchmesser aus 2.1.1 auslesen */
+
+        /* Nur auswerten wenn beide Werte vorhanden sind */
+        if (isNaN(seildurchmesser) || seildurchmesser <= 0 || isNaN(rollendurchmesser) || rollendurchmesser <= 0) {
+            document.getElementById('verhaeltnis_bereich').style.display = 'none'; /* Auswertung verstecken */
+            return; /* Abbrechen */
+        }
+
+        /* Verhältnis berechnen: Rollendurchmesser / Seildurchmesser */
+        const verhaeltnis = rollendurchmesser / seildurchmesser;
+
+        /* Auswertungsbereich einblenden */
+        document.getElementById('verhaeltnis_bereich').style.display = 'block';
+
+        /* Werte in Karten anzeigen */
+        document.getElementById('anzeige_seildurchmesser').innerText   = seildurchmesser.toFixed(2) + ' mm';   /* Seildurchmesser anzeigen */
+        document.getElementById('anzeige_rollendurchmesser').innerText = rollendurchmesser.toFixed(2) + ' mm'; /* Rollendurchmesser anzeigen */
+        document.getElementById('anzeige_verhaeltnis').innerText       = verhaeltnis.toFixed(1);               /* Verhältnis anzeigen */
+
+        const box = document.getElementById('verhaeltnis_box'); /* Referenz auf Auswertungsbox */
+
+        if (verhaeltnis >= 30) {
+            /* Grün: Verhältnis stimmt – beide Werte grün einfärben */
+            document.getElementById('anzeige_seildurchmesser').style.color   = '#155724'; /* Seildurchmesser: Dunkelgrün */
+            document.getElementById('anzeige_rollendurchmesser').style.color = '#155724'; /* Rollendurchmesser: Dunkelgrün */
+            document.getElementById('anzeige_verhaeltnis').style.color       = '#155724'; /* Verhältnis: Dunkelgrün */
+            box.style.background = '#d4edda';       /* Hintergrund: Hellgrün */
+            box.style.border     = '2px solid #28a745'; /* Rahmen: Grün */
+            box.style.color      = '#155724';       /* Textfarbe: Dunkelgrün */
+            box.innerText = '✅ Verhältnis in Ordnung! (1:' + verhaeltnis.toFixed(1) + ' ≥ 1:30)';
+        } else {
+            /* Rot: Verhältnis stimmt nicht – beide Werte rot einfärben */
+            document.getElementById('anzeige_seildurchmesser').style.color   = '#dc3545'; /* Seildurchmesser: Rot */
+            document.getElementById('anzeige_rollendurchmesser').style.color = '#dc3545'; /* Rollendurchmesser: Rot */
+            document.getElementById('anzeige_verhaeltnis').style.color       = '#dc3545'; /* Verhältnis: Rot */
+            box.style.background = '#f8d7da';       /* Hintergrund: Hellrot */
+            box.style.border     = '2px solid #dc3545'; /* Rahmen: Rot */
+            box.style.color      = '#dc3545';       /* Textfarbe: Rot */
+            box.innerText = '❌ Verhältnis stimmt nicht! (1:' + verhaeltnis.toFixed(1) + ' < 1:30)';
+        }
+    }
         document.querySelectorAll('.tab').forEach(el => el.classList.remove('aktiv'));
         document.querySelectorAll('.tab-inhalt').forEach(el => el.classList.remove('aktiv'));
         btn.classList.add('aktiv');
