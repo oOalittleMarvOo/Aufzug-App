@@ -701,7 +701,7 @@
     <h2 id="bereichTitel"></h2>
     <div class="bauteil-liste">
         <!-- Bauteil 1: Geschwindigkeitsbegrenzerseil -->
-        <button class="bauteil-btn" onclick="zeigeBauteil('Geschwindigkeitsbegrenzerseil')">🔩 Geschwindigkeitsbegrenzerseil</button>
+        <button class="bauteil-btn" onclick="zeigeBauteil('Geschwindigkeitsbegrenzerseil')">1 – 🔩 Geschwindigkeitsbegrenzerseil</button>
         <!-- Weitere Bauteile können hier ergänzt werden -->
     </div>
 </div>
@@ -732,9 +732,9 @@
 ========================================== -->
 <div id="pruefung" class="tab-inhalt aktiv">
 
-    <!-- FRAGE 1.0 – Dokument vor Ort vorhanden? (Ja/Nein) -->
+    <!-- FRAGE 1.1.0 – Dokument vor Ort vorhanden? (Ja/Nein) -->
     <div class="frage" id="frage1_0">
-        <h3>1.0 – Liegt das Dokument zur Ermittlung des Seildurchmessers mit dem Messschieber vor Ort vor?</h3>
+        <h3>1.1.0 – Liegt das Dokument zur Ermittlung des Seildurchmessers mit dem Messschieber vor Ort vor?</h3>
         <div class="ja-nein-gruppe">
             <!-- onclick="jaNein(this, 'frage1_0', 'ja')" → markiert diesen Button als aktiv -->
             <button class="ja-btn" onclick="jaNein(this, 'frage1_0', 'ja')">✅ Ja</button>
@@ -742,9 +742,9 @@
         </div>
     </div>
 
-    <!-- FRAGE 1.1 – Verhältnis Begrenzerseil/Rollendurchmesser 1:30 (Passt/Mangel/Trifft nicht zu) -->
+    <!-- FRAGE 1.1.1 – Verhältnis Begrenzerseil/Rollendurchmesser 1:30 (Passt/Mangel/Trifft nicht zu) -->
     <div class="frage" id="frage1_1">
-        <h3>1.1 – Ist das Verhältnis von Begrenzerseil und Rollendurchmesser 1:30?</h3>
+        <h3>1.1.1 – Ist das Verhältnis von Begrenzerseil und Rollendurchmesser 1:30?</h3>
         <div class="antwort-gruppe">
             <!-- Passt: grüner Button, kein zusätzliches Feld -->
             <button class="antwort-btn passt" onclick="antwort(this, 'frage1_1')">🟢 Passt</button>
@@ -767,9 +767,9 @@
         </div>
     </div>
 
-    <!-- FRAGE 1.2 – Mindestbruchkraft = 8-fache Zugkraft? (Passt/Mangel/Trifft nicht zu) -->
+    <!-- FRAGE 1.1.2 – Mindestbruchkraft = 8-fache Zugkraft? (Passt/Mangel/Trifft nicht zu) -->
     <div class="frage" id="frage1_2">
-        <h3>1.2 – Beträgt die Mindestbruchkraft das Achtfache der Zugkraft der Fangvorrichtung?</h3>
+        <h3>1.1.2 – Beträgt die Mindestbruchkraft das Achtfache der Zugkraft der Fangvorrichtung?</h3>
         <div class="antwort-gruppe">
             <button class="antwort-btn passt" onclick="antwort(this, 'frage1_2')">🟢 Passt</button>
             <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage1_2')">🔴 Mangel</button>
@@ -789,9 +789,9 @@
         </div>
     </div>
 
-    <!-- FRAGE 1.3 – Seildurchmesser messen (Messwert-Eingabe in mm) -->
+    <!-- FRAGE 1.1.3 – Seildurchmesser messen (Messwert-Eingabe in mm) -->
     <div class="frage" id="frage1_3">
-        <h3>1.3 – Durchmesser mit dem Messschieber erfassen:</h3>
+        <h3>1.1.3 – Durchmesser mit dem Messschieber erfassen:</h3>
         <div class="messwert-gruppe">
             <!-- Zahl-Eingabefeld mit 0.01mm Schrittweite -->
             <input type="number" id="messwert1_3" placeholder="Wert eingeben" step="0.01" min="0">
@@ -799,9 +799,9 @@
         </div>
     </div>
 
-    <!-- FRAGE 1.4 – Seilklemmen (Frosch) fest? (Passt/Mangel/Trifft nicht zu) -->
+    <!-- FRAGE 1.1.4 – Seilklemmen (Frosch) fest? (Passt/Mangel/Trifft nicht zu) -->
     <div class="frage" id="frage1_4">
-        <h3>1.4 – Sind die Schrauben fest wenn Seilklemmen (Frosch) verwendet wurden?</h3>
+        <h3>1.1.4 – Sind die Schrauben fest wenn Seilklemmen (Frosch) verwendet wurden?</h3>
         <div class="antwort-gruppe">
             <button class="antwort-btn passt" onclick="antwort(this, 'frage1_4')">🟢 Passt</button>
             <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage1_4')">🔴 Mangel</button>
@@ -829,9 +829,9 @@
 ========================================== -->
 <div id="dokumente" class="tab-inhalt">
 
-    <!-- FRAGE 0.1 – Datenblatt vorhanden? (Ja/Nein) -->
+    <!-- FRAGE 1.0.1 – Datenblatt vorhanden? (Ja/Nein) -->
     <div class="frage" id="dok_datenblatt">
-        <h3>0.1 – Liegt das Datenblatt vor?</h3>
+        <h3>1.0.1 – Liegt das Datenblatt vor?</h3>
         <div class="ja-nein-gruppe">
             <button class="ja-btn" onclick="jaNein(this, 'dok_datenblatt', 'ja')">✅ Ja</button>
             <button class="nein-btn" onclick="jaNein(this, 'dok_datenblatt', 'nein')">❌ Nein</button>
@@ -852,7 +852,7 @@
          Bestimmt welche Formel für f(μ) verwendet wird
          Macht den gesamten Berechnungsbereich sichtbar -->
     <div class="frage">
-        <h3>2.1 – Rillenform auswählen</h3>
+        <h3>1.2.1 – Rillenform auswählen</h3>
         <div class="auswahl-gruppe">
             <!-- 'gehaertet' → f(μ) = μ/sin(γ/2), SF-Formel wird angezeigt -->
             <button class="auswahl-btn" onclick="waehleRillenform(this, 'gehaertet')">⚙️ Keilrille gehärtet</button>
@@ -871,7 +871,7 @@
         <!-- 2.2 EINGABEWERTE
              oninput="berechneAlles()" → Berechnung startet sofort bei jeder Eingabe -->
         <div class="frage">
-            <h3>2.2 – Eingabewerte</h3>
+            <h3>1.2.2 – Eingabewerte</h3>
 
             <!-- Nenngeschwindigkeit v in m/s (wird für μ benötigt) -->
             <div class="eingabe-zeile">
@@ -913,7 +913,7 @@
              Formel: μ = 0,1 / (1 + v/10)
              Ergebnis wird in id="ergebnis_mu" angezeigt -->
         <div class="frage">
-            <h3>2.3 – Reibwert μ</h3>
+            <h3>1.2.3 – Reibwert μ</h3>
             <!-- Grafische Bruchdarstellung: Zähler oben, blaue Linie, Nenner unten -->
             <div class="formel-container">
                 <span>μ = </span>
@@ -936,7 +936,7 @@
              Halbrundrille: nur eine Formel (komplexere Funktion)
              Sichtbarkeit wird per JavaScript umgeschaltet -->
         <div class="frage">
-            <h3>2.4 – Reibungszahl f(μ)</h3>
+            <h3>1.2.4 – Reibungszahl f(μ)</h3>
 
             <!-- Keilrille-Formeln: standardmäßig sichtbar, bei Halbrundrille versteckt -->
             <div id="formelKeilrilleGruppe" class="formel-gruppe">
@@ -1006,14 +1006,14 @@
         </div>
 
         <!-- ==========================================
-             2.5 – ZUGKRAFT: GB OBEN, FANG ABWÄRTS
+             1.2.5 – ZUGKRAFT: GB OBEN, FANG ABWÄRTS
              Gilt wenn der Geschwindigkeitsbegrenzer (GB) oben montiert ist
              und die Fangvorrichtung abwärts auslöst
              Formel Zugkraft: F = (G/2) × (e^(f(μ)×π) - 1)
              Formel SF:       SF = (G/2) × e^(f(μ)_SF × π)
         ========================================== -->
         <div class="frage">
-            <h3>2.5 – Zugkraft F (GB oben, Fang abwärts)</h3>
+            <h3>1.2.5 – Zugkraft F (GB oben, Fang abwärts)</h3>
 
             <!-- SVG-SKIZZE: Schacht mit GB oben, Kabine mit Pfeil nach unten
                  Elemente: Schachtrahmen, GB-Block oben, gestricheltes Seil, Kabine, Pfeil -->
@@ -1069,11 +1069,11 @@
             </div>
         </div>
 
-        <!-- 2.6 – AUSWERTUNG ZUGKRAFT (Fang abwärts)
+        <!-- 1.2.6 – AUSWERTUNG ZUGKRAFT (Fang abwärts)
              Farbige Box: rot < 300N, gelb 300-400N, grün > 400N
              display:none → wird erst sichtbar wenn Ergebnis vorliegt -->
         <div class="frage" id="vergleich_bereich" style="display:none;">
-            <h3>2.6 – Auswertung Zugkraft (Fang abwärts)</h3>
+            <h3>1.2.6 – Auswertung Zugkraft (Fang abwärts)</h3>
             <!-- Farbige Auswertungsbox – Farbe und Text werden per JavaScript gesetzt -->
             <div id="vergleich_box" style="padding:20px;border-radius:10px;text-align:center;font-size:18px;font-weight:bold;margin-bottom:15px;"></div>
             <!-- Vergleichswerte nebeneinander: Mindest-Zugkraft vs. Berechnete Zugkraft -->
@@ -1091,12 +1091,12 @@
             </div>
         </div>
 
-        <!-- 2.6b – SICHERHEITSFAKTOR AUSWERTUNG
+        <!-- 1.2.6b – SICHERHEITSFAKTOR AUSWERTUNG
              Nur bei Keilrille sichtbar
              Formel: S = Mindestbruchkraft × 1000 / SF_ab
              Grenzwerte nach DIN EN 81-50: ≤8 = rot, 8.1–10 = gelb, >10 = grün -->
         <div class="frage" id="sicherheitsfaktor_bereich" style="display:none;">
-            <h3>2.6b – Sicherheitsfaktor (DIN EN 81-50 5.6.2.2.1.3 b)</h3>
+            <h3>1.2.6b – Sicherheitsfaktor (DIN EN 81-50 5.6.2.2.1.3 b)</h3>
             <!-- Grafische Formeldarstellung: S = Mindestbruchkraft × 1000 / SF_ab -->
             <div class="formel-container">
                 <span>S = </span>
@@ -1117,12 +1117,12 @@
         </div>
 
         <!-- ==========================================
-             2.7 – ZUGKRAFT: GB OBEN, FANG AUFWÄRTS
+             1.2.7 – ZUGKRAFT: GB OBEN, FANG AUFWÄRTS
              Gilt wenn GB oben und Fangvorrichtung aufwärts auslöst
              Formel: F = (G/2) × (1 - 1/e^(f(μ)×π))
         ========================================== -->
         <div class="frage">
-            <h3>2.7 – Zugkraft F (GB oben, Fang aufwärts)</h3>
+            <h3>1.2.7 – Zugkraft F (GB oben, Fang aufwärts)</h3>
 
             <!-- SVG-SKIZZE: Schacht mit GB oben, Kabine mit grünem Pfeil nach oben -->
             <div class="skizze-box">
@@ -1160,9 +1160,9 @@
             </div>
         </div>
 
-        <!-- 2.8 – AUSWERTUNG ZUGKRAFT (Fang aufwärts) – gleiche Logik wie 2.6 -->
+        <!-- 1.2.8 – AUSWERTUNG ZUGKRAFT (Fang aufwärts) – gleiche Logik wie 2.6 -->
         <div class="frage" id="vergleich_bereich_auf" style="display:none;">
-            <h3>2.8 – Auswertung Zugkraft (Fang aufwärts)</h3>
+            <h3>1.2.8 – Auswertung Zugkraft (Fang aufwärts)</h3>
             <div id="vergleich_box_auf" style="padding:20px;border-radius:10px;text-align:center;font-size:18px;font-weight:bold;margin-bottom:15px;"></div>
             <div style="display:flex;gap:15px;justify-content:center;flex-wrap:wrap;">
                 <div style="background:#fff3cd;border:2px solid #ffc107;border-radius:8px;padding:15px;text-align:center;min-width:120px;">
@@ -1176,13 +1176,13 @@
             </div>
         </div>
 
-        <!-- 2.7b – SICHERHEITSFAKTOR AUSWERTUNG (Fang aufwärts)
+        <!-- 1.2.7b – SICHERHEITSFAKTOR AUSWERTUNG (Fang aufwärts)
              Formel: SF = G/2
              S = Mindestbruchkraft × 1000 / SF
              Grenzwert: < 8 = rot, ≥ 8 = grün
              Nur sichtbar wenn Mindestbruchkraft eingegeben wurde -->
         <div class="frage" id="sicherheitsfaktor_bereich_auf" style="display:none;"> <!-- Versteckt – wird per JavaScript eingeblendet -->
-            <h3>2.7b – Sicherheitsfaktor (Fang aufwärts)</h3> <!-- Überschrift -->
+            <h3>1.2.7b – Sicherheitsfaktor (Fang aufwärts)</h3> <!-- Überschrift -->
             <div class="hinweis">ℹ️ DIN EN 81-50 5.6.2.2.1.3 b) – Sicherheitsfaktor muss größer oder gleich 8 sein</div> <!-- Norm-Hinweis -->
             <!-- Grafische Formeldarstellung: SF = G/2 -->
             <div class="formel-container"> <!-- Zentrierter Formel-Container -->
@@ -1207,12 +1207,12 @@
         </div>
 
         <!-- ==========================================
-             2.9 – ZUGKRAFT: GB UNTEN, FANG AUF- UND ABWÄRTS
+             1.2.9 – ZUGKRAFT: GB UNTEN, FANG AUF- UND ABWÄRTS
              Gilt wenn GB unten montiert – wirkt in beide Richtungen gleich
              Formel: F = G × (e^(f(μ)×π) - 1) / (e^(f(μ)×π) + 1)
         ========================================== -->
         <div class="frage">
-            <h3>2.9 – Zugkraft F (GB unten, Fang auf- und abwärts)</h3>
+            <h3>1.2.9 – Zugkraft F (GB unten, Fang auf- und abwärts)</h3>
 
             <!-- SVG-SKIZZE: Schacht mit Kabine oben, GB unten, zwei Pfeile -->
             <div class="skizze-box">
@@ -1253,9 +1253,9 @@
             </div>
         </div>
 
-        <!-- 2.10 – AUSWERTUNG ZUGKRAFT (GB unten) – gleiche Logik wie 2.6 und 2.8 -->
+        <!-- 1.2.10 – AUSWERTUNG ZUGKRAFT (GB unten) – gleiche Logik wie 2.6 und 2.8 -->
         <div class="frage" id="vergleich_bereich_unten" style="display:none;">
-            <h3>2.10 – Auswertung Zugkraft (GB unten)</h3>
+            <h3>1.2.10 – Auswertung Zugkraft (GB unten)</h3>
             <div id="vergleich_box_unten" style="padding:20px;border-radius:10px;text-align:center;font-size:18px;font-weight:bold;margin-bottom:15px;"></div>
             <div style="display:flex;gap:15px;justify-content:center;flex-wrap:wrap;">
                 <div style="background:#fff3cd;border:2px solid #ffc107;border-radius:8px;padding:15px;text-align:center;min-width:120px;">
@@ -1269,12 +1269,12 @@
             </div>
         </div>
 
-        <!-- 2.9b – SICHERHEITSFAKTOR AUSWERTUNG (GB unten, Fang auf- und abwärts)
+        <!-- 1.2.9b – SICHERHEITSFAKTOR AUSWERTUNG (GB unten, Fang auf- und abwärts)
              Formel: SF = G × (e^(f(μ)_SF × π) - 1) / (e^(f(μ)_SF × π) + 1)
              S = Mindestbruchkraft × 1000 / SF
              Grenzwert: < 8 = rot, ≥ 8 = grün -->
         <div class="frage" id="sicherheitsfaktor_bereich_unten" style="display:none;"> <!-- Versteckt – wird per JavaScript eingeblendet -->
-            <h3>2.9b – Sicherheitsfaktor (GB unten, Fang auf- und abwärts)</h3> <!-- Überschrift -->
+            <h3>1.2.9b – Sicherheitsfaktor (GB unten, Fang auf- und abwärts)</h3> <!-- Überschrift -->
             <div class="hinweis">ℹ️ DIN EN 81-50 5.6.2.2.1.3 b) – Sicherheitsfaktor muss größer oder gleich 8 sein</div> <!-- Norm-Hinweis -->
             <!-- Grafische Formeldarstellung -->
             <div class="formel-container"> <!-- Zentrierter Formel-Container -->
