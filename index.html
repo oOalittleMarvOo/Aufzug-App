@@ -798,6 +798,10 @@
             <input type="number" id="messwert1_3" placeholder="Wert eingeben" step="0.01" min="0" oninput="pruefeVerhaeltnis()"> <!-- Startet Verhältnisprüfung sofort -->
             <span>mm</span>
         </div>
+        <!-- Auswertungsbox: erscheint sobald beide Werte (1.1.3 + 2.1.1) vorhanden sind -->
+        <div id="verhaeltnis_bereich_seil" style="display:none; margin-top:15px;">
+            <div id="verhaeltnis_box_seil" style="padding:20px; border-radius:10px; text-align:center; font-size:18px; font-weight:bold;"></div>
+        </div>
     </div>
 
     <!-- FRAGE 1.1.4 – Seilklemmen (Frosch) fest? (Passt/Mangel/Trifft nicht zu) -->
@@ -1542,15 +1546,17 @@
 
         /* Nur auswerten wenn beide Werte vorhanden sind */
         if (isNaN(seildurchmesser) || seildurchmesser <= 0 || isNaN(rollendurchmesser) || rollendurchmesser <= 0) {
-            document.getElementById('verhaeltnis_bereich').style.display = 'none'; /* Auswertung verstecken */
+            document.getElementById('verhaeltnis_bereich').style.display = 'none'; /* Auswertung bei 2.1.1 verstecken */
+            document.getElementById('verhaeltnis_bereich_seil').style.display = 'none'; /* Auswertung bei 1.1.3 verstecken */
             return; /* Abbrechen */
         }
 
         /* Verhältnis berechnen: Rollendurchmesser / Seildurchmesser */
         const verhaeltnis = rollendurchmesser / seildurchmesser;
 
-        /* Auswertungsbereich einblenden */
-        document.getElementById('verhaeltnis_bereich').style.display = 'block';
+        /* Auswertungsbereich einblenden – bei 2.1.1 UND bei 1.1.3 */
+        document.getElementById('verhaeltnis_bereich').style.display = 'block';      /* Box bei 2.1.1 anzeigen */
+        document.getElementById('verhaeltnis_bereich_seil').style.display = 'block'; /* Box bei 1.1.3 anzeigen */
 
         /* Werte in Karten anzeigen */
         document.getElementById('anzeige_seildurchmesser').innerText   = seildurchmesser.toFixed(2) + ' mm';   /* Seildurchmesser anzeigen */
@@ -1561,22 +1567,34 @@
 
         if (verhaeltnis >= 30) {
             /* Grün: Verhältnis stimmt – beide Werte grün einfärben */
-            document.getElementById('anzeige_seildurchmesser').style.color   = '#155724'; /* Seildurchmesser: Dunkelgrün */
-            document.getElementById('anzeige_rollendurchmesser').style.color = '#155724'; /* Rollendurchmesser: Dunkelgrün */
-            document.getElementById('anzeige_verhaeltnis').style.color       = '#155724'; /* Verhältnis: Dunkelgrün */
-            box.style.background = '#d4edda';       /* Hintergrund: Hellgrün */
-            box.style.border     = '2px solid #28a745'; /* Rahmen: Grün */
-            box.style.color      = '#155724';       /* Textfarbe: Dunkelgrün */
+            document.getElementById('anzeige_seildurchmesser').style.color   = '#155724';
+            document.getElementById('anzeige_rollendurchmesser').style.color = '#155724';
+            document.getElementById('anzeige_verhaeltnis').style.color       = '#155724';
+            box.style.background = '#d4edda';
+            box.style.border     = '2px solid #28a745';
+            box.style.color      = '#155724';
             box.innerText = '✅ Verhältnis in Ordnung! (1:' + verhaeltnis.toFixed(1) + ' ≥ 1:30)';
+            /* Seil-Box bei 1.1.3 ebenfalls grün */
+            const boxSeil = document.getElementById('verhaeltnis_box_seil');
+            boxSeil.style.background = '#d4edda';
+            boxSeil.style.border     = '2px solid #28a745';
+            boxSeil.style.color      = '#155724';
+            boxSeil.innerText = '✅ Verhältnis in Ordnung! (1:' + verhaeltnis.toFixed(1) + ' ≥ 1:30)';
         } else {
             /* Rot: Verhältnis stimmt nicht – beide Werte rot einfärben */
-            document.getElementById('anzeige_seildurchmesser').style.color   = '#dc3545'; /* Seildurchmesser: Rot */
-            document.getElementById('anzeige_rollendurchmesser').style.color = '#dc3545'; /* Rollendurchmesser: Rot */
-            document.getElementById('anzeige_verhaeltnis').style.color       = '#dc3545'; /* Verhältnis: Rot */
-            box.style.background = '#f8d7da';       /* Hintergrund: Hellrot */
-            box.style.border     = '2px solid #dc3545'; /* Rahmen: Rot */
-            box.style.color      = '#dc3545';       /* Textfarbe: Rot */
+            document.getElementById('anzeige_seildurchmesser').style.color   = '#dc3545';
+            document.getElementById('anzeige_rollendurchmesser').style.color = '#dc3545';
+            document.getElementById('anzeige_verhaeltnis').style.color       = '#dc3545';
+            box.style.background = '#f8d7da';
+            box.style.border     = '2px solid #dc3545';
+            box.style.color      = '#dc3545';
             box.innerText = '❌ Verhältnis stimmt nicht! (1:' + verhaeltnis.toFixed(1) + ' < 1:30)';
+            /* Seil-Box bei 1.1.3 ebenfalls rot */
+            const boxSeil = document.getElementById('verhaeltnis_box_seil');
+            boxSeil.style.background = '#f8d7da';
+            boxSeil.style.border     = '2px solid #dc3545';
+            boxSeil.style.color      = '#dc3545';
+            boxSeil.innerText = '❌ Verhältnis stimmt nicht! (1:' + verhaeltnis.toFixed(1) + ' < 1:30)';
         }
     }
 
