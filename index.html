@@ -742,6 +742,8 @@
         <button class="btn" onclick="zeigeUmbau()">🔧 Umbau</button>
         <!-- Einzelprüfung: öffnet Bauteil-Liste ohne Seriennummer-Modal -->
         <button class="btn" onclick="zeigeBauteile('Einzelprüfung')">🔩 Einzelprüfung</button>
+        <!-- Sicherung: öffnet direkt die Sicherungsberechnung -->
+        <button class="btn" onclick="zeige('sicherungSeite')">⚡ Sicherung</button>
     </div>
 </div>
 
@@ -1708,6 +1710,60 @@
 </div><!-- Ende detailBegrenzer -->
 
 <!-- ==========================================
+     SICHERUNGS-SEITE
+     Direkt von der Startseite erreichbar
+     Enthält die komplette Sicherungsberechnung
+========================================== -->
+
+<div id="sicherungSeite" class="seite"> <!-- Versteckt – wird per JavaScript eingeblendet -->
+    <button class="zuruck" onclick="zeige('startseite')">← Zurück</button> <!-- Zurück zur Startseite -->
+    <h2>⚡ Sicherungsberechnung</h2> <!-- Titel -->
+
+```
+<div class="frage">
+    <h3>Gemessener Strom &amp; Sicherungsvergleich</h3>
+    <!-- Gemessener Strom -->
+    <div class="eingabe-zeile">
+        <label>Gemessener Strom:</label>
+        <input type="number" id="gemessener_strom_s" placeholder="Wert eingeben" step="0.1" min="0" oninput="berechneAusloeseStromS()"> <!-- Eingabe in Ampere -->
+        <span class="einheit">A</span>
+        <span id="ausloeseStrom_inline_s" style="display:none; margin-left:10px; font-weight:bold; color:#0057a8;">→ Auslösestrom = <span id="ergebnis_ausloeseStrom_s">–</span> A</span>
+    </div>
+    <!-- Sicherungs-Nennstrom -->
+    <div class="eingabe-zeile" style="margin-top:10px;">
+        <label>Verbaute Sicherung:</label>
+        <input type="number" id="sicherungswert_s" placeholder="Nennstrom" step="0.1" min="0" oninput="berechneAusloeseStromS()">
+        <span class="einheit">A</span>
+    </div>
+    <!-- Typen-Tabelle -->
+    <div id="sicherung_tabelle_s" style="display:none; margin-top:15px;">
+        <div style="display:flex; flex-direction:column; gap:10px;">
+            <div id="box_B_s" style="padding:15px;border-radius:8px;border:2px solid #0057a8;display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:bold;font-size:18px;" id="label_B_s">B –</span><span id="wert_B_s" style="font-size:18px;font-weight:bold;">– A</span></div>
+            <div id="box_C_s" style="padding:15px;border-radius:8px;border:2px solid #0057a8;display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:bold;font-size:18px;" id="label_C_s">C –</span><span id="wert_C_s" style="font-size:18px;font-weight:bold;">– A</span></div>
+            <div id="box_D_s" style="padding:15px;border-radius:8px;border:2px solid #0057a8;display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:bold;font-size:18px;" id="label_D_s">D –</span><span id="wert_D_s" style="font-size:18px;font-weight:bold;">– A</span></div>
+            <div id="box_K_s" style="padding:15px;border-radius:8px;border:2px solid #0057a8;display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:bold;font-size:18px;" id="label_K_s">K –</span><span id="wert_K_s" style="font-size:18px;font-weight:bold;">– A</span></div>
+            <div id="box_Z_s" style="padding:15px;border-radius:8px;border:2px solid #0057a8;display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:bold;font-size:18px;" id="label_Z_s">Z –</span><span id="wert_Z_s" style="font-size:18px;font-weight:bold;">– A</span></div>
+            <div id="box_A_s" style="padding:15px;border-radius:8px;border:2px solid #0057a8;display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:bold;font-size:18px;" id="label_A_s">A –</span><span id="wert_A_s" style="font-size:18px;font-weight:bold;">– A</span></div>
+            <div id="box_H_s" style="padding:15px;border-radius:8px;border:2px solid #0057a8;display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:bold;font-size:18px;" id="label_H_s">H –</span><span id="wert_H_s" style="font-size:18px;font-weight:bold;">– A</span></div>
+            <div id="box_E_s" style="padding:15px;border-radius:8px;border:2px solid #0057a8;display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:bold;font-size:18px;" id="label_E_s">E –</span><span id="wert_E_s" style="font-size:18px;font-weight:bold;">– A</span></div>
+            <div id="box_L_s" style="padding:15px;border-radius:8px;border:2px solid #0057a8;display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:bold;font-size:18px;" id="label_L_s">L –</span><span id="wert_L_s" style="font-size:18px;font-weight:bold;">– A</span></div>
+            <div id="box_R_s" style="padding:15px;border-radius:8px;border:2px solid #0057a8;display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:bold;font-size:18px;" id="label_R_s">R –</span><span id="wert_R_s" style="font-size:18px;font-weight:bold;">– A</span></div>
+            <div id="box_G_s" style="padding:15px;border-radius:8px;border:2px solid #0057a8;display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:bold;font-size:18px;" id="label_G_s">G –</span><span id="wert_G_s" style="font-size:18px;font-weight:bold;">– A</span></div>
+            <div id="box_S_s" style="padding:15px;border-radius:8px;border:2px solid #0057a8;display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:bold;font-size:18px;" id="label_S_s">S –</span><span id="wert_S_s" style="font-size:18px;font-weight:bold;">– A</span></div>
+            <div id="box_U_s" style="padding:15px;border-radius:8px;border:2px solid #0057a8;display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:bold;font-size:18px;" id="label_U_s">U –</span><span id="wert_U_s" style="font-size:18px;font-weight:bold;">– A</span></div>
+            <div id="box_CF_s" style="padding:15px;border-radius:8px;border:2px solid #0057a8;display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:bold;font-size:18px;" id="label_CF_s">CF –</span><span id="wert_CF_s" style="font-size:18px;font-weight:bold;">– A</span></div>
+            <div id="box_F_s" style="padding:15px;border-radius:8px;border:2px solid #0057a8;display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:bold;font-size:18px;" id="label_F_s">Fein flink –</span><span id="wert_F_s" style="font-size:18px;font-weight:bold;">– A</span></div>
+            <div id="box_M_s" style="padding:15px;border-radius:8px;border:2px solid #0057a8;display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:bold;font-size:18px;" id="label_M_s">Fein mittel –</span><span id="wert_M_s" style="font-size:18px;font-weight:bold;">– A</span></div>
+            <div id="box_T_s" style="padding:15px;border-radius:8px;border:2px solid #0057a8;display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:bold;font-size:18px;" id="label_T_s">Fein träge –</span><span id="wert_T_s" style="font-size:18px;font-weight:bold;">– A</span></div>
+            <div id="box_gggl_s" style="padding:15px;border-radius:8px;border:2px solid #0057a8;display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:bold;font-size:18px;" id="label_gggl_s">gg/gl –</span><span id="wert_gggl_s" style="font-size:18px;font-weight:bold;">– A</span></div>
+        </div>
+    </div>
+</div>
+```
+
+</div><!-- Ende sicherungSeite -->
+
+<!-- ==========================================
      JAVASCRIPT
      Alle Funktionen der App sind hier definiert
      Keine externen JS-Dateien nötig außer jsPDF
@@ -1925,6 +1981,45 @@
         });
 
         /* Tabelle einblenden */
+        tabelle.style.display = 'block';
+    }
+
+    /* Sicherungsberechnung für eigenständige Sicherungs-Seite */
+    function berechneAusloeseStromS() {
+        const strom    = parseFloat(document.getElementById('gemessener_strom_s').value);
+        const sicherung = parseFloat(document.getElementById('sicherungswert_s').value);
+        const inline   = document.getElementById('ausloeseStrom_inline_s');
+        const tabelle  = document.getElementById('sicherung_tabelle_s');
+        if (isNaN(strom) || strom <= 0) { inline.style.display = 'none'; tabelle.style.display = 'none'; return; }
+        const ausloeseStrom = strom * 0.7;
+        document.getElementById('ergebnis_ausloeseStrom_s').innerText = ausloeseStrom.toFixed(2);
+        inline.style.display = 'inline';
+        if (isNaN(sicherung) || sicherung <= 0) { tabelle.style.display = 'none'; return; }
+        const typen = [
+            { id: 'B', faktor: 5 }, { id: 'C', faktor: 10 }, { id: 'D', faktor: 20 },
+            { id: 'K', faktor: 14 }, { id: 'Z', faktor: 3 }, { id: 'A', faktor: 3 },
+            { id: 'H', faktor: 3 }, { id: 'E', faktor: 6.25 }, { id: 'L', faktor: 5 },
+            { id: 'R', faktor: 3 }, { id: 'G', faktor: 10 }, { id: 'S', faktor: 17 },
+            { id: 'U', faktor: 9 }, { id: 'CF', faktor: 10 }, { id: 'F', faktor: 1.5 },
+            { id: 'M', faktor: 4 }, { id: 'T', faktor: 8 }, { id: 'gggl', faktor: 5 },
+        ];
+        typen.forEach(typ => {
+            const wert = sicherung * typ.faktor;
+            let label;
+            if      (typ.id === 'gggl') label = 'gg/gl ' + sicherung;
+            else if (typ.id === 'F')    label = 'Fein flink ' + sicherung;
+            else if (typ.id === 'M')    label = 'Fein mittel ' + sicherung;
+            else if (typ.id === 'T')    label = 'Fein träge ' + sicherung;
+            else                        label = typ.id + ' ' + sicherung;
+            document.getElementById('label_' + typ.id + '_s').innerText = label;
+            document.getElementById('wert_'  + typ.id + '_s').innerText = wert.toFixed(1) + ' A';
+            const box = document.getElementById('box_' + typ.id + '_s');
+            if (wert <= ausloeseStrom) {
+                box.style.background = '#d4edda'; box.style.borderColor = '#28a745'; box.style.color = '#155724';
+            } else {
+                box.style.background = '#f8d7da'; box.style.borderColor = '#dc3545'; box.style.color = '#dc3545';
+            }
+        });
         tabelle.style.display = 'block';
     }
 
