@@ -1603,20 +1603,95 @@
         <!-- Typen-Tabelle: erscheint sobald Sicherungswert eingegeben -->
         <div id="sicherung_tabelle" style="display:none; margin-top:15px;">
             <div style="display:flex; flex-direction:column; gap:10px;">
-                <!-- B-Typ -->
+                <!-- B-Typ: Faktor 5 -->
                 <div id="box_B" style="padding:15px; border-radius:8px; border:2px solid #0057a8; display:flex; justify-content:space-between; align-items:center;">
-                    <span style="font-weight:bold; font-size:18px;" id="label_B">B –</span> <!-- z.B. B3 -->
-                    <span id="wert_B" style="font-size:18px; font-weight:bold;">– A</span> <!-- z.B. 15 A -->
+                    <span style="font-weight:bold; font-size:18px;" id="label_B">B –</span>
+                    <span id="wert_B" style="font-size:18px; font-weight:bold;">– A</span>
                 </div>
-                <!-- C-Typ -->
+                <!-- C-Typ: Faktor 10 -->
                 <div id="box_C" style="padding:15px; border-radius:8px; border:2px solid #0057a8; display:flex; justify-content:space-between; align-items:center;">
                     <span style="font-weight:bold; font-size:18px;" id="label_C">C –</span>
                     <span id="wert_C" style="font-size:18px; font-weight:bold;">– A</span>
                 </div>
-                <!-- D-Typ -->
+                <!-- D-Typ: Faktor 20 -->
                 <div id="box_D" style="padding:15px; border-radius:8px; border:2px solid #0057a8; display:flex; justify-content:space-between; align-items:center;">
                     <span style="font-weight:bold; font-size:18px;" id="label_D">D –</span>
                     <span id="wert_D" style="font-size:18px; font-weight:bold;">– A</span>
+                </div>
+                <!-- K-Typ: Faktor 14 -->
+                <div id="box_K" style="padding:15px; border-radius:8px; border:2px solid #0057a8; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:bold; font-size:18px;" id="label_K">K –</span>
+                    <span id="wert_K" style="font-size:18px; font-weight:bold;">– A</span>
+                </div>
+                <!-- Z-Typ: Faktor 3 -->
+                <div id="box_Z" style="padding:15px; border-radius:8px; border:2px solid #0057a8; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:bold; font-size:18px;" id="label_Z">Z –</span>
+                    <span id="wert_Z" style="font-size:18px; font-weight:bold;">– A</span>
+                </div>
+                <!-- A-Typ: Faktor 3 -->
+                <div id="box_A" style="padding:15px; border-radius:8px; border:2px solid #0057a8; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:bold; font-size:18px;" id="label_A">A –</span>
+                    <span id="wert_A" style="font-size:18px; font-weight:bold;">– A</span>
+                </div>
+                <!-- H-Typ: Faktor 3 -->
+                <div id="box_H" style="padding:15px; border-radius:8px; border:2px solid #0057a8; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:bold; font-size:18px;" id="label_H">H –</span>
+                    <span id="wert_H" style="font-size:18px; font-weight:bold;">– A</span>
+                </div>
+                <!-- E-Typ: Faktor 6,25 -->
+                <div id="box_E" style="padding:15px; border-radius:8px; border:2px solid #0057a8; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:bold; font-size:18px;" id="label_E">E –</span>
+                    <span id="wert_E" style="font-size:18px; font-weight:bold;">– A</span>
+                </div>
+                <!-- L-Typ: Faktor 5 -->
+                <div id="box_L" style="padding:15px; border-radius:8px; border:2px solid #0057a8; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:bold; font-size:18px;" id="label_L">L –</span>
+                    <span id="wert_L" style="font-size:18px; font-weight:bold;">– A</span>
+                </div>
+                <!-- R-Typ: Faktor 3 -->
+                <div id="box_R" style="padding:15px; border-radius:8px; border:2px solid #0057a8; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:bold; font-size:18px;" id="label_R">R –</span>
+                    <span id="wert_R" style="font-size:18px; font-weight:bold;">– A</span>
+                </div>
+                <!-- G-Typ: Faktor 10 -->
+                <div id="box_G" style="padding:15px; border-radius:8px; border:2px solid #0057a8; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:bold; font-size:18px;" id="label_G">G –</span>
+                    <span id="wert_G" style="font-size:18px; font-weight:bold;">– A</span>
+                </div>
+                <!-- S-Typ: Faktor 17 -->
+                <div id="box_S" style="padding:15px; border-radius:8px; border:2px solid #0057a8; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:bold; font-size:18px;" id="label_S">S –</span>
+                    <span id="wert_S" style="font-size:18px; font-weight:bold;">– A</span>
+                </div>
+                <!-- U-Typ: Faktor 9 -->
+                <div id="box_U" style="padding:15px; border-radius:8px; border:2px solid #0057a8; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:bold; font-size:18px;" id="label_U">U –</span>
+                    <span id="wert_U" style="font-size:18px; font-weight:bold;">– A</span>
+                </div>
+                <!-- CF-Typ: Faktor 10 -->
+                <div id="box_CF" style="padding:15px; border-radius:8px; border:2px solid #0057a8; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:bold; font-size:18px;" id="label_CF">CF –</span>
+                    <span id="wert_CF" style="font-size:18px; font-weight:bold;">– A</span>
+                </div>
+                <!-- F-Typ Feinsicherung: Faktor 1,5 -->
+                <div id="box_F" style="padding:15px; border-radius:8px; border:2px solid #0057a8; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:bold; font-size:18px;" id="label_F">F –</span>
+                    <span id="wert_F" style="font-size:18px; font-weight:bold;">– A</span>
+                </div>
+                <!-- M-Typ Feinsicherung: Faktor 4 -->
+                <div id="box_M" style="padding:15px; border-radius:8px; border:2px solid #0057a8; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:bold; font-size:18px;" id="label_M">M –</span>
+                    <span id="wert_M" style="font-size:18px; font-weight:bold;">– A</span>
+                </div>
+                <!-- T-Typ Feinsicherung: Faktor 8 -->
+                <div id="box_T" style="padding:15px; border-radius:8px; border:2px solid #0057a8; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:bold; font-size:18px;" id="label_T">T –</span>
+                    <span id="wert_T" style="font-size:18px; font-weight:bold;">– A</span>
+                </div>
+                <!-- gg/gl-Typ: Faktor 5 -->
+                <div id="box_gggl" style="padding:15px; border-radius:8px; border:2px solid #0057a8; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:bold; font-size:18px;" id="label_gggl">gg/gl –</span>
+                    <span id="wert_gggl" style="font-size:18px; font-weight:bold;">– A</span>
                 </div>
             </div>
         </div>
@@ -1803,36 +1878,44 @@
         }
 
         /* Auslösewerte berechnen: Nennstrom × Faktor */
-        const wertB = sicherung * 5;  /* B: Faktor 5 */
-        const wertC = sicherung * 10; /* C: Faktor 10 */
-        const wertD = sicherung * 20; /* D: Faktor 20 */
+        const typen = [
+            { id: 'B',    faktor: 5    },
+            { id: 'C',    faktor: 10   },
+            { id: 'D',    faktor: 20   },
+            { id: 'K',    faktor: 14   },
+            { id: 'Z',    faktor: 3    },
+            { id: 'A',    faktor: 3    },
+            { id: 'H',    faktor: 3    },
+            { id: 'E',    faktor: 6.25 },
+            { id: 'L',    faktor: 5    },
+            { id: 'R',    faktor: 3    },
+            { id: 'G',    faktor: 10   },
+            { id: 'S',    faktor: 17   },
+            { id: 'U',    faktor: 9    },
+            { id: 'CF',   faktor: 10   },
+            { id: 'F',    faktor: 1.5  },
+            { id: 'M',    faktor: 4    },
+            { id: 'T',    faktor: 8    },
+            { id: 'gggl', faktor: 5    },
+        ];
 
-        /* Labels setzen: z.B. "B3" */
-        document.getElementById('label_B').innerText = 'B' + sicherung;
-        document.getElementById('label_C').innerText = 'C' + sicherung;
-        document.getElementById('label_D').innerText = 'D' + sicherung;
-
-        /* Werte setzen */
-        document.getElementById('wert_B').innerText = wertB.toFixed(1) + ' A';
-        document.getElementById('wert_C').innerText = wertC.toFixed(1) + ' A';
-        document.getElementById('wert_D').innerText = wertD.toFixed(1) + ' A';
-
-        /* Farben setzen: grün wenn Wert ≤ Auslösestrom, rot wenn Wert > Auslösestrom */
-        function faerbeBox(boxId, wert) {
-            const box = document.getElementById(boxId);
+        /* Für jeden Typ: Label, Wert und Farbe setzen */
+        typen.forEach(typ => {
+            const wert = sicherung * typ.faktor; /* Auslösewert berechnen */
+            document.getElementById('label_' + typ.id).innerText = typ.id === 'gggl' ? 'gg/gl ' + sicherung : typ.id + sicherung; /* Label z.B. B3 */
+            document.getElementById('wert_' + typ.id).innerText  = wert.toFixed(1) + ' A'; /* Wert z.B. 15,0 A */
+            /* Farbe: grün wenn ≤ Auslösestrom, rot wenn > */
+            const box = document.getElementById('box_' + typ.id);
             if (wert <= ausloeseStrom) {
-                box.style.background = '#d4edda';        /* Hellgrün */
-                box.style.borderColor = '#28a745';       /* Grüner Rahmen */
-                box.style.color = '#155724';             /* Dunkelgrüner Text */
+                box.style.background  = '#d4edda';  /* Hellgrün */
+                box.style.borderColor = '#28a745';  /* Grüner Rahmen */
+                box.style.color       = '#155724';  /* Dunkelgrüner Text */
             } else {
-                box.style.background = '#f8d7da';        /* Hellrot */
-                box.style.borderColor = '#dc3545';       /* Roter Rahmen */
-                box.style.color = '#dc3545';             /* Roter Text */
+                box.style.background  = '#f8d7da';  /* Hellrot */
+                box.style.borderColor = '#dc3545';  /* Roter Rahmen */
+                box.style.color       = '#dc3545';  /* Roter Text */
             }
-        }
-        faerbeBox('box_B', wertB); /* B-Typ einfärben */
-        faerbeBox('box_C', wertC); /* C-Typ einfärben */
-        faerbeBox('box_D', wertD); /* D-Typ einfärben */
+        });
 
         /* Tabelle einblenden */
         tabelle.style.display = 'block';
