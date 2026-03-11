@@ -135,6 +135,21 @@
     #modalSeriennummer.aktiv {
         display: flex; /* Modal sichtbar machen wenn .aktiv Klasse gesetzt wird */
     }
+    #modalBauteile {
+        display: none;               /* Versteckt – wird per JavaScript mit .aktiv sichtbar */
+        position: fixed;             /* Fixiert über allem */
+        top: 0;                      /* Ganz oben */
+        left: 0;                     /* Ganz links */
+        width: 100%;                 /* Gesamte Breite */
+        height: 100%;                /* Gesamte Höhe */
+        background: rgba(0,0,0,0.5); /* Dunkles Overlay */
+        z-index: 500;                /* Über allen anderen Elementen */
+        align-items: center;         /* Vertikal zentrieren */
+        justify-content: center;     /* Horizontal zentrieren */
+    }
+    #modalBauteile.aktiv {
+        display: flex; /* Sichtbar wenn .aktiv gesetzt */
+    }
     .modal-box {
         background: white;                     /* Weißer Hintergrund der Dialogbox */
         border-radius: 16px;                   /* Stark abgerundete Ecken */
@@ -646,8 +661,37 @@
         <div class="modal-buttons">
             <!-- Überspringen: schließt Modal ohne zu speichern -->
             <button class="modal-btn-skip" onclick="schliesseModal()">Überspringen</button>
-            <!-- Speichern: übernimmt Seriennummer in die Leiste -->
-            <button class="modal-btn-ok" onclick="speichereSeriennummer()">✅ Speichern</button>
+            <!-- Speichern: übernimmt Seriennummer, öffnet dann Bauteil-Auswahl -->
+            <button class="modal-btn-ok" onclick="speichereSeriennummer()">✅ Weiter</button>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     MODAL – BAUTEIL-AUSWAHL
+     Erscheint nach der Seriennummer-Eingabe bei Umbau
+     Mehrfachauswahl welche Bauteile umgebaut wurden
+     Jederzeit änderbar über "ändern" Button in der Leiste
+========================================== -->
+
+<div id="modalBauteile"> <!-- Standardmäßig versteckt – .aktiv macht es sichtbar -->
+    <div class="modal-box"> <!-- Modal-Box zentriert -->
+        <h2>🔧 Welche Teile wurden umgebaut?</h2> <!-- Titel -->
+        <p style="color:#666;margin-bottom:15px;font-size:14px;">Bitte wählen Sie alle betroffenen Bauteile aus.</p> <!-- Hinweis -->
+        <!-- Checkboxen für alle Bauteile – untereinander -->
+        <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px;text-align:left;">
+            <label style="display:flex;align-items:center;gap:10px;font-size:16px;cursor:pointer;"> <!-- Checkbox Seil -->
+                <input type="checkbox" id="check_seil" style="width:20px;height:20px;cursor:pointer;">
+                1 – 🔩 Geschwindigkeitsbegrenzerseil
+            </label>
+            <label style="display:flex;align-items:center;gap:10px;font-size:16px;cursor:pointer;"> <!-- Checkbox Begrenzer -->
+                <input type="checkbox" id="check_begrenzer" style="width:20px;height:20px;cursor:pointer;">
+                2 – ⚙️ Geschwindigkeitsbegrenzer
+            </label>
+        </div>
+        <div class="modal-buttons"> <!-- Buttons nebeneinander -->
+            <button class="modal-btn-skip" onclick="schliesseBauteilModal()">Überspringen</button> <!-- Alle Bauteile zeigen -->
+            <button class="modal-btn-ok" onclick="speichereBauteile()">✅ Speichern</button> <!-- Nur gewählte zeigen -->
         </div>
     </div>
 </div>
@@ -669,6 +713,8 @@
     <span id="seriennummerAnzeige">–</span>
     <!-- Bearbeiten-Link öffnet das Modal erneut -->
     <button class="seriennummer-edit" onclick="oeffneModal()">✏️ ändern</button>
+    <!-- Bauteile-Auswahl jederzeit änderbar -->
+    <button class="seriennummer-edit" id="btnBauteileAendern" onclick="oeffneBauteilModal()" style="display:none;">🔧 Bauteile ✏️ ändern</button>
 </div>
 
 <!-- ==========================================
@@ -701,9 +747,9 @@
     <h2 id="bereichTitel"></h2>
     <div class="bauteil-liste">
         <!-- Bauteil 1: Geschwindigkeitsbegrenzerseil -->
-        <button class="bauteil-btn" onclick="zeigeBauteil('seil')">1 – 🔩 Geschwindigkeitsbegrenzerseil</button>
+        <button id="btn_seil" class="bauteil-btn" onclick="zeigeBauteil('seil')">1 – 🔩 Geschwindigkeitsbegrenzerseil</button>
         <!-- Bauteil 2: Geschwindigkeitsbegrenzer -->
-        <button class="bauteil-btn" onclick="zeigeBauteil('begrenzer')">2 – ⚙️ Geschwindigkeitsbegrenzer</button>
+        <button id="btn_begrenzer" class="bauteil-btn" onclick="zeigeBauteil('begrenzer')">2 – ⚙️ Geschwindigkeitsbegrenzer</button>
     </div>
 </div>
 
@@ -1436,7 +1482,8 @@
        Speichert die aktuell eingegebene Seriennummer
        Wird im PDF-Export und in der Leiste verwendet
     ------------------------------------------ */
-    let aktuelleSeriennummer = '';
+    let aktuelleSeriennummer = '';  /* Aktuelle Seriennummer */
+    let gewaehlteBauteile   = [];  /* Gewählte Bauteile: ['seil', 'begrenzer', ...] – leer = alle anzeigen */
 
     /* Modal öffnen: zeigt das Seriennummer-Eingabefeld
        Befüllt das Eingabefeld mit der aktuellen Seriennummer */
@@ -1452,17 +1499,56 @@
         zeigeBauteile(document.getElementById('bereichTitel').innerText || 'Umbau');
     }
 
-    /* Seriennummer speichern und Modal schließen
-       Zeigt die Seriennummer in der blauen Leiste an */
+    /* Seriennummer speichern – öffnet danach Bauteil-Auswahl Modal */
     function speichereSeriennummer() {
-        const eingabe = document.getElementById('seriennummerInput').value.trim();
-        /* Falls nichts eingegeben wurde, Strich als Platzhalter */
-        aktuelleSeriennummer = eingabe || '–';
-        document.getElementById('seriennummerAnzeige').innerText = aktuelleSeriennummer;
-        /* Seriennummer-Leiste einblenden */
-        document.getElementById('seriennummerBar').style.display = 'flex';
-        document.getElementById('modalSeriennummer').classList.remove('aktiv');
-        zeigeBauteile('Umbau');
+        const eingabe = document.getElementById('seriennummerInput').value.trim(); /* Eingabe auslesen */
+        aktuelleSeriennummer = eingabe || '–'; /* Leer → Strich */
+        document.getElementById('seriennummerAnzeige').innerText = aktuelleSeriennummer; /* In Leiste anzeigen */
+        document.getElementById('seriennummerBar').style.display = 'flex'; /* Leiste einblenden */
+        document.getElementById('modalSeriennummer').classList.remove('aktiv'); /* SN-Modal schließen */
+        oeffneBauteilModal(); /* Bauteil-Auswahl öffnen */
+    }
+
+    /* Bauteil-Modal öffnen – stellt aktuelle Auswahl wieder her */
+    function oeffneBauteilModal() {
+        /* Aktuelle Checkboxen-Zustände wiederherstellen */
+        document.getElementById('check_seil').checked = gewaehlteBauteile.includes('seil');
+        document.getElementById('check_begrenzer').checked = gewaehlteBauteile.includes('begrenzer');
+        document.getElementById('modalBauteile').classList.add('aktiv'); /* Modal anzeigen */
+    }
+
+    /* Bauteil-Modal ohne Speichern schließen – alle Bauteile bleiben sichtbar */
+    function schliesseBauteilModal() {
+        document.getElementById('modalBauteile').classList.remove('aktiv'); /* Modal schließen */
+        document.getElementById('btnBauteileAendern').style.display = 'inline-block'; /* Ändern-Button zeigen */
+        aktualisiereBauteilListe(); /* Bauteil-Liste aktualisieren */
+        zeige('bauteilSeite'); /* Zur Bauteil-Liste navigieren */
+    }
+
+    /* Bauteil-Auswahl speichern und Modal schließen */
+    function speichereBauteile() {
+        gewaehlteBauteile = []; /* Auswahl zurücksetzen */
+        if (document.getElementById('check_seil').checked) gewaehlteBauteile.push('seil'); /* Seil gewählt */
+        if (document.getElementById('check_begrenzer').checked) gewaehlteBauteile.push('begrenzer'); /* Begrenzer gewählt */
+        document.getElementById('modalBauteile').classList.remove('aktiv'); /* Modal schließen */
+        document.getElementById('btnBauteileAendern').style.display = 'inline-block'; /* Ändern-Button zeigen */
+        aktualisiereBauteilListe(); /* Bauteil-Liste aktualisieren */
+        zeige('bauteilSeite'); /* Zur Bauteil-Liste navigieren */
+    }
+
+    /* Bauteil-Liste je nach Auswahl anzeigen/verstecken */
+    function aktualisiereBauteilListe() {
+        const btnSeil      = document.getElementById('btn_seil');      /* Button Seil */
+        const btnBegrenzer = document.getElementById('btn_begrenzer'); /* Button Begrenzer */
+        if (gewaehlteBauteile.length === 0) {
+            /* Nichts gewählt → alle anzeigen */
+            btnSeil.style.display      = 'block';
+            btnBegrenzer.style.display = 'block';
+        } else {
+            /* Nur gewählte anzeigen */
+            btnSeil.style.display      = gewaehlteBauteile.includes('seil')      ? 'block' : 'none';
+            btnBegrenzer.style.display = gewaehlteBauteile.includes('begrenzer') ? 'block' : 'none';
+        }
     }
 
     /* Umbau-Button: öffnet zuerst das Seriennummer-Modal */
