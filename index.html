@@ -1600,6 +1600,26 @@
             <input type="number" id="sicherungswert" placeholder="Nennstrom" step="0.1" min="0" oninput="berechneAusloeseStrom()"> <!-- Sicherungs-Nennstrom in Ampere -->
             <span class="einheit">A</span> <!-- Einheit Ampere -->
         </div>
+        <!-- Typen-Tabelle: erscheint sobald Sicherungswert eingegeben -->
+        <div id="sicherung_tabelle" style="display:none; margin-top:15px;">
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <!-- B-Typ -->
+                <div id="box_B" style="padding:15px; border-radius:8px; border:2px solid #0057a8; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:bold; font-size:18px;" id="label_B">B –</span> <!-- z.B. B3 -->
+                    <span id="wert_B" style="font-size:18px; font-weight:bold;">– A</span> <!-- z.B. 15 A -->
+                </div>
+                <!-- C-Typ -->
+                <div id="box_C" style="padding:15px; border-radius:8px; border:2px solid #0057a8; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:bold; font-size:18px;" id="label_C">C –</span>
+                    <span id="wert_C" style="font-size:18px; font-weight:bold;">– A</span>
+                </div>
+                <!-- D-Typ -->
+                <div id="box_D" style="padding:15px; border-radius:8px; border:2px solid #0057a8; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:bold; font-size:18px;" id="label_D">D –</span>
+                    <span id="wert_D" style="font-size:18px; font-weight:bold;">– A</span>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div><!-- Ende Tab Elektro Prüfung -->
@@ -1761,15 +1781,61 @@
        Auslösestrom = gemessener Strom − 30%
     ------------------------------------------ */
     function berechneAusloeseStrom() {
-        const strom = parseFloat(document.getElementById('gemessener_strom').value); /* Gemessener Strom auslesen */
-        const inline = document.getElementById('ausloeseStrom_inline'); /* Inline-Ergebnis */
+        const strom    = parseFloat(document.getElementById('gemessener_strom').value); /* Gemessener Strom */
+        const sicherung = parseFloat(document.getElementById('sicherungswert').value);  /* Sicherungs-Nennstrom */
+        const inline   = document.getElementById('ausloeseStrom_inline'); /* Inline-Ergebnis */
+        const tabelle  = document.getElementById('sicherung_tabelle');    /* Typen-Tabelle */
+
+        /* Auslösestrom berechnen und anzeigen */
         if (isNaN(strom) || strom <= 0) {
-            inline.style.display = 'none'; /* Verstecken wenn kein Wert */
+            inline.style.display  = 'none';
+            tabelle.style.display = 'none';
             return;
         }
-        const ausloeseStrom = strom * 0.7; /* 30% abziehen: Strom × 0,7 */
-        document.getElementById('ergebnis_ausloeseStrom').innerText = ausloeseStrom.toFixed(2); /* Ergebnis anzeigen */
-        inline.style.display = 'inline'; /* Ergebnis einblenden */
+        const ausloeseStrom = strom * 0.7; /* 30% abziehen */
+        document.getElementById('ergebnis_ausloeseStrom').innerText = ausloeseStrom.toFixed(2);
+        inline.style.display = 'inline';
+
+        /* Typen-Tabelle nur anzeigen wenn Sicherungswert vorhanden */
+        if (isNaN(sicherung) || sicherung <= 0) {
+            tabelle.style.display = 'none';
+            return;
+        }
+
+        /* Auslösewerte berechnen: Nennstrom × Faktor */
+        const wertB = sicherung * 5;  /* B: Faktor 5 */
+        const wertC = sicherung * 10; /* C: Faktor 10 */
+        const wertD = sicherung * 20; /* D: Faktor 20 */
+
+        /* Labels setzen: z.B. "B3" */
+        document.getElementById('label_B').innerText = 'B' + sicherung;
+        document.getElementById('label_C').innerText = 'C' + sicherung;
+        document.getElementById('label_D').innerText = 'D' + sicherung;
+
+        /* Werte setzen */
+        document.getElementById('wert_B').innerText = wertB.toFixed(1) + ' A';
+        document.getElementById('wert_C').innerText = wertC.toFixed(1) + ' A';
+        document.getElementById('wert_D').innerText = wertD.toFixed(1) + ' A';
+
+        /* Farben setzen: grün wenn Wert ≤ Auslösestrom, rot wenn Wert > Auslösestrom */
+        function faerbeBox(boxId, wert) {
+            const box = document.getElementById(boxId);
+            if (wert <= ausloeseStrom) {
+                box.style.background = '#d4edda';        /* Hellgrün */
+                box.style.borderColor = '#28a745';       /* Grüner Rahmen */
+                box.style.color = '#155724';             /* Dunkelgrüner Text */
+            } else {
+                box.style.background = '#f8d7da';        /* Hellrot */
+                box.style.borderColor = '#dc3545';       /* Roter Rahmen */
+                box.style.color = '#dc3545';             /* Roter Text */
+            }
+        }
+        faerbeBox('box_B', wertB); /* B-Typ einfärben */
+        faerbeBox('box_C', wertC); /* C-Typ einfärben */
+        faerbeBox('box_D', wertD); /* D-Typ einfärben */
+
+        /* Tabelle einblenden */
+        tabelle.style.display = 'block';
     }
 
     /* ------------------------------------------
