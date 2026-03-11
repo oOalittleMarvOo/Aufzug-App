@@ -14,10 +14,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Titel im Browser-Tab -->
     <title>Aufzug-App</title>
-    <!-- jsPDF Bibliothek: Erstellt PDF-Protokolle direkt im Browser, kein Server nötig -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 ```
+<!-- PWA: App-Manifest verknüpfen -->
+<link rel="manifest" href="manifest.json"> <!-- Manifest für App-Symbol und Offline-Funktion -->
+<!-- PWA: iOS spezifische Meta-Tags -->
+<meta name="apple-mobile-web-app-capable" content="yes"> <!-- Vollbild auf iOS -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"> <!-- Statusleiste transparent -->
+<meta name="apple-mobile-web-app-title" content="Aufzug-App"> <!-- App-Name auf iOS Homescreen -->
+<link rel="apple-touch-icon" href="icon-192.png"> <!-- App-Icon für iOS -->
+<!-- PWA: Theme-Farbe -->
+<meta name="theme-color" content="#0057a8"> <!-- Blau passend zur App -->
+<!-- jsPDF Bibliothek: Erstellt PDF-Protokolle direkt im Browser, kein Server nötig -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <style>
 
     /* ==========================================
@@ -1573,10 +1583,26 @@
      TAB: ELEKTRO PRÜFUNG (2.3.x) – Platzhalter
 ========================================== -->
 <div id="elektro_begrenzer" class="tab-inhalt"> <!-- Versteckt -->
-    <div class="frage">
-        <h3>Elektro Prüfung folgt...</h3> <!-- Platzhalter für spätere Erweiterung -->
+
+    <!-- FRAGE 2.3.1 – Gemessener Strom -->
+    <div class="frage" id="frage2_3_1">
+        <h3>2.3.1 – Gemessener Strom</h3> <!-- Fragetitel -->
+        <div class="eingabe-zeile">
+            <label>Gemessener Strom:</label>
+            <input type="number" id="gemessener_strom" placeholder="Wert eingeben" step="0.1" min="0" oninput="berechneAusloeseStrom()"> <!-- Eingabe in Ampere -->
+            <span class="einheit">A</span> <!-- Einheit Ampere -->
+            <!-- Ergebnis direkt dahinter: Strom − 30% -->
+            <span id="ausloeseStrom_inline" style="display:none; margin-left:10px; font-weight:bold; color:#0057a8;">→ Auslösestrom = <span id="ergebnis_ausloeseStrom">–</span> A</span>
+        </div>
+        <!-- Eingabe Sicherungswert -->
+        <div class="eingabe-zeile" style="margin-top:10px;">
+            <label>Verbaute Sicherung:</label>
+            <input type="number" id="sicherungswert" placeholder="Nennstrom" step="0.1" min="0" oninput="berechneAusloeseStrom()"> <!-- Sicherungs-Nennstrom in Ampere -->
+            <span class="einheit">A</span> <!-- Einheit Ampere -->
+        </div>
     </div>
-</div>
+
+</div><!-- Ende Tab Elektro Prüfung -->
 
 <!-- PDF EXPORT BUTTON -->
 <div class="pdf-bereich">
@@ -1728,6 +1754,22 @@
             tabs[0].classList.add('aktiv');
             document.getElementById('pruefung_begrenzer').classList.add('aktiv');
         }
+    }
+
+    /* ------------------------------------------
+       AUSLÖSESTROM BERECHNUNG (2.3.1)
+       Auslösestrom = gemessener Strom − 30%
+    ------------------------------------------ */
+    function berechneAusloeseStrom() {
+        const strom = parseFloat(document.getElementById('gemessener_strom').value); /* Gemessener Strom auslesen */
+        const inline = document.getElementById('ausloeseStrom_inline'); /* Inline-Ergebnis */
+        if (isNaN(strom) || strom <= 0) {
+            inline.style.display = 'none'; /* Verstecken wenn kein Wert */
+            return;
+        }
+        const ausloeseStrom = strom * 0.7; /* 30% abziehen: Strom × 0,7 */
+        document.getElementById('ergebnis_ausloeseStrom').innerText = ausloeseStrom.toFixed(2); /* Ergebnis anzeigen */
+        inline.style.display = 'inline'; /* Ergebnis einblenden */
     }
 
     /* ------------------------------------------
@@ -2245,6 +2287,18 @@
         /* PDF speichern: Dateiname enthält das heutige Datum */
         const datum = new Date().toLocaleDateString('de-DE').replace(/\./g, '-');
         doc.save('Pruefprotokoll_' + datum + '.pdf');
+    }
+
+    /* ------------------------------------------
+       PWA – SERVICE WORKER REGISTRIERUNG
+       Aktiviert Offline-Funktion und App-Symbol
+    ------------------------------------------ */
+    if ('serviceWorker' in navigator) { /* Prüfen ob Browser Service Worker unterstützt */
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/Aufzug-App/sw.js') /* Service Worker registrieren */
+                .then(() => console.log('Service Worker aktiv ✅'))
+                .catch(err => console.log('Service Worker Fehler:', err));
+        });
     }
 
 </script>
