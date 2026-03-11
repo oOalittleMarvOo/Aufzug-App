@@ -1422,6 +1422,30 @@
         </div>
     </div>
 
+    <!-- FRAGE 2.1.2 – Zugänglichkeit des Geschwindigkeitsbegrenzers -->
+    <div class="frage" id="frage2_1_2">
+        <h3>2.1.2 – Der Zugang zum Geschwindigkeitsbegrenzer muss zur Prüfung und Wartung zugänglich sein. Befindet er sich im Schacht, muss er von außen zugänglich sein (Wartungsklappe).</h3> <!-- Fragetitel -->
+        <!-- Blauer Hinweiskasten mit Ausnahme-Regelung -->
+        <div class="hinweis">ℹ️ Ausnahme bei Fernauslösung: Kabellose Fernauslösungen sind nicht zulässig. Der Geschwindigkeitsbegrenzer ist von der Grube oder vom Fahrkorbdach erreichbar. Der Geschwindigkeitsbegrenzer setzt sich selbstständig zurück nach der Aufwärtsfahrt.<br><br>📋 DIN 81:20 5.6.2.2.1.4</div> <!-- Norm-Hinweis -->
+        <!-- Antwort-Buttons: Passt / Mangel / Trifft nicht zu -->
+        <div class="antwort-gruppe">
+            <button class="antwort-btn passt" onclick="antwort(this, 'frage2_1_2')">🟢 Passt</button> <!-- Alles in Ordnung -->
+            <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage2_1_2')">🔴 Mangel</button> <!-- Mangel festgestellt -->
+            <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage2_1_2')">⚪ Trifft nicht zu</button> <!-- Nicht relevant -->
+        </div>
+        <!-- Mangelfeld: erscheint bei "Mangel" -->
+        <div class="mangelfeld" id="mangel-frage2_1_2">
+            <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+            <label>Bitte Mangel beschreiben:</label>
+            <textarea placeholder="Beschreibung des Mangels..."></textarea>
+        </div>
+        <!-- Kommentarfeld: erscheint bei "Trifft nicht zu" -->
+        <div class="mangelfeld" id="trifft-frage2_1_2" style="background:#f0f0f0;border-color:#999;">
+            <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
+            <textarea placeholder="Begründung oder Kommentar..."></textarea>
+        </div>
+    </div>
+
 </div><!-- Ende Tab Prüfung vor Ort -->
 
 <!-- ==========================================
