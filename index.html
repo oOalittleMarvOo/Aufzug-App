@@ -1902,7 +1902,14 @@
         /* Für jeden Typ: Label, Wert und Farbe setzen */
         typen.forEach(typ => {
             const wert = sicherung * typ.faktor; /* Auslösewert berechnen */
-            document.getElementById('label_' + typ.id).innerText = typ.id === 'gggl' ? 'gg/gl ' + sicherung : typ.id + sicherung; /* Label z.B. B3 */
+            /* Label mit Leerzeichen und Sondernamen für Feinsicherungen */
+            let label;
+            if      (typ.id === 'gggl') label = 'gg/gl ' + sicherung;
+            else if (typ.id === 'F')    label = 'Fein flink ' + sicherung;
+            else if (typ.id === 'M')    label = 'Fein mittel ' + sicherung;
+            else if (typ.id === 'T')    label = 'Fein träge ' + sicherung;
+            else                        label = typ.id + ' ' + sicherung; /* z.B. "B 3" */
+            document.getElementById('label_' + typ.id).innerText = label; /* Label setzen */
             document.getElementById('wert_' + typ.id).innerText  = wert.toFixed(1) + ' A'; /* Wert z.B. 15,0 A */
             /* Farbe: grün wenn ≤ Auslösestrom, rot wenn > */
             const box = document.getElementById('box_' + typ.id);
