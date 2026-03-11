@@ -1466,6 +1466,94 @@
         </div>
     </div>
 
+    <!-- FRAGE 2.1.4 – Fangprobe / Geschwindigkeitsbegrenzerschalter -->
+    <div class="frage" id="frage2_1_4">
+        <h3>2.1.4 – Fangprobe: Nach der Fangprobe den Fangschalter überbrücken und prüfen ob der Geschwindigkeitsbegrenzerschalter abgeschaltet hat.</h3>
+        <div class="antwort-gruppe">
+            <button class="antwort-btn passt" onclick="antwort(this, 'frage2_1_4')">🟢 Passt</button>
+            <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage2_1_4')">🔴 Mangel</button>
+            <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage2_1_4')">⚪ Trifft nicht zu</button>
+        </div>
+        <div class="mangelfeld" id="mangel-frage2_1_4">
+            <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+            <label>Bitte Mangel beschreiben:</label>
+            <textarea placeholder="Beschreibung des Mangels..."></textarea>
+        </div>
+        <div class="mangelfeld" id="trifft-frage2_1_4" style="background:#f0f0f0;border-color:#999;">
+            <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
+            <textarea placeholder="Begründung oder Kommentar..."></textarea>
+        </div>
+    </div>
+
+    <!-- FRAGE 2.1.5 – Auslösegeschwindigkeit -->
+    <div class="frage" id="frage2_1_5">
+        <h3>2.1.5 – Ist die richtige Auslösegeschwindigkeit eingestellt?</h3>
+        <!-- Hinweiskasten mit festen Grenzwerten – immer sichtbar -->
+        <div class="hinweis">
+            ℹ️ Grenzwerte der Auslösegeschwindigkeit:<br><br>
+            • 0,8 m/s bei Sperrfangvorrichtungen<br>
+            • 1,0 m/s bei Rollensperrfangvorrichtungen<br>
+            • 1,5 m/s bei Bremsfangvorrichtungen bis 1,0 m/s<br>
+            • Bei v &gt; 1,0 m/s → Formel: v<sub>max</sub> = 1,25 × v + 0,25/v
+        </div>
+        <!-- Eingabe Nenngeschwindigkeit mit inline Ergebnis -->
+        <div class="eingabe-zeile" style="margin-top:15px;">
+            <label>Nenngeschwindigkeit v:</label>
+            <input type="number" id="v_ausloesung" placeholder="Wert eingeben" step="0.01" min="0" oninput="berechneAusloesung()">
+            <span class="einheit">m/s</span>
+            <!-- Ergebnis direkt dahinter – nur sichtbar wenn v > 1,0 m/s -->
+            <span id="ausloesung_inline" style="display:none; margin-left:10px; font-weight:bold; color:#0057a8;">→ v<sub>max</sub> = <span id="ergebnis_ausloesung_inline">–</span> m/s</span>
+        </div>
+        <!-- Berechnungsbereich: nur sichtbar wenn v > 1,0 m/s -->
+        <div id="ausloesung_bereich" style="display:none; margin-top:15px;">
+            <div class="formel-container">
+                <span>v<sub>max</sub> = 1,25 × v + </span>
+                <span class="bruch">
+                    <span class="zaehler">0,25</span>
+                    <span class="nenner">v</span>
+                </span>
+            </div>
+            <div class="zwischenwert" style="margin-top:10px;">
+                <label>Maximale Auslösegeschwindigkeit v<sub>max</sub> =</label>
+                <span id="ergebnis_ausloesung" style="font-weight:bold;color:#0057a8;">–</span>
+                <span> m/s</span>
+            </div>
+        </div>
+        <div class="antwort-gruppe" style="margin-top:15px;">
+            <button class="antwort-btn passt" onclick="antwort(this, 'frage2_1_5')">🟢 Passt</button>
+            <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage2_1_5')">🔴 Mangel</button>
+            <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage2_1_5')">⚪ Trifft nicht zu</button>
+        </div>
+        <div class="mangelfeld" id="mangel-frage2_1_5">
+            <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+            <label>Bitte Mangel beschreiben:</label>
+            <textarea placeholder="Beschreibung des Mangels..."></textarea>
+        </div>
+        <div class="mangelfeld" id="trifft-frage2_1_5" style="background:#f0f0f0;border-color:#999;">
+            <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
+            <textarea placeholder="Begründung oder Kommentar..."></textarea>
+        </div>
+    </div>
+
+    <!-- FRAGE 2.1.6 – Typenschild -->
+    <div class="frage" id="frage2_1_6">
+        <h3>2.1.6 – Typenschild vorhanden bzw. stimmt es mit dem Baumuster überein?</h3>
+        <div class="antwort-gruppe">
+            <button class="antwort-btn passt" onclick="antwort(this, 'frage2_1_6')">🟢 Passt</button>
+            <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage2_1_6')">🔴 Mangel</button>
+            <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage2_1_6')">⚪ Trifft nicht zu</button>
+        </div>
+        <div class="mangelfeld" id="mangel-frage2_1_6">
+            <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+            <label>Bitte Mangel beschreiben:</label>
+            <textarea placeholder="Beschreibung des Mangels..."></textarea>
+        </div>
+        <div class="mangelfeld" id="trifft-frage2_1_6" style="background:#f0f0f0;border-color:#999;">
+            <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
+            <textarea placeholder="Begründung oder Kommentar..."></textarea>
+        </div>
+    </div>
+
 </div><!-- Ende Tab Prüfung vor Ort -->
 
 <!-- ==========================================
@@ -1644,6 +1732,33 @@
             inhalte.forEach(el => el.classList.remove('aktiv'));
             tabs[0].classList.add('aktiv');
             document.getElementById('pruefung_begrenzer').classList.add('aktiv');
+        }
+    }
+
+    /* ------------------------------------------
+       AUSLÖSEGESCHWINDIGKEIT BERECHNUNG (2.1.5)
+       Formel gilt nur wenn v > 1,0 m/s
+       v_max = 1,25 × v + 0,25 / v
+    ------------------------------------------ */
+    function berechneAusloesung() {
+        const v = parseFloat(document.getElementById('v_ausloesung').value); /* Nenngeschwindigkeit auslesen */
+        const bereich = document.getElementById('ausloesung_bereich'); /* Berechnungsbereich */
+        const inline  = document.getElementById('ausloesung_inline');  /* Inline-Ergebnis neben Eingabe */
+        if (isNaN(v) || v <= 0) {
+            bereich.style.display = 'none'; /* Verstecken wenn kein Wert */
+            inline.style.display  = 'none';
+            return;
+        }
+        if (v > 1.0) {
+            /* Formel anwenden: v_max = 1,25 × v + 0,25/v */
+            const vmax = 1.25 * v + 0.25 / v; /* Maximale Auslösegeschwindigkeit berechnen */
+            document.getElementById('ergebnis_ausloesung').innerText        = vmax.toFixed(2); /* Ergebnis in Formelbereich */
+            document.getElementById('ergebnis_ausloesung_inline').innerText = vmax.toFixed(2); /* Ergebnis inline */
+            bereich.style.display = 'block'; /* Formelbereich einblenden */
+            inline.style.display  = 'inline'; /* Inline-Ergebnis einblenden */
+        } else {
+            bereich.style.display = 'none'; /* Unter 1,0 m/s: nur Hinweis */
+            inline.style.display  = 'none';
         }
     }
 
