@@ -1496,27 +1496,22 @@
             • 1,5 m/s bei Bremsfangvorrichtungen bis 1,0 m/s<br>
             • Bei v &gt; 1,0 m/s → Formel: v<sub>max</sub> = 1,25 × v + 0,25/v
         </div>
-        <!-- Eingabe Nenngeschwindigkeit mit inline Ergebnis -->
+        <!-- Eingabe Nenngeschwindigkeit -->
         <div class="eingabe-zeile" style="margin-top:15px;">
             <label>Nenngeschwindigkeit v:</label>
             <input type="number" id="v_ausloesung" placeholder="Wert eingeben" step="0.01" min="0" oninput="berechneAusloesung()">
             <span class="einheit">m/s</span>
-            <!-- Ergebnis direkt dahinter – nur sichtbar wenn v > 1,0 m/s -->
-            <span id="ausloesung_inline" style="display:none; margin-left:10px; font-weight:bold; color:#0057a8;">→ v<sub>max</sub> = <span id="ergebnis_ausloesung_inline">–</span> m/s</span>
         </div>
-        <!-- Berechnungsbereich: nur sichtbar wenn v > 1,0 m/s -->
+        <!-- Formel + Ergebnis: nur sichtbar wenn v ≥ 1,0 m/s -->
         <div id="ausloesung_bereich" style="display:none; margin-top:15px;">
+            <!-- Formeldarstellung -->
             <div class="formel-container">
                 <span>v<sub>max</sub> = 1,25 × v + </span>
                 <span class="bruch">
                     <span class="zaehler">0,25</span>
                     <span class="nenner">v</span>
                 </span>
-            </div>
-            <div class="zwischenwert" style="margin-top:10px;">
-                <label>Maximale Auslösegeschwindigkeit v<sub>max</sub> =</label>
-                <span id="ergebnis_ausloesung" style="font-weight:bold;color:#0057a8;">–</span>
-                <span> m/s</span>
+                <span style="margin-left:15px;font-weight:bold;color:#0057a8;">= <span id="ergebnis_ausloesung">–</span> m/s</span>
             </div>
         </div>
         <div class="antwort-gruppe" style="margin-top:15px;">
@@ -1742,23 +1737,18 @@
     ------------------------------------------ */
     function berechneAusloesung() {
         const v = parseFloat(document.getElementById('v_ausloesung').value); /* Nenngeschwindigkeit auslesen */
-        const bereich = document.getElementById('ausloesung_bereich'); /* Berechnungsbereich */
-        const inline  = document.getElementById('ausloesung_inline');  /* Inline-Ergebnis neben Eingabe */
+        const bereich = document.getElementById('ausloesung_bereich'); /* Formel+Ergebnis-Bereich */
         if (isNaN(v) || v <= 0) {
             bereich.style.display = 'none'; /* Verstecken wenn kein Wert */
-            inline.style.display  = 'none';
             return;
         }
-        if (v > 1.0) {
+        if (v >= 1.0) {
             /* Formel anwenden: v_max = 1,25 × v + 0,25/v */
-            const vmax = 1.25 * v + 0.25 / v; /* Maximale Auslösegeschwindigkeit berechnen */
-            document.getElementById('ergebnis_ausloesung').innerText        = vmax.toFixed(2); /* Ergebnis in Formelbereich */
-            document.getElementById('ergebnis_ausloesung_inline').innerText = vmax.toFixed(2); /* Ergebnis inline */
-            bereich.style.display = 'block'; /* Formelbereich einblenden */
-            inline.style.display  = 'inline'; /* Inline-Ergebnis einblenden */
+            const vmax = 1.25 * v + 0.25 / v; /* Berechnung */
+            document.getElementById('ergebnis_ausloesung').innerText = vmax.toFixed(2); /* Ergebnis eintragen */
+            bereich.style.display = 'block'; /* Formel + Ergebnis anzeigen */
         } else {
             bereich.style.display = 'none'; /* Unter 1,0 m/s: nur Hinweis */
-            inline.style.display  = 'none';
         }
     }
 
