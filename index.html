@@ -41,6 +41,28 @@
     body {
         font-family: Arial, sans-serif; /* Schriftart: Arial, falls nicht vorhanden dann sans-serif */
         background-color: #f0f4f8;      /* Seitenhintergrund: Helles Blaugrau */
+        background-image: url('https://ooalittlemarvoo.github.io/Aufzug-App/IMG_1852.png'); /* Aufzug-Hintergrundbild */
+        background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
+        background-position: center;    /* Bild zentriert */
+        background-attachment: fixed;   /* Bild bleibt beim Scrollen fixiert */
+        background-repeat: no-repeat;   /* Bild wird nicht wiederholt */
+    }
+
+    /* Halbtransparentes Overlay damit der Inhalt gut lesbar bleibt */
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(240, 244, 248, 0.88); /* Helles Blaugrau mit 88% Deckkraft */
+        z-index: 0;
+        pointer-events: none; /* Klicks gehen durch das Overlay hindurch */
+    }
+
+    /* Alle direkten Kinder von body über dem Overlay */
+    body > * {
+        position: relative;
+        z-index: 1;
     }
 
     /* ==========================================
