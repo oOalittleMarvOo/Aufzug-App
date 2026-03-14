@@ -732,7 +732,7 @@
 
 <!-- HEADER – Blaue Titelleiste, immer sichtbar -->
 
-<header>🛗 Aufzug-App</header>
+<header id="hauptHeader">🛗 Aufzug-App</header> <!-- Header: wird per JavaScript auf "Hauptmenü" oder Bereichsname gesetzt -->
 
 <!-- ==========================================
      SERIENNUMMER-LEISTE
@@ -758,16 +758,16 @@
 ========================================== -->
 
 <div id="startseite" class="startseite">
-    <h2>Bitte wählen Sie einen Bereich:</h2>
+    <h2>0 – Hauptmenü</h2> <!-- Hauptmenü = 0 -->
     <div class="auswahl">
         <!-- Neubau: öffnet Bauteil-Liste ohne Seriennummer-Modal -->
-        <button class="btn" onclick="zeigeBauteile('Neubau')">🏗️ Neubau</button>
+        <button class="btn" onclick="zeigeBauteile('1 – Neubau')">🏗️ 1 – Neubau</button>
         <!-- Umbau: öffnet zuerst das Seriennummer-Modal -->
-        <button class="btn" onclick="zeigeUmbau()">🔧 Umbau</button>
-        <!-- Einzelprüfung: öffnet Bauteil-Liste ohne Seriennummer-Modal -->
-        <button class="btn" onclick="zeigeBauteile('Einzelprüfung')">🔩 Einzelprüfung</button>
+        <button class="btn" onclick="zeigeUmbau()">🔧 2 – Umbau</button>
+        <!-- Komponenten: öffnet Bauteil-Liste ohne Seriennummer-Modal -->
+        <button class="btn" onclick="zeigeBauteile('3 – Komponenten')">🔩 3 – Komponenten</button>
         <!-- Sicherung: öffnet direkt die Sicherungsberechnung -->
-        <button class="btn" onclick="zeige('sicherungSeite')">⚡ Sicherung</button>
+        <button class="btn" onclick="zeige('sicherungSeite')">⚡ 4 – Sicherung</button>
     </div>
 </div>
 
@@ -1881,7 +1881,8 @@
 
     /* Umbau-Button: öffnet zuerst das Seriennummer-Modal */
     function zeigeUmbau() {
-        document.getElementById('bereichTitel').innerText = 'Umbau';
+        document.getElementById('bereichTitel').innerText = '2 – Umbau';
+        document.getElementById('hauptHeader').innerText = '🛗 2 – Umbau'; /* Header setzen */
         oeffneModal();
     }
 
@@ -1896,11 +1897,14 @@
         const el = document.getElementById(id);
         /* Startseite = flex (für zentrierte Buttons), alle anderen = block */
         if (el) { el.style.display = id === 'startseite' ? 'flex' : 'block'; }
+        /* Header zurücksetzen wenn Startseite gezeigt wird */
+        if (id === 'startseite') { document.getElementById('hauptHeader').innerText = '🛗 Aufzug-App'; }
     }
 
     /* Bauteil-Liste anzeigen und Bereich-Titel setzen */
     function zeigeBauteile(bereich) {
         document.getElementById('bereichTitel').innerText = bereich;
+        document.getElementById('hauptHeader').innerText = '🛗 ' + bereich; /* Header auf Bereichsname setzen */
         zeige('bauteilSeite');
     }
 
