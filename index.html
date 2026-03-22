@@ -785,6 +785,26 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         <button id="btn_seil" class="bauteil-btn" onclick="zeigeBauteil('seil')">1 – 🔩 Geschwindigkeitsbegrenzerseil</button>
         <!-- Bauteil 2: Geschwindigkeitsbegrenzer -->
         <button id="btn_begrenzer" class="bauteil-btn" onclick="zeigeBauteil('begrenzer')">2 – ⚙️ Geschwindigkeitsbegrenzer</button>
+        <!-- Bauteil 3: Fangvorrichtung -->
+        <button id="btn_fang" class="bauteil-btn" onclick="zeigeBauteil('fang')">3 – 🛑 Fangvorrichtung</button>
+        <!-- Bauteil 4: Schienen -->
+        <button id="btn_schienen" class="bauteil-btn" onclick="zeigeBauteil('schienen')">4 – 🛤️ Schienen</button>
+        <!-- Bauteil 5: Puffer -->
+        <button id="btn_puffer" class="bauteil-btn" onclick="zeigeBauteil('puffer')">5 – 🟥 Puffer</button>
+        <!-- Bauteil 6: Steuerung -->
+        <button id="btn_steuerung" class="bauteil-btn" onclick="zeigeBauteil('steuerung')">6 – 🖥️ Steuerung</button>
+        <!-- Bauteil 7: Antrieb -->
+        <button id="btn_antrieb" class="bauteil-btn" onclick="zeigeBauteil('antrieb')">7 – 🔧 Antrieb</button>
+        <!-- Bauteil 8: Tragseile -->
+        <button id="btn_tragseile" class="bauteil-btn" onclick="zeigeBauteil('tragseile')">8 – 🪢 Tragseile</button>
+        <!-- Bauteil 9: Rohrbruchsicherung -->
+        <button id="btn_rohrbruch" class="bauteil-btn" onclick="zeigeBauteil('rohrbruch')">9 – 🔴 Rohrbruchsicherung</button>
+        <!-- Bauteil 10: Heber (Hydraulikzylinder) -->
+        <button id="btn_heber" class="bauteil-btn" onclick="zeigeBauteil('heber')">10 – ⬆️ Heber</button>
+        <!-- Bauteil 11: Schacht -->
+        <button id="btn_schacht" class="bauteil-btn" onclick="zeigeBauteil('schacht')">11 – 🏗️ Schacht</button>
+        <!-- Bauteil 12: Schachttüren -->
+        <button id="btn_schachttuer" class="bauteil-btn" onclick="zeigeBauteil('schachttuer')">12 – 🚪 Schachttüren</button>
     </div>
 </div>
 
@@ -978,22 +998,6 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
                 <label>Spannkraft vom Spanngewicht G:</label>
                 <input type="number" id="spannkraft" placeholder="Wert eingeben" step="1" min="0" oninput="berechneAlles()">
                 <span class="einheit">N</span>
-                
-<span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#0057a8;color:white;font-size:12px;font-weight:bold;cursor:pointer;margin-left:8px;" onclick="document.getElementById('infoSpannkraft').style.display='flex'">i</span>
-<div id="infoSpannkraft" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;">
-    <div style="background:white;border-radius:12px;padding:30px;max-width:400px;width:90%;position:relative;">
-        <button onclick="document.getElementById('infoSpannkraft').style.display='none'" style="position:absolute;top:10px;right:15px;background:none;border:none;font-size:22px;cursor:pointer;">✕</button>
-        <h3 style="color:#0057a8;margin-bottom:15px;">Spannkraft vom Spanngewicht G</h3>
- <p style="margin-bottom:10px;">Der Wert kann wie folgt ermittelt werden:</p>
-<ul style="padding-left:20px;line-height:1.8;">
-    <li>Entnahme aus dem Baumusterzertifikat</li>
-    <li>Nach DIN EN 81-20 §5.6.2.2.1.1 mit einem Mindestwert von 300 N</li>
-    <li>Nach TRA 200 §254.3 mit einem Mindestwert von 500 N</li>
-</ul>
-
-    </div>
-</div>
-
             </div>
 
             <!-- Mindestbruchkraft in kN (vom Seil-Datenblatt) – wird für Sicherheitsfaktor benötigt -->
@@ -1803,6 +1807,192 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 </div><!-- Ende sicherungSeite -->
 
 <!-- ==========================================
+     PLATZHALTER DETAIL-SEITEN
+     Alle neuen Bauteile – Inhalt folgt nach und nach
+     Jede Seite hat 4 Tabs: Prüfung vor Ort / Dokumente / Berechnung / Elektro
+========================================== -->
+
+<!-- BAUTEIL 3: FANGVORRICHTUNG -->
+
+<div id="detailFang" class="seite">
+    <button class="zuruck" onclick="zeige('bauteilSeite')">← Zurück</button>
+    <h2 id="bauteilTitelFang"></h2>
+    <div class="tabs">
+        <button class="tab aktiv" onclick="zeigeTabGeneric(this, 'pruefung_fang', 'detailFang')">📋 Prüfung vor Ort</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'dokumente_fang', 'detailFang')">📄 Dokumente</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'berechnung_fang', 'detailFang')">🔢 Berechnung</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'elektro_fang', 'detailFang')">⚡ Elektro</button>
+    </div>
+    <div id="pruefung_fang" class="tab-inhalt aktiv"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="dokumente_fang" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="berechnung_fang" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="elektro_fang" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div class="pdf-bereich"><button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button></div>
+</div>
+
+<!-- BAUTEIL 4: SCHIENEN -->
+
+<div id="detailSchienen" class="seite">
+    <button class="zuruck" onclick="zeige('bauteilSeite')">← Zurück</button>
+    <h2 id="bauteilTitelSchienen"></h2>
+    <div class="tabs">
+        <button class="tab aktiv" onclick="zeigeTabGeneric(this, 'pruefung_schienen', 'detailSchienen')">📋 Prüfung vor Ort</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'dokumente_schienen', 'detailSchienen')">📄 Dokumente</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'berechnung_schienen', 'detailSchienen')">🔢 Berechnung</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'elektro_schienen', 'detailSchienen')">⚡ Elektro</button>
+    </div>
+    <div id="pruefung_schienen" class="tab-inhalt aktiv"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="dokumente_schienen" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="berechnung_schienen" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="elektro_schienen" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div class="pdf-bereich"><button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button></div>
+</div>
+
+<!-- BAUTEIL 5: PUFFER -->
+
+<div id="detailPuffer" class="seite">
+    <button class="zuruck" onclick="zeige('bauteilSeite')">← Zurück</button>
+    <h2 id="bauteilTitelPuffer"></h2>
+    <div class="tabs">
+        <button class="tab aktiv" onclick="zeigeTabGeneric(this, 'pruefung_puffer', 'detailPuffer')">📋 Prüfung vor Ort</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'dokumente_puffer', 'detailPuffer')">📄 Dokumente</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'berechnung_puffer', 'detailPuffer')">🔢 Berechnung</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'elektro_puffer', 'detailPuffer')">⚡ Elektro</button>
+    </div>
+    <div id="pruefung_puffer" class="tab-inhalt aktiv"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="dokumente_puffer" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="berechnung_puffer" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="elektro_puffer" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div class="pdf-bereich"><button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button></div>
+</div>
+
+<!-- BAUTEIL 6: STEUERUNG -->
+
+<div id="detailSteuerung" class="seite">
+    <button class="zuruck" onclick="zeige('bauteilSeite')">← Zurück</button>
+    <h2 id="bauteilTitelSteuerung"></h2>
+    <div class="tabs">
+        <button class="tab aktiv" onclick="zeigeTabGeneric(this, 'pruefung_steuerung', 'detailSteuerung')">📋 Prüfung vor Ort</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'dokumente_steuerung', 'detailSteuerung')">📄 Dokumente</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'berechnung_steuerung', 'detailSteuerung')">🔢 Berechnung</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'elektro_steuerung', 'detailSteuerung')">⚡ Elektro</button>
+    </div>
+    <div id="pruefung_steuerung" class="tab-inhalt aktiv"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="dokumente_steuerung" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="berechnung_steuerung" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="elektro_steuerung" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div class="pdf-bereich"><button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button></div>
+</div>
+
+<!-- BAUTEIL 7: ANTRIEB -->
+
+<div id="detailAntrieb" class="seite">
+    <button class="zuruck" onclick="zeige('bauteilSeite')">← Zurück</button>
+    <h2 id="bauteilTitelAntrieb"></h2>
+    <div class="tabs">
+        <button class="tab aktiv" onclick="zeigeTabGeneric(this, 'pruefung_antrieb', 'detailAntrieb')">📋 Prüfung vor Ort</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'dokumente_antrieb', 'detailAntrieb')">📄 Dokumente</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'berechnung_antrieb', 'detailAntrieb')">🔢 Berechnung</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'elektro_antrieb', 'detailAntrieb')">⚡ Elektro</button>
+    </div>
+    <div id="pruefung_antrieb" class="tab-inhalt aktiv"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="dokumente_antrieb" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="berechnung_antrieb" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="elektro_antrieb" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div class="pdf-bereich"><button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button></div>
+</div>
+
+<!-- BAUTEIL 8: TRAGSEILE -->
+
+<div id="detailTragseile" class="seite">
+    <button class="zuruck" onclick="zeige('bauteilSeite')">← Zurück</button>
+    <h2 id="bauteilTitelTragseile"></h2>
+    <div class="tabs">
+        <button class="tab aktiv" onclick="zeigeTabGeneric(this, 'pruefung_tragseile', 'detailTragseile')">📋 Prüfung vor Ort</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'dokumente_tragseile', 'detailTragseile')">📄 Dokumente</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'berechnung_tragseile', 'detailTragseile')">🔢 Berechnung</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'elektro_tragseile', 'detailTragseile')">⚡ Elektro</button>
+    </div>
+    <div id="pruefung_tragseile" class="tab-inhalt aktiv"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="dokumente_tragseile" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="berechnung_tragseile" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="elektro_tragseile" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div class="pdf-bereich"><button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button></div>
+</div>
+
+<!-- BAUTEIL 9: ROHRBRUCHSICHERUNG -->
+
+<div id="detailRohrbruch" class="seite">
+    <button class="zuruck" onclick="zeige('bauteilSeite')">← Zurück</button>
+    <h2 id="bauteilTitelRohrbruch"></h2>
+    <div class="tabs">
+        <button class="tab aktiv" onclick="zeigeTabGeneric(this, 'pruefung_rohrbruch', 'detailRohrbruch')">📋 Prüfung vor Ort</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'dokumente_rohrbruch', 'detailRohrbruch')">📄 Dokumente</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'berechnung_rohrbruch', 'detailRohrbruch')">🔢 Berechnung</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'elektro_rohrbruch', 'detailRohrbruch')">⚡ Elektro</button>
+    </div>
+    <div id="pruefung_rohrbruch" class="tab-inhalt aktiv"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="dokumente_rohrbruch" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="berechnung_rohrbruch" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="elektro_rohrbruch" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div class="pdf-bereich"><button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button></div>
+</div>
+
+<!-- BAUTEIL 10: HEBER -->
+
+<div id="detailHeber" class="seite">
+    <button class="zuruck" onclick="zeige('bauteilSeite')">← Zurück</button>
+    <h2 id="bauteilTitelHeber"></h2>
+    <div class="tabs">
+        <button class="tab aktiv" onclick="zeigeTabGeneric(this, 'pruefung_heber', 'detailHeber')">📋 Prüfung vor Ort</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'dokumente_heber', 'detailHeber')">📄 Dokumente</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'berechnung_heber', 'detailHeber')">🔢 Berechnung</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'elektro_heber', 'detailHeber')">⚡ Elektro</button>
+    </div>
+    <div id="pruefung_heber" class="tab-inhalt aktiv"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="dokumente_heber" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="berechnung_heber" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="elektro_heber" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div class="pdf-bereich"><button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button></div>
+</div>
+
+<!-- BAUTEIL 11: SCHACHT -->
+
+<div id="detailSchacht" class="seite">
+    <button class="zuruck" onclick="zeige('bauteilSeite')">← Zurück</button>
+    <h2 id="bauteilTitelSchacht"></h2>
+    <div class="tabs">
+        <button class="tab aktiv" onclick="zeigeTabGeneric(this, 'pruefung_schacht', 'detailSchacht')">📋 Prüfung vor Ort</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'dokumente_schacht', 'detailSchacht')">📄 Dokumente</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'berechnung_schacht', 'detailSchacht')">🔢 Berechnung</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'elektro_schacht', 'detailSchacht')">⚡ Elektro</button>
+    </div>
+    <div id="pruefung_schacht" class="tab-inhalt aktiv"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="dokumente_schacht" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="berechnung_schacht" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="elektro_schacht" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div class="pdf-bereich"><button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button></div>
+</div>
+
+<!-- BAUTEIL 12: SCHACHTTÜREN -->
+
+<div id="detailSchachttuer" class="seite">
+    <button class="zuruck" onclick="zeige('bauteilSeite')">← Zurück</button>
+    <h2 id="bauteilTitelSchachttuer"></h2>
+    <div class="tabs">
+        <button class="tab aktiv" onclick="zeigeTabGeneric(this, 'pruefung_schachttuer', 'detailSchachttuer')">📋 Prüfung vor Ort</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'dokumente_schachttuer', 'detailSchachttuer')">📄 Dokumente</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'berechnung_schachttuer', 'detailSchachttuer')">🔢 Berechnung</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'elektro_schachttuer', 'detailSchachttuer')">⚡ Elektro</button>
+    </div>
+    <div id="pruefung_schachttuer" class="tab-inhalt aktiv"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="dokumente_schachttuer" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="berechnung_schachttuer" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="elektro_schachttuer" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div class="pdf-bereich"><button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button></div>
+</div>
+
+<!-- ==========================================
      JAVASCRIPT
      Alle Funktionen der App sind hier definiert
      Keine externen JS-Dateien nötig außer jsPDF
@@ -1923,30 +2113,52 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         zeige('bauteilSeite');
     }
 
-    /* Detail-Seite eines Bauteils anzeigen
-       'seil' → öffnet detailSeil
-       'begrenzer' → öffnet detailBegrenzer */
+    /* ------------------------------------------
+       GENERISCHE TAB-FUNKTION
+       Funktioniert für alle neuen Platzhalter-Bauteile
+       seitenId = z.B. 'detailFang'
+    ------------------------------------------ */
+    function zeigeTabGeneric(btn, tabId, seitenId) {
+        document.querySelectorAll('#' + seitenId + ' .tab').forEach(el => el.classList.remove('aktiv'));
+        document.querySelectorAll('#' + seitenId + ' .tab-inhalt').forEach(el => el.classList.remove('aktiv'));
+        btn.classList.add('aktiv');
+        document.getElementById(tabId).classList.add('aktiv');
+    }
+
+    /* Detail-Seite eines Bauteils anzeigen */
     function zeigeBauteil(bauteil) {
-        if (bauteil === 'seil') {
-            document.getElementById('bauteilTitel').innerText = '1 – Geschwindigkeitsbegrenzerseil'; /* Titel setzen */
-            zeige('detailSeil'); /* Seil-Detailseite anzeigen */
-            /* Ersten Tab aktivieren */
-            const tabs = document.querySelectorAll('#detailSeil .tab');
-            const inhalte = document.querySelectorAll('#detailSeil .tab-inhalt');
+
+        /* Hilfsfunktion: ersten Tab einer Seite aktivieren */
+        function aktiviereErstenTab(seitenId, ersterTabId) {
+            const tabs = document.querySelectorAll('#' + seitenId + ' .tab');
+            const inhalte = document.querySelectorAll('#' + seitenId + ' .tab-inhalt');
             tabs.forEach(el => el.classList.remove('aktiv'));
             inhalte.forEach(el => el.classList.remove('aktiv'));
             tabs[0].classList.add('aktiv');
-            document.getElementById('pruefung').classList.add('aktiv');
-        } else if (bauteil === 'begrenzer') {
-            document.getElementById('bauteilTitelBegrenzer').innerText = '2 – Geschwindigkeitsbegrenzer'; /* Titel setzen */
-            zeige('detailBegrenzer'); /* Begrenzer-Detailseite anzeigen */
-            /* Ersten Tab aktivieren */
-            const tabs = document.querySelectorAll('#detailBegrenzer .tab');
-            const inhalte = document.querySelectorAll('#detailBegrenzer .tab-inhalt');
-            tabs.forEach(el => el.classList.remove('aktiv'));
-            inhalte.forEach(el => el.classList.remove('aktiv'));
-            tabs[0].classList.add('aktiv');
-            document.getElementById('pruefung_begrenzer').classList.add('aktiv');
+            document.getElementById(ersterTabId).classList.add('aktiv');
+        }
+
+        /* Mapping: bauteilId → [titelElementId, seitenId, ersterTabId, titelText] */
+        const bauteile = {
+            seil:        ['bauteilTitel',             'detailSeil',        'pruefung',            '1 – Geschwindigkeitsbegrenzerseil'],
+            begrenzer:   ['bauteilTitelBegrenzer',    'detailBegrenzer',   'pruefung_begrenzer',  '2 – Geschwindigkeitsbegrenzer'],
+            fang:        ['bauteilTitelFang',         'detailFang',        'pruefung_fang',       '3 – Fangvorrichtung'],
+            schienen:    ['bauteilTitelSchienen',     'detailSchienen',    'pruefung_schienen',   '4 – Schienen'],
+            puffer:      ['bauteilTitelPuffer',       'detailPuffer',      'pruefung_puffer',     '5 – Puffer'],
+            steuerung:   ['bauteilTitelSteuerung',    'detailSteuerung',   'pruefung_steuerung',  '6 – Steuerung'],
+            antrieb:     ['bauteilTitelAntrieb',      'detailAntrieb',     'pruefung_antrieb',    '7 – Antrieb'],
+            tragseile:   ['bauteilTitelTragseile',    'detailTragseile',   'pruefung_tragseile',  '8 – Tragseile'],
+            rohrbruch:   ['bauteilTitelRohrbruch',    'detailRohrbruch',   'pruefung_rohrbruch',  '9 – Rohrbruchsicherung'],
+            heber:       ['bauteilTitelHeber',        'detailHeber',       'pruefung_heber',      '10 – Heber'],
+            schacht:     ['bauteilTitelSchacht',      'detailSchacht',     'pruefung_schacht',    '11 – Schacht'],
+            schachttuer: ['bauteilTitelSchachttuer',  'detailSchachttuer', 'pruefung_schachttuer','12 – Schachttüren'],
+        };
+
+        const info = bauteile[bauteil];
+        if (info) {
+            document.getElementById(info[0]).innerText = info[3]; /* Titel setzen */
+            zeige(info[1]);                                        /* Seite anzeigen */
+            aktiviereErstenTab(info[1], info[2]);                  /* Ersten Tab aktivieren */
         }
     }
 
