@@ -1823,11 +1823,130 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         <button class="tab" onclick="zeigeTabGeneric(this, 'berechnung_fang', 'detailFang')">🔢 Berechnung</button>
         <button class="tab" onclick="zeigeTabGeneric(this, 'elektro_fang', 'detailFang')">⚡ Elektro</button>
     </div>
-    <div id="pruefung_fang" class="tab-inhalt aktiv"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
-    <div id="dokumente_fang" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
-    <div id="berechnung_fang" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
-    <div id="elektro_fang" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
-    <div class="pdf-bereich"><button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button></div>
+    <div id="pruefung_fang" class="tab-inhalt aktiv">
+
+```
+    <!-- FRAGE 3.1.1 – Fangprobe mit 125% Last -->
+    <div class="frage" id="frage3_1_1">
+        <h3>3.1.1 – Wurde die Fangprobe mit 125 % der Nennlast durchgeführt?</h3>
+        <div class="hinweis">ℹ️ Die Verzögerung beim Auslösen der Fangvorrichtung sollte zwischen 0,2g und 1g liegen.</div>
+
+        <!-- Eingabe Nennlast + automatische Berechnung -->
+        <div class="eingabe-zeile" style="margin-top:15px;">
+            <label>Nennlast:</label>
+            <input type="number" id="nennlast_fang" placeholder="Wert eingeben" step="1" min="0" oninput="berechnePrueflast()">
+            <span class="einheit">kg</span>
+        </div>
+        <div id="pruef_ergebnis" style="display:none; margin-top:10px;">
+            <div class="zwischenwert">
+                <label>Prüflast (125 %) =</label>
+                <span id="ergebnis_pruef" style="font-weight:bold;color:#0057a8;">–</span>
+            </div>
+        </div>
+
+        <!-- Verzögerungsberechnung -->
+        <div class="eingabe-zeile" style="margin-top:15px;">
+            <label>Nenngeschwindigkeit v:</label>
+            <input type="number" id="v_fang" placeholder="Wert eingeben" step="0.01" min="0" oninput="berechneVerzögerung()">
+            <span class="einheit">m/s</span>
+        </div>
+        <div class="eingabe-zeile">
+            <label>Fanglänge s:</label>
+            <input type="number" id="s_fang" placeholder="Wert eingeben" step="1" min="0" oninput="berechneVerzögerung()">
+            <span class="einheit">mm</span>
+        </div>
+
+        <!-- Formel grafisch -->
+        <div class="formel-container" style="margin-top:10px;">
+            <span>a = </span>
+            <span class="bruch">
+                <span class="zaehler">v²</span>
+                <span class="nenner">2 × s</span>
+            </span>
+        </div>
+
+        <!-- Ergebnis Verzögerung -->
+        <div id="verzögerung_ergebnis" style="display:none; margin-top:10px;">
+            <div class="zwischenwert">
+                <label>Verzögerung a =</label>
+                <span id="ergebnis_verz_ms" style="font-weight:bold;color:#0057a8;">–</span>
+            </div>
+            <div class="zwischenwert">
+                <label>Verzögerung a =</label>
+                <span id="ergebnis_verz_g" style="font-weight:bold;color:#0057a8;">–</span>
+            </div>
+            <!-- Auswertungsbox -->
+            <div id="verzögerung_box" style="padding:15px;border-radius:10px;text-align:center;font-size:16px;font-weight:bold;margin-top:10px;"></div>
+        </div>
+
+        <div class="antwort-gruppe" style="margin-top:15px;">
+            <button class="antwort-btn passt" onclick="antwort(this, 'frage3_1_1')">🟢 Passt</button>
+            <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage3_1_1')">🔴 Mangel</button>
+            <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage3_1_1')">⚪ Trifft nicht zu</button>
+        </div>
+        <div class="mangelfeld" id="mangel-frage3_1_1">
+            <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+            <label>Bitte Mangel beschreiben:</label>
+            <textarea placeholder="Beschreibung des Mangels..."></textarea>
+        </div>
+        <div class="mangelfeld" id="trifft-frage3_1_1" style="background:#f0f0f0;border-color:#999;">
+            <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
+            <textarea placeholder="Begründung oder Kommentar..."></textarea>
+        </div>
+    </div>
+
+    <!-- FRAGE 3.1.2 – Fangvorrichtung setzt sich zurück -->
+    <div class="frage" id="frage3_1_2">
+        <h3>3.1.2 – Setzt sich die Fangvorrichtung nach dem Herausfahren aus der Fang selbstständig zurück?</h3>
+        <div class="antwort-gruppe">
+            <button class="antwort-btn passt" onclick="antwort(this, 'frage3_1_2')">🟢 Passt</button>
+            <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage3_1_2')">🔴 Mangel</button>
+            <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage3_1_2')">⚪ Trifft nicht zu</button>
+        </div>
+        <div class="mangelfeld" id="mangel-frage3_1_2">
+            <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+            <label>Bitte Mangel beschreiben:</label>
+            <textarea placeholder="Beschreibung des Mangels..."></textarea>
+        </div>
+        <div class="mangelfeld" id="trifft-frage3_1_2" style="background:#f0f0f0;border-color:#999;">
+            <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
+            <textarea placeholder="Begründung oder Kommentar..."></textarea>
+        </div>
+    </div>
+
+    <!-- FRAGE 3.1.3 – Typenschild korrekt -->
+    <div class="frage" id="frage3_1_3">
+        <h3>3.1.3 – Ist das Typenschild vorhanden und korrekt?</h3>
+        <div class="hinweis">
+            ℹ️ Folgende Angaben müssen auf dem Typenschild angebracht sein:<br><br>
+            1. Hersteller<br>
+            2. Nummer des Baumusters<br>
+            3. Art der Fangvorrichtung<br>
+            4. Wenn einstellbar: Fangvorrichtung muss verplombt sein
+        </div>
+        <div class="antwort-gruppe">
+            <button class="antwort-btn passt" onclick="antwort(this, 'frage3_1_3')">🟢 Passt</button>
+            <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage3_1_3')">🔴 Mangel</button>
+            <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage3_1_3')">⚪ Trifft nicht zu</button>
+        </div>
+        <div class="mangelfeld" id="mangel-frage3_1_3">
+            <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+            <label>Bitte Mangel beschreiben:</label>
+            <textarea placeholder="Beschreibung des Mangels..."></textarea>
+        </div>
+        <div class="mangelfeld" id="trifft-frage3_1_3" style="background:#f0f0f0;border-color:#999;">
+            <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
+            <textarea placeholder="Begründung oder Kommentar..."></textarea>
+        </div>
+    </div>
+
+</div>
+<div id="dokumente_fang" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+<div id="berechnung_fang" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+<div id="elektro_fang" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+<div class="pdf-bereich"><button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button></div>
+```
+
 </div>
 
 <!-- BAUTEIL 4: SCHIENEN -->
@@ -2160,6 +2279,61 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             zeige(info[1]);                                        /* Seite anzeigen */
             aktiviereErstenTab(info[1], info[2]);                  /* Ersten Tab aktivieren */
         }
+    }
+
+    /* ------------------------------------------
+       VERZÖGERUNGSBERECHNUNG (3.1.1)
+       a = v² / (2 × s)
+       v in m/s, s in mm → umrechnen in m (/1000)
+       Ergebnis in m/s² und g (÷ 9,81)
+       Grenzwerte: 0,2g – 1g
+    ------------------------------------------ */
+    function berechneVerzögerung() {
+        const v = parseFloat(document.getElementById('v_fang').value);
+        const s_mm = parseFloat(document.getElementById('s_fang').value);
+        const bereich = document.getElementById('verzögerung_ergebnis');
+
+        if (isNaN(v) || v <= 0 || isNaN(s_mm) || s_mm <= 0) {
+            bereich.style.display = 'none';
+            return;
+        }
+
+        const s_m = s_mm / 1000;               /* mm → m */
+        const a_ms2 = (v * v) / (2 * s_m);     /* m/s² */
+        const a_g   = a_ms2 / 9.81;            /* g */
+
+        document.getElementById('ergebnis_verz_ms').innerText = a_ms2.toFixed(2) + ' m/s²';
+        document.getElementById('ergebnis_verz_g').innerText  = a_g.toFixed(3) + ' g';
+        bereich.style.display = 'block';
+
+        /* Auswertung: 0,2g – 1g = grün, sonst rot */
+        const box = document.getElementById('verzögerung_box');
+        if (a_g < 0.2) {
+            box.style.background = '#f8d7da'; box.style.border = '2px solid #dc3545'; box.style.color = '#dc3545';
+            box.innerText = '❌ Verzögerung zu niedrig! (' + a_g.toFixed(3) + ' g < 0,2 g)';
+        } else if (a_g <= 1.0) {
+            box.style.background = '#d4edda'; box.style.border = '2px solid #28a745'; box.style.color = '#155724';
+            box.innerText = '✅ Verzögerung in Ordnung! (' + a_g.toFixed(3) + ' g – zwischen 0,2 g und 1 g)';
+        } else {
+            box.style.background = '#f8d7da'; box.style.border = '2px solid #dc3545'; box.style.color = '#dc3545';
+            box.innerText = '❌ Verzögerung zu hoch! (' + a_g.toFixed(3) + ' g > 1 g)';
+        }
+    }
+
+    /* ------------------------------------------
+       PRÜFLAST BERECHNUNG (3.1.1)
+       Prüflast = Nennlast × 1,25
+    ------------------------------------------ */
+    function berechnePrueflast() {
+        const nennlast = parseFloat(document.getElementById('nennlast_fang').value);
+        const bereich  = document.getElementById('pruef_ergebnis');
+        if (isNaN(nennlast) || nennlast <= 0) {
+            bereich.style.display = 'none';
+            return;
+        }
+        const prueflast = nennlast * 1.25;
+        document.getElementById('ergebnis_pruef').innerText = prueflast.toFixed(0) + ' kg';
+        bereich.style.display = 'block';
     }
 
     /* ------------------------------------------
