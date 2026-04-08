@@ -806,7 +806,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         <!-- Bauteil 12: Schachttüren -->
         <button id="btn_schachttuer" class="bauteil-btn" onclick="zeigeBauteil('schachttuer')">12 – 🚪 Schachttüren</button>
         <!-- Bauteil 13: Schutzraum oben  -->
-        <button id="btn_Schutzraum oben " class="bauteil-btn" onclick="zeigeBauteil('Schutzraum oben')">13 – 🚪 Schutzraum oben </button>
+        <button id="btn_Schutzraum" class="bauteil-btn" onclick="zeigeBauteil('Schutzraum oben')">13 – 🚪 Schutzraum </button>
     </div>
 </div>
 
@@ -2115,14 +2115,14 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
 <!-- BAUTEIL 13: Schutzraum oben  -->
 
-<div id="detailSchutzraum oben" class="seite">
+<div id="detailSchutzraum" class="seite">
     <button class="zuruck" onclick="zeige('bauteilSeite')">← Zurück</button>
-    <h2 id="bauteilTitelSchutzraum oben"></h2>
+    <h2 id="bauteilTitelSchutzraum"></h2>
     <div class="tabs">
-        <button class="tab aktiv" onclick="zeigeTabGeneric(this, 'pruefung_Schutzraum oben', 'detailSchutzraum oben')">📋 Prüfung vor Ort</button>
-        <button class="tab" onclick="zeigeTabGeneric(this, 'dokumente_schachttuer', 'detailSchutzraum oben')">📄 Dokumente</button>
-        <button class="tab" onclick="zeigeTabGeneric(this, 'berechnung_schachttuer', 'detailSchutzraum oben')">🔢 Berechnung</button>
-        <button class="tab" onclick="zeigeTabGeneric(this, 'elektro_schachttuer', 'detailSchutzraum oben')">⚡ Elektro</button>
+        <button class="tab aktiv" onclick="zeigeTabGeneric(this, 'pruefung_Schutzraum oben', 'detailSchutzraum')">📋 Prüfung vor Ort</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'dokumente_schachttuer', 'detailSchutzraum')">📄 Dokumente</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'berechnung_schachttuer', 'detailSchutzraum')">🔢 Berechnung</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'elektro_schachttuer', 'detailSchutzraum')">⚡ Elektro</button>
     </div>
     <div id="pruefung_Schutzraum oben" class="tab-inhalt aktiv"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
     <div id="dokumente_Schutzraum oben" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
