@@ -2123,11 +2123,27 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         <button class="tab" onclick="zeigeTabGeneric(this, 'dokumente_schachttuer', 'detailSchutzraum')">📄 Dokumente</button>
         <button class="tab" onclick="zeigeTabGeneric(this, 'berechnung_schachttuer', 'detailSchutzraum')">🔢 Berechnung</button>
         <button class="tab" onclick="zeigeTabGeneric(this, 'elektro_schachttuer', 'detailSchutzraum')">⚡ Elektro</button>
+
+
+    <div id="pruefung" class="tab-inhalt aktiv">
+
+    <!-- FRAGE 1.1.0 – Dokument vor Ort vorhanden? (Ja/Nein) -->
+    <div class="frage" id="frage1_0">
+        <h3>13.1.0 – Liegt das Dokument zur Ermittlung des Seildurchmessers mit dem Messschieber vor Ort vor?</h3>
+        <div class="ja-nein-gruppe">
+            <!-- onclick="jaNein(this, 'frage1_0', 'ja')" → markiert diesen Button als aktiv -->
+            <button class="ja-btn" onclick="jaNein(this, 'frage1_0', 'ja')">✅ Ja</button>
+            <button class="nein-btn" onclick="jaNein(this, 'frage1_0', 'nein')">❌ Nein</button>
+        </div>
     </div>
-    <div id="pruefung_Schutzraum oben" class="tab-inhalt aktiv"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
-    <div id="dokumente_Schutzraum oben" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
-    <div id="berechnung_Schutzraum oben" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
-    <div id="elektro_Schutzraum oben" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+
+
+    
+    </div>
+    <div id="pruefung_Schutzraum" class="tab-inhalt aktiv"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="dokumente_Schutzraum" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="berechnung_Schutzraum" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="elektro_Schutzraum" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
     <div class="pdf-bereich"><button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button></div>
 </div>
 
