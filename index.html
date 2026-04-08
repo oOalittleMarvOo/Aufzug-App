@@ -2120,14 +2120,14 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     <h2 id="bauteilTitelSchutzraum oben"></h2>
     <div class="tabs">
         <button class="tab aktiv" onclick="zeigeTabGeneric(this, 'pruefung_Schutzraum oben', 'detailSchutzraum oben')">📋 Prüfung vor Ort</button>
-        <button class="tab" onclick="zeigeTabGeneric(this, 'dokumente_schachttuer', 'detailSchachttuer')">📄 Dokumente</button>
-        <button class="tab" onclick="zeigeTabGeneric(this, 'berechnung_schachttuer', 'detailSchachttuer')">🔢 Berechnung</button>
-        <button class="tab" onclick="zeigeTabGeneric(this, 'elektro_schachttuer', 'detailSchachttuer')">⚡ Elektro</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'dokumente_schachttuer', 'detailSchutzraum oben')">📄 Dokumente</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'berechnung_schachttuer', 'detailSchutzraum oben')">🔢 Berechnung</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'elektro_schachttuer', 'detailSchutzraum oben')">⚡ Elektro</button>
     </div>
     <div id="pruefung_Schutzraum oben" class="tab-inhalt aktiv"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
-    <div id="dokumente_schachttuer" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
-    <div id="berechnung_schachttuer" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
-    <div id="elektro_schachttuer" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="dokumente_Schutzraum oben" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="berechnung_Schutzraum oben" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="elektro_Schutzraum oben" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
     <div class="pdf-bereich"><button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button></div>
 </div>
 
@@ -2291,6 +2291,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             heber:       ['bauteilTitelHeber',        'detailHeber',       'pruefung_heber',      '10 – Heber'],
             schacht:     ['bauteilTitelSchacht',      'detailSchacht',     'pruefung_schacht',    '11 – Schacht'],
             schachttuer: ['bauteilTitelSchachttuer',  'detailSchachttuer', 'pruefung_schachttuer','12 – Schachttüren'],
+            
         };
 
         const info = bauteile[bauteil];
