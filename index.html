@@ -837,6 +837,8 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         <button id="btn_schacht" class="bauteil-btn" onclick="zeigeBauteil('schacht')">11 – 🏗️ Schacht</button>
         <!-- Bauteil 12: Schachttüren -->
         <button id="btn_schachttuer" class="bauteil-btn" onclick="zeigeBauteil('schachttuer')">12 – 🚪 Schachttüren</button>
+        <!-- Bauteil 13: Schutzraum -->
+        <button id="btn_schutzraum" class="bauteil-btn" onclick="zeigeBauteil('schutzraum')">13 – 🛡️ Schutzraum</button>
     </div>
 </div>
 
@@ -2145,6 +2147,136 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     <div class="pdf-bereich"><button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button></div>
 </div>
 
+<!-- BAUTEIL 13: SCHUTZRAUM -->
+
+<div id="detailSchutzraum" class="seite">
+    <button class="zuruck" onclick="zeige('bauteilSeite')">← Zurück</button>
+    <h2 id="bauteilTitelSchutzraum"></h2>
+
+```
+<!-- Nur ein Tab: Prüfung vor Ort -->
+<div style="margin-top:20px;">
+
+    <!-- GESCHWINDIGKEIT – gilt für alle Berechnungen -->
+    <div class="frage">
+        <h3>13.1.0 – Nenngeschwindigkeit eingeben</h3>
+        <div class="eingabe-zeile">
+            <label>Nenngeschwindigkeit v:</label>
+            <input type="number" id="schutzraum_v" placeholder="Wert eingeben" step="0.01" min="0" oninput="berechneSchutzraum()">
+            <span class="einheit">m/s</span>
+        </div>
+    </div>
+
+    <!-- ANTRIEBSART AUSWAHL -->
+    <div class="frage">
+        <h3>13.1.1 – Antriebsart auswählen</h3>
+        <div class="auswahl-gruppe">
+            <button class="auswahl-btn" id="btn_treibscheibe" onclick="waehleAntrieb(this, 'treibscheibe')">⚙️ Treibscheibe</button>
+            <button class="auswahl-btn" id="btn_hydraulik" onclick="waehleAntrieb(this, 'hydraulik')">💧 Hydraulik</button>
+        </div>
+    </div>
+
+    <!-- FRAGE 13.1.2 – RESTFAHRWEG -->
+    <div class="frage" id="schutzraum_frage2" style="display:none;">
+        <h3>13.1.2 – Restfahrweg ≥ 10 cm</h3>
+        <div class="hinweis">ℹ️ DIN EN 81-20 – Mindest-Restfahrweg im Schacht</div>
+
+        <!-- Soll-Wert wird berechnet und angezeigt -->
+        <div class="zwischenwert" style="margin-bottom:15px;">
+            <label>Mindest-Restfahrweg (10 cm + 0,0335 × v²):</label>
+            <span id="schutzraum_restfahrweg_soll" style="font-weight:bold;color:#0057a8;">–</span>
+        </div>
+
+        <!-- Passt / Passt nicht -->
+        <div class="antwort-gruppe" id="schutzraum_restfahrweg">
+            <button class="antwort-btn passt" onclick="antwort(this,'schutzraum_restfahrweg')">🟢 Passt</button>
+            <button class="antwort-btn passt-nicht" onclick="antwort(this,'schutzraum_restfahrweg')">🔴 Mangel</button>
+        </div>
+        <div class="mangelfeld" id="mangel-schutzraum_restfahrweg" style="display:none;">
+            <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+            <label>Bitte Mangel beschreiben:</label>
+            <textarea placeholder="Beschreibung des Mangels..."></textarea>
+        </div>
+    </div>
+
+    <!-- FRAGE 13.1.3 – SCHUTZRAUMMASSE -->
+    <div class="frage" id="schutzraum_frage3" style="display:none;">
+        <h3>13.1.3 – Schutzraum Maße prüfen</h3>
+        <div class="hinweis">ℹ️ DIN EN 81-20 – Mindestmaße je nach Körperhaltung</div>
+
+        <!-- Auswahl Stehend / Hockend -->
+        <div class="auswahl-gruppe" style="margin-bottom:15px;">
+            <button class="auswahl-btn" id="btn_mass_stehend" onclick="waehleMassTyp(this,'stehend')">🧍 Stehend</button>
+            <button class="auswahl-btn" id="btn_mass_hockend" onclick="waehleMassTyp(this,'hockend')">🧎 Hockend</button>
+        </div>
+
+        <!-- Soll-Werte Anzeige -->
+        <div id="schutzraum_masse_soll" style="display:none;margin-bottom:15px;">
+            <div class="zwischenwert">
+                <label>Soll Höhe:</label>
+                <span id="soll_hoehe" style="font-weight:bold;color:#0057a8;">–</span>
+            </div>
+            <div class="zwischenwert">
+                <label>Soll Breite:</label>
+                <span id="soll_breite" style="font-weight:bold;color:#0057a8;">–</span>
+            </div>
+            <div class="zwischenwert">
+                <label>Soll Tiefe:</label>
+                <span id="soll_tiefe" style="font-weight:bold;color:#0057a8;">–</span>
+            </div>
+
+            <!-- Passt / Mangel -->
+            <div class="antwort-gruppe" id="schutzraum_masse_antwort" style="margin-top:15px;">
+                <button class="antwort-btn passt" onclick="antwort(this,'schutzraum_masse_antwort')">🟢 Passt</button>
+                <button class="antwort-btn passt-nicht" onclick="antwort(this,'schutzraum_masse_antwort')">🔴 Mangel</button>
+            </div>
+            <div class="mangelfeld" id="mangel-schutzraum_masse_antwort" style="display:none;">
+                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+                <label>Bitte Mangel beschreiben:</label>
+                <textarea placeholder="Beschreibung des Mangels..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- FRAGE 13.1.5 – REDUKTION HOCKEND -->
+    <div class="frage" id="schutzraum_frage5" style="display:none;">
+        <h3>13.1.5 – Reduktion des Schutzraums (nur hockend)</h3>
+        <div class="hinweis">ℹ️ DIN EN 81-20 Bild 4 – Zulässige Reduktion:<br>• Fläche: max. 10 cm<br>• Höhe: max. 30 cm</div>
+
+        <!-- Passt / Mangel -->
+        <div class="antwort-gruppe" id="schutzraum_reduktion_antwort" style="margin-top:15px;">
+            <button class="antwort-btn passt" onclick="antwort(this,'schutzraum_reduktion_antwort')">🟢 Passt</button>
+            <button class="antwort-btn passt-nicht" onclick="antwort(this,'schutzraum_reduktion_antwort')">🔴 Mangel</button>
+        </div>
+        <div class="mangelfeld" id="mangel-schutzraum_reduktion_antwort" style="display:none;">
+            <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+            <label>Bitte Mangel beschreiben:</label>
+            <textarea placeholder="Beschreibung des Mangels..."></textarea>
+        </div>
+    </div>
+
+    <!-- FRAGE 13.1.6 – SCHILDER – immer letzte Frage -->
+    <div class="frage" id="schutzraum_frage_schild" style="display:none;">
+        <h3>13.1.6 – Sind die korrekten Schilder angebracht?</h3>
+        <div class="hinweis">ℹ️ DIN EN 81-20 – Pflicht: Schild mit erlaubter Körperhaltung im Schutzraum</div>
+        <div class="antwort-gruppe">
+            <button class="antwort-btn passt" onclick="waehleSchild(this, 'vorhanden')">🟢 Vorhanden</button>
+            <button class="antwort-btn passt-nicht" onclick="waehleSchild(this, 'nein')">🔴 Nicht vorhanden – Mangel</button>
+        </div>
+        <div class="mangelfeld" id="mangel-schutzraum_schild" style="display:none;">
+            <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+            <label>Bitte Mangel beschreiben:</label>
+            <textarea placeholder="Beschreibung des Mangels..."></textarea>
+        </div>
+    </div>
+
+</div><!-- Ende Prüfung vor Ort -->
+
+<div class="pdf-bereich"><button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button></div>
+```
+
+</div>
+
 <!-- ==========================================
      JAVASCRIPT
      Alle Funktionen der App sind hier definiert
@@ -2305,13 +2437,14 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             heber:       ['bauteilTitelHeber',        'detailHeber',       'pruefung_heber',      '10 – Heber'],
             schacht:     ['bauteilTitelSchacht',      'detailSchacht',     'pruefung_schacht',    '11 – Schacht'],
             schachttuer: ['bauteilTitelSchachttuer',  'detailSchachttuer', 'pruefung_schachttuer','12 – Schachttüren'],
+            schutzraum:  ['bauteilTitelSchutzraum',   'detailSchutzraum',  null,                  '13 – Schutzraum'],
         };
 
         const info = bauteile[bauteil];
         if (info) {
             document.getElementById(info[0]).innerText = info[3]; /* Titel setzen */
             zeige(info[1]);                                        /* Seite anzeigen */
-            aktiviereErstenTab(info[1], info[2]);                  /* Ersten Tab aktivieren */
+            if (info[2]) aktiviereErstenTab(info[1], info[2]);    /* Ersten Tab nur wenn vorhanden */
         }
     }
 
@@ -2633,6 +2766,11 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         /* Beide Buttons deaktivieren, dann geklickten aktivieren */
         frage.querySelectorAll('.ja-btn, .nein-btn').forEach(el => el.classList.remove('aktiv'));
         btn.classList.add('aktiv');
+        /* Mangelfeld ein-/ausblenden bei Nein */
+        const mangelfeld = document.getElementById('mangel-' + frageId);
+        if (mangelfeld) {
+            mangelfeld.style.display = (antwortWert === 'nein') ? 'block' : 'none';
+        }
     }
 
     /* ------------------------------------------
@@ -3010,6 +3148,93 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         doc.save('Pruefprotokoll_' + datum + '.pdf');
     }
 
+    /* ------------------------------------------
+       SCHUTZRAUM – GLOBALE VARIABLEN
+    ------------------------------------------ */
+    let schutzraum_antrieb  = '';  /* 'treibscheibe' oder 'hydraulik' */
+    let schutzraum_masstyp  = '';  /* 'stehend' oder 'hockend' */
+    let schutzraum_schild   = '';  /* 'stehend', 'hockend' oder 'nein' */
+
+    /* Antriebsart wählen und Folgefelder einblenden */
+    function waehleAntrieb(btn, antrieb) {
+        document.querySelectorAll('#detailSchutzraum .auswahl-btn').forEach(el => el.classList.remove('aktiv'));
+        btn.classList.add('aktiv');
+        schutzraum_antrieb = antrieb;
+        /* Folgefelder einblenden */
+        document.getElementById('schutzraum_frage2').style.display = 'block';
+        document.getElementById('schutzraum_frage3').style.display = 'block';
+        document.getElementById('schutzraum_frage_schild').style.display = 'block';
+        berechneSchutzraum();
+    }
+
+    /* Hauptberechnung: Soll-Werte aus Geschwindigkeit berechnen */
+    function berechneSchutzraum() {
+        const v = parseFloat(document.getElementById('schutzraum_v').value);
+        if (isNaN(v) || v < 0) return;
+
+        const zusatz = 0.0335 * v * v; /* Formel: 0,0335 × v² */
+
+        /* Restfahrweg Soll: 10 cm + Zusatz (in cm) */
+        const restfahrweg_soll = 10 + (zusatz * 100); /* Zusatz in m → cm */
+        document.getElementById('schutzraum_restfahrweg_soll').innerText = restfahrweg_soll.toFixed(2) + ' cm';
+
+        /* Schutzraum Höhen Soll aktualisieren wenn Masstyp bereits gewählt */
+        if (schutzraum_masstyp) {
+            aktualisiereSollMasse(v);
+        }
+    }
+
+    /* Soll-Maße je nach Typ und Geschwindigkeit setzen */
+    function aktualisiereSollMasse(v) {
+        const zusatz = 0.0335 * v * v; /* in Meter */
+        let hoehe_soll, breite_soll, tiefe_soll;
+
+        if (schutzraum_masstyp === 'stehend') {
+            hoehe_soll  = 2.0 + zusatz; /* 2 m + 0,0335 × v² */
+            breite_soll = 0.4;
+            tiefe_soll  = 0.5;
+        } else {
+            hoehe_soll  = 1.0 + zusatz; /* 1 m + 0,0335 × v² */
+            breite_soll = 0.5;
+            tiefe_soll  = 0.7;
+        }
+
+        document.getElementById('soll_hoehe').innerText  = hoehe_soll.toFixed(3) + ' m';
+        document.getElementById('soll_breite').innerText = breite_soll.toFixed(2) + ' m';
+        document.getElementById('soll_tiefe').innerText  = tiefe_soll.toFixed(2) + ' m';
+
+        /* Maße neu prüfen wenn Ist-Werte vorhanden */
+        pruefeMasse();
+    }
+
+    /* Schild-Auswahl */
+    function waehleSchild(btn, wahl) {
+        const frage = document.getElementById('schutzraum_frage3');
+        frage.querySelectorAll('.antwort-btn').forEach(el => el.classList.remove('aktiv'));
+        btn.classList.add('aktiv');
+        schutzraum_schild = wahl;
+        const mangelfeld = document.getElementById('mangel-schutzraum_schild');
+        if (wahl === 'nein') { mangelfeld.style.display = 'block'; }
+        else { mangelfeld.style.display = 'none'; }
+    }
+
+    /* Maß-Typ wählen (stehend/hockend) */
+    function waehleMassTyp(btn, typ) {
+        document.getElementById('btn_mass_stehend').classList.remove('aktiv');
+        document.getElementById('btn_mass_hockend').classList.remove('aktiv');
+        btn.classList.add('aktiv');
+        schutzraum_masstyp = typ;
+        document.getElementById('schutzraum_masse_soll').style.display = 'block';
+
+        /* Frage 5 nur bei hockend */
+        const frage5 = document.getElementById('schutzraum_frage5');
+        frage5.style.display = typ === 'hockend' ? 'block' : 'none';
+
+        const v = parseFloat(document.getElementById('schutzraum_v').value);
+        if (!isNaN(v) && v >= 0) aktualisiereSollMasse(v);
+    }
+
+    /* Maße prüfen */
     /* ------------------------------------------
        PWA – SERVICE WORKER REGISTRIERUNG
        Aktiviert Offline-Funktion und App-Symbol
