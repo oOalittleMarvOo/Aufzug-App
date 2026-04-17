@@ -1801,6 +1801,16 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 ```
 <div class="frage">
     <h3>Gemessener Strom &amp; Sicherungsvergleich</h3>
+
+    <!-- Messgerät-Auswahl: bestimmt den Abzugsfaktor -->
+    <div style="margin-bottom:15px;">
+        <label style="font-size:14px;color:#333;display:block;margin-bottom:8px;">Messgerät:</label>
+        <div class="auswahl-gruppe">
+            <button class="auswahl-btn aktiv" id="btn_dinvde_s" onclick="waehleMessgeraet(this,'dinvde')">📐 DIN VDE (−30%)</button>
+            <button class="auswahl-btn" id="btn_fluke_s" onclick="waehleMessgeraet(this,'fluke')">🔧 Fluke (−5%)</button>
+        </div>
+    </div>
+
     <!-- Gemessener Strom -->
     <div class="eingabe-zeile">
         <label>Gemessener Strom:</label>
@@ -2584,13 +2594,27 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     }
 
     /* Sicherungsberechnung für eigenständige Sicherungs-Seite */
+
+    let messgeraet_s = 'dinvde'; /* Standard: DIN VDE = 30% Abzug */
+
+    /* Messgerät wählen und neu berechnen */
+    function waehleMessgeraet(btn, geraet) {
+        document.getElementById('btn_dinvde_s').classList.remove('aktiv');
+        document.getElementById('btn_fluke_s').classList.remove('aktiv');
+        btn.classList.add('aktiv');
+        messgeraet_s = geraet;
+        berechneAusloeseStromS(); /* Sofort neu berechnen */
+    }
+
     function berechneAusloeseStromS() {
         const strom    = parseFloat(document.getElementById('gemessener_strom_s').value);
         const sicherung = parseFloat(document.getElementById('sicherungswert_s').value);
         const inline   = document.getElementById('ausloeseStrom_inline_s');
         const tabelle  = document.getElementById('sicherung_tabelle_s');
         if (isNaN(strom) || strom <= 0) { inline.style.display = 'none'; tabelle.style.display = 'none'; return; }
-        const ausloeseStrom = strom * 0.7;
+        /* Faktor je nach Messgerät: DIN VDE = 70%, Fluke = 95% */
+        const faktor = messgeraet_s === 'fluke' ? 0.95 : 0.70;
+        const ausloeseStrom = strom * faktor;
         document.getElementById('ergebnis_ausloeseStrom_s').innerText = ausloeseStrom.toFixed(2);
         inline.style.display = 'inline';
         if (isNaN(sicherung) || sicherung <= 0) { tabelle.style.display = 'none'; return; }
