@@ -3466,7 +3466,6 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         }
 
         function ausgabeBauteil(id) {
-                const bauteil = BAUTEILE.find(b => b.id === id);
             const bauteil = BAUTEILE.find(b => b.id === id);
             const item    = document.querySelector('.bauteil-item[data-bauteil-id="' + id + '"]');
             if (!item) return;
