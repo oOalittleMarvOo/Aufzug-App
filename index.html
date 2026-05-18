@@ -1047,6 +1047,9 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 <div id="bauteilSeite" class="seite">
     <button class="zuruck" onclick="zeige('startseite')">← Zurück</button>
     <h2 id="bereichTitel"></h2>
+    <div id="umbauPdfBereich" style="display:none; margin-bottom:15px;">
+        <button class="pdf-btn" onclick="erstellePDFUmbau()">📄 Gesamtprotokoll PDF erstellen</button>
+    </div>
 
     <!-- Gruppenansicht (nur bei Umbau mit Auswahl) -->
     <div id="gruppenAnsicht" style="display:none;">
@@ -2631,6 +2634,10 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             if (item) standard.appendChild(item);
         });
 
+        /* PDF-Button nur bei Umbau mit gewählten Bauteilen anzeigen */
+        const pdfBereich = document.getElementById('umbauPdfBereich');
+        if (pdfBereich) pdfBereich.style.display = gewaehlteBauteile.length > 0 ? 'block' : 'none';
+
         if (gewaehlteBauteile.length === 0) {
             BAUTEILE.forEach(b => {
                 const item = document.querySelector('.bauteil-item[data-bauteil-id="' + b.id + '"]');
@@ -3396,6 +3403,103 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             box.style.background = '#d4edda'; box.style.border = '2px solid #28a745'; box.style.color = '#155724';
             box.innerText = '✅ Zugkraft in Ordnung! (' + F.toFixed(2) + ' N > 400 N)';
         }
+    }
+
+    /* ------------------------------------------
+       UMBAU GESAMT-PDF
+       Erstellt ein Protokoll für alle gewählten Bauteile
+    ------------------------------------------ */
+    function erstellePDFUmbau() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        let y = 20;
+        const zeilenAbstand = 7;
+        const seitenHoehe = 280;
+
+        function zeile(text, einzug = 0) {
+            if (y > seitenHoehe) { doc.addPage(); y = 20; }
+            const lines = doc.splitTextToSize(text, 180 - einzug);
+            lines.forEach(l => {
+                if (y > seitenHoehe) { doc.addPage(); y = 20; }
+                doc.text(l, 15 + einzug, y);
+                y += zeilenAbstand;
+            });
+        }
+
+        /* Kopfzeile */
+        doc.setFontSize(18); doc.setTextColor(0, 87, 168);
+        zeile('Aufzug-App - Umbau Pruefprotokoll');
+        doc.setFontSize(10); doc.setTextColor(100, 100, 100);
+        zeile('Erstellt: ' + new Date().toLocaleDateString('de-DE') + '  ' + new Date().toLocaleTimeString('de-DE'));
+        if (aktuelleSeriennummer) zeile('Projektnummer: ' + aktuelleSeriennummer);
+        y += 4;
+
+        /* Bauteile nach Gruppen sortiert ausgeben */
+        const gruppenConfig = [
+            { key: 'triebwerk', label: 'Triebwerksraum' },
+            { key: 'schacht',   label: 'Schacht'        },
+            { key: 'grube',     label: 'Grube'          },
+            { key: 'ohne',      label: 'Weitere'        }
+        ];
+
+        const gruppenIds = { triebwerk: [], schacht: [], grube: [], ohne: [] };
+        gewaehlteBauteile.forEach(id => {
+            gruppenIds[bauteilGruppen[id] || 'ohne'].push(id);
+        });
+
+        gruppenConfig.forEach(g => {
+            if (gruppenIds[g.key].length === 0) return;
+
+            doc.setFontSize(13); doc.setTextColor(0, 87, 168);
+            zeile('-- ' + g.label + ' --');
+            y += 2;
+
+            gruppenIds[g.key].forEach(id => {
+                const bauteil = BAUTEILE.find(b => b.id === id);
+                const item    = document.querySelector('.bauteil-item[data-bauteil-id="' + id + '"]');
+                if (!item) return;
+
+                /* Bauteil-Titel + Status */
+                const btn = item.querySelector('.bauteil-btn');
+                let status = 'Offen';
+                if (btn && btn.classList.contains('status-ok'))     status = 'Mangelfrei';
+                if (btn && btn.classList.contains('status-mangel')) status = 'Mangel';
+
+                doc.setFontSize(11); doc.setTextColor(0, 0, 0);
+                zeile(bauteil.label + '  [' + status + ']');
+
+                /* Alle Fragen im Prüfung-vor-Ort Tab */
+                const detail = item.querySelector('.bauteil-detail');
+                const pruefTab = detail ? detail.querySelector('.tab-inhalt') : null;
+                if (pruefTab) {
+                    pruefTab.querySelectorAll('.frage').forEach(frage => {
+                        const h3     = frage.querySelector('h3');
+                        const titel  = h3 ? h3.innerText.replace(/\s+/g, ' ').trim() : '';
+                        const aktiv  = frage.querySelector('.antwort-btn.aktiv');
+                        const antw   = aktiv ? aktiv.innerText.replace(/[🟢🔴⚪✅❌]/g, '').trim() : 'Offen';
+                        if (titel) {
+                            doc.setFontSize(9); doc.setTextColor(40, 40, 40);
+                            zeile(titel + ': ' + antw, 5);
+                        }
+                        /* Mangeltext */
+                        const mangelDiv = frage.querySelector('[id^="mangel-"]');
+                        if (mangelDiv && mangelDiv.style.display === 'block') {
+                            const ta = mangelDiv.querySelector('textarea');
+                            if (ta && ta.value.trim()) {
+                                doc.setTextColor(180, 0, 0);
+                                zeile('Mangel: ' + ta.value.trim(), 10);
+                                doc.setTextColor(40, 40, 40);
+                            }
+                        }
+                    });
+                }
+                y += 3;
+            });
+            y += 4;
+        });
+
+        const datum = new Date().toLocaleDateString('de-DE').replace(/\./g, '-');
+        doc.save('Umbau_' + (aktuelleSeriennummer || datum) + '.pdf');
     }
 
     /* ------------------------------------------
