@@ -792,8 +792,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         <!-- Texteingabe für die Seriennummer -->
         <input type="text" id="seriennummerInput" placeholder="z.B. AZ-2024-00123">
         <div class="modal-buttons">
-
-            <!-- Speichern: übernimmt Seriennummer, öffnet dann Bauteil-Auswahl -->
+            <button class="modal-btn-skip" onclick="document.getElementById('modalSeriennummer').classList.remove('aktiv')">← Abbrechen</button>
             <button class="modal-btn-ok" onclick="speichereSeriennummer()">✅ Weiter</button>
         </div>
     </div>
@@ -973,6 +972,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             ℹ️ Kein Bauteil gewählt = alle Bauteile sind im Projekt enthalten
         </div>
         <div class="modal-buttons">
+            <button class="modal-btn-skip" onclick="schliesseBauteilModal()">← Abbrechen</button>
             <button class="modal-btn-ok" onclick="speichereBauteile()">✅ Speichern</button>
         </div>
     </div>
