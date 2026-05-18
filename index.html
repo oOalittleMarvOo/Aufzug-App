@@ -181,6 +181,41 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     #modalBauteile.aktiv {
         display: flex; /* Sichtbar wenn .aktiv gesetzt */
     }
+    .umbau-zeile {
+        border-bottom: 1px solid #e8edf2;
+        padding-bottom: 8px;
+    }
+    .umbau-zeile:last-child { border-bottom: none; }
+    .gruppe-auswahl {
+        display: none;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-left: 30px;
+        margin-top: 6px;
+    }
+    .gruppe-btn {
+        padding: 4px 10px;
+        border: 1.5px solid #0057a8;
+        border-radius: 15px;
+        background: white;
+        color: #0057a8;
+        font-size: 12px;
+        cursor: pointer;
+    }
+    .gruppe-btn.aktiv {
+        background: #0057a8;
+        color: white;
+    }
+    .gruppe-titel {
+        font-size: 13px;
+        font-weight: bold;
+        color: #0057a8;
+        background: #e8f0fb;
+        border-radius: 8px;
+        padding: 6px 12px;
+        margin-bottom: 8px;
+        margin-top: 4px;
+    }
     #modalSpannkraft {
         display: none;               /* Versteckt – wird per JavaScript mit .aktiv sichtbar */
         position: fixed;             /* Fixiert über allem */
@@ -722,24 +757,172 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
      Jederzeit änderbar über "ändern" Button in der Leiste
 ========================================== -->
 
-<div id="modalBauteile"> <!-- Standardmäßig versteckt – .aktiv macht es sichtbar -->
-    <div class="modal-box"> <!-- Modal-Box zentriert -->
-        <h2>🔧 Welche Teile wurden umgebaut?</h2> <!-- Titel -->
-        <p style="color:#666;margin-bottom:15px;font-size:14px;">Bitte wählen Sie alle betroffenen Bauteile aus.</p> <!-- Hinweis -->
-        <!-- Checkboxen für alle Bauteile – untereinander -->
-        <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px;text-align:left;">
-            <label style="display:flex;align-items:center;gap:10px;font-size:16px;cursor:pointer;"> <!-- Checkbox Seil -->
-                <input type="checkbox" id="check_seil" style="width:20px;height:20px;cursor:pointer;">
-                1 – 🔩 Geschwindigkeitsbegrenzerseil
-            </label>
-            <label style="display:flex;align-items:center;gap:10px;font-size:16px;cursor:pointer;"> <!-- Checkbox Begrenzer -->
-                <input type="checkbox" id="check_begrenzer" style="width:20px;height:20px;cursor:pointer;">
-                2 – ⚙️ Geschwindigkeitsbegrenzer
-            </label>
+<div id="modalBauteile">
+    <div class="modal-box" style="max-width:480px;max-height:85vh;overflow-y:auto;">
+        <h2>🔧 Welche Teile wurden umgebaut?</h2>
+        <p style="color:#666;margin-bottom:15px;font-size:14px;">Bauteil wählen → Gruppe zuweisen</p>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;text-align:left;">
+
+            <div class="umbau-zeile">
+                <label style="display:flex;align-items:center;gap:10px;font-size:15px;cursor:pointer;">
+                    <input type="checkbox" id="check_seil" style="width:20px;height:20px;cursor:pointer;" onchange="toggleGruppe('seil')">
+                    1 – 🔩 Geschwindigkeitsbegrenzerseil
+                </label>
+                <div id="gruppe_seil" class="gruppe-auswahl">
+                    <button class="gruppe-btn" data-gruppe="triebwerk" onclick="waehleGruppe(this,'seil','triebwerk')">⚙️ Triebwerksraum</button>
+                    <button class="gruppe-btn" data-gruppe="schacht" onclick="waehleGruppe(this,'seil','schacht')">🏗️ Schacht</button>
+                    <button class="gruppe-btn" data-gruppe="grube" onclick="waehleGruppe(this,'seil','grube')">⛏️ Grube</button>
+                </div>
+            </div>
+
+            <div class="umbau-zeile">
+                <label style="display:flex;align-items:center;gap:10px;font-size:15px;cursor:pointer;">
+                    <input type="checkbox" id="check_begrenzer" style="width:20px;height:20px;cursor:pointer;" onchange="toggleGruppe('begrenzer')">
+                    2 – ⚙️ Geschwindigkeitsbegrenzer
+                </label>
+                <div id="gruppe_begrenzer" class="gruppe-auswahl">
+                    <button class="gruppe-btn" data-gruppe="triebwerk" onclick="waehleGruppe(this,'begrenzer','triebwerk')">⚙️ Triebwerksraum</button>
+                    <button class="gruppe-btn" data-gruppe="schacht" onclick="waehleGruppe(this,'begrenzer','schacht')">🏗️ Schacht</button>
+                    <button class="gruppe-btn" data-gruppe="grube" onclick="waehleGruppe(this,'begrenzer','grube')">⛏️ Grube</button>
+                </div>
+            </div>
+
+            <div class="umbau-zeile">
+                <label style="display:flex;align-items:center;gap:10px;font-size:15px;cursor:pointer;">
+                    <input type="checkbox" id="check_fang" style="width:20px;height:20px;cursor:pointer;" onchange="toggleGruppe('fang')">
+                    3 – 🛑 Fangvorrichtung
+                </label>
+                <div id="gruppe_fang" class="gruppe-auswahl">
+                    <button class="gruppe-btn" data-gruppe="triebwerk" onclick="waehleGruppe(this,'fang','triebwerk')">⚙️ Triebwerksraum</button>
+                    <button class="gruppe-btn" data-gruppe="schacht" onclick="waehleGruppe(this,'fang','schacht')">🏗️ Schacht</button>
+                    <button class="gruppe-btn" data-gruppe="grube" onclick="waehleGruppe(this,'fang','grube')">⛏️ Grube</button>
+                </div>
+            </div>
+
+            <div class="umbau-zeile">
+                <label style="display:flex;align-items:center;gap:10px;font-size:15px;cursor:pointer;">
+                    <input type="checkbox" id="check_schienen" style="width:20px;height:20px;cursor:pointer;" onchange="toggleGruppe('schienen')">
+                    4 – 🛤️ Schienen
+                </label>
+                <div id="gruppe_schienen" class="gruppe-auswahl">
+                    <button class="gruppe-btn" data-gruppe="triebwerk" onclick="waehleGruppe(this,'schienen','triebwerk')">⚙️ Triebwerksraum</button>
+                    <button class="gruppe-btn" data-gruppe="schacht" onclick="waehleGruppe(this,'schienen','schacht')">🏗️ Schacht</button>
+                    <button class="gruppe-btn" data-gruppe="grube" onclick="waehleGruppe(this,'schienen','grube')">⛏️ Grube</button>
+                </div>
+            </div>
+
+            <div class="umbau-zeile">
+                <label style="display:flex;align-items:center;gap:10px;font-size:15px;cursor:pointer;">
+                    <input type="checkbox" id="check_puffer" style="width:20px;height:20px;cursor:pointer;" onchange="toggleGruppe('puffer')">
+                    5 – 🟥 Puffer
+                </label>
+                <div id="gruppe_puffer" class="gruppe-auswahl">
+                    <button class="gruppe-btn" data-gruppe="triebwerk" onclick="waehleGruppe(this,'puffer','triebwerk')">⚙️ Triebwerksraum</button>
+                    <button class="gruppe-btn" data-gruppe="schacht" onclick="waehleGruppe(this,'puffer','schacht')">🏗️ Schacht</button>
+                    <button class="gruppe-btn" data-gruppe="grube" onclick="waehleGruppe(this,'puffer','grube')">⛏️ Grube</button>
+                </div>
+            </div>
+
+            <div class="umbau-zeile">
+                <label style="display:flex;align-items:center;gap:10px;font-size:15px;cursor:pointer;">
+                    <input type="checkbox" id="check_steuerung" style="width:20px;height:20px;cursor:pointer;" onchange="toggleGruppe('steuerung')">
+                    6 – 🖥️ Steuerung
+                </label>
+                <div id="gruppe_steuerung" class="gruppe-auswahl">
+                    <button class="gruppe-btn" data-gruppe="triebwerk" onclick="waehleGruppe(this,'steuerung','triebwerk')">⚙️ Triebwerksraum</button>
+                    <button class="gruppe-btn" data-gruppe="schacht" onclick="waehleGruppe(this,'steuerung','schacht')">🏗️ Schacht</button>
+                    <button class="gruppe-btn" data-gruppe="grube" onclick="waehleGruppe(this,'steuerung','grube')">⛏️ Grube</button>
+                </div>
+            </div>
+
+            <div class="umbau-zeile">
+                <label style="display:flex;align-items:center;gap:10px;font-size:15px;cursor:pointer;">
+                    <input type="checkbox" id="check_antrieb" style="width:20px;height:20px;cursor:pointer;" onchange="toggleGruppe('antrieb')">
+                    7 – 🔧 Antrieb
+                </label>
+                <div id="gruppe_antrieb" class="gruppe-auswahl">
+                    <button class="gruppe-btn" data-gruppe="triebwerk" onclick="waehleGruppe(this,'antrieb','triebwerk')">⚙️ Triebwerksraum</button>
+                    <button class="gruppe-btn" data-gruppe="schacht" onclick="waehleGruppe(this,'antrieb','schacht')">🏗️ Schacht</button>
+                    <button class="gruppe-btn" data-gruppe="grube" onclick="waehleGruppe(this,'antrieb','grube')">⛏️ Grube</button>
+                </div>
+            </div>
+
+            <div class="umbau-zeile">
+                <label style="display:flex;align-items:center;gap:10px;font-size:15px;cursor:pointer;">
+                    <input type="checkbox" id="check_tragseile" style="width:20px;height:20px;cursor:pointer;" onchange="toggleGruppe('tragseile')">
+                    8 – 🪢 Tragseile
+                </label>
+                <div id="gruppe_tragseile" class="gruppe-auswahl">
+                    <button class="gruppe-btn" data-gruppe="triebwerk" onclick="waehleGruppe(this,'tragseile','triebwerk')">⚙️ Triebwerksraum</button>
+                    <button class="gruppe-btn" data-gruppe="schacht" onclick="waehleGruppe(this,'tragseile','schacht')">🏗️ Schacht</button>
+                    <button class="gruppe-btn" data-gruppe="grube" onclick="waehleGruppe(this,'tragseile','grube')">⛏️ Grube</button>
+                </div>
+            </div>
+
+            <div class="umbau-zeile">
+                <label style="display:flex;align-items:center;gap:10px;font-size:15px;cursor:pointer;">
+                    <input type="checkbox" id="check_rohrbruch" style="width:20px;height:20px;cursor:pointer;" onchange="toggleGruppe('rohrbruch')">
+                    9 – 🔴 Rohrbruchsicherung
+                </label>
+                <div id="gruppe_rohrbruch" class="gruppe-auswahl">
+                    <button class="gruppe-btn" data-gruppe="triebwerk" onclick="waehleGruppe(this,'rohrbruch','triebwerk')">⚙️ Triebwerksraum</button>
+                    <button class="gruppe-btn" data-gruppe="schacht" onclick="waehleGruppe(this,'rohrbruch','schacht')">🏗️ Schacht</button>
+                    <button class="gruppe-btn" data-gruppe="grube" onclick="waehleGruppe(this,'rohrbruch','grube')">⛏️ Grube</button>
+                </div>
+            </div>
+
+            <div class="umbau-zeile">
+                <label style="display:flex;align-items:center;gap:10px;font-size:15px;cursor:pointer;">
+                    <input type="checkbox" id="check_heber" style="width:20px;height:20px;cursor:pointer;" onchange="toggleGruppe('heber')">
+                    10 – ⬆️ Heber
+                </label>
+                <div id="gruppe_heber" class="gruppe-auswahl">
+                    <button class="gruppe-btn" data-gruppe="triebwerk" onclick="waehleGruppe(this,'heber','triebwerk')">⚙️ Triebwerksraum</button>
+                    <button class="gruppe-btn" data-gruppe="schacht" onclick="waehleGruppe(this,'heber','schacht')">🏗️ Schacht</button>
+                    <button class="gruppe-btn" data-gruppe="grube" onclick="waehleGruppe(this,'heber','grube')">⛏️ Grube</button>
+                </div>
+            </div>
+
+            <div class="umbau-zeile">
+                <label style="display:flex;align-items:center;gap:10px;font-size:15px;cursor:pointer;">
+                    <input type="checkbox" id="check_schacht" style="width:20px;height:20px;cursor:pointer;" onchange="toggleGruppe('schacht')">
+                    11 – 🏗️ Schacht
+                </label>
+                <div id="gruppe_schacht" class="gruppe-auswahl">
+                    <button class="gruppe-btn" data-gruppe="triebwerk" onclick="waehleGruppe(this,'schacht','triebwerk')">⚙️ Triebwerksraum</button>
+                    <button class="gruppe-btn" data-gruppe="schacht" onclick="waehleGruppe(this,'schacht','schacht')">🏗️ Schacht</button>
+                    <button class="gruppe-btn" data-gruppe="grube" onclick="waehleGruppe(this,'schacht','grube')">⛏️ Grube</button>
+                </div>
+            </div>
+
+            <div class="umbau-zeile">
+                <label style="display:flex;align-items:center;gap:10px;font-size:15px;cursor:pointer;">
+                    <input type="checkbox" id="check_schachttuer" style="width:20px;height:20px;cursor:pointer;" onchange="toggleGruppe('schachttuer')">
+                    12 – 🚪 Schachttüren
+                </label>
+                <div id="gruppe_schachttuer" class="gruppe-auswahl">
+                    <button class="gruppe-btn" data-gruppe="triebwerk" onclick="waehleGruppe(this,'schachttuer','triebwerk')">⚙️ Triebwerksraum</button>
+                    <button class="gruppe-btn" data-gruppe="schacht" onclick="waehleGruppe(this,'schachttuer','schacht')">🏗️ Schacht</button>
+                    <button class="gruppe-btn" data-gruppe="grube" onclick="waehleGruppe(this,'schachttuer','grube')">⛏️ Grube</button>
+                </div>
+            </div>
+
+            <div class="umbau-zeile">
+                <label style="display:flex;align-items:center;gap:10px;font-size:15px;cursor:pointer;">
+                    <input type="checkbox" id="check_schutzraum" style="width:20px;height:20px;cursor:pointer;" onchange="toggleGruppe('schutzraum')">
+                    13 – 🛡️ Schutzraum
+                </label>
+                <div id="gruppe_schutzraum" class="gruppe-auswahl">
+                    <button class="gruppe-btn" data-gruppe="triebwerk" onclick="waehleGruppe(this,'schutzraum','triebwerk')">⚙️ Triebwerksraum</button>
+                    <button class="gruppe-btn" data-gruppe="schacht" onclick="waehleGruppe(this,'schutzraum','schacht')">🏗️ Schacht</button>
+                    <button class="gruppe-btn" data-gruppe="grube" onclick="waehleGruppe(this,'schutzraum','grube')">⛏️ Grube</button>
+                </div>
+            </div>
+
         </div>
-        <div class="modal-buttons"> <!-- Buttons nebeneinander -->
-            <button class="modal-btn-skip" onclick="schliesseBauteilModal()">Überspringen</button> <!-- Alle Bauteile zeigen -->
-            <button class="modal-btn-ok" onclick="speichereBauteile()">✅ Speichern</button> <!-- Nur gewählte zeigen -->
+        <div class="modal-buttons">
+            <button class="modal-btn-skip" onclick="schliesseBauteilModal()">Überspringen</button>
+            <button class="modal-btn-ok" onclick="speichereBauteile()">✅ Speichern</button>
         </div>
     </div>
 </div>
@@ -809,35 +992,43 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 ========================================== -->
 
 <div id="bauteilSeite" class="seite">
-    <!-- Zurück zur Startseite -->
     <button class="zuruck" onclick="zeige('startseite')">← Zurück</button>
     <h2 id="bereichTitel"></h2>
-    <div class="bauteil-liste">
-        <!-- Bauteil 1: Geschwindigkeitsbegrenzerseil -->
+
+    <!-- Gruppenansicht (nur bei Umbau mit Auswahl) -->
+    <div id="gruppenAnsicht" style="display:none;">
+        <div id="triebwerkGruppeBereich" style="display:none;">
+            <div class="gruppe-titel">⚙️ Triebwerksraum</div>
+            <div class="bauteil-liste" id="triebwerkGruppeListe"></div>
+        </div>
+        <div id="schachtGruppeBereich" style="display:none;">
+            <div class="gruppe-titel">🏗️ Schacht</div>
+            <div class="bauteil-liste" id="schachtGruppeListe"></div>
+        </div>
+        <div id="grubeGruppeBereich" style="display:none;">
+            <div class="gruppe-titel">⛏️ Grube</div>
+            <div class="bauteil-liste" id="grubeGruppeListe"></div>
+        </div>
+        <div id="ohneGruppeBereich" style="display:none;">
+            <div class="gruppe-titel">📋 Ohne Gruppe</div>
+            <div class="bauteil-liste" id="ohneGruppeListe"></div>
+        </div>
+    </div>
+
+    <!-- Standardansicht (alle Bauteile ungroupiert) -->
+    <div class="bauteil-liste" id="standardBauteilListe">
         <button id="btn_seil" class="bauteil-btn" onclick="zeigeBauteil('seil')">1 – 🔩 Geschwindigkeitsbegrenzerseil</button>
-        <!-- Bauteil 2: Geschwindigkeitsbegrenzer -->
         <button id="btn_begrenzer" class="bauteil-btn" onclick="zeigeBauteil('begrenzer')">2 – ⚙️ Geschwindigkeitsbegrenzer</button>
-        <!-- Bauteil 3: Fangvorrichtung -->
         <button id="btn_fang" class="bauteil-btn" onclick="zeigeBauteil('fang')">3 – 🛑 Fangvorrichtung</button>
-        <!-- Bauteil 4: Schienen -->
         <button id="btn_schienen" class="bauteil-btn" onclick="zeigeBauteil('schienen')">4 – 🛤️ Schienen</button>
-        <!-- Bauteil 5: Puffer -->
         <button id="btn_puffer" class="bauteil-btn" onclick="zeigeBauteil('puffer')">5 – 🟥 Puffer</button>
-        <!-- Bauteil 6: Steuerung -->
         <button id="btn_steuerung" class="bauteil-btn" onclick="zeigeBauteil('steuerung')">6 – 🖥️ Steuerung</button>
-        <!-- Bauteil 7: Antrieb -->
         <button id="btn_antrieb" class="bauteil-btn" onclick="zeigeBauteil('antrieb')">7 – 🔧 Antrieb</button>
-        <!-- Bauteil 8: Tragseile -->
         <button id="btn_tragseile" class="bauteil-btn" onclick="zeigeBauteil('tragseile')">8 – 🪢 Tragseile</button>
-        <!-- Bauteil 9: Rohrbruchsicherung -->
         <button id="btn_rohrbruch" class="bauteil-btn" onclick="zeigeBauteil('rohrbruch')">9 – 🔴 Rohrbruchsicherung</button>
-        <!-- Bauteil 10: Heber (Hydraulikzylinder) -->
         <button id="btn_heber" class="bauteil-btn" onclick="zeigeBauteil('heber')">10 – ⬆️ Heber</button>
-        <!-- Bauteil 11: Schacht -->
         <button id="btn_schacht" class="bauteil-btn" onclick="zeigeBauteil('schacht')">11 – 🏗️ Schacht</button>
-        <!-- Bauteil 12: Schachttüren -->
         <button id="btn_schachttuer" class="bauteil-btn" onclick="zeigeBauteil('schachttuer')">12 – 🚪 Schachttüren</button>
-        <!-- Bauteil 13: Schutzraum -->
         <button id="btn_schutzraum" class="bauteil-btn" onclick="zeigeBauteil('schutzraum')">13 – 🛡️ Schutzraum</button>
     </div>
 </div>
@@ -2310,8 +2501,25 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
        Speichert die aktuell eingegebene Seriennummer
        Wird im PDF-Export und in der Leiste verwendet
     ------------------------------------------ */
-    let aktuelleSeriennummer = '';  /* Aktuelle Seriennummer */
-    let gewaehlteBauteile   = [];  /* Gewählte Bauteile: ['seil', 'begrenzer', ...] – leer = alle anzeigen */
+    let aktuelleSeriennummer = '';
+    let gewaehlteBauteile   = [];
+    let bauteilGruppen      = {}; /* { seil: 'triebwerk', begrenzer: 'schacht', ... } */
+
+    const BAUTEILE = [
+        { id: 'seil',       label: '1 – 🔩 Geschwindigkeitsbegrenzerseil' },
+        { id: 'begrenzer',  label: '2 – ⚙️ Geschwindigkeitsbegrenzer' },
+        { id: 'fang',       label: '3 – 🛑 Fangvorrichtung' },
+        { id: 'schienen',   label: '4 – 🛤️ Schienen' },
+        { id: 'puffer',     label: '5 – 🟥 Puffer' },
+        { id: 'steuerung',  label: '6 – 🖥️ Steuerung' },
+        { id: 'antrieb',    label: '7 – 🔧 Antrieb' },
+        { id: 'tragseile',  label: '8 – 🪢 Tragseile' },
+        { id: 'rohrbruch',  label: '9 – 🔴 Rohrbruchsicherung' },
+        { id: 'heber',      label: '10 – ⬆️ Heber' },
+        { id: 'schacht',    label: '11 – 🏗️ Schacht' },
+        { id: 'schachttuer',label: '12 – 🚪 Schachttüren' },
+        { id: 'schutzraum', label: '13 – 🛡️ Schutzraum' }
+    ];
 
     /* Modal öffnen: zeigt das Seriennummer-Eingabefeld
        Befüllt das Eingabefeld mit der aktuellen Seriennummer */
@@ -2337,46 +2545,103 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         oeffneBauteilModal(); /* Bauteil-Auswahl öffnen */
     }
 
-    /* Bauteil-Modal öffnen – stellt aktuelle Auswahl wieder her */
-    function oeffneBauteilModal() {
-        /* Aktuelle Checkboxen-Zustände wiederherstellen */
-        document.getElementById('check_seil').checked = gewaehlteBauteile.includes('seil');
-        document.getElementById('check_begrenzer').checked = gewaehlteBauteile.includes('begrenzer');
-        document.getElementById('modalBauteile').classList.add('aktiv'); /* Modal anzeigen */
-    }
-
-    /* Bauteil-Modal ohne Speichern schließen – alle Bauteile bleiben sichtbar */
-    function schliesseBauteilModal() {
-        document.getElementById('modalBauteile').classList.remove('aktiv'); /* Modal schließen */
-        document.getElementById('btnBauteileAendern').style.display = 'inline-block'; /* Ändern-Button zeigen */
-        aktualisiereBauteilListe(); /* Bauteil-Liste aktualisieren */
-        zeige('bauteilSeite'); /* Zur Bauteil-Liste navigieren */
-    }
-
-    /* Bauteil-Auswahl speichern und Modal schließen */
-    function speichereBauteile() {
-        gewaehlteBauteile = []; /* Auswahl zurücksetzen */
-        if (document.getElementById('check_seil').checked) gewaehlteBauteile.push('seil'); /* Seil gewählt */
-        if (document.getElementById('check_begrenzer').checked) gewaehlteBauteile.push('begrenzer'); /* Begrenzer gewählt */
-        document.getElementById('modalBauteile').classList.remove('aktiv'); /* Modal schließen */
-        document.getElementById('btnBauteileAendern').style.display = 'inline-block'; /* Ändern-Button zeigen */
-        aktualisiereBauteilListe(); /* Bauteil-Liste aktualisieren */
-        zeige('bauteilSeite'); /* Zur Bauteil-Liste navigieren */
-    }
-
-    /* Bauteil-Liste je nach Auswahl anzeigen/verstecken */
-    function aktualisiereBauteilListe() {
-        const btnSeil      = document.getElementById('btn_seil');      /* Button Seil */
-        const btnBegrenzer = document.getElementById('btn_begrenzer'); /* Button Begrenzer */
-        if (gewaehlteBauteile.length === 0) {
-            /* Nichts gewählt → alle anzeigen */
-            btnSeil.style.display      = 'block';
-            btnBegrenzer.style.display = 'block';
-        } else {
-            /* Nur gewählte anzeigen */
-            btnSeil.style.display      = gewaehlteBauteile.includes('seil')      ? 'block' : 'none';
-            btnBegrenzer.style.display = gewaehlteBauteile.includes('begrenzer') ? 'block' : 'none';
+    /* Checkbox im Modal: Gruppen-Buttons ein-/ausblenden */
+    function toggleGruppe(id) {
+        const checked = document.getElementById('check_' + id).checked;
+        const gruppenDiv = document.getElementById('gruppe_' + id);
+        gruppenDiv.style.display = checked ? 'flex' : 'none';
+        if (!checked) {
+            delete bauteilGruppen[id];
+            gruppenDiv.querySelectorAll('.gruppe-btn').forEach(b => b.classList.remove('aktiv'));
         }
+    }
+
+    /* Gruppe einem Bauteil zuweisen */
+    function waehleGruppe(btn, id, gruppe) {
+        document.querySelectorAll('#gruppe_' + id + ' .gruppe-btn').forEach(b => b.classList.remove('aktiv'));
+        btn.classList.add('aktiv');
+        bauteilGruppen[id] = gruppe;
+    }
+
+    /* Bauteil-Modal öffnen – stellt Auswahl und Gruppen wieder her */
+    function oeffneBauteilModal() {
+        BAUTEILE.forEach(b => {
+            const check = document.getElementById('check_' + b.id);
+            const gruppenDiv = document.getElementById('gruppe_' + b.id);
+            check.checked = gewaehlteBauteile.includes(b.id);
+            if (check.checked) {
+                gruppenDiv.style.display = 'flex';
+                const gespeicherteGruppe = bauteilGruppen[b.id];
+                gruppenDiv.querySelectorAll('.gruppe-btn').forEach(btn => {
+                    btn.classList.toggle('aktiv', btn.dataset.gruppe === gespeicherteGruppe);
+                });
+            } else {
+                gruppenDiv.style.display = 'none';
+            }
+        });
+        document.getElementById('modalBauteile').classList.add('aktiv');
+    }
+
+    /* Modal schließen ohne Speichern */
+    function schliesseBauteilModal() {
+        document.getElementById('modalBauteile').classList.remove('aktiv');
+        document.getElementById('btnBauteileAendern').style.display = 'inline-block';
+        aktualisiereBauteilListe();
+        zeige('bauteilSeite');
+    }
+
+    /* Auswahl und Gruppen speichern */
+    function speichereBauteile() {
+        gewaehlteBauteile = [];
+        BAUTEILE.forEach(b => {
+            if (document.getElementById('check_' + b.id).checked) gewaehlteBauteile.push(b.id);
+        });
+        document.getElementById('modalBauteile').classList.remove('aktiv');
+        document.getElementById('btnBauteileAendern').style.display = 'inline-block';
+        aktualisiereBauteilListe();
+        zeige('bauteilSeite');
+    }
+
+    /* Bauteil-Liste nach Gruppen aufbauen */
+    function aktualisiereBauteilListe() {
+        const standard     = document.getElementById('standardBauteilListe');
+        const gruppenAns   = document.getElementById('gruppenAnsicht');
+
+        if (gewaehlteBauteile.length === 0) {
+            standard.style.display   = 'flex';
+            gruppenAns.style.display = 'none';
+            return;
+        }
+
+        standard.style.display   = 'none';
+        gruppenAns.style.display = 'block';
+
+        const gruppen = { triebwerk: [], schacht: [], grube: [], ohne: [] };
+        gewaehlteBauteile.forEach(id => {
+            const g = bauteilGruppen[id] || 'ohne';
+            gruppen[g].push(id);
+        });
+
+        const config = [
+            { key: 'triebwerk', bereichId: 'triebwerkGruppeBereich', listeId: 'triebwerkGruppeListe' },
+            { key: 'schacht',   bereichId: 'schachtGruppeBereich',   listeId: 'schachtGruppeListe'   },
+            { key: 'grube',     bereichId: 'grubeGruppeBereich',     listeId: 'grubeGruppeListe'     },
+            { key: 'ohne',      bereichId: 'ohneGruppeBereich',      listeId: 'ohneGruppeListe'      }
+        ];
+
+        config.forEach(c => {
+            const bereich = document.getElementById(c.bereichId);
+            const liste   = document.getElementById(c.listeId);
+            if (gruppen[c.key].length === 0) {
+                bereich.style.display = 'none';
+                return;
+            }
+            bereich.style.display = 'block';
+            liste.innerHTML = gruppen[c.key].map(id => {
+                const b = BAUTEILE.find(x => x.id === id);
+                return `<button class="bauteil-btn" onclick="zeigeBauteil('${id}')">${b.label}</button>`;
+            }).join('');
+        });
     }
 
     /* Umbau-Button: öffnet zuerst das Seriennummer-Modal */
