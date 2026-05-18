@@ -3105,18 +3105,18 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
         const fragen = pruefungTab.querySelectorAll('.frage');
         let alleBeantwortet = true;
-        let hatMangel       = false;
+        let hatNichtPasst   = false;
 
         fragen.forEach(frage => {
             const btns = frage.querySelectorAll('.antwort-btn');
             if (btns.length === 0) return;
             const aktiv = frage.querySelector('.antwort-btn.aktiv');
             if (!aktiv) { alleBeantwortet = false; }
-            else if (aktiv.classList.contains('passt-nicht')) { hatMangel = true; }
+            else if (!aktiv.classList.contains('passt')) { hatNichtPasst = true; }
         });
 
         btn.classList.remove('status-ok', 'status-mangel');
-        if (hatMangel)            btn.classList.add('status-mangel');
+        if (hatNichtPasst)        btn.classList.add('status-mangel');
         else if (alleBeantwortet) btn.classList.add('status-ok');
     }
 
@@ -3127,14 +3127,14 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     ------------------------------------------ */
     function jaNein(btn, frageId, antwortWert) {
         const frage = document.getElementById(frageId);
-        /* Beide Buttons deaktivieren, dann geklickten aktivieren */
         frage.querySelectorAll('.ja-btn, .nein-btn').forEach(el => el.classList.remove('aktiv'));
         btn.classList.add('aktiv');
-        /* Mangelfeld ein-/ausblenden bei Nein */
         const mangelfeld = document.getElementById('mangel-' + frageId);
         if (mangelfeld) {
             mangelfeld.style.display = (antwortWert === 'nein') ? 'block' : 'none';
         }
+        const item = frage.closest('.bauteil-item');
+        if (item) aktualisiereBauteilStatus(item.dataset.bauteilId);
     }
 
     /* ------------------------------------------
