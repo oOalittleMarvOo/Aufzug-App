@@ -1112,16 +1112,6 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 ========================================== -->
 <div id="pruefung" class="tab-inhalt aktiv">
 
-    <!-- FRAGE 1.1.0 – Dokument vor Ort vorhanden? (Ja/Nein) -->
-    <div class="frage" id="frage1_0">
-        <h3>1.1.0 – Liegt das Dokument zur Ermittlung des Seildurchmessers mit dem Messschieber vor Ort vor?</h3>
-        <div class="ja-nein-gruppe">
-            <!-- onclick="jaNein(this, 'frage1_0', 'ja')" → markiert diesen Button als aktiv -->
-            <button class="ja-btn" onclick="jaNein(this, 'frage1_0', 'ja')">✅ Ja</button>
-            <button class="nein-btn" onclick="jaNein(this, 'frage1_0', 'nein')">❌ Nein</button>
-        </div>
-    </div>
-
     <!-- FRAGE 1.1.2 – Mindestbruchkraft = 8-fache Zugkraft? (Passt/Mangel/Trifft nicht zu) -->
     <div class="frage" id="frage1_2">
         <h3>1.1.2 – Beträgt die Mindestbruchkraft das Achtfache der Zugkraft der Fangvorrichtung?</h3>
@@ -3446,7 +3436,6 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         doc.setFontSize(14); doc.setTextColor(0, 87, 168);
         neueZeile('1. Pruefung vor Ort');
         doc.setFontSize(10); doc.setTextColor(0, 0, 0);
-        neueZeile('1.0 Dokument vor Ort vorhanden: ' + holeAntwort('frage1_0'));
         neueZeile('1.1 Verhaeltnis 1:30: ' + holeAntwort('frage1_1'));
         /* Mangeltext nur wenn vorhanden */
         const mangel11 = holeMangel('frage1_1');
