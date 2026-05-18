@@ -1100,31 +1100,6 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         </div>
     </div>
 
-    <!-- FRAGE 1.1.1 – Verhältnis Begrenzerseil/Rollendurchmesser 1:30 (Passt/Mangel/Trifft nicht zu) -->
-    <div class="frage" id="frage1_1">
-        <h3>1.1.1 – Ist das Verhältnis von Begrenzerseil und Rollendurchmesser 1:30?</h3>
-        <div class="antwort-gruppe">
-            <!-- Passt: grüner Button, kein zusätzliches Feld -->
-            <button class="antwort-btn passt" onclick="antwort(this, 'frage1_1')">🟢 Passt</button>
-            <!-- Mangel (passt-nicht): roter Button → öffnet Mangelfeld -->
-            <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage1_1')">🔴 Mangel</button>
-            <!-- Trifft nicht zu (irrelevant): grauer Button → öffnet Kommentarfeld -->
-            <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage1_1')">⚪ Trifft nicht zu</button>
-        </div>
-        <!-- Mangelfeld: erscheint bei "Mangel", hat roten Rand -->
-        <div class="mangelfeld" id="mangel-frage1_1">
-            <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
-            <label>Bitte Mangel beschreiben:</label>
-            <textarea placeholder="Beschreibung des Mangels..."></textarea>
-        </div>
-        <!-- Kommentarfeld für "Trifft nicht zu": gleiche .mangelfeld Klasse, aber grauer Text -->
-        <div class="mangelfeld" id="trifft-frage1_1">
-            <p class="mangel-hinweis" style="color:#888;">💬 Kommentar</p>
-            <label>Bitte Kommentar eingeben:</label>
-            <textarea placeholder="Kommentar..."></textarea>
-        </div>
-    </div>
-
     <!-- FRAGE 1.1.2 – Mindestbruchkraft = 8-fache Zugkraft? (Passt/Mangel/Trifft nicht zu) -->
     <div class="frage" id="frage1_2">
         <h3>1.1.2 – Beträgt die Mindestbruchkraft das Achtfache der Zugkraft der Fangvorrichtung?</h3>
