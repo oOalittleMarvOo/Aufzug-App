@@ -347,7 +347,35 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         text-align: left;            /* Text linksbündig */
     }
     .bauteil-btn:hover {
-        background-color: #e8f0fb; /* Heller blauer Hintergrund beim Drüberfahren */
+        background-color: #e8f0fb;
+    }
+    .bauteil-btn::after {
+        content: ' ▶';
+        float: right;
+        font-size: 14px;
+    }
+    .bauteil-btn-offen {
+        background-color: #0057a8;
+        color: white;
+        border-radius: 10px 10px 0 0;
+    }
+    .bauteil-btn-offen:hover {
+        background-color: #0047a0;
+        color: white;
+    }
+    .bauteil-btn-offen::after {
+        content: ' ▼';
+    }
+    .bauteil-item {
+        display: flex;
+        flex-direction: column;
+    }
+    .bauteil-detail {
+        border: 2px solid #0057a8;
+        border-top: none;
+        border-radius: 0 0 10px 10px;
+        padding: 15px;
+        background: white;
     }
 
     /* ==========================================
@@ -2602,24 +2630,39 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         zeige('bauteilSeite');
     }
 
-    /* Bauteil-Liste nach Gruppen aufbauen */
+    /* Bauteil-Liste nach Gruppen aufbauen – verschiebt .bauteil-item Divs */
     function aktualisiereBauteilListe() {
-        const standard     = document.getElementById('standardBauteilListe');
-        const gruppenAns   = document.getElementById('gruppenAnsicht');
+        const standard   = document.getElementById('standardBauteilListe');
+        const gruppenAns = document.getElementById('gruppenAnsicht');
+
+        /* Alle Items in Originalreihenfolge zurück in die Standardliste */
+        BAUTEILE.forEach(b => {
+            const item = document.querySelector('.bauteil-item[data-bauteil-id="' + b.id + '"]');
+            if (item) standard.appendChild(item);
+        });
 
         if (gewaehlteBauteile.length === 0) {
+            BAUTEILE.forEach(b => {
+                const item = document.querySelector('.bauteil-item[data-bauteil-id="' + b.id + '"]');
+                if (item) item.style.display = 'flex';
+            });
             standard.style.display   = 'flex';
             gruppenAns.style.display = 'none';
             return;
         }
+
+        /* Alle Items verstecken */
+        BAUTEILE.forEach(b => {
+            const item = document.querySelector('.bauteil-item[data-bauteil-id="' + b.id + '"]');
+            if (item) item.style.display = 'none';
+        });
 
         standard.style.display   = 'none';
         gruppenAns.style.display = 'block';
 
         const gruppen = { triebwerk: [], schacht: [], grube: [], ohne: [] };
         gewaehlteBauteile.forEach(id => {
-            const g = bauteilGruppen[id] || 'ohne';
-            gruppen[g].push(id);
+            gruppen[bauteilGruppen[id] || 'ohne'].push(id);
         });
 
         const config = [
@@ -2632,15 +2675,12 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         config.forEach(c => {
             const bereich = document.getElementById(c.bereichId);
             const liste   = document.getElementById(c.listeId);
-            if (gruppen[c.key].length === 0) {
-                bereich.style.display = 'none';
-                return;
-            }
+            if (gruppen[c.key].length === 0) { bereich.style.display = 'none'; return; }
             bereich.style.display = 'block';
-            liste.innerHTML = gruppen[c.key].map(id => {
-                const b = BAUTEILE.find(x => x.id === id);
-                return `<button class="bauteil-btn" onclick="zeigeBauteil('${id}')">${b.label}</button>`;
-            }).join('');
+            gruppen[c.key].forEach(id => {
+                const item = document.querySelector('.bauteil-item[data-bauteil-id="' + id + '"]');
+                if (item) { item.style.display = 'flex'; liste.appendChild(item); }
+            });
         });
     }
 
@@ -2686,41 +2726,50 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     }
 
     /* Detail-Seite eines Bauteils anzeigen */
-    function zeigeBauteil(bauteil) {
+    /* Akkordeon: Detail-Div ein-/ausklappen */
+    function toggleBauteil(id) {
+        const item   = document.querySelector('.bauteil-item[data-bauteil-id="' + id + '"]');
+        if (!item) return;
+        const detail = item.querySelector('.bauteil-detail');
+        const btn    = item.querySelector('.bauteil-btn');
+        if (!detail) return;
+        const isOpen = detail.style.display === 'block';
+        detail.style.display = isOpen ? 'none' : 'block';
+        btn.classList.toggle('bauteil-btn-offen', !isOpen);
+    }
 
-        /* Hilfsfunktion: ersten Tab einer Seite aktivieren */
-        function aktiviereErstenTab(seitenId, ersterTabId) {
-            const tabs = document.querySelectorAll('#' + seitenId + ' .tab');
-            const inhalte = document.querySelectorAll('#' + seitenId + ' .tab-inhalt');
-            tabs.forEach(el => el.classList.remove('aktiv'));
-            inhalte.forEach(el => el.classList.remove('aktiv'));
-            tabs[0].classList.add('aktiv');
-            document.getElementById(ersterTabId).classList.add('aktiv');
-        }
+    /* Rückwärtskompatibel: zeigeBauteil → toggleBauteil */
+    function zeigeBauteil(bauteil) { toggleBauteil(bauteil); }
 
-        /* Mapping: bauteilId → [titelElementId, seitenId, ersterTabId, titelText] */
-        const bauteile = {
-            seil:        ['bauteilTitel',             'detailSeil',        'pruefung',            '1 – Geschwindigkeitsbegrenzerseil'],
-            begrenzer:   ['bauteilTitelBegrenzer',    'detailBegrenzer',   'pruefung_begrenzer',  '2 – Geschwindigkeitsbegrenzer'],
-            fang:        ['bauteilTitelFang',         'detailFang',        'pruefung_fang',       '3 – Fangvorrichtung'],
-            schienen:    ['bauteilTitelSchienen',     'detailSchienen',    'pruefung_schienen',   '4 – Schienen'],
-            puffer:      ['bauteilTitelPuffer',       'detailPuffer',      'pruefung_puffer',     '5 – Puffer'],
-            steuerung:   ['bauteilTitelSteuerung',    'detailSteuerung',   'pruefung_steuerung',  '6 – Steuerung'],
-            antrieb:     ['bauteilTitelAntrieb',      'detailAntrieb',     'pruefung_antrieb',    '7 – Antrieb'],
-            tragseile:   ['bauteilTitelTragseile',    'detailTragseile',   'pruefung_tragseile',  '8 – Tragseile'],
-            rohrbruch:   ['bauteilTitelRohrbruch',    'detailRohrbruch',   'pruefung_rohrbruch',  '9 – Rohrbruchsicherung'],
-            heber:       ['bauteilTitelHeber',        'detailHeber',       'pruefung_heber',      '10 – Heber'],
-            schacht:     ['bauteilTitelSchacht',      'detailSchacht',     'pruefung_schacht',    '11 – Schacht'],
-            schachttuer: ['bauteilTitelSchachttuer',  'detailSchachttuer', 'pruefung_schachttuer','12 – Schachttüren'],
-            schutzraum:  ['bauteilTitelSchutzraum',   'detailSchutzraum',  null,                  '13 – Schutzraum'],
-        };
+    /* Akkordeon beim Laden einrichten:
+       Jeden Button mit seinem Detail-Div in ein .bauteil-item einwickeln */
+    function setupAkkordeon() {
+        const standard = document.getElementById('standardBauteilListe');
+        BAUTEILE.forEach(b => {
+            const btn = document.getElementById('btn_' + b.id);
+            if (!btn) return;
+            const detailId = 'detail' + b.id.charAt(0).toUpperCase() + b.id.slice(1);
+            const detail   = document.getElementById(detailId);
 
-        const info = bauteile[bauteil];
-        if (info) {
-            document.getElementById(info[0]).innerText = info[3]; /* Titel setzen */
-            zeige(info[1]);                                        /* Seite anzeigen */
-            if (info[2]) aktiviereErstenTab(info[1], info[2]);    /* Ersten Tab nur wenn vorhanden */
-        }
+            const item = document.createElement('div');
+            item.className = 'bauteil-item';
+            item.dataset.bauteilId = b.id;
+
+            standard.insertBefore(item, btn);
+            btn.onclick = function() { toggleBauteil(b.id); };
+            item.appendChild(btn);
+
+            if (detail) {
+                detail.classList.remove('seite');
+                detail.classList.add('bauteil-detail');
+                detail.style.display = 'none';
+                const zuruck = detail.querySelector('button.zuruck');
+                if (zuruck) zuruck.remove();
+                const h2 = detail.querySelector('h2');
+                if (h2) h2.remove();
+                item.appendChild(detail);
+            }
+        });
     }
 
     /* ------------------------------------------
@@ -3528,13 +3577,16 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
        PWA – SERVICE WORKER REGISTRIERUNG
        Aktiviert Offline-Funktion und App-Symbol
     ------------------------------------------ */
-    if ('serviceWorker' in navigator) { /* Prüfen ob Browser Service Worker unterstützt */
+    if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/Aufzug-App/sw.js') /* Service Worker registrieren */
+            navigator.serviceWorker.register('/Aufzug-App/sw.js')
                 .then(() => console.log('Service Worker aktiv ✅'))
                 .catch(err => console.log('Service Worker Fehler:', err));
         });
     }
+
+    /* Akkordeon beim Start einrichten */
+    window.addEventListener('DOMContentLoaded', setupAkkordeon);
 
 </script>
 
