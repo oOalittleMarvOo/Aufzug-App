@@ -366,6 +366,28 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     .bauteil-btn-offen::after {
         content: ' ▼';
     }
+    .bauteil-btn.status-ok {
+        border-color: #2e7d32;
+        color: #2e7d32;
+        background-color: #e8f5e9;
+    }
+    .bauteil-btn.status-ok:hover { background-color: #c8e6c9; }
+    .bauteil-btn.status-ok.bauteil-btn-offen {
+        background-color: #2e7d32;
+        color: white;
+        border-color: #2e7d32;
+    }
+    .bauteil-btn.status-mangel {
+        border-color: #c62828;
+        color: #c62828;
+        background-color: #fdecea;
+    }
+    .bauteil-btn.status-mangel:hover { background-color: #ffcdd2; }
+    .bauteil-btn.status-mangel.bauteil-btn-offen {
+        background-color: #c62828;
+        color: white;
+        border-color: #c62828;
+    }
     .bauteil-item {
         display: flex;
         flex-direction: column;
@@ -3052,24 +3074,46 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     ------------------------------------------ */
     function antwort(btn, frageId) {
         const frage = document.getElementById(frageId);
-        /* Alle Buttons in dieser Frage deaktivieren */
         frage.querySelectorAll('.antwort-btn').forEach(el => el.classList.remove('aktiv'));
-        /* Geklickten Button aktivieren */
         btn.classList.add('aktiv');
 
-        /* Mangelfeld ein-/ausblenden (erscheint bei "Mangel" / passt-nicht) */
         const mangelfeld = document.getElementById('mangel-' + frageId);
         if (mangelfeld) {
-            if (btn.classList.contains('passt-nicht')) { mangelfeld.style.display = 'block'; }
-            else { mangelfeld.style.display = 'none'; }
+            mangelfeld.style.display = btn.classList.contains('passt-nicht') ? 'block' : 'none';
         }
-
-        /* Kommentarfeld ein-/ausblenden (erscheint bei "Trifft nicht zu" / irrelevant) */
         const trifftfeld = document.getElementById('trifft-' + frageId);
         if (trifftfeld) {
-            if (btn.classList.contains('irrelevant')) { trifftfeld.style.display = 'block'; }
-            else { trifftfeld.style.display = 'none'; }
+            trifftfeld.style.display = btn.classList.contains('irrelevant') ? 'block' : 'none';
         }
+
+        /* Bauteil-Status nach jeder Antwort aktualisieren */
+        const item = frage.closest('.bauteil-item');
+        if (item) aktualisiereBauteilStatus(item.dataset.bauteilId);
+    }
+
+    /* Prüft alle Fragen im Bauteil und setzt Farbe des Buttons */
+    function aktualisiereBauteilStatus(bauteilId) {
+        const item = document.querySelector('.bauteil-item[data-bauteil-id="' + bauteilId + '"]');
+        if (!item) return;
+        const btn    = item.querySelector('.bauteil-btn');
+        const detail = item.querySelector('.bauteil-detail');
+        if (!btn || !detail) return;
+
+        const fragen = detail.querySelectorAll('.frage');
+        let alleBeantwortet = true;
+        let hatMangel       = false;
+
+        fragen.forEach(frage => {
+            const btns = frage.querySelectorAll('.antwort-btn');
+            if (btns.length === 0) return;
+            const aktiv = frage.querySelector('.antwort-btn.aktiv');
+            if (!aktiv) { alleBeantwortet = false; }
+            else if (aktiv.classList.contains('passt-nicht')) { hatMangel = true; }
+        });
+
+        btn.classList.remove('status-ok', 'status-mangel');
+        if (hatMangel)             btn.classList.add('status-mangel');
+        else if (alleBeantwortet)  btn.classList.add('status-ok');
     }
 
     /* ------------------------------------------
