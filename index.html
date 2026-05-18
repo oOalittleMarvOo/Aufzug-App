@@ -3091,7 +3091,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         if (item) aktualisiereBauteilStatus(item.dataset.bauteilId);
     }
 
-    /* Prüft alle Fragen im Bauteil und setzt Farbe des Buttons */
+    /* Prüft nur die Fragen im Tab "Prüfung vor Ort" (erster Tab) */
     function aktualisiereBauteilStatus(bauteilId) {
         const item = document.querySelector('.bauteil-item[data-bauteil-id="' + bauteilId + '"]');
         if (!item) return;
@@ -3099,7 +3099,11 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         const detail = item.querySelector('.bauteil-detail');
         if (!btn || !detail) return;
 
-        const fragen = detail.querySelectorAll('.frage');
+        /* Nur den ersten Tab-Inhalt (= Prüfung vor Ort) auswerten */
+        const pruefungTab = detail.querySelector('.tab-inhalt');
+        if (!pruefungTab) return;
+
+        const fragen = pruefungTab.querySelectorAll('.frage');
         let alleBeantwortet = true;
         let hatMangel       = false;
 
@@ -3112,8 +3116,8 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         });
 
         btn.classList.remove('status-ok', 'status-mangel');
-        if (hatMangel)             btn.classList.add('status-mangel');
-        else if (alleBeantwortet)  btn.classList.add('status-ok');
+        if (hatMangel)            btn.classList.add('status-mangel');
+        else if (alleBeantwortet) btn.classList.add('status-ok');
     }
 
     /* ------------------------------------------
