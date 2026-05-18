@@ -3034,37 +3034,32 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
         const box = document.getElementById('verhaeltnis_box'); /* Referenz auf Auswertungsbox */
 
+        const boxSeil = document.getElementById('verhaeltnis_box_seil');
+
         if (verhaeltnis >= 30) {
-            /* Grün: Verhältnis stimmt – beide Werte grün einfärben */
             document.getElementById('anzeige_seildurchmesser').style.color   = '#155724';
             document.getElementById('anzeige_rollendurchmesser').style.color = '#155724';
             document.getElementById('anzeige_verhaeltnis').style.color       = '#155724';
-            box.style.background = '#d4edda';
-            box.style.border     = '2px solid #28a745';
-            box.style.color      = '#155724';
+            box.style.background = '#d4edda'; box.style.border = '2px solid #28a745'; box.style.color = '#155724';
             box.innerText = '✅ Verhältnis in Ordnung! (1:' + verhaeltnis.toFixed(1) + ' ≥ 1:30)';
-            /* Seil-Box bei 1.1.3 ebenfalls grün */
-            const boxSeil = document.getElementById('verhaeltnis_box_seil');
-            boxSeil.style.background = '#d4edda';
-            boxSeil.style.border     = '2px solid #28a745';
-            boxSeil.style.color      = '#155724';
+            box.removeAttribute('data-mangel');
+            boxSeil.style.background = '#d4edda'; boxSeil.style.border = '2px solid #28a745'; boxSeil.style.color = '#155724';
             boxSeil.innerText = '✅ Verhältnis in Ordnung! (1:' + verhaeltnis.toFixed(1) + ' ≥ 1:30)';
+            boxSeil.removeAttribute('data-mangel');
         } else {
-            /* Rot: Verhältnis stimmt nicht – beide Werte rot einfärben */
             document.getElementById('anzeige_seildurchmesser').style.color   = '#dc3545';
             document.getElementById('anzeige_rollendurchmesser').style.color = '#dc3545';
             document.getElementById('anzeige_verhaeltnis').style.color       = '#dc3545';
-            box.style.background = '#f8d7da';
-            box.style.border     = '2px solid #dc3545';
-            box.style.color      = '#dc3545';
+            box.style.background = '#f8d7da'; box.style.border = '2px solid #dc3545'; box.style.color = '#dc3545';
             box.innerText = '❌ Verhältnis stimmt nicht! (1:' + verhaeltnis.toFixed(1) + ' < 1:30)';
-            /* Seil-Box bei 1.1.3 ebenfalls rot */
-            const boxSeil = document.getElementById('verhaeltnis_box_seil');
-            boxSeil.style.background = '#f8d7da';
-            boxSeil.style.border     = '2px solid #dc3545';
-            boxSeil.style.color      = '#dc3545';
+            box.dataset.mangel = 'true';
+            boxSeil.style.background = '#f8d7da'; boxSeil.style.border = '2px solid #dc3545'; boxSeil.style.color = '#dc3545';
             boxSeil.innerText = '❌ Verhältnis stimmt nicht! (1:' + verhaeltnis.toFixed(1) + ' < 1:30)';
+            boxSeil.dataset.mangel = 'true';
         }
+
+        aktualisiereBauteilStatus('seil');
+        aktualisiereBauteilStatus('begrenzer');
     }
 
     /* ------------------------------------------
@@ -3114,6 +3109,9 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             if (!aktiv) { alleBeantwortet = false; }
             else if (!aktiv.classList.contains('passt')) { hatNichtPasst = true; }
         });
+
+        /* Berechnungsergebnisse mit data-mangel="true" ebenfalls als Mangel werten */
+        if (pruefungTab.querySelector('[data-mangel="true"]')) hatNichtPasst = true;
 
         btn.classList.remove('status-ok', 'status-mangel');
         if (hatNichtPasst)        btn.classList.add('status-mangel');
