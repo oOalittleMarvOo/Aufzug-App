@@ -430,6 +430,47 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     .weiter-zur-pruefung:hover {
         background: #004080;
     }
+    .schritt-indikator {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+    }
+    .schritt-indikator .s-step {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 12px;
+        color: #aaa;
+    }
+    .schritt-indikator .s-step.aktiv {
+        color: #0057a8;
+        font-weight: bold;
+    }
+    .schritt-indikator .s-kreis {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: #ddd;
+        color: #888;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: bold;
+        flex-shrink: 0;
+    }
+    .schritt-indikator .s-step.aktiv .s-kreis {
+        background: #0057a8;
+        color: white;
+    }
+    .schritt-indikator .s-linie {
+        flex: 1;
+        min-width: 12px;
+        height: 2px;
+        background: #ddd;
+    }
     .dok-eingabe-bereich {
         margin-top: 20px;
         padding: 15px;
@@ -870,6 +911,15 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
 <div id="modalSeriennummer">
     <div class="modal-box">
+        <div class="schritt-indikator">
+            <div class="s-step aktiv"><div class="s-kreis">1</div><span>Seriennummer</span></div>
+            <div class="s-linie"></div>
+            <div class="s-step"><div class="s-kreis">2</div><span>Bauteile</span></div>
+            <div class="s-linie"></div>
+            <div class="s-step"><div class="s-kreis">3</div><span>Dokumente</span></div>
+            <div class="s-linie"></div>
+            <div class="s-step"><div class="s-kreis">4</div><span>Prüfung</span></div>
+        </div>
         <h2>🔧 Projekt Seriennummer</h2>
         <p style="color:#666;margin-bottom:15px;font-size:14px;">Bitte geben Sie die Seriennummer der Anlage ein.</p>
         <!-- Texteingabe für die Seriennummer -->
@@ -890,6 +940,15 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
 <div id="modalBauteile">
     <div class="modal-box" style="max-width:480px;max-height:85vh;overflow-y:auto;">
+        <div class="schritt-indikator">
+            <div class="s-step"><div class="s-kreis">1</div><span>Seriennummer</span></div>
+            <div class="s-linie"></div>
+            <div class="s-step aktiv"><div class="s-kreis">2</div><span>Bauteile</span></div>
+            <div class="s-linie"></div>
+            <div class="s-step"><div class="s-kreis">3</div><span>Dokumente</span></div>
+            <div class="s-linie"></div>
+            <div class="s-step"><div class="s-kreis">4</div><span>Prüfung</span></div>
+        </div>
         <h2>🔧 Welche Teile wurden umgebaut?</h2>
         <p style="color:#666;margin-bottom:15px;font-size:14px;">Bauteil wählen → Gruppe zuweisen</p>
         <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;text-align:left;">
@@ -1127,6 +1186,15 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
 <div id="bauteilSeite" class="seite">
     <button class="zuruck" onclick="zeige('startseite')">← Zurück</button>
+    <div id="umbauSchrittAnzeige" style="display:none;" class="schritt-indikator">
+        <div class="s-step"><div class="s-kreis">1</div><span>Seriennummer</span></div>
+        <div class="s-linie"></div>
+        <div class="s-step"><div class="s-kreis">2</div><span>Bauteile</span></div>
+        <div class="s-linie"></div>
+        <div class="s-step"><div class="s-kreis">3</div><span>Dokumente</span></div>
+        <div class="s-linie"></div>
+        <div class="s-step aktiv"><div class="s-kreis">4</div><span>Prüfung vor Ort</span></div>
+    </div>
     <h2 id="bereichTitel"></h2>
     <div id="umbauPdfBereich" style="display:none; margin-bottom:15px;">
         <button class="modal-btn-skip" style="margin-bottom:10px;" onclick="zeigeDokumenteSchritt()">← Zurück zu Dokumente</button>
@@ -2587,6 +2655,15 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
      Zeigt Dokumente-Fragen für alle gewählten Bauteile
 ========================================== -->
 <div id="dokumenteSchritt" class="seite" style="display:none;">
+    <div class="schritt-indikator">
+        <div class="s-step"><div class="s-kreis">1</div><span>Seriennummer</span></div>
+        <div class="s-linie"></div>
+        <div class="s-step"><div class="s-kreis">2</div><span>Bauteile</span></div>
+        <div class="s-linie"></div>
+        <div class="s-step aktiv"><div class="s-kreis">3</div><span>Dokumente</span></div>
+        <div class="s-linie"></div>
+        <div class="s-step"><div class="s-kreis">4</div><span>Prüfung</span></div>
+    </div>
     <p class="dokumente-seite-titel">📄 Dokumente prüfen</p>
     <p style="color:#555;font-size:14px;margin-bottom:10px;">Bitte prüfen Sie die Unterlagen für die gewählten Bauteile, bevor die Prüfung vor Ort beginnt.</p>
     <div id="dokumenteSchrittInhalt"></div>
@@ -2787,6 +2864,8 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         const pdfBereich = document.getElementById('umbauPdfBereich');
         const isUmbau = document.getElementById('bereichTitel').innerText.includes('Umbau');
         if (pdfBereich) pdfBereich.style.display = isUmbau ? 'block' : 'none';
+        const schrittAnzeige = document.getElementById('umbauSchrittAnzeige');
+        if (schrittAnzeige) schrittAnzeige.style.display = isUmbau ? 'flex' : 'none';
 
         if (gewaehlteBauteile.length === 0) {
             BAUTEILE.forEach(b => {
