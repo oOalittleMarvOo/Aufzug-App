@@ -399,6 +399,89 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         padding: 15px;
         background: white;
     }
+    .dokumente-seite-titel {
+        color: #0057a8;
+        font-size: 20px;
+        margin-bottom: 5px;
+    }
+    .dokumente-bauteil-header {
+        background: #e8f0fe;
+        border-left: 4px solid #0057a8;
+        padding: 10px 15px;
+        margin: 20px 0 8px;
+        color: #0057a8;
+        font-weight: bold;
+        font-size: 15px;
+        border-radius: 0 8px 8px 0;
+    }
+    .weiter-zur-pruefung {
+        display: block;
+        width: 100%;
+        background: #0057a8;
+        color: white;
+        border: none;
+        padding: 15px;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 25px;
+    }
+    .weiter-zur-pruefung:hover {
+        background: #004080;
+    }
+    .dok-eingabe-bereich {
+        margin-top: 20px;
+        padding: 15px;
+        background: #f0f4f8;
+        border-radius: 10px;
+    }
+    .dok-eingabe-bereich p {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 10px;
+    }
+    .dok-eingabe-zeile {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+    .dok-eingabe-zeile input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 14px;
+    }
+    .dok-add-btn {
+        background: #0057a8;
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-size: 20px;
+        cursor: pointer;
+        line-height: 1;
+    }
+    .dok-list-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: white;
+        border: 1px solid #ddd;
+        padding: 8px 12px;
+        border-radius: 8px;
+        margin-top: 8px;
+        font-size: 14px;
+    }
+    .dok-remove-btn {
+        background: none;
+        border: none;
+        color: #dc3545;
+        font-size: 18px;
+        cursor: pointer;
+        padding: 0 4px;
+    }
 
     /* ==========================================
        TABS (Prüfung vor Ort / Dokumente / Berechnung)
@@ -1046,6 +1129,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     <button class="zuruck" onclick="zeige('startseite')">← Zurück</button>
     <h2 id="bereichTitel"></h2>
     <div id="umbauPdfBereich" style="display:none; margin-bottom:15px;">
+        <button class="modal-btn-skip" style="margin-bottom:10px;" onclick="zeigeDokumenteSchritt()">← Zurück zu Dokumente</button>
         <button class="pdf-btn" onclick="erstellePDFUmbau()">📄 Gesamtprotokoll PDF erstellen</button>
     </div>
 
@@ -2498,6 +2582,18 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 </div>
 
 <!-- ==========================================
+     DOKUMENTE-SCHRITT
+     Eigene Seite zwischen Bauteil-Auswahl und Prüfung
+     Zeigt Dokumente-Fragen für alle gewählten Bauteile
+========================================== -->
+<div id="dokumenteSchritt" class="seite" style="display:none;">
+    <p class="dokumente-seite-titel">📄 Dokumente prüfen</p>
+    <p style="color:#555;font-size:14px;margin-bottom:10px;">Bitte prüfen Sie die Unterlagen für die gewählten Bauteile, bevor die Prüfung vor Ort beginnt.</p>
+    <div id="dokumenteSchrittInhalt"></div>
+    <button class="weiter-zur-pruefung" onclick="weiterVonDokumenten()">✅ Weiter zur Prüfung vor Ort</button>
+</div>
+
+<!-- ==========================================
      JAVASCRIPT
      Alle Funktionen der App sind hier definiert
      Keine externen JS-Dateien nötig außer jsPDF
@@ -2618,6 +2714,61 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         document.getElementById('modalBauteile').classList.remove('aktiv');
         document.getElementById('btnBauteileAendern').style.display = 'inline-block';
         aktualisiereBauteilListe();
+        zeigeDokumenteSchritt();
+    }
+
+    /* Dokumente-Schritt: Dokumente-Tabs aller gewählten Bauteile anzeigen */
+    function zeigeDokumenteSchritt() {
+        const container = document.getElementById('dokumenteSchrittInhalt');
+        container.querySelectorAll('.dokumente-bauteil-header').forEach(h => h.remove());
+
+        const liste = gewaehlteBauteile.length > 0 ? gewaehlteBauteile : BAUTEILE.map(b => b.id);
+        let hatInhalt = false;
+
+        liste.forEach(bId => {
+            const dokTabId = DOKUMENTE_TAB_IDS[bId];
+            if (!dokTabId) return;
+            const dokEl = document.getElementById(dokTabId);
+            if (!dokEl) return;
+
+            const bauteil = BAUTEILE.find(b => b.id === bId);
+            const hdr = document.createElement('div');
+            hdr.className = 'dokumente-bauteil-header';
+            hdr.textContent = bauteil ? bauteil.label : bId;
+            container.appendChild(hdr);
+
+            if (dokEl.parentElement !== container) {
+                dokEl.classList.add('aktiv');
+                container.appendChild(dokEl);
+            }
+            hatInhalt = true;
+        });
+
+        if (!hatInhalt) {
+            container.innerHTML = '<p style="color:#666;padding:20px 0;">Keine Dokumente für die gewählten Bauteile vorhanden.</p>';
+        }
+
+        zeige('dokumenteSchritt');
+    }
+
+    /* Dokumente-Schritt abschließen: Elemente zurück, bauteilSeite öffnen */
+    function weiterVonDokumenten() {
+        const container = document.getElementById('dokumenteSchrittInhalt');
+        const liste = gewaehlteBauteile.length > 0 ? gewaehlteBauteile : BAUTEILE.map(b => b.id);
+
+        liste.forEach(bId => {
+            const dokTabId = DOKUMENTE_TAB_IDS[bId];
+            if (!dokTabId) return;
+            const dokEl = document.getElementById(dokTabId);
+            if (!dokEl || dokEl.parentElement !== container) return;
+
+            const detailId = 'detail' + bId.charAt(0).toUpperCase() + bId.slice(1);
+            const detailEl = document.getElementById(detailId);
+            dokEl.classList.remove('aktiv');
+            if (detailEl) detailEl.appendChild(dokEl);
+        });
+
+        container.querySelectorAll('.dokumente-bauteil-header').forEach(h => h.remove());
         zeige('bauteilSeite');
     }
 
@@ -2721,7 +2872,22 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         document.getElementById(tabId).classList.add('aktiv');
     }
 
-    /* Detail-Seite eines Bauteils anzeigen */
+    /* Mapping: Bauteil-ID → ID des Dokumente-Tab-Inhalts */
+    const DOKUMENTE_TAB_IDS = {
+        seil:       'dokumente',
+        begrenzer:  'dokumente_begrenzer',
+        fang:       'dokumente_fang',
+        schienen:   'dokumente_schienen',
+        puffer:     'dokumente_puffer',
+        steuerung:  'dokumente_steuerung',
+        antrieb:    'dokumente_antrieb',
+        tragseile:  'dokumente_tragseile',
+        rohrbruch:  'dokumente_rohrbruch',
+        heber:      'dokumente_heber',
+        schacht:    'dokumente_schacht',
+        schachttuer:'dokumente_schachttuer'
+    };
+
     /* Akkordeon: Detail-Div ein-/ausklappen */
     function toggleBauteil(id) {
         const item   = document.querySelector('.bauteil-item[data-bauteil-id="' + id + '"]');
@@ -2766,6 +2932,105 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
                 item.appendChild(detail);
             }
         });
+    }
+
+    /* ------------------------------------------
+       DOKUMENT-EINGABEN
+       Textfelder im Dokumente-Tab → werden als Prüffragen
+       im Tab "Prüfung vor Ort" angezeigt
+    ------------------------------------------ */
+    const dokEintraege = {};
+    let _dokZaehler = 0;
+
+    function setupDokumentEingaben() {
+        BAUTEILE.forEach(b => {
+            const dokTabId = DOKUMENTE_TAB_IDS[b.id];
+            if (!dokTabId) return;
+            const dokTab = document.getElementById(dokTabId);
+            if (!dokTab) return;
+
+            const item = document.querySelector('.bauteil-item[data-bauteil-id="' + b.id + '"]');
+            if (!item) return;
+            const detail = item.querySelector('.bauteil-detail');
+            if (!detail) return;
+            const pruefungTab = detail.querySelector('.tab-inhalt');
+            if (!pruefungTab) return;
+
+            /* Container für dynamische Fragen im Prüfungs-Tab */
+            const fragenContainer = document.createElement('div');
+            fragenContainer.id = 'dokFragen_' + b.id;
+            pruefungTab.appendChild(fragenContainer);
+
+            /* Eingabe-UI im Dokumente-Tab */
+            const eingabe = document.createElement('div');
+            eingabe.className = 'dok-eingabe-bereich';
+            eingabe.innerHTML =
+                '<p>Dokument erfassen – erscheint als Prüffrage:</p>' +
+                '<div class="dok-eingabe-zeile">' +
+                    '<input type="text" id="dokInput_' + b.id + '" placeholder="z.B. Datenblatt Nr. 12345..." ' +
+                           'onkeydown="if(event.key===\'Enter\')addDokumentEintrag(\'' + b.id + '\')">' +
+                    '<button class="dok-add-btn" onclick="addDokumentEintrag(\'' + b.id + '\')">+</button>' +
+                '</div>' +
+                '<div id="dokListe_' + b.id + '"></div>';
+            dokTab.appendChild(eingabe);
+        });
+    }
+
+    function addDokumentEintrag(bauteilId) {
+        const input = document.getElementById('dokInput_' + bauteilId);
+        const text = input.value.trim();
+        if (!text) return;
+
+        const id = 'dokFrage_' + bauteilId + '_' + (++_dokZaehler);
+        if (!dokEintraege[bauteilId]) dokEintraege[bauteilId] = [];
+        dokEintraege[bauteilId].push({id, text});
+
+        /* Anzeige in Dokumente-Liste */
+        const dokList = document.getElementById('dokListe_' + bauteilId);
+        const listItem = document.createElement('div');
+        listItem.className = 'dok-list-item';
+        listItem.id = 'dokItem_' + id;
+        listItem.innerHTML =
+            '<span>📄 ' + _escapeHtml(text) + '</span>' +
+            '<button class="dok-remove-btn" onclick="removeDokumentEintrag(\'' + bauteilId + '\',\'' + id + '\')">✕</button>';
+        dokList.appendChild(listItem);
+
+        /* Prüffrage im Prüfungs-Tab erzeugen */
+        const fragenContainer = document.getElementById('dokFragen_' + bauteilId);
+        const frage = document.createElement('div');
+        frage.className = 'frage';
+        frage.id = id;
+        frage.innerHTML =
+            '<h3>📄 ' + _escapeHtml(text) + '</h3>' +
+            '<div class="antwort-gruppe">' +
+                '<button class="antwort-btn passt" onclick="antwort(this,\'' + id + '\')">🟢 Passt</button>' +
+                '<button class="antwort-btn passt-nicht" onclick="antwort(this,\'' + id + '\')">🔴 Mangel</button>' +
+                '<button class="antwort-btn irrelevant" onclick="antwort(this,\'' + id + '\')">⚪ Trifft nicht zu</button>' +
+            '</div>' +
+            '<div class="mangelfeld" id="mangel-' + id + '">' +
+                '<p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>' +
+                '<label>Bitte Mangel beschreiben:</label>' +
+                '<textarea placeholder="Beschreibung des Mangels..."></textarea>' +
+            '</div>';
+        fragenContainer.appendChild(frage);
+
+        input.value = '';
+        aktualisiereBauteilStatus(bauteilId);
+    }
+
+    function removeDokumentEintrag(bauteilId, id) {
+        const listItem = document.getElementById('dokItem_' + id);
+        if (listItem) listItem.remove();
+        const frage = document.getElementById(id);
+        if (frage) frage.remove();
+        if (dokEintraege[bauteilId]) {
+            dokEintraege[bauteilId] = dokEintraege[bauteilId].filter(e => e.id !== id);
+        }
+        aktualisiereBauteilStatus(bauteilId);
+    }
+
+    function _escapeHtml(t) {
+        return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
     /* ------------------------------------------
@@ -3706,8 +3971,11 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         });
     }
 
-    /* Akkordeon beim Start einrichten */
-    window.addEventListener('DOMContentLoaded', setupAkkordeon);
+    /* Akkordeon und Dokument-Eingaben beim Start einrichten */
+    window.addEventListener('DOMContentLoaded', function() {
+        setupAkkordeon();
+        setupDokumentEingaben();
+    });
 
 </script>
 
