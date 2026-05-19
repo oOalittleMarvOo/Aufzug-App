@@ -399,15 +399,20 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         padding: 15px;
         background: white;
     }
-    .dokumente-schritt-header {
+    .dokumente-seite-titel {
+        color: #0057a8;
+        font-size: 20px;
+        margin-bottom: 5px;
+    }
+    .dokumente-bauteil-header {
         background: #e8f0fe;
-        border: 2px solid #0057a8;
-        border-radius: 8px;
-        padding: 12px 16px;
-        margin-bottom: 15px;
+        border-left: 4px solid #0057a8;
+        padding: 10px 15px;
+        margin: 20px 0 8px;
         color: #0057a8;
         font-weight: bold;
         font-size: 15px;
+        border-radius: 0 8px 8px 0;
     }
     .weiter-zur-pruefung {
         display: block;
@@ -420,7 +425,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         font-size: 16px;
         font-weight: bold;
         cursor: pointer;
-        margin-top: 15px;
+        margin-top: 25px;
     }
     .weiter-zur-pruefung:hover {
         background: #004080;
@@ -2524,6 +2529,18 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 </div>
 
 <!-- ==========================================
+     DOKUMENTE-SCHRITT
+     Eigene Seite zwischen Bauteil-Auswahl und Prüfung
+     Zeigt Dokumente-Fragen für alle gewählten Bauteile
+========================================== -->
+<div id="dokumenteSchritt" class="seite" style="display:none;">
+    <p class="dokumente-seite-titel">📄 Dokumente prüfen</p>
+    <p style="color:#555;font-size:14px;margin-bottom:10px;">Bitte prüfen Sie die Unterlagen für die gewählten Bauteile, bevor die Prüfung vor Ort beginnt.</p>
+    <div id="dokumenteSchrittInhalt"></div>
+    <button class="weiter-zur-pruefung" onclick="weiterVonDokumenten()">✅ Weiter zur Prüfung vor Ort</button>
+</div>
+
+<!-- ==========================================
      JAVASCRIPT
      Alle Funktionen der App sind hier definiert
      Keine externen JS-Dateien nötig außer jsPDF
@@ -2644,6 +2661,57 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         document.getElementById('modalBauteile').classList.remove('aktiv');
         document.getElementById('btnBauteileAendern').style.display = 'inline-block';
         aktualisiereBauteilListe();
+        zeigeDokumenteSchritt();
+    }
+
+    /* Dokumente-Schritt: Dokumente-Tabs aller gewählten Bauteile temporär anzeigen */
+    let _verschobeneDokElemente = [];
+
+    function zeigeDokumenteSchritt() {
+        _verschobeneDokElemente = [];
+        const container = document.getElementById('dokumenteSchrittInhalt');
+        container.innerHTML = '';
+
+        const liste = gewaehlteBauteile.length > 0 ? gewaehlteBauteile : BAUTEILE.map(b => b.id);
+
+        liste.forEach(bId => {
+            const dokTabId = DOKUMENTE_TAB_IDS[bId];
+            if (!dokTabId) return;
+            const dokEl = document.getElementById(dokTabId);
+            if (!dokEl) return;
+
+            const bauteil = BAUTEILE.find(b => b.id === bId);
+            const hdr = document.createElement('div');
+            hdr.className = 'dokumente-bauteil-header';
+            hdr.textContent = bauteil ? bauteil.label : bId;
+            container.appendChild(hdr);
+
+            const parent = dokEl.parentElement;
+            const nextSib = dokEl.nextElementSibling;
+            _verschobeneDokElemente.push({el: dokEl, parent, nextSib});
+
+            dokEl.classList.add('aktiv');
+            container.appendChild(dokEl);
+        });
+
+        if (_verschobeneDokElemente.length === 0) {
+            container.innerHTML = '<p style="color:#666;padding:20px 0;">Keine Dokumente für die gewählten Bauteile vorhanden.</p>';
+        }
+
+        zeige('dokumenteSchritt');
+    }
+
+    /* Dokumente-Schritt abschließen: Elemente zurück, bauteilSeite öffnen */
+    function weiterVonDokumenten() {
+        _verschobeneDokElemente.forEach(({el, parent, nextSib}) => {
+            el.classList.remove('aktiv');
+            if (nextSib && nextSib.parentElement === parent) {
+                parent.insertBefore(el, nextSib);
+            } else {
+                parent.appendChild(el);
+            }
+        });
+        _verschobeneDokElemente = [];
         zeige('bauteilSeite');
     }
 
@@ -2763,8 +2831,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         schachttuer:'dokumente_schachttuer'
     };
 
-    /* Akkordeon: Detail-Div ein-/ausklappen.
-       Beim Öffnen zuerst Dokumente-Schritt zeigen (falls vorhanden). */
+    /* Akkordeon: Detail-Div ein-/ausklappen */
     function toggleBauteil(id) {
         const item   = document.querySelector('.bauteil-item[data-bauteil-id="' + id + '"]');
         if (!item) return;
@@ -2772,58 +2839,8 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         const btn    = item.querySelector('.bauteil-btn');
         if (!detail) return;
         const isOpen = detail.style.display === 'block';
-        if (isOpen) {
-            detail.style.display = 'none';
-            btn.classList.remove('bauteil-btn-offen');
-            _resetBauteilZustand(detail);
-            return;
-        }
-        detail.style.display = 'block';
-        btn.classList.add('bauteil-btn-offen');
-        const dokTabId = DOKUMENTE_TAB_IDS[id];
-        if (dokTabId) _aktiviereDokumenteSchritt(detail, id, dokTabId);
-    }
-
-    function _aktiviereDokumenteSchritt(detail, id, dokTabId) {
-        const tabsDiv = detail.querySelector('.tabs');
-        if (tabsDiv) tabsDiv.style.display = 'none';
-        detail.querySelectorAll('.tab-inhalt').forEach(el => el.classList.remove('aktiv'));
-        const dokEl = document.getElementById(dokTabId);
-        if (dokEl) dokEl.classList.add('aktiv');
-        const hdr = detail.querySelector('.dokumente-schritt-header');
-        if (hdr) hdr.style.display = 'block';
-        const weiterBtn = detail.querySelector('.weiter-zur-pruefung');
-        if (weiterBtn) weiterBtn.style.display = 'block';
-    }
-
-    function weiterZurPruefung(id) {
-        const item = document.querySelector('.bauteil-item[data-bauteil-id="' + id + '"]');
-        if (!item) return;
-        const detail = item.querySelector('.bauteil-detail');
-        if (!detail) return;
-        const hdr = detail.querySelector('.dokumente-schritt-header');
-        if (hdr) hdr.style.display = 'none';
-        const weiterBtn = detail.querySelector('.weiter-zur-pruefung');
-        if (weiterBtn) weiterBtn.style.display = 'none';
-        const tabsDiv = detail.querySelector('.tabs');
-        if (tabsDiv) tabsDiv.style.display = '';
-        detail.querySelectorAll('.tab-inhalt').forEach(el => el.classList.remove('aktiv'));
-        const ersteTab = detail.querySelector('.tab-inhalt');
-        if (ersteTab) ersteTab.classList.add('aktiv');
-        detail.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('aktiv', i === 0));
-    }
-
-    function _resetBauteilZustand(detail) {
-        const hdr = detail.querySelector('.dokumente-schritt-header');
-        if (hdr) hdr.style.display = 'none';
-        const weiterBtn = detail.querySelector('.weiter-zur-pruefung');
-        if (weiterBtn) weiterBtn.style.display = 'none';
-        const tabsDiv = detail.querySelector('.tabs');
-        if (tabsDiv) tabsDiv.style.display = '';
-        detail.querySelectorAll('.tab-inhalt').forEach(el => el.classList.remove('aktiv'));
-        const ersteTab = detail.querySelector('.tab-inhalt');
-        if (ersteTab) ersteTab.classList.add('aktiv');
-        detail.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('aktiv', i === 0));
+        detail.style.display = isOpen ? 'none' : 'block';
+        btn.classList.toggle('bauteil-btn-offen', !isOpen);
     }
 
     /* Rückwärtskompatibel: zeigeBauteil → toggleBauteil */
@@ -2855,22 +2872,6 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
                 if (zuruck) zuruck.remove();
                 const h2 = detail.querySelector('h2');
                 if (h2) h2.remove();
-
-                if (DOKUMENTE_TAB_IDS[b.id]) {
-                    const hdr = document.createElement('div');
-                    hdr.className = 'dokumente-schritt-header';
-                    hdr.style.display = 'none';
-                    hdr.textContent = 'Schritt 1 von 2: 📄 Dokumente prüfen';
-                    detail.insertBefore(hdr, detail.firstChild);
-
-                    const wBtn = document.createElement('button');
-                    wBtn.className = 'weiter-zur-pruefung';
-                    wBtn.style.display = 'none';
-                    wBtn.textContent = '✅ Weiter zur Prüfung vor Ort';
-                    wBtn.onclick = (function(bId) { return function() { weiterZurPruefung(bId); }; })(b.id);
-                    detail.appendChild(wBtn);
-                }
-
                 item.appendChild(detail);
             }
         });
