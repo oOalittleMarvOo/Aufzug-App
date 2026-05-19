@@ -2961,6 +2961,14 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             fragenContainer.id = 'dokFragen_' + b.id;
             pruefungTab.appendChild(fragenContainer);
 
+            /* Dokumente-Tab-Button aus Tab-Leiste entfernen (eigener Schritt) */
+            const tabsDiv = detail.querySelector('.tabs');
+            if (tabsDiv) {
+                const dokBtn = Array.from(tabsDiv.querySelectorAll('.tab'))
+                    .find(t => t.textContent.includes('Dokumente'));
+                if (dokBtn) dokBtn.remove();
+            }
+
             /* Eingabe-UI im Dokumente-Tab */
             const eingabe = document.createElement('div');
             eingabe.className = 'dok-eingabe-bereich';
