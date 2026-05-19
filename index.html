@@ -2665,15 +2665,13 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         zeigeDokumenteSchritt();
     }
 
-    /* Dokumente-Schritt: Dokumente-Tabs aller gewählten Bauteile temporär anzeigen */
-    let _verschobeneDokElemente = [];
-
+    /* Dokumente-Schritt: Dokumente-Tabs aller gewählten Bauteile anzeigen */
     function zeigeDokumenteSchritt() {
-        _verschobeneDokElemente = [];
         const container = document.getElementById('dokumenteSchrittInhalt');
-        container.innerHTML = '';
+        container.querySelectorAll('.dokumente-bauteil-header').forEach(h => h.remove());
 
         const liste = gewaehlteBauteile.length > 0 ? gewaehlteBauteile : BAUTEILE.map(b => b.id);
+        let hatInhalt = false;
 
         liste.forEach(bId => {
             const dokTabId = DOKUMENTE_TAB_IDS[bId];
@@ -2687,15 +2685,14 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             hdr.textContent = bauteil ? bauteil.label : bId;
             container.appendChild(hdr);
 
-            const parent = dokEl.parentElement;
-            const nextSib = dokEl.nextElementSibling;
-            _verschobeneDokElemente.push({el: dokEl, parent, nextSib});
-
-            dokEl.classList.add('aktiv');
-            container.appendChild(dokEl);
+            if (dokEl.parentElement !== container) {
+                dokEl.classList.add('aktiv');
+                container.appendChild(dokEl);
+            }
+            hatInhalt = true;
         });
 
-        if (_verschobeneDokElemente.length === 0) {
+        if (!hatInhalt) {
             container.innerHTML = '<p style="color:#666;padding:20px 0;">Keine Dokumente für die gewählten Bauteile vorhanden.</p>';
         }
 
@@ -2704,15 +2701,22 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
     /* Dokumente-Schritt abschließen: Elemente zurück, bauteilSeite öffnen */
     function weiterVonDokumenten() {
-        _verschobeneDokElemente.forEach(({el, parent, nextSib}) => {
-            el.classList.remove('aktiv');
-            if (nextSib && nextSib.parentElement === parent) {
-                parent.insertBefore(el, nextSib);
-            } else {
-                parent.appendChild(el);
-            }
+        const container = document.getElementById('dokumenteSchrittInhalt');
+        const liste = gewaehlteBauteile.length > 0 ? gewaehlteBauteile : BAUTEILE.map(b => b.id);
+
+        liste.forEach(bId => {
+            const dokTabId = DOKUMENTE_TAB_IDS[bId];
+            if (!dokTabId) return;
+            const dokEl = document.getElementById(dokTabId);
+            if (!dokEl || dokEl.parentElement !== container) return;
+
+            const detailId = 'detail' + bId.charAt(0).toUpperCase() + bId.slice(1);
+            const detailEl = document.getElementById(detailId);
+            dokEl.classList.remove('aktiv');
+            if (detailEl) detailEl.appendChild(dokEl);
         });
-        _verschobeneDokElemente = [];
+
+        container.querySelectorAll('.dokumente-bauteil-header').forEach(h => h.remove());
         zeige('bauteilSeite');
     }
 
