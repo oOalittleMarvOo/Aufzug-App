@@ -399,6 +399,32 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         padding: 15px;
         background: white;
     }
+    .dokumente-schritt-header {
+        background: #e8f0fe;
+        border: 2px solid #0057a8;
+        border-radius: 8px;
+        padding: 12px 16px;
+        margin-bottom: 15px;
+        color: #0057a8;
+        font-weight: bold;
+        font-size: 15px;
+    }
+    .weiter-zur-pruefung {
+        display: block;
+        width: 100%;
+        background: #0057a8;
+        color: white;
+        border: none;
+        padding: 15px;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 15px;
+    }
+    .weiter-zur-pruefung:hover {
+        background: #004080;
+    }
 
     /* ==========================================
        TABS (Prüfung vor Ort / Dokumente / Berechnung)
@@ -2721,8 +2747,24 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         document.getElementById(tabId).classList.add('aktiv');
     }
 
-    /* Detail-Seite eines Bauteils anzeigen */
-    /* Akkordeon: Detail-Div ein-/ausklappen */
+    /* Mapping: Bauteil-ID → ID des Dokumente-Tab-Inhalts */
+    const DOKUMENTE_TAB_IDS = {
+        seil:       'dokumente',
+        begrenzer:  'dokumente_begrenzer',
+        fang:       'dokumente_fang',
+        schienen:   'dokumente_schienen',
+        puffer:     'dokumente_puffer',
+        steuerung:  'dokumente_steuerung',
+        antrieb:    'dokumente_antrieb',
+        tragseile:  'dokumente_tragseile',
+        rohrbruch:  'dokumente_rohrbruch',
+        heber:      'dokumente_heber',
+        schacht:    'dokumente_schacht',
+        schachttuer:'dokumente_schachttuer'
+    };
+
+    /* Akkordeon: Detail-Div ein-/ausklappen.
+       Beim Öffnen zuerst Dokumente-Schritt zeigen (falls vorhanden). */
     function toggleBauteil(id) {
         const item   = document.querySelector('.bauteil-item[data-bauteil-id="' + id + '"]');
         if (!item) return;
@@ -2730,8 +2772,58 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         const btn    = item.querySelector('.bauteil-btn');
         if (!detail) return;
         const isOpen = detail.style.display === 'block';
-        detail.style.display = isOpen ? 'none' : 'block';
-        btn.classList.toggle('bauteil-btn-offen', !isOpen);
+        if (isOpen) {
+            detail.style.display = 'none';
+            btn.classList.remove('bauteil-btn-offen');
+            _resetBauteilZustand(detail);
+            return;
+        }
+        detail.style.display = 'block';
+        btn.classList.add('bauteil-btn-offen');
+        const dokTabId = DOKUMENTE_TAB_IDS[id];
+        if (dokTabId) _aktiviereDokumenteSchritt(detail, id, dokTabId);
+    }
+
+    function _aktiviereDokumenteSchritt(detail, id, dokTabId) {
+        const tabsDiv = detail.querySelector('.tabs');
+        if (tabsDiv) tabsDiv.style.display = 'none';
+        detail.querySelectorAll('.tab-inhalt').forEach(el => el.classList.remove('aktiv'));
+        const dokEl = document.getElementById(dokTabId);
+        if (dokEl) dokEl.classList.add('aktiv');
+        const hdr = detail.querySelector('.dokumente-schritt-header');
+        if (hdr) hdr.style.display = 'block';
+        const weiterBtn = detail.querySelector('.weiter-zur-pruefung');
+        if (weiterBtn) weiterBtn.style.display = 'block';
+    }
+
+    function weiterZurPruefung(id) {
+        const item = document.querySelector('.bauteil-item[data-bauteil-id="' + id + '"]');
+        if (!item) return;
+        const detail = item.querySelector('.bauteil-detail');
+        if (!detail) return;
+        const hdr = detail.querySelector('.dokumente-schritt-header');
+        if (hdr) hdr.style.display = 'none';
+        const weiterBtn = detail.querySelector('.weiter-zur-pruefung');
+        if (weiterBtn) weiterBtn.style.display = 'none';
+        const tabsDiv = detail.querySelector('.tabs');
+        if (tabsDiv) tabsDiv.style.display = '';
+        detail.querySelectorAll('.tab-inhalt').forEach(el => el.classList.remove('aktiv'));
+        const ersteTab = detail.querySelector('.tab-inhalt');
+        if (ersteTab) ersteTab.classList.add('aktiv');
+        detail.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('aktiv', i === 0));
+    }
+
+    function _resetBauteilZustand(detail) {
+        const hdr = detail.querySelector('.dokumente-schritt-header');
+        if (hdr) hdr.style.display = 'none';
+        const weiterBtn = detail.querySelector('.weiter-zur-pruefung');
+        if (weiterBtn) weiterBtn.style.display = 'none';
+        const tabsDiv = detail.querySelector('.tabs');
+        if (tabsDiv) tabsDiv.style.display = '';
+        detail.querySelectorAll('.tab-inhalt').forEach(el => el.classList.remove('aktiv'));
+        const ersteTab = detail.querySelector('.tab-inhalt');
+        if (ersteTab) ersteTab.classList.add('aktiv');
+        detail.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('aktiv', i === 0));
     }
 
     /* Rückwärtskompatibel: zeigeBauteil → toggleBauteil */
@@ -2763,6 +2855,22 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
                 if (zuruck) zuruck.remove();
                 const h2 = detail.querySelector('h2');
                 if (h2) h2.remove();
+
+                if (DOKUMENTE_TAB_IDS[b.id]) {
+                    const hdr = document.createElement('div');
+                    hdr.className = 'dokumente-schritt-header';
+                    hdr.style.display = 'none';
+                    hdr.textContent = 'Schritt 1 von 2: 📄 Dokumente prüfen';
+                    detail.insertBefore(hdr, detail.firstChild);
+
+                    const wBtn = document.createElement('button');
+                    wBtn.className = 'weiter-zur-pruefung';
+                    wBtn.style.display = 'none';
+                    wBtn.textContent = '✅ Weiter zur Prüfung vor Ort';
+                    wBtn.onclick = (function(bId) { return function() { weiterZurPruefung(bId); }; })(b.id);
+                    detail.appendChild(wBtn);
+                }
+
                 item.appendChild(detail);
             }
         });
