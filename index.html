@@ -2859,16 +2859,11 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         <div class="s-linie"></div>
         <div class="s-step"><div class="s-kreis">4</div><span>Prüfung</span></div>
     </div>
-    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:6px;">
-        <p class="dokumente-seite-titel" style="margin:0;">📄 Dokumente prüfen</p>
-        <button class="modal-btn-skip" onclick="speichereProjekt()" style="font-size:13px; padding:8px 14px;">💾 Projekt speichern</button>
-    </div>
+    <button class="modal-btn-skip" style="margin-bottom:10px;" onclick="speichereProjekt()">💾 Projekt speichern</button>
+    <p class="dokumente-seite-titel">📄 Dokumente prüfen</p>
     <p style="color:#555;font-size:14px;margin-bottom:10px;">Bitte prüfen Sie die Unterlagen für die gewählten Bauteile, bevor die Prüfung vor Ort beginnt.</p>
     <div id="dokumenteSchrittInhalt"></div>
-    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:15px;">
-        <button class="weiter-zur-pruefung" onclick="weiterVonDokumenten()">✅ Weiter zur Prüfung vor Ort</button>
-        <button class="modal-btn-skip" onclick="speichereProjekt()">💾 Projekt speichern</button>
-    </div>
+    <button class="weiter-zur-pruefung" onclick="weiterVonDokumenten()">✅ Weiter zur Prüfung vor Ort</button>
 </div>
 
 <!-- ==========================================
