@@ -1111,7 +1111,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
             <div class="umbau-zeile">
                 <label style="display:flex;align-items:center;gap:10px;font-size:15px;cursor:pointer;">
-                    <input type="checkbox" id="check_fahrkorb" style="width:20px;height:20px;cursor:pointer;" onchange="toggleGruppe('fahrkorb'); if(this.checked){ document.getElementById('check_schienen').checked=true; toggleGruppe('schienen'); }">
+                    <input type="checkbox" id="check_fahrkorb" style="width:20px;height:20px;cursor:pointer;" onchange="toggleGruppe('fahrkorb'); if(this.checked){ document.getElementById('check_schienen').checked=true; toggleGruppe('schienen'); var jaBtn=document.querySelector('#sch_frage3 .ja-btn'); if(jaBtn){ jaNein(jaBtn,'sch_frage3','ja'); document.getElementById('sch_frage3_sub').style.display='block'; } }">
                     14 – 🚖 Fahrkorb
                 </label>
                 <div id="gruppe_fahrkorb" class="gruppe-auswahl">
