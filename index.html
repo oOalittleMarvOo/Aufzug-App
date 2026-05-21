@@ -1109,6 +1109,30 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
                 </div>
             </div>
 
+            <div class="umbau-zeile">
+                <label style="display:flex;align-items:center;gap:10px;font-size:15px;cursor:pointer;">
+                    <input type="checkbox" id="check_fahrkorb" style="width:20px;height:20px;cursor:pointer;" onchange="toggleGruppe('fahrkorb')">
+                    14 – 🚖 Fahrkorb
+                </label>
+                <div id="gruppe_fahrkorb" class="gruppe-auswahl">
+                    <button class="gruppe-btn" data-gruppe="triebwerk" onclick="waehleGruppe(this,'fahrkorb','triebwerk')">⚙️ Triebwerksraum</button>
+                    <button class="gruppe-btn" data-gruppe="schacht" onclick="waehleGruppe(this,'fahrkorb','schacht')">🏗️ Schacht</button>
+                    <button class="gruppe-btn" data-gruppe="grube" onclick="waehleGruppe(this,'fahrkorb','grube')">⛏️ Grube</button>
+                </div>
+            </div>
+
+            <div class="umbau-zeile">
+                <label style="display:flex;align-items:center;gap:10px;font-size:15px;cursor:pointer;">
+                    <input type="checkbox" id="check_frequenzumrichter" style="width:20px;height:20px;cursor:pointer;" onchange="toggleGruppe('frequenzumrichter')">
+                    15 – 🎛️ Frequenzumrichter
+                </label>
+                <div id="gruppe_frequenzumrichter" class="gruppe-auswahl">
+                    <button class="gruppe-btn" data-gruppe="triebwerk" onclick="waehleGruppe(this,'frequenzumrichter','triebwerk')">⚙️ Triebwerksraum</button>
+                    <button class="gruppe-btn" data-gruppe="schacht" onclick="waehleGruppe(this,'frequenzumrichter','schacht')">🏗️ Schacht</button>
+                    <button class="gruppe-btn" data-gruppe="grube" onclick="waehleGruppe(this,'frequenzumrichter','grube')">⛏️ Grube</button>
+                </div>
+            </div>
+
         </div>
         <div style="background:#e8f0fb;border-radius:8px;padding:10px 14px;font-size:13px;color:#0057a8;margin-bottom:15px;">
             ℹ️ Kein Bauteil gewählt = alle Bauteile sind im Projekt enthalten
@@ -1236,6 +1260,8 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         <button id="btn_schacht" class="bauteil-btn" onclick="zeigeBauteil('schacht')">11 – 🏗️ Schacht</button>
         <button id="btn_schachttuer" class="bauteil-btn" onclick="zeigeBauteil('schachttuer')">12 – 🚪 Schachttüren</button>
         <button id="btn_schutzraum" class="bauteil-btn" onclick="zeigeBauteil('schutzraum')">13 – 🛡️ Schutzraum</button>
+        <button id="btn_fahrkorb" class="bauteil-btn" onclick="zeigeBauteil('fahrkorb')">14 – 🚖 Fahrkorb</button>
+        <button id="btn_frequenzumrichter" class="bauteil-btn" onclick="zeigeBauteil('frequenzumrichter')">15 – 🎛️ Frequenzumrichter</button>
     </div>
 </div>
 
@@ -2790,6 +2816,38 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
      Eigene Seite zwischen Bauteil-Auswahl und Prüfung
      Zeigt Dokumente-Fragen für alle gewählten Bauteile
 ========================================== -->
+<!-- BAUTEIL 14: FAHRKORB -->
+
+<div id="detailFahrkorb" class="seite">
+    <button class="zuruck" onclick="zeige('bauteilSeite')">← Zurück</button>
+    <h2 id="bauteilTitelFahrkorb"></h2>
+    <div class="tabs">
+        <button class="tab aktiv" onclick="zeigeTabGeneric(this, 'pruefung_fahrkorb', 'detailFahrkorb')">📋 Prüfung vor Ort</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'dokumente_fahrkorb', 'detailFahrkorb')">📄 Dokumente</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'berechnung_fahrkorb', 'detailFahrkorb')">🔢 Berechnung</button>
+    </div>
+    <div id="pruefung_fahrkorb" class="tab-inhalt aktiv"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="dokumente_fahrkorb" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="berechnung_fahrkorb" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div class="pdf-bereich"><button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button></div>
+</div>
+
+<!-- BAUTEIL 15: FREQUENZUMRICHTER -->
+
+<div id="detailFrequenzumrichter" class="seite">
+    <button class="zuruck" onclick="zeige('bauteilSeite')">← Zurück</button>
+    <h2 id="bauteilTitelFrequenzumrichter"></h2>
+    <div class="tabs">
+        <button class="tab aktiv" onclick="zeigeTabGeneric(this, 'pruefung_frequenzumrichter', 'detailFrequenzumrichter')">📋 Prüfung vor Ort</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'dokumente_frequenzumrichter', 'detailFrequenzumrichter')">📄 Dokumente</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'berechnung_frequenzumrichter', 'detailFrequenzumrichter')">🔢 Berechnung</button>
+    </div>
+    <div id="pruefung_frequenzumrichter" class="tab-inhalt aktiv"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="dokumente_frequenzumrichter" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="berechnung_frequenzumrichter" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div class="pdf-bereich"><button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button></div>
+</div>
+
 <div id="dokumenteSchritt" class="seite" style="display:none;">
     <div class="schritt-indikator">
         <div class="s-step"><div class="s-kreis">1</div><span>Seriennummer</span></div>
@@ -2846,7 +2904,9 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         { id: 'heber',      label: '10 – ⬆️ Heber' },
         { id: 'schacht',    label: '11 – 🏗️ Schacht' },
         { id: 'schachttuer',label: '12 – 🚪 Schachttüren' },
-        { id: 'schutzraum', label: '13 – 🛡️ Schutzraum' }
+        { id: 'schutzraum',         label: '13 – 🛡️ Schutzraum' },
+        { id: 'fahrkorb',           label: '14 – 🚖 Fahrkorb' },
+        { id: 'frequenzumrichter',  label: '15 – 🎛️ Frequenzumrichter' }
     ];
 
     /* Modal öffnen: zeigt das Seriennummer-Eingabefeld
@@ -3100,7 +3160,9 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         rohrbruch:  'dokumente_rohrbruch',
         heber:      'dokumente_heber',
         schacht:    'dokumente_schacht',
-        schachttuer:'dokumente_schachttuer'
+        schachttuer:        'dokumente_schachttuer',
+        fahrkorb:           'dokumente_fahrkorb',
+        frequenzumrichter:  'dokumente_frequenzumrichter'
     };
 
     /* Akkordeon: Detail-Div ein-/ausklappen */
