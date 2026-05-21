@@ -1189,17 +1189,17 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 ========================================== -->
 
 <div id="startseite" class="startseite">
-    <h2>0 – Hauptmenü</h2> <!-- Hauptmenü = 0 -->
+    <h2>0 – Hauptmenü</h2>
     <div class="auswahl">
-        <!-- Neubau: öffnet Bauteil-Liste ohne Seriennummer-Modal -->
         <button class="btn" onclick="zeigeBauteile('1 – Neubau')">🏗️ 1 – Neubau</button>
-        <!-- Umbau: öffnet zuerst das Seriennummer-Modal -->
         <button class="btn" onclick="zeigeUmbau()">🔧 2 – Umbau</button>
-        <!-- Komponenten: öffnet Bauteil-Liste ohne Seriennummer-Modal -->
         <button class="btn" onclick="zeigeBauteile('3 – Komponenten')">🔩 3 – Komponenten</button>
-        <!-- Sicherung: öffnet direkt die Sicherungsberechnung -->
         <button class="btn" onclick="zeige('sicherungSeite')">⚡ 4 – Sicherung</button>
     </div>
+    <div style="margin-top:20px; display:flex; gap:10px; justify-content:center;">
+        <button class="modal-btn-skip" onclick="ladeProjekt()" style="font-size:15px; padding:12px 20px;">📂 Projekt laden</button>
+    </div>
+    <input type="file" id="projektDateiInput" accept=".json" style="display:none;" onchange="projektDateiGewaehlt(this)">
 </div>
 
 <!-- ==========================================
@@ -1223,6 +1223,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     <div id="umbauPdfBereich" style="display:none; margin-bottom:15px;">
         <button class="modal-btn-skip" style="margin-bottom:10px;" onclick="zeigeDokumenteSchritt()">← Zurück zu Dokumente</button>
         <button class="pdf-btn" onclick="erstellePDFUmbau()">📄 Gesamtprotokoll PDF erstellen</button>
+        <button class="modal-btn-skip" style="margin-top:10px;" onclick="speichereProjekt()">💾 Projekt speichern</button>
     </div>
 
     <!-- Gruppenansicht (nur bei Umbau mit Auswahl) -->
@@ -3126,6 +3127,181 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         if (el) { el.style.display = id === 'startseite' ? 'flex' : 'block'; }
         /* Header zurücksetzen wenn Startseite gezeigt wird */
         if (id === 'startseite') { document.getElementById('hauptHeader').innerText = '🛗 Aufzug-App'; }
+    }
+
+    /* ------------------------------------------
+       PROJEKT SPEICHERN / LADEN (JSON)
+    ------------------------------------------ */
+    function speichereProjekt() {
+        const daten = {
+            version: 1,
+            datum: new Date().toISOString(),
+            seriennummer: aktuelleSeriennummer,
+            gewaehlteBauteile: gewaehlteBauteile,
+            bauteilGruppen: bauteilGruppen,
+            dokEintraege: {},
+            antworten: {},
+            jaNein: {},
+            eingaben: {},
+            mangelTexte: []
+        };
+
+        /* Dokument-Einträge inkl. Antworten sichern */
+        Object.entries(dokEintraege).forEach(function(entry) {
+            var bId = entry[0]; var liste = entry[1];
+            daten.dokEintraege[bId] = liste.map(function(e) {
+                var frEl = document.getElementById(e.id);
+                var aktiv = frEl ? frEl.querySelector('.antwort-btn.aktiv') : null;
+                var typ = aktiv ? (aktiv.classList.contains('passt-nicht') ? 'passt-nicht' : aktiv.classList.contains('irrelevant') ? 'irrelevant' : 'passt') : null;
+                var ta = frEl ? frEl.querySelector('textarea') : null;
+                return { text: e.text, antwort: typ, mangelText: ta ? ta.value : '' };
+            });
+        });
+
+        /* Antwort-Buttons */
+        document.querySelectorAll('.antwort-btn.aktiv').forEach(function(btn) {
+            var frage = btn.closest('.frage[id]');
+            if (!frage) return;
+            var typ = btn.classList.contains('passt-nicht') ? 'passt-nicht' : btn.classList.contains('irrelevant') ? 'irrelevant' : 'passt';
+            daten.antworten[frage.id] = typ;
+        });
+
+        /* Ja/Nein-Buttons */
+        document.querySelectorAll('.ja-btn.aktiv, .nein-btn.aktiv').forEach(function(btn) {
+            var frage = btn.closest('.frage[id]');
+            if (!frage) return;
+            daten.jaNein[frage.id] = btn.classList.contains('ja-btn') ? 'ja' : 'nein';
+        });
+
+        /* Eingabefelder */
+        document.querySelectorAll('input[id]').forEach(function(inp) {
+            if (inp.type === 'checkbox' || inp.type === 'file' || !inp.value) return;
+            daten.eingaben[inp.id] = inp.value;
+        });
+
+        /* Mangeltext-Textareas */
+        document.querySelectorAll('.frage[id] textarea').forEach(function(ta) {
+            if (!ta.value) return;
+            var frage = ta.closest('.frage[id]');
+            if (frage) daten.mangelTexte.push({ frageId: frage.id, wert: ta.value });
+        });
+
+        var json = JSON.stringify(daten, null, 2);
+        var blob = new Blob([json], { type: 'application/json' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        var sn = (aktuelleSeriennummer && aktuelleSeriennummer !== '–') ? aktuelleSeriennummer : 'neu';
+        var datum = new Date().toLocaleDateString('de-DE').replace(/\./g, '-');
+        a.download = 'aufzug-' + sn + '-' + datum + '.json';
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    function ladeProjekt() {
+        document.getElementById('projektDateiInput').click();
+    }
+
+    function projektDateiGewaehlt(input) {
+        var file = input.files[0];
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function(ev) {
+            try {
+                var daten = JSON.parse(ev.target.result);
+                wiederherstelleProjekt(daten);
+            } catch(e) {
+                alert('Fehler: Datei konnte nicht gelesen werden.');
+            }
+        };
+        reader.readAsText(file);
+        input.value = '';
+    }
+
+    function wiederherstelleProjekt(daten) {
+        /* Seriennummer */
+        aktuelleSeriennummer = daten.seriennummer || '–';
+        document.getElementById('seriennummerAnzeige').innerText = aktuelleSeriennummer;
+        document.getElementById('seriennummerBar').style.display = aktuelleSeriennummer !== '–' ? 'flex' : 'none';
+
+        /* Bauteile & Gruppen */
+        gewaehlteBauteile = daten.gewaehlteBauteile || [];
+        bauteilGruppen = daten.bauteilGruppen || {};
+
+        /* Dokument-Einträge wiederherstellen */
+        if (daten.dokEintraege) {
+            Object.entries(daten.dokEintraege).forEach(function(entry) {
+                var bId = entry[0]; var liste = entry[1];
+                liste.forEach(function(e) {
+                    var inp = document.getElementById('dokInput_' + bId);
+                    if (!inp) return;
+                    inp.value = e.text;
+                    addDokumentEintrag(bId);
+                    var neueEintraege = dokEintraege[bId];
+                    if (!neueEintraege || neueEintraege.length === 0) return;
+                    var neueId = neueEintraege[neueEintraege.length - 1].id;
+                    var frEl = document.getElementById(neueId);
+                    if (!frEl) return;
+                    if (e.antwort) {
+                        var btn = frEl.querySelector('.antwort-btn.' + e.antwort);
+                        if (btn) btn.click();
+                    }
+                    if (e.mangelText) {
+                        var ta = frEl.querySelector('textarea');
+                        if (ta) ta.value = e.mangelText;
+                    }
+                });
+            });
+        }
+
+        /* Eingabefelder */
+        if (daten.eingaben) {
+            Object.entries(daten.eingaben).forEach(function(entry) {
+                var el = document.getElementById(entry[0]);
+                if (el) {
+                    el.value = entry[1];
+                    if (el.oninput) el.oninput();
+                }
+            });
+        }
+
+        /* Antwort-Buttons */
+        if (daten.antworten) {
+            Object.entries(daten.antworten).forEach(function(entry) {
+                var frage = document.getElementById(entry[0]);
+                if (!frage) return;
+                var btn = frage.querySelector('.antwort-btn.' + entry[1]);
+                if (btn) btn.click();
+            });
+        }
+
+        /* Ja/Nein-Buttons */
+        if (daten.jaNein) {
+            Object.entries(daten.jaNein).forEach(function(entry) {
+                var frage = document.getElementById(entry[0]);
+                if (!frage) return;
+                var btn = frage.querySelector('.' + entry[1] + '-btn');
+                if (btn) btn.click();
+            });
+        }
+
+        /* Mangel-Textareas */
+        if (daten.mangelTexte) {
+            daten.mangelTexte.forEach(function(m) {
+                var frage = document.getElementById(m.frageId);
+                if (!frage) return;
+                var ta = frage.querySelector('textarea');
+                if (ta) ta.value = m.wert;
+            });
+        }
+
+        /* Zur Umbau-Bauteilseite navigieren */
+        document.getElementById('bereichTitel').innerText = '2 – Umbau';
+        document.getElementById('hauptHeader').innerText = '🛗 2 – Umbau';
+        document.getElementById('btnBauteileAendern').style.display = 'inline-block';
+        aktualisiereBauteilListe();
+        zeige('bauteilSeite');
+        BAUTEILE.forEach(function(b) { aktualisiereBauteilStatus(b.id); });
     }
 
     /* Bauteil-Liste anzeigen und Bereich-Titel setzen */
