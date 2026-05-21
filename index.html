@@ -921,9 +921,11 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             <div class="s-step"><div class="s-kreis">4</div><span>Prüfung</span></div>
         </div>
         <h2>🔧 Projekt Seriennummer</h2>
-        <p style="color:#666;margin-bottom:15px;font-size:14px;">Bitte geben Sie die Seriennummer der Anlage ein.</p>
+        <p style="color:#666;margin-bottom:15px;font-size:14px;">Bitte geben Sie die Projektdaten ein.</p>
+        <!-- Texteingabe für den Projektnamen -->
+        <input type="text" id="projektnameInput" placeholder="Projektname (z.B. Musterstraße 12)" style="margin-bottom:10px;">
         <!-- Texteingabe für die Seriennummer -->
-        <input type="text" id="seriennummerInput" placeholder="z.B. AZ-2024-00123">
+        <input type="text" id="seriennummerInput" placeholder="Seriennummer (z.B. AZ-2024-00123)">
         <div class="modal-buttons">
             <button class="modal-btn-skip" onclick="document.getElementById('modalSeriennummer').classList.remove('aktiv')">← Abbrechen</button>
             <button class="modal-btn-ok" onclick="speichereSeriennummer()">✅ Weiter</button>
@@ -1173,8 +1175,10 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 ========================================== -->
 
 <div class="seriennummer-bar" id="seriennummerBar" style="display:none;">
-    <span>📋 Projekt:</span>
-    <!-- Hier wird die Seriennummer per JavaScript eingetragen -->
+    <span>📋</span>
+    <span id="projektnameAnzeige" style="font-weight:700;"></span>
+    <span style="opacity:0.5;">|</span>
+    <span style="opacity:0.7;font-size:13px;">SN:</span>
     <span id="seriennummerAnzeige">–</span>
     <!-- Bearbeiten-Link öffnet das Modal erneut -->
     <button class="seriennummer-edit" onclick="oeffneModal()">✏️ ändern</button>
@@ -2889,6 +2893,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
        Wird im PDF-Export und in der Leiste verwendet
     ------------------------------------------ */
     let aktuelleSeriennummer = '';
+    let aktuelleProjektname  = '';
     let gewaehlteBauteile   = [];
     let bauteilGruppen      = {}; /* { seil: 'triebwerk', begrenzer: 'schacht', ... } */
 
@@ -2913,6 +2918,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     /* Modal öffnen: zeigt das Seriennummer-Eingabefeld
        Befüllt das Eingabefeld mit der aktuellen Seriennummer */
     function oeffneModal() {
+        document.getElementById('projektnameInput').value = aktuelleProjektname;
         document.getElementById('seriennummerInput').value = aktuelleSeriennummer;
         document.getElementById('modalSeriennummer').classList.add('aktiv');
     }
@@ -2924,14 +2930,17 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         zeigeBauteile(document.getElementById('bereichTitel').innerText || 'Umbau');
     }
 
-    /* Seriennummer speichern – öffnet danach Bauteil-Auswahl Modal */
+    /* Seriennummer & Projektname speichern – öffnet danach Bauteil-Auswahl Modal */
     function speichereSeriennummer() {
-        const eingabe = document.getElementById('seriennummerInput').value.trim(); /* Eingabe auslesen */
-        aktuelleSeriennummer = eingabe || '–'; /* Leer → Strich */
-        document.getElementById('seriennummerAnzeige').innerText = aktuelleSeriennummer; /* In Leiste anzeigen */
-        document.getElementById('seriennummerBar').style.display = 'flex'; /* Leiste einblenden */
-        document.getElementById('modalSeriennummer').classList.remove('aktiv'); /* SN-Modal schließen */
-        oeffneBauteilModal(); /* Bauteil-Auswahl öffnen */
+        aktuelleProjektname  = document.getElementById('projektnameInput').value.trim();
+        const eingabe = document.getElementById('seriennummerInput').value.trim();
+        aktuelleSeriennummer = eingabe || '–';
+        var pnAnz = document.getElementById('projektnameAnzeige');
+        if (pnAnz) pnAnz.innerText = aktuelleProjektname || '';
+        document.getElementById('seriennummerAnzeige').innerText = aktuelleSeriennummer;
+        document.getElementById('seriennummerBar').style.display = 'flex';
+        document.getElementById('modalSeriennummer').classList.remove('aktiv');
+        oeffneBauteilModal();
     }
 
     /* Checkbox im Modal: Gruppen-Buttons ein-/ausblenden */
@@ -3136,6 +3145,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         const daten = {
             version: 1,
             datum: new Date().toISOString(),
+            projektname: aktuelleProjektname,
             seriennummer: aktuelleSeriennummer,
             gewaehlteBauteile: gewaehlteBauteile,
             bauteilGruppen: bauteilGruppen,
@@ -3191,9 +3201,10 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         var url = URL.createObjectURL(blob);
         var a = document.createElement('a');
         a.href = url;
+        var pn = aktuelleProjektname ? aktuelleProjektname.replace(/[^a-zA-Z0-9äöüÄÖÜß\-_]/g, '_') : '';
         var sn = (aktuelleSeriennummer && aktuelleSeriennummer !== '–') ? aktuelleSeriennummer : 'neu';
         var datum = new Date().toLocaleDateString('de-DE').replace(/\./g, '-');
-        a.download = 'aufzug-' + sn + '-' + datum + '.json';
+        a.download = 'aufzug-' + (pn || sn) + '-' + datum + '.json';
         a.click();
         URL.revokeObjectURL(url);
     }
@@ -3219,8 +3230,11 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     }
 
     function wiederherstelleProjekt(daten) {
-        /* Seriennummer */
+        /* Projektname & Seriennummer */
+        aktuelleProjektname = daten.projektname || '';
         aktuelleSeriennummer = daten.seriennummer || '–';
+        var pnAnz = document.getElementById('projektnameAnzeige');
+        if (pnAnz) pnAnz.innerText = aktuelleProjektname;
         document.getElementById('seriennummerAnzeige').innerText = aktuelleSeriennummer;
         document.getElementById('seriennummerBar').style.display = aktuelleSeriennummer !== '–' ? 'flex' : 'none';
 
@@ -4156,7 +4170,8 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         zeile('Aufzug-App - Umbau Pruefprotokoll');
         doc.setFontSize(10); doc.setTextColor(100, 100, 100);
         zeile('Erstellt: ' + new Date().toLocaleDateString('de-DE') + '  ' + new Date().toLocaleTimeString('de-DE'));
-        if (aktuelleSeriennummer) zeile('Projektnummer: ' + aktuelleSeriennummer);
+        if (aktuelleProjektname) zeile('Projekt: ' + aktuelleProjektname);
+        if (aktuelleSeriennummer) zeile('Seriennummer: ' + aktuelleSeriennummer);
         y += 4;
 
         /* Alle Bauteile oder nur gewählte */
@@ -4262,7 +4277,8 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         neueZeile('Erstellt am: ' + new Date().toLocaleDateString('de-DE') + ' um ' + new Date().toLocaleTimeString('de-DE'));
         neueZeile('Bauteil: ' + (document.getElementById('bauteilTitel').innerText || '-'));
         neueZeile('Bereich: ' + (document.getElementById('bereichTitel').innerText || '-'));
-        /* Seriennummer nur wenn vorhanden */
+        /* Projektname und Seriennummer */
+        if (aktuelleProjektname) neueZeile('Projekt: ' + aktuelleProjektname);
         if (aktuelleSeriennummer) neueZeile('Seriennummer: ' + aktuelleSeriennummer);
         y += 5; /* Leerzeile */
 
