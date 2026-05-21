@@ -2430,9 +2430,10 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             <div id="sch_frage3_sub" style="display:none; margin-top:15px;">
                 <div class="frage" id="sch_frage3_2">
                     <h3>4.3.2 – Liegt eine Schienenberechnung vor?</h3>
+                    <span id="sch_3_2_mangel" data-mangel="false" style="display:none;"></span>
                     <div class="ja-nein-gruppe">
-                        <button class="ja-btn" onclick="jaNein(this,'sch_frage3_2','ja')">✅ Ja</button>
-                        <button class="nein-btn" onclick="jaNein(this,'sch_frage3_2','nein')">❌ Nein</button>
+                        <button class="ja-btn" onclick="jaNein(this,'sch_frage3_2','ja'); document.getElementById('sch_3_2_mangel').dataset.mangel='false'; aktualisiereBauteilStatus('schienen')">✅ Ja</button>
+                        <button class="nein-btn" onclick="jaNein(this,'sch_frage3_2','nein'); document.getElementById('sch_3_2_mangel').dataset.mangel='true'; aktualisiereBauteilStatus('schienen')">❌ Nein</button>
                     </div>
                 </div>
                 <div class="frage">
