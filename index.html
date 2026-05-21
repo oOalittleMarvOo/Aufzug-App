@@ -2368,7 +2368,142 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         <button class="tab" onclick="zeigeTabGeneric(this, 'berechnung_schienen', 'detailSchienen')">🔢 Berechnung</button>
         <button class="tab" onclick="zeigeTabGeneric(this, 'elektro_schienen', 'detailSchienen')">⚡ Elektro</button>
     </div>
-    <div id="pruefung_schienen" class="tab-inhalt aktiv"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="pruefung_schienen" class="tab-inhalt aktiv">
+
+        <!-- 4.1 – FAHRKORBSCHIENE MASSE -->
+        <div class="frage">
+            <h3>4.1 – Typ-Fahrkorbschiene: Maße erfassen</h3>
+            <div class="eingabe-zeile">
+                <label>1.1 Gesamtbreite:</label>
+                <input type="number" id="sch_fk_breite" placeholder="Wert" step="0.1" min="0">
+                <span class="einheit">mm</span>
+            </div>
+            <div class="eingabe-zeile">
+                <label>1.2 Gesamthöhe:</label>
+                <input type="number" id="sch_fk_hoehe" placeholder="Wert" step="0.1" min="0">
+                <span class="einheit">mm</span>
+            </div>
+            <div class="eingabe-zeile">
+                <label>1.3 Stegbreite:</label>
+                <input type="number" id="sch_fk_steg" placeholder="Wert" step="0.1" min="0">
+                <span class="einheit">mm</span>
+            </div>
+            <div class="eingabe-zeile">
+                <label>1.4 max. Befestigungsabstand:</label>
+                <input type="number" id="sch_fk_abstand" placeholder="Wert" step="1" min="0">
+                <span class="einheit">mm</span>
+            </div>
+        </div>
+
+        <!-- 4.2 – GEGENGEWICHTSSCHIENE MASSE -->
+        <div class="frage">
+            <h3>4.2 – Typ-Gegengewichtsschiene: Maße erfassen</h3>
+            <div class="eingabe-zeile">
+                <label>2.1 Gesamtbreite:</label>
+                <input type="number" id="sch_gg_breite" placeholder="Wert" step="0.1" min="0">
+                <span class="einheit">mm</span>
+            </div>
+            <div class="eingabe-zeile">
+                <label>2.2 Gesamthöhe:</label>
+                <input type="number" id="sch_gg_hoehe" placeholder="Wert" step="0.1" min="0">
+                <span class="einheit">mm</span>
+            </div>
+            <div class="eingabe-zeile">
+                <label>2.3 Stegbreite:</label>
+                <input type="number" id="sch_gg_steg" placeholder="Wert" step="0.1" min="0">
+                <span class="einheit">mm</span>
+            </div>
+            <div class="eingabe-zeile">
+                <label>2.4 max. Befestigungsabstand:</label>
+                <input type="number" id="sch_gg_abstand" placeholder="Wert" step="1" min="0">
+                <span class="einheit">mm</span>
+            </div>
+        </div>
+
+        <!-- FRAGE 4.3 – Fangvorrichtung/Masse/Last geändert? -->
+        <div class="frage" id="sch_frage3">
+            <h3>4.3 – Wurde die Fangvorrichtung, die Fahrkorbmasse oder die Nennlast geändert?</h3>
+            <div class="ja-nein-gruppe">
+                <button class="ja-btn" onclick="jaNein(this,'sch_frage3','ja'); document.getElementById('sch_frage3_sub').style.display='block'">✅ Ja</button>
+                <button class="nein-btn" onclick="jaNein(this,'sch_frage3','nein'); document.getElementById('sch_frage3_sub').style.display='none'">❌ Nein</button>
+            </div>
+            <div id="sch_frage3_sub" style="display:none; margin-top:15px;">
+                <div class="frage" id="sch_frage3_2">
+                    <h3>4.3.2 – Liegt eine Schienenberechnung vor?</h3>
+                    <div class="ja-nein-gruppe">
+                        <button class="ja-btn" onclick="jaNein(this,'sch_frage3_2','ja')">✅ Ja</button>
+                        <button class="nein-btn" onclick="jaNein(this,'sch_frage3_2','nein')">❌ Nein</button>
+                    </div>
+                </div>
+                <div class="frage">
+                    <h3>4.3.2.1 – Schienenberechnung</h3>
+                    <p style="color:#888;font-size:14px;">Eigene Berechnung folgt in Kürze...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FRAGE 4.4.1 – Verschraubungen komplett? -->
+        <div class="frage" id="sch_frage4_1">
+            <h3>4.4.1 – Verschraubungen komplett?</h3>
+            <div class="antwort-gruppe">
+                <button class="antwort-btn passt" onclick="antwort(this,'sch_frage4_1')">🟢 Passt</button>
+                <button class="antwort-btn passt-nicht" onclick="antwort(this,'sch_frage4_1')">🔴 Mangel</button>
+                <button class="antwort-btn irrelevant" onclick="antwort(this,'sch_frage4_1')">⚪ Trifft nicht zu</button>
+            </div>
+            <div class="mangelfeld" id="mangel-sch_frage4_1">
+                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+                <label>Bitte Mangel beschreiben:</label>
+                <textarea placeholder="Beschreibung des Mangels..."></textarea>
+            </div>
+        </div>
+
+        <!-- FRAGE 4.4.2 – Muttern vollflächig? -->
+        <div class="frage" id="sch_frage4_2">
+            <h3>4.4.2 – Muttern liegen vollflächig auf?</h3>
+            <div class="antwort-gruppe">
+                <button class="antwort-btn passt" onclick="antwort(this,'sch_frage4_2')">🟢 Passt</button>
+                <button class="antwort-btn passt-nicht" onclick="antwort(this,'sch_frage4_2')">🔴 Mangel</button>
+                <button class="antwort-btn irrelevant" onclick="antwort(this,'sch_frage4_2')">⚪ Trifft nicht zu</button>
+            </div>
+            <div class="mangelfeld" id="mangel-sch_frage4_2">
+                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+                <label>Bitte Mangel beschreiben:</label>
+                <textarea placeholder="Beschreibung des Mangels..."></textarea>
+            </div>
+        </div>
+
+        <!-- FRAGE 4.5 – Befestigungsabstände eingehalten? -->
+        <div class="frage" id="sch_frage5">
+            <h3>4.5 – Sind die maximalen Befestigungsabstände eingehalten?</h3>
+            <div class="antwort-gruppe">
+                <button class="antwort-btn passt" onclick="antwort(this,'sch_frage5')">🟢 Passt</button>
+                <button class="antwort-btn passt-nicht" onclick="antwort(this,'sch_frage5')">🔴 Mangel</button>
+                <button class="antwort-btn irrelevant" onclick="antwort(this,'sch_frage5')">⚪ Trifft nicht zu</button>
+            </div>
+            <div class="mangelfeld" id="mangel-sch_frage5">
+                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+                <label>Bitte Mangel beschreiben:</label>
+                <textarea placeholder="Beschreibung des Mangels..."></textarea>
+            </div>
+        </div>
+
+        <!-- FRAGE 4.6 – Schiene passt zur Fangvorrichtung? -->
+        <div class="frage" id="sch_frage6">
+            <h3>4.6 – Passt die Schiene zur Fangvorrichtung?</h3>
+            <p style="color:#555;font-size:14px;margin-bottom:10px;">(Gezogen / bearbeitet / trocken / geölt)</p>
+            <div class="antwort-gruppe">
+                <button class="antwort-btn passt" onclick="antwort(this,'sch_frage6')">🟢 Passt</button>
+                <button class="antwort-btn passt-nicht" onclick="antwort(this,'sch_frage6')">🔴 Mangel</button>
+                <button class="antwort-btn irrelevant" onclick="antwort(this,'sch_frage6')">⚪ Trifft nicht zu</button>
+            </div>
+            <div class="mangelfeld" id="mangel-sch_frage6">
+                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+                <label>Bitte Mangel beschreiben:</label>
+                <textarea placeholder="Beschreibung des Mangels..."></textarea>
+            </div>
+        </div>
+
+    </div>
     <div id="dokumente_schienen" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
     <div id="berechnung_schienen" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
     <div id="elektro_schienen" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
