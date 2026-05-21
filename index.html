@@ -3187,13 +3187,21 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         });
 
         var json = JSON.stringify(daten, null, 2);
+        var sn = (aktuelleSeriennummer && aktuelleSeriennummer !== '–') ? aktuelleSeriennummer : 'neu';
+        var datum = new Date().toLocaleDateString('de-DE').replace(/\./g, '-');
+        var dateiname = 'aufzug-' + sn + '-' + datum + '.json';
+
+        /* iOS Safari ignoriert das download-Attribut → Hinweis anzeigen */
+        var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        if (isIOS) {
+            alert('📁 Datei wird gespeichert.\n\nBitte in der Dateien-App umbenennen zu:\n' + dateiname);
+        }
+
         var blob = new Blob([json], { type: 'application/json' });
         var url = URL.createObjectURL(blob);
         var a = document.createElement('a');
         a.href = url;
-        var sn = (aktuelleSeriennummer && aktuelleSeriennummer !== '–') ? aktuelleSeriennummer : 'neu';
-        var datum = new Date().toLocaleDateString('de-DE').replace(/\./g, '-');
-        a.download = 'aufzug-' + sn + '-' + datum + '.json';
+        a.download = dateiname;
         a.click();
         URL.revokeObjectURL(url);
     }
