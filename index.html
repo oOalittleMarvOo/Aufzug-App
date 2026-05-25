@@ -1598,17 +1598,27 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             💻 <strong>PC / Mac</strong><br>
             Die App wird als <code>Aufzug-App.html</code> gespeichert und kann direkt im Browser geöffnet werden – vollständig offline nutzbar.
         </p>
-        <p style="color:#333;font-size:15px;line-height:1.6;margin-bottom:12px;">
+        <p style="color:#333;font-size:15px;line-height:1.6;margin-bottom:6px;">
             📱 <strong>iPhone / iPad (iOS)</strong><br>
             Safari erlaubt keine lokalen HTML-Dateien. Stattdessen:
         </p>
-        <ol style="color:#333;font-size:14px;line-height:1.8;margin:0 0 16px 18px;">
+        <ol style="color:#333;font-size:14px;line-height:1.8;margin:0 0 12px 18px;">
             <li>App in Safari öffnen</li>
             <li>Teilen-Symbol antippen <strong>⎙</strong></li>
             <li>„Zum Home-Bildschirm" wählen</li>
             <li>App erscheint mit Icon auf dem Startbildschirm</li>
         </ol>
-        <p style="color:#777;font-size:13px;">Die App muss dazu einmal mit Internet geladen werden – danach funktioniert sie auch ohne WLAN.</p>
+        <p style="color:#333;font-size:15px;line-height:1.6;margin-bottom:6px;">
+            🤖 <strong>Android</strong><br>
+            In Chrome herunterladen oder direkt installieren:
+        </p>
+        <ol style="color:#333;font-size:14px;line-height:1.8;margin:0 0 12px 18px;">
+            <li>App in Chrome öffnen</li>
+            <li>Menü antippen <strong>⋮</strong></li>
+            <li>„Zum Startbildschirm hinzufügen" wählen</li>
+            <li>App erscheint mit Icon auf dem Startbildschirm</li>
+        </ol>
+        <p style="color:#777;font-size:13px;margin-bottom:0;">💡 Einmal mit Internet laden – danach auch ohne WLAN nutzbar.</p>
         <div class="modal-buttons">
             <button class="modal-btn-ok" onclick="document.getElementById('modalDownloadInfo').classList.remove('aktiv')">✅ OK</button>
         </div>
@@ -1657,11 +1667,9 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     <div style="margin-top:20px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
         <button class="modal-btn-skip" onclick="ladeProjekt()" style="font-size:15px; padding:12px 20px;">📂 Projekt laden</button>
     </div>
-    <div style="margin-top:10px; display:flex; flex-direction:column; align-items:center; gap:4px;">
-        <div style="display:flex; align-items:center; gap:8px;">
-            <button class="modal-btn-skip" onclick="downloadApp()" style="font-size:15px; padding:12px 20px; background:#c62828; color:white; border:2px solid #7f0000;">⬇️ App herunterladen</button>
-            <button onclick="document.getElementById('modalDownloadInfo').classList.add('aktiv')" style="background:#0057a8;color:white;border:none;border-radius:50%;width:30px;height:30px;font-size:16px;font-weight:bold;cursor:pointer;flex-shrink:0;">i</button>
-        </div>
+    <div style="margin-top:10px; display:flex; flex-direction:column; align-items:center; gap:6px;">
+        <button onclick="document.getElementById('modalDownloadInfo').classList.add('aktiv')" style="background:#0057a8;color:white;border:none;border-radius:50%;width:30px;height:30px;font-size:16px;font-weight:bold;cursor:pointer;">i</button>
+        <button class="modal-btn-skip" onclick="downloadApp()" style="font-size:15px; padding:12px 20px; background:#c62828; color:white; border:2px solid #7f0000;">⬇️ App herunterladen</button>
     </div>
     <input type="file" id="projektDateiInput" accept=".json" style="display:none;" onchange="projektDateiGewaehlt(this)">
 </div>
