@@ -628,6 +628,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         justify-content: center;
     }
     #modalAntriebSicherung.aktiv { display: flex; }
+    #modalDownloadInfo.aktiv { display: flex; }
     #modalAntriebSicherung table { width:100%; border-collapse:collapse; font-size:14px; margin:12px 0; }
     #modalAntriebSicherung th { background:#0057a8; color:white; padding:8px 10px; text-align:left; }
     #modalAntriebSicherung td { padding:7px 10px; border-bottom:1px solid #e0e0e0; }
@@ -1589,6 +1590,30 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     </div>
 </div>
 
+<div id="modalDownloadInfo" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:500; align-items:center; justify-content:center;">
+    <div class="modal-box" style="max-width:480px;">
+        <h2>ℹ️ App herunterladen</h2>
+        <p style="color:#333;font-size:15px;line-height:1.6;margin-bottom:12px;">
+            💻 <strong>PC / Mac</strong><br>
+            Die App wird als <code>Aufzug-App.html</code> gespeichert und kann direkt im Browser geöffnet werden – vollständig offline nutzbar.
+        </p>
+        <p style="color:#333;font-size:15px;line-height:1.6;margin-bottom:12px;">
+            📱 <strong>iPhone / iPad (iOS)</strong><br>
+            Safari erlaubt keine lokalen HTML-Dateien. Stattdessen:
+        </p>
+        <ol style="color:#333;font-size:14px;line-height:1.8;margin:0 0 16px 18px;">
+            <li>App in Safari öffnen</li>
+            <li>Teilen-Symbol antippen <strong>⎙</strong></li>
+            <li>„Zum Home-Bildschirm" wählen</li>
+            <li>App erscheint mit Icon auf dem Startbildschirm</li>
+        </ol>
+        <p style="color:#777;font-size:13px;">Die App muss dazu einmal mit Internet geladen werden – danach funktioniert sie auch ohne WLAN.</p>
+        <div class="modal-buttons">
+            <button class="modal-btn-ok" onclick="document.getElementById('modalDownloadInfo').classList.remove('aktiv')">✅ OK</button>
+        </div>
+    </div>
+</div>
+
 <!-- HEADER – Blaue Titelleiste, immer sichtbar -->
 
 <header id="hauptHeader">🛗 Aufzug-App</header> <!-- Header: wird per JavaScript auf "Hauptmenü" oder Bereichsname gesetzt -->
@@ -1632,8 +1657,10 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         <button class="modal-btn-skip" onclick="ladeProjekt()" style="font-size:15px; padding:12px 20px;">📂 Projekt laden</button>
     </div>
     <div style="margin-top:10px; display:flex; flex-direction:column; align-items:center; gap:4px;">
-        <p style="color:#c62828; font-size:12px; font-weight:700; margin:0;">🛑 Nur für PC/Mac – auf iPhone/iPad stattdessen „Zum Home-Bildschirm" nutzen 🛑</p>
-        <button class="modal-btn-skip" onclick="downloadApp()" style="font-size:15px; padding:12px 20px; background:#c62828; color:white; border:2px solid #7f0000;">⬇️ App herunterladen (PC/Mac)</button>
+        <div style="display:flex; align-items:center; gap:8px;">
+            <button class="modal-btn-skip" onclick="downloadApp()" style="font-size:15px; padding:12px 20px; background:#c62828; color:white; border:2px solid #7f0000;">⬇️ App herunterladen</button>
+            <button onclick="document.getElementById('modalDownloadInfo').classList.add('aktiv')" style="background:#0057a8;color:white;border:none;border-radius:50%;width:30px;height:30px;font-size:16px;font-weight:bold;cursor:pointer;flex-shrink:0;">i</button>
+        </div>
     </div>
     <input type="file" id="projektDateiInput" accept=".json" style="display:none;" onchange="projektDateiGewaehlt(this)">
 </div>
