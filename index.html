@@ -1664,7 +1664,10 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     </div>
     <div style="margin-top:20px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
         <button class="modal-btn-skip" onclick="ladeProjekt()" style="font-size:15px; padding:12px 20px;">📂 Projekt laden</button>
-        <button class="modal-btn-skip" onclick="downloadApp()" style="font-size:15px; padding:12px 20px;">⬇️ App herunterladen</button>
+    </div>
+    <div style="margin-top:10px; display:flex; flex-direction:column; align-items:center; gap:4px;">
+        <p style="color:#c62828; font-size:12px; font-weight:700; margin:0;">🛑 Nur für Offline-Nutzung – mit Vorsicht verwenden 🛑</p>
+        <button class="modal-btn-skip" onclick="downloadApp()" style="font-size:15px; padding:12px 20px; background:#c62828; color:white; border:2px solid #7f0000;">⬇️ App herunterladen</button>
     </div>
     <input type="file" id="projektDateiInput" accept=".json" style="display:none;" onchange="projektDateiGewaehlt(this)">
 </div>
