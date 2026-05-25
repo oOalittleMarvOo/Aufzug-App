@@ -12,19 +12,66 @@
     <meta charset="UTF-8">
     <!-- Viewport: Skalierung für Mobilgeräte (iPad, iPhone) korrekt setzen -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Titel im Browser-Tab -->
     <title>Aufzug-App</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Aufzug-App">
+    <meta name="theme-color" content="#0057a8">
+    <script>
+    /* Icon + Manifest inline generieren – funktioniert online und offline */
+    (function() {
+        var canvas = document.createElement('canvas');
+        canvas.width = 192; canvas.height = 192;
+        var ctx = canvas.getContext('2d');
+        /* Blauer Hintergrund mit abgerundeten Ecken */
+        ctx.fillStyle = '#0057a8';
+        ctx.beginPath();
+        ctx.moveTo(30, 0); ctx.lineTo(162, 0);
+        ctx.quadraticCurveTo(192, 0, 192, 30);
+        ctx.lineTo(192, 162);
+        ctx.quadraticCurveTo(192, 192, 162, 192);
+        ctx.lineTo(30, 192);
+        ctx.quadraticCurveTo(0, 192, 0, 162);
+        ctx.lineTo(0, 30);
+        ctx.quadraticCurveTo(0, 0, 30, 0);
+        ctx.closePath();
+        ctx.fill();
+        /* Aufzug-Symbol */
+        ctx.font = '110px serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('🛗', 96, 105);
+        var pngUrl = canvas.toDataURL('image/png');
 
-```
-<!-- PWA: App-Manifest verknüpfen -->
-<link rel="manifest" href="manifest.json"> <!-- Manifest für App-Symbol und Offline-Funktion -->
-<!-- PWA: iOS spezifische Meta-Tags -->
-<meta name="apple-mobile-web-app-capable" content="yes"> <!-- Vollbild auf iOS -->
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"> <!-- Statusleiste transparent -->
-<meta name="apple-mobile-web-app-title" content="Aufzug-App"> <!-- App-Name auf iOS Homescreen -->
-<link rel="apple-touch-icon" href="icon-192.png"> <!-- App-Icon für iOS -->
-<!-- PWA: Theme-Farbe -->
-<meta name="theme-color" content="#0057a8"> <!-- Blau passend zur App -->
+        /* Favicon */
+        var favicon = document.createElement('link');
+        favicon.rel = 'icon'; favicon.href = pngUrl;
+        document.head.appendChild(favicon);
+
+        /* Apple Touch Icon */
+        var appleIcon = document.createElement('link');
+        appleIcon.rel = 'apple-touch-icon'; appleIcon.href = pngUrl;
+        document.head.appendChild(appleIcon);
+
+        /* PWA Manifest als Blob */
+        var manifest = JSON.stringify({
+            name: 'Aufzug-App',
+            short_name: 'Aufzug',
+            start_url: '.',
+            display: 'standalone',
+            background_color: '#0057a8',
+            theme_color: '#0057a8',
+            icons: [
+                { src: pngUrl, sizes: '192x192', type: 'image/png', purpose: 'any maskable' }
+            ]
+        });
+        var mBlob = new Blob([manifest], { type: 'application/manifest+json' });
+        var mLink = document.createElement('link');
+        mLink.rel = 'manifest';
+        mLink.href = URL.createObjectURL(mBlob);
+        document.head.appendChild(mLink);
+    })();
+    </script>
 <!-- jsPDF Bibliothek: Erstellt PDF-Protokolle direkt im Browser, kein Server nötig -->
 <script>/** @license
  *
