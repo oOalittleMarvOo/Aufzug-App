@@ -1667,11 +1667,23 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     <div style="margin-top:20px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
         <button class="modal-btn-skip" onclick="ladeProjekt()" style="font-size:15px; padding:12px 20px;">📂 Projekt laden</button>
     </div>
-    <div style="margin-top:10px; display:flex; flex-direction:column; align-items:center; gap:6px;">
+    <div style="margin-top:10px; display:flex; flex-direction:column; align-items:center; gap:6px;" id="downloadBereich">
         <button onclick="document.getElementById('modalDownloadInfo').classList.add('aktiv')" style="background:#0057a8;color:white;border:none;border-radius:50%;width:30px;height:30px;font-size:16px;font-weight:bold;cursor:pointer;">i</button>
         <p style="color:#c62828;font-weight:700;font-size:13px;margin:0;">⚠️ Vorsicht – Offline Modus ⚠️</p>
-        <button class="modal-btn-skip" onclick="downloadApp()" style="font-size:15px; padding:12px 20px; background:#c62828; color:white; border:2px solid #7f0000;">⬇️ App herunterladen</button>
+        <button class="modal-btn-skip" onclick="downloadApp()" style="font-size:15px; padding:12px 20px; background:#c62828; color:white; border:2px solid #7f0000;">⬇️ App herunterladen (nur PC/Mac)</button>
     </div>
+    <!-- Auf iOS stattdessen Hinweis zum Home-Bildschirm -->
+    <div id="iosHinweis" style="display:none; margin-top:10px; background:#fff8e1; border:1px solid #f9a825; border-radius:10px; padding:12px 16px; font-size:14px; color:#555; text-align:left; max-width:320px;">
+        📱 <strong>iPhone/iPad:</strong> Statt Download bitte<br>
+        Safari → <strong>Teilen ⎙</strong> → <strong>„Zum Home-Bildschirm"</strong> nutzen.<br>
+        So erscheint die App als Icon und funktioniert auch offline.
+    </div>
+    <script>
+    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+        document.getElementById('downloadBereich').style.display = 'none';
+        document.getElementById('iosHinweis').style.display = 'block';
+    }
+    </script>
     <!-- Synchronisieren -->
     <div style="margin-top:16px; display:flex; flex-direction:column; align-items:center; gap:6px;">
         <button class="modal-btn-skip" onclick="synchronisiereApp()" id="syncBtn" style="font-size:15px; padding:12px 20px;">🔄 Mit Online-Version synchronisieren</button>
