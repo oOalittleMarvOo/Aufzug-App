@@ -1658,6 +1658,10 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         <button class="btn" onclick="zeigeBauteile('3 – Komponenten')">🔩 3 – Komponenten</button>
         <button class="btn" onclick="zeige('sicherungSeite')">⚡ 4 – Sicherung</button>
     </div>
+    <!-- Erscheint nur wenn ein Umbau-Projekt aktiv ist -->
+    <div id="projektFortsetzenBereich" style="display:none; margin-top:15px;">
+        <button class="btn" style="background:#2e7d32; font-size:16px;" onclick="zeige('bauteilSeite')">▶ Projekt fortsetzen</button>
+    </div>
     <div style="margin-top:20px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
         <button class="modal-btn-skip" onclick="ladeProjekt()" style="font-size:15px; padding:12px 20px;">📂 Projekt laden</button>
         <button class="modal-btn-skip" onclick="downloadApp()" style="font-size:15px; padding:12px 20px;">⬇️ App herunterladen</button>
@@ -3615,7 +3619,11 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         /* Startseite = flex (für zentrierte Buttons), alle anderen = block */
         if (el) { el.style.display = id === 'startseite' ? 'flex' : 'block'; }
         /* Header zurücksetzen wenn Startseite gezeigt wird */
-        if (id === 'startseite') { document.getElementById('hauptHeader').innerText = '🛗 Aufzug-App'; }
+        if (id === 'startseite') {
+            document.getElementById('hauptHeader').innerText = '🛗 Aufzug-App';
+            var pf = document.getElementById('projektFortsetzenBereich');
+            if (pf) pf.style.display = (aktuelleSeriennummer && aktuelleSeriennummer !== '–') ? 'block' : 'none';
+        }
     }
 
     /* ------------------------------------------
@@ -3731,6 +3739,8 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         aktuelleSeriennummer = daten.seriennummer || '–';
         document.getElementById('seriennummerAnzeige').innerText = aktuelleSeriennummer;
         document.getElementById('seriennummerBar').style.display = aktuelleSeriennummer !== '–' ? 'flex' : 'none';
+        var pf = document.getElementById('projektFortsetzenBereich');
+        if (pf) pf.style.display = aktuelleSeriennummer !== '–' ? 'block' : 'none';
 
         /* Bauteile & Gruppen */
         gewaehlteBauteile = daten.gewaehlteBauteile || [];
