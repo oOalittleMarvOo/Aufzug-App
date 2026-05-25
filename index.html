@@ -2585,7 +2585,16 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         <button class="tab" onclick="zeigeTabGeneric(this, 'berechnung_antrieb', 'detailAntrieb')">🔢 Berechnung</button>
         <button class="tab" onclick="zeigeTabGeneric(this, 'elektro_antrieb', 'detailAntrieb')">⚡ Elektro</button>
     </div>
-    <div id="pruefung_antrieb" class="tab-inhalt aktiv"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="pruefung_antrieb" class="tab-inhalt aktiv">
+        <div class="frage" id="ant_frage1">
+            <h3>7.1 – Ist die korrekte Sicherung verbaut?</h3>
+            <span id="ant_1_mangel" data-mangel="false" style="display:none;"></span>
+            <div class="ja-nein-gruppe">
+                <button class="ja-btn" onclick="jaNein(this,'ant_frage1','ja'); document.getElementById('ant_1_mangel').dataset.mangel='false'; aktualisiereBauteilStatus('antrieb')">✅ Ja</button>
+                <button class="nein-btn" onclick="jaNein(this,'ant_frage1','nein'); document.getElementById('ant_1_mangel').dataset.mangel='true'; aktualisiereBauteilStatus('antrieb')">❌ Nein</button>
+            </div>
+        </div>
+    </div>
     <div id="dokumente_antrieb" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
     <div id="berechnung_antrieb" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
     <div id="elektro_antrieb" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
