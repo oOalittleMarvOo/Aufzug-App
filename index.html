@@ -628,6 +628,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         justify-content: center;
     }
     #modalAntriebSicherung.aktiv { display: flex; }
+    #modalDownloadInfo { display: none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:500; align-items:center; justify-content:center; }
     #modalDownloadInfo.aktiv { display: flex; }
     #modalAntriebSicherung table { width:100%; border-collapse:collapse; font-size:14px; margin:12px 0; }
     #modalAntriebSicherung th { background:#0057a8; color:white; padding:8px 10px; text-align:left; }
@@ -1590,7 +1591,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     </div>
 </div>
 
-<div id="modalDownloadInfo" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:500; align-items:center; justify-content:center;">
+<div id="modalDownloadInfo">
     <div class="modal-box" style="max-width:480px;">
         <h2>ℹ️ App herunterladen</h2>
         <p style="color:#333;font-size:15px;line-height:1.6;margin-bottom:12px;">
