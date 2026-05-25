@@ -2036,6 +2036,10 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
                 <span style="margin-left:15px;font-weight:bold;color:#0057a8;">= <span id="ergebnis_ausloesung">–</span> m/s</span>
             </div>
         </div>
+        <!-- Hinweis wenn v < 1,0 m/s: keine Formel möglich -->
+        <div id="ausloesung_hinweis_unter1" style="display:none; margin-top:12px; background:#fff8e1; border:1px solid #f9a825; border-radius:8px; padding:10px 14px; font-size:14px; color:#555;">
+            ⚠️ Unter 1,0 m/s gilt keine Formel – bitte den passenden Grenzwert aus dem Hinweis oben entnehmen und manuell prüfen.
+        </div>
         <div class="antwort-gruppe" style="margin-top:15px;">
             <button class="antwort-btn passt" onclick="antwort(this, 'frage2_1_5')">🟢 i.O.</button>
             <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage2_1_5')">🔴 Mangel</button>
@@ -3755,19 +3759,22 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
        v_max = 1,25 × v + 0,25 / v
     ------------------------------------------ */
     function berechneAusloesung() {
-        const v = parseFloat(document.getElementById('v_ausloesung').value); /* Nenngeschwindigkeit auslesen */
-        const bereich = document.getElementById('ausloesung_bereich'); /* Formel+Ergebnis-Bereich */
+        const v = parseFloat(document.getElementById('v_ausloesung').value);
+        const bereich = document.getElementById('ausloesung_bereich');
+        const hinweisUnter1 = document.getElementById('ausloesung_hinweis_unter1');
         if (isNaN(v) || v <= 0) {
-            bereich.style.display = 'none'; /* Verstecken wenn kein Wert */
+            bereich.style.display = 'none';
+            hinweisUnter1.style.display = 'none';
             return;
         }
         if (v >= 1.0) {
-            /* Formel anwenden: v_max = 1,25 × v + 0,25/v */
-            const vmax = 1.25 * v + 0.25 / v; /* Berechnung */
-            document.getElementById('ergebnis_ausloesung').innerText = vmax.toFixed(2); /* Ergebnis eintragen */
-            bereich.style.display = 'block'; /* Formel + Ergebnis anzeigen */
+            const vmax = 1.25 * v + 0.25 / v;
+            document.getElementById('ergebnis_ausloesung').innerText = vmax.toFixed(2);
+            bereich.style.display = 'block';
+            hinweisUnter1.style.display = 'none';
         } else {
-            bereich.style.display = 'none'; /* Unter 1,0 m/s: nur Hinweis */
+            bereich.style.display = 'none';
+            hinweisUnter1.style.display = 'block';
         }
     }
 
