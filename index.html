@@ -231,6 +231,21 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     #modalSpannkraft.aktiv {
         display: flex; /* Sichtbar wenn .aktiv gesetzt */
     }
+    #modalAntriebSicherung {
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 500;
+        align-items: center;
+        justify-content: center;
+    }
+    #modalAntriebSicherung.aktiv { display: flex; }
+    #modalAntriebSicherung table { width:100%; border-collapse:collapse; font-size:14px; margin:12px 0; }
+    #modalAntriebSicherung th { background:#0057a8; color:white; padding:8px 10px; text-align:left; }
+    #modalAntriebSicherung td { padding:7px 10px; border-bottom:1px solid #e0e0e0; }
+    #modalAntriebSicherung tr:nth-child(even) td { background:#f4f8ff; }
     .modal-box {
         background: white;                     /* Weißer Hintergrund der Dialogbox */
         border-radius: 16px;                   /* Stark abgerundete Ecken */
@@ -1157,6 +1172,33 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         <p style="color:#333;font-size:15px;line-height:1.6;margin-bottom:20px;">📋 <strong>TRA 200 §254.3</strong><br>Mindestzugkraft: <strong>500 N</strong></p>
         <div class="modal-buttons">
             <button class="modal-btn-ok" onclick="document.getElementById('modalSpannkraft').classList.remove('aktiv')">✅ OK</button>
+        </div>
+    </div>
+</div>
+
+<div id="modalAntriebSicherung">
+    <div class="modal-box" style="max-width:520px;max-height:85vh;overflow-y:auto;">
+        <h2>ℹ️ Korrekte Sicherung</h2>
+        <p style="color:#555;font-size:14px;margin-bottom:8px;">Richtwerte für Kupferkabel bei 30 °C Umgebungstemperatur (übliche Verlegeart):</p>
+        <table>
+            <thead>
+                <tr><th>Sicherung</th><th>Kabelquerschnitt</th><th>Max. Kabellänge</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>10 A</td><td>1,5 mm²</td><td>ca. 20 m</td></tr>
+                <tr><td>16 A</td><td>2,5 mm²</td><td>ca. 20 m</td></tr>
+                <tr><td>25 A</td><td>4 mm²</td><td>ca. 25 m</td></tr>
+                <tr><td>32 A</td><td>6 mm²</td><td>ca. 30 m</td></tr>
+                <tr><td>40 A</td><td>10 mm²</td><td>ca. 35 m</td></tr>
+                <tr><td>63 A</td><td>16 mm²</td><td>ca. 40 m</td></tr>
+            </tbody>
+        </table>
+        <p style="color:#333;font-size:14px;font-weight:700;margin:12px 0 6px;">Normative Grundlagen:</p>
+        <p style="color:#333;font-size:14px;line-height:1.6;margin-bottom:8px;">📋 <strong>DIN VDE 0100-430</strong><br>Schutz von Kabeln und Leitungen vor Überstrom – legt fest, dass der Kabelquerschnitt die maximale Stromstärke der Sicherung sicher übertragen kann.</p>
+        <p style="color:#333;font-size:14px;line-height:1.6;margin-bottom:8px;">📋 <strong>DIN VDE 0298-4</strong><br>Strombelastbarkeit von Kabeln und Leitungen in Abhängigkeit von Verlegeart und Kabelmaterial.</p>
+        <p style="color:#333;font-size:14px;line-height:1.6;margin-bottom:16px;">⚡ <strong>Spannungsverlust</strong><br>Bei längeren Leitungen muss der Querschnitt erhöht werden. Zulässiger Spannungsverlust: max. <strong>3 %</strong>.</p>
+        <div class="modal-buttons">
+            <button class="modal-btn-ok" onclick="document.getElementById('modalAntriebSicherung').classList.remove('aktiv')">✅ OK</button>
         </div>
     </div>
 </div>
@@ -2587,7 +2629,10 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     </div>
     <div id="pruefung_antrieb" class="tab-inhalt aktiv">
         <div class="frage" id="ant_frage1">
-            <h3>7.1 – Ist die korrekte Sicherung verbaut?</h3>
+            <h3 style="display:flex;align-items:center;gap:8px;">
+                7.1 – Ist die korrekte Sicherung verbaut?
+                <button onclick="document.getElementById('modalAntriebSicherung').classList.add('aktiv')" style="background:#0057a8;color:white;border:none;border-radius:50%;width:26px;height:26px;font-size:14px;font-weight:bold;cursor:pointer;flex-shrink:0;">i</button>
+            </h3>
             <span id="ant_1_mangel" data-mangel="false" style="display:none;"></span>
             <div class="ja-nein-gruppe">
                 <button class="ja-btn" onclick="jaNein(this,'ant_frage1','ja'); document.getElementById('ant_1_mangel').dataset.mangel='false'; aktualisiereBauteilStatus('antrieb')">✅ Ja</button>
