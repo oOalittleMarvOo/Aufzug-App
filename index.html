@@ -2026,14 +2026,23 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         </div>
         <!-- Formel + Ergebnis: nur sichtbar wenn v ≥ 1,0 m/s -->
         <div id="ausloesung_bereich" style="display:none; margin-top:15px;">
-            <!-- Formeldarstellung -->
+            <!-- Mindestwert -->
+            <div class="formel-container" style="margin-bottom:8px;">
+                <span>v<sub>min</sub> = 1,15 × v</span>
+                <span style="margin-left:15px;font-weight:bold;color:#2e7d32;">= <span id="ergebnis_ausloesung_min">–</span> m/s</span>
+            </div>
+            <!-- Höchstwert -->
             <div class="formel-container">
                 <span>v<sub>max</sub> = 1,25 × v + </span>
                 <span class="bruch">
                     <span class="zaehler">0,25</span>
                     <span class="nenner">v</span>
                 </span>
-                <span style="margin-left:15px;font-weight:bold;color:#0057a8;">= <span id="ergebnis_ausloesung">–</span> m/s</span>
+                <span style="margin-left:15px;font-weight:bold;color:#c62828;">= <span id="ergebnis_ausloesung">–</span> m/s</span>
+            </div>
+            <!-- Zulässiger Bereich als Hinweis -->
+            <div style="margin-top:10px; background:#e8f5e9; border:1px solid #66bb6a; border-radius:8px; padding:10px 14px; font-size:14px; color:#1b5e20;">
+                ✅ Zulässiger Bereich: <strong><span id="ausloesung_bereich_text">–</span> m/s</strong>
             </div>
         </div>
         <!-- Hinweis wenn v < 1,0 m/s: keine Formel möglich -->
@@ -3768,8 +3777,11 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             return;
         }
         if (v >= 1.0) {
+            const vmin = 1.15 * v;
             const vmax = 1.25 * v + 0.25 / v;
+            document.getElementById('ergebnis_ausloesung_min').innerText = vmin.toFixed(2);
             document.getElementById('ergebnis_ausloesung').innerText = vmax.toFixed(2);
+            document.getElementById('ausloesung_bereich_text').innerText = vmin.toFixed(2) + ' – ' + vmax.toFixed(2);
             bereich.style.display = 'block';
             hinweisUnter1.style.display = 'none';
         } else {
