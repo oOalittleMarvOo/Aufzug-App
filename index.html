@@ -3744,35 +3744,26 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
     function synchronisiereApp() {
         var btn = document.getElementById('syncBtn');
-        btn.textContent = '⏳ Verbinde…';
-        btn.disabled = true;
-        fetch('https://ooalittlemarvoo.github.io/Aufzug-App/')
-            .then(function(res) { return res.text(); })
-            .then(function(html) {
-                /* Neueste Version herunterladen */
-                var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
-                var url = URL.createObjectURL(blob);
-                var a = document.createElement('a');
-                a.href = url;
-                a.download = 'Aufzug-App.html';
-                a.click();
-                URL.revokeObjectURL(url);
-                /* Zeitstempel speichern */
-                localStorage.setItem('aufzugAppSync', new Date().toISOString());
-                aktualisiereSyncAnzeige();
-                btn.textContent = '✅ Synchronisiert!';
-                setTimeout(function() {
-                    btn.textContent = '🔄 Mit Online-Version synchronisieren';
-                    btn.disabled = false;
-                }, 3000);
-            })
-            .catch(function() {
-                btn.textContent = '⚠️ Keine Verbindung – bitte online öffnen';
-                btn.disabled = false;
-                setTimeout(function() {
-                    btn.textContent = '🔄 Mit Online-Version synchronisieren';
-                }, 3000);
-            });
+        var istOnline = window.location.hostname === 'ooalittlemarvoo.github.io';
+
+        if (!navigator.onLine) {
+            btn.textContent = '⚠️ Kein Internet – bitte online öffnen';
+            setTimeout(function() { btn.textContent = '🔄 Mit Online-Version synchronisieren'; }, 3000);
+            return;
+        }
+
+        if (istOnline) {
+            /* Auf GitHub Pages: aktuelle (=neueste) Version direkt herunterladen */
+            downloadApp();
+            localStorage.setItem('aufzugAppSync', new Date().toISOString());
+            aktualisiereSyncAnzeige();
+            btn.textContent = '✅ Aktuelle Version heruntergeladen!';
+            setTimeout(function() { btn.textContent = '🔄 Mit Online-Version synchronisieren'; }, 3000);
+        } else {
+            /* Lokale Datei: Nutzer muss online-Version öffnen */
+            btn.textContent = '⚠️ Bitte zuerst online-Version öffnen';
+            setTimeout(function() { btn.textContent = '🔄 Mit Online-Version synchronisieren'; }, 3000);
+        }
     }
 
     function projektDateiGewaehlt(input) {
