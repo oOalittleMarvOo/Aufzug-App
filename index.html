@@ -1672,6 +1672,11 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         <p style="color:#c62828;font-weight:700;font-size:13px;margin:0;">⚠️ Vorsicht – Offline Modus ⚠️</p>
         <button class="modal-btn-skip" onclick="downloadApp()" style="font-size:15px; padding:12px 20px; background:#c62828; color:white; border:2px solid #7f0000;">⬇️ App herunterladen</button>
     </div>
+    <!-- Synchronisieren -->
+    <div style="margin-top:16px; display:flex; flex-direction:column; align-items:center; gap:6px;">
+        <button class="modal-btn-skip" onclick="synchronisiereApp()" id="syncBtn" style="font-size:15px; padding:12px 20px;">🔄 Mit Online-Version synchronisieren</button>
+        <p id="syncDatum" style="color:#777; font-size:12px; margin:0;"></p>
+    </div>
     <input type="file" id="projektDateiInput" accept=".json" style="display:none;" onchange="projektDateiGewaehlt(this)">
 </div>
 
@@ -3725,6 +3730,52 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         URL.revokeObjectURL(url);
     }
 
+    function aktualisiereSyncAnzeige() {
+        var sync = localStorage.getItem('aufzugAppSync');
+        var el = document.getElementById('syncDatum');
+        if (!el) return;
+        if (sync) {
+            var d = new Date(sync);
+            el.textContent = '🕐 Zuletzt synchronisiert: ' + d.toLocaleDateString('de-DE') + ' um ' + d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+        } else {
+            el.textContent = 'Noch nicht synchronisiert';
+        }
+    }
+
+    function synchronisiereApp() {
+        var btn = document.getElementById('syncBtn');
+        btn.textContent = '⏳ Verbinde…';
+        btn.disabled = true;
+        fetch('https://ooalittlemarvoo.github.io/Aufzug-App/')
+            .then(function(res) { return res.text(); })
+            .then(function(html) {
+                /* Neueste Version herunterladen */
+                var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+                var url = URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = 'Aufzug-App.html';
+                a.click();
+                URL.revokeObjectURL(url);
+                /* Zeitstempel speichern */
+                localStorage.setItem('aufzugAppSync', new Date().toISOString());
+                aktualisiereSyncAnzeige();
+                btn.textContent = '✅ Synchronisiert!';
+                setTimeout(function() {
+                    btn.textContent = '🔄 Mit Online-Version synchronisieren';
+                    btn.disabled = false;
+                }, 3000);
+            })
+            .catch(function() {
+                /* Kein Internet – zur Online-Version navigieren */
+                localStorage.setItem('aufzugAppSync', new Date().toISOString());
+                aktualisiereSyncAnzeige();
+                btn.textContent = '🔄 Mit Online-Version synchronisieren';
+                btn.disabled = false;
+                window.open('https://ooalittlemarvoo.github.io/Aufzug-App/', '_blank');
+            });
+    }
+
     function projektDateiGewaehlt(input) {
         var file = input.files[0];
         if (!file) return;
@@ -4967,6 +5018,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     window.addEventListener('DOMContentLoaded', function() {
         setupAkkordeon();
         setupDokumentEingaben();
+        aktualisiereSyncAnzeige();
     });
 
 </script>
