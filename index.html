@@ -3767,12 +3767,11 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
                 }, 3000);
             })
             .catch(function() {
-                /* Kein Internet – zur Online-Version navigieren */
-                localStorage.setItem('aufzugAppSync', new Date().toISOString());
-                aktualisiereSyncAnzeige();
-                btn.textContent = '🔄 Mit Online-Version synchronisieren';
+                btn.textContent = '⚠️ Keine Verbindung – bitte online öffnen';
                 btn.disabled = false;
-                window.open('https://ooalittlemarvoo.github.io/Aufzug-App/', '_blank');
+                setTimeout(function() {
+                    btn.textContent = '🔄 Mit Online-Version synchronisieren';
+                }, 3000);
             });
     }
 
