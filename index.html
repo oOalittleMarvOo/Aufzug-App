@@ -1611,8 +1611,9 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         <button class="btn" onclick="zeigeBauteile('3 – Komponenten')">🔩 3 – Komponenten</button>
         <button class="btn" onclick="zeige('sicherungSeite')">⚡ 4 – Sicherung</button>
     </div>
-    <div style="margin-top:20px; display:flex; gap:10px; justify-content:center;">
+    <div style="margin-top:20px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
         <button class="modal-btn-skip" onclick="ladeProjekt()" style="font-size:15px; padding:12px 20px;">📂 Projekt laden</button>
+        <button class="modal-btn-skip" onclick="downloadApp()" style="font-size:15px; padding:12px 20px;">⬇️ App herunterladen</button>
     </div>
     <input type="file" id="projektDateiInput" accept=".json" style="display:none;" onchange="projektDateiGewaehlt(this)">
 </div>
@@ -3649,6 +3650,17 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
     function ladeProjekt() {
         document.getElementById('projektDateiInput').click();
+    }
+
+    function downloadApp() {
+        var html = document.documentElement.outerHTML;
+        var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'Aufzug-App.html';
+        a.click();
+        URL.revokeObjectURL(url);
     }
 
     function projektDateiGewaehlt(input) {
