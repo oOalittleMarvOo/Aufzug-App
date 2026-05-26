@@ -3094,37 +3094,6 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
                 7.1 – Stimmen die Sicherungen des Antriebs mit den Querschnitten der Zuleitungen überein?
                 <button onclick="document.getElementById('modalAntriebSicherung').classList.add('aktiv')" style="background:#0057a8;color:white;border:none;border-radius:50%;width:26px;height:26px;font-size:14px;font-weight:bold;cursor:pointer;flex-shrink:0;">i</button>
             </h3>
-
-            <!-- Vergleichsrechner -->
-            <div style="background:#f4f8ff;border:1px solid #cce0ff;border-radius:10px;padding:14px;margin-bottom:14px;">
-                <p style="font-size:13px;color:#555;margin:0 0 10px 0;">🔢 Norm-Vergleich (DIN VDE 0100-430 / DIN VDE 0298-4)</p>
-                <div class="eingabe-zeile">
-                    <label>Verbaute Sicherung:</label>
-                    <select id="ant_sicherung" onchange="pruefeSicherung()" style="padding:6px 10px;border:1px solid #ccc;border-radius:6px;font-size:14px;">
-                        <option value="">– wählen –</option>
-                        <option value="10">10 A</option>
-                        <option value="16">16 A</option>
-                        <option value="25">25 A</option>
-                        <option value="32">32 A</option>
-                        <option value="40">40 A</option>
-                        <option value="63">63 A</option>
-                    </select>
-                </div>
-                <div class="eingabe-zeile" style="margin-top:8px;">
-                    <label>Verbauter Querschnitt:</label>
-                    <select id="ant_querschnitt" onchange="pruefeSicherung()" style="padding:6px 10px;border:1px solid #ccc;border-radius:6px;font-size:14px;">
-                        <option value="">– wählen –</option>
-                        <option value="1.5">1,5 mm²</option>
-                        <option value="2.5">2,5 mm²</option>
-                        <option value="4">4 mm²</option>
-                        <option value="6">6 mm²</option>
-                        <option value="10">10 mm²</option>
-                        <option value="16">16 mm²</option>
-                    </select>
-                </div>
-                <div id="ant_sicherung_ergebnis" style="display:none;margin-top:12px;padding:10px 14px;border-radius:8px;font-size:14px;font-weight:600;"></div>
-            </div>
-
             <span id="ant_1_mangel" data-mangel="false" style="display:none;"></span>
             <div class="ja-nein-gruppe">
                 <button class="ja-btn" onclick="jaNein(this,'ant_frage1','ja'); document.getElementById('ant_1_mangel').dataset.mangel='false'; aktualisiereBauteilStatus('antrieb')">✅ Ja</button>
@@ -3773,31 +3742,6 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         URL.revokeObjectURL(url);
     }
 
-    function pruefeSicherung() {
-        var sEl = document.getElementById('ant_sicherung');
-        var qEl = document.getElementById('ant_querschnitt');
-        var res = document.getElementById('ant_sicherung_ergebnis');
-        var sA = parseFloat(sEl.value);
-        var qMM = parseFloat(qEl.value);
-        if (!sEl.value || !qEl.value) { res.style.display = 'none'; return; }
-
-        /* Norm-Tabelle: Sicherung → Mindest-Querschnitt (DIN VDE 0100-430 / 0298-4) */
-        var normTabelle = { 10: 1.5, 16: 2.5, 25: 4, 32: 6, 40: 10, 63: 16 };
-        var normQ = normTabelle[sA];
-
-        res.style.display = 'block';
-        if (qMM >= normQ) {
-            res.style.background = '#e8f5e9';
-            res.style.border = '1px solid #66bb6a';
-            res.style.color = '#1b5e20';
-            res.innerHTML = '✅ i.O. – ' + sA + ' A Sicherung erfordert mind. ' + normQ.toString().replace('.', ',') + ' mm² (vorbaut: ' + qMM.toString().replace('.', ',') + ' mm²)<br><small style="font-weight:400">📋 DIN VDE 0100-430 / DIN VDE 0298-4</small>';
-        } else {
-            res.style.background = '#ffebee';
-            res.style.border = '1px solid #ef9a9a';
-            res.style.color = '#b71c1c';
-            res.innerHTML = '❌ Mangel – ' + sA + ' A Sicherung erfordert mind. ' + normQ.toString().replace('.', ',') + ' mm², verbaut: ' + qMM.toString().replace('.', ',') + ' mm²<br><small style="font-weight:400">📋 DIN VDE 0100-430 / DIN VDE 0298-4</small>';
-        }
-    }
 
     function aktualisiereSyncAnzeige() {
         var sync = localStorage.getItem('aufzugAppSync');
