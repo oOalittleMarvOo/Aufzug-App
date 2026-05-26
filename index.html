@@ -2690,7 +2690,6 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     <button class="zuruck" onclick="zeige('startseite')">← Zurück</button> <!-- Zurück zur Startseite -->
     <h2>⚡ Sicherungsberechnung</h2> <!-- Titel -->
 
-```
 <div class="frage">
     <h3>Gemessener Strom &amp; Sicherungsvergleich</h3>
 
@@ -2740,7 +2739,29 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         </div>
     </div>
 </div>
-```
+
+<div class="frage" style="margin-top:15px;">
+    <h3>Kabelquerschnitt-Vergleich (Norm-Prüfung)</h3>
+    <p style="font-size:13px;color:#555;margin-bottom:12px;">Prüft ob der verbaute Querschnitt für die eingebaute Sicherung ausreicht (DIN VDE 0100-430 / 0298-4).</p>
+    <div class="eingabe-zeile">
+        <label>Verbaute Sicherung:</label>
+        <select id="sicherung_norm_wert" onchange="pruefeSicherungNorm()" style="padding:8px;border:1px solid #ccc;border-radius:6px;font-size:15px;flex:1;">
+            <option value="">– bitte wählen –</option>
+            <option value="10">10 A</option>
+            <option value="16">16 A</option>
+            <option value="25">25 A</option>
+            <option value="32">32 A</option>
+            <option value="40">40 A</option>
+            <option value="63">63 A</option>
+        </select>
+    </div>
+    <div class="eingabe-zeile" style="margin-top:10px;">
+        <label>Kabelquerschnitt:</label>
+        <input type="number" id="kabel_querschnitt_norm" placeholder="z.B. 2.5" step="0.25" min="0" oninput="pruefeSicherungNorm()">
+        <span class="einheit">mm²</span>
+    </div>
+    <div id="sicherung_norm_ergebnis" style="display:none; padding:14px; border-radius:8px; margin-top:12px; font-weight:bold;"></div>
+</div>
 
 </div><!-- Ende sicherungSeite -->
 
@@ -4263,6 +4284,30 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             }
         });
         tabelle.style.display = 'block';
+    }
+
+    function pruefeSicherungNorm() {
+        var sEl = document.getElementById('sicherung_norm_wert');
+        var qEl = document.getElementById('kabel_querschnitt_norm');
+        var res = document.getElementById('sicherung_norm_ergebnis');
+        var sA = parseFloat(sEl.value);
+        var qMM = parseFloat(qEl.value);
+        if (!sEl.value || !qEl.value || isNaN(qMM)) { res.style.display = 'none'; return; }
+        var normTabelle = { 10: 1.5, 16: 2.5, 25: 4, 32: 6, 40: 10, 63: 16 };
+        var normQ = normTabelle[sA];
+        if (!normQ) { res.style.display = 'none'; return; }
+        res.style.display = 'block';
+        if (qMM >= normQ) {
+            res.style.background = '#e8f5e9';
+            res.style.border = '1px solid #66bb6a';
+            res.style.color = '#1b5e20';
+            res.innerHTML = '✅ i.O. – ' + sA + ' A Sicherung erfordert mind. ' + normQ.toString().replace('.', ',') + ' mm² – verbaut: ' + qMM.toString().replace('.', ',') + ' mm²<br><small style="font-weight:400">📋 DIN VDE 0100-430 / DIN VDE 0298-4</small>';
+        } else {
+            res.style.background = '#ffebee';
+            res.style.border = '1px solid #ef9a9a';
+            res.style.color = '#b71c1c';
+            res.innerHTML = '❌ Mangel – ' + sA + ' A Sicherung erfordert mind. ' + normQ.toString().replace('.', ',') + ' mm², verbaut: ' + qMM.toString().replace('.', ',') + ' mm²<br><small style="font-weight:400">📋 DIN VDE 0100-430 / DIN VDE 0298-4</small>';
+        }
     }
 
     /* ------------------------------------------
