@@ -2743,6 +2743,23 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 <div class="frage" style="margin-top:15px;">
     <h3>Kabelquerschnitt-Vergleich (Norm-Prüfung)</h3>
     <p style="font-size:13px;color:#555;margin-bottom:12px;">Prüft ob der verbaute Querschnitt für die eingebaute Sicherung ausreicht (DIN VDE 0100-430 / 0298-4).</p>
+    <table style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:14px;">
+        <thead>
+            <tr>
+                <th style="background:#0057a8;color:white;padding:8px 10px;text-align:left;">Sicherung</th>
+                <th style="background:#0057a8;color:white;padding:8px 10px;text-align:left;">Mind. Querschnitt</th>
+                <th style="background:#0057a8;color:white;padding:8px 10px;text-align:left;">Max. Kabellänge</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td style="padding:7px 10px;border-bottom:1px solid #e0e0e0;">10 A</td><td style="padding:7px 10px;border-bottom:1px solid #e0e0e0;">1,5 mm²</td><td style="padding:7px 10px;border-bottom:1px solid #e0e0e0;">ca. 20 m</td></tr>
+            <tr style="background:#f4f8ff;"><td style="padding:7px 10px;border-bottom:1px solid #e0e0e0;">16 A</td><td style="padding:7px 10px;border-bottom:1px solid #e0e0e0;">2,5 mm²</td><td style="padding:7px 10px;border-bottom:1px solid #e0e0e0;">ca. 20 m</td></tr>
+            <tr><td style="padding:7px 10px;border-bottom:1px solid #e0e0e0;">25 A</td><td style="padding:7px 10px;border-bottom:1px solid #e0e0e0;">4 mm²</td><td style="padding:7px 10px;border-bottom:1px solid #e0e0e0;">ca. 25 m</td></tr>
+            <tr style="background:#f4f8ff;"><td style="padding:7px 10px;border-bottom:1px solid #e0e0e0;">32 A</td><td style="padding:7px 10px;border-bottom:1px solid #e0e0e0;">6 mm²</td><td style="padding:7px 10px;border-bottom:1px solid #e0e0e0;">ca. 30 m</td></tr>
+            <tr><td style="padding:7px 10px;border-bottom:1px solid #e0e0e0;">40 A</td><td style="padding:7px 10px;border-bottom:1px solid #e0e0e0;">10 mm²</td><td style="padding:7px 10px;border-bottom:1px solid #e0e0e0;">ca. 35 m</td></tr>
+            <tr style="background:#f4f8ff;"><td style="padding:7px 10px;">63 A</td><td style="padding:7px 10px;">16 mm²</td><td style="padding:7px 10px;">ca. 40 m</td></tr>
+        </tbody>
+    </table>
     <div class="eingabe-zeile">
         <label>Verbaute Sicherung:</label>
         <select id="sicherung_norm_wert" onchange="pruefeSicherungNorm()" style="padding:8px;border:1px solid #ccc;border-radius:6px;font-size:15px;flex:1;">
