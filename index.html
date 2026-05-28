@@ -3004,18 +3004,20 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
         <div class="eingabe-zeile" style="margin-top:12px;">
             <label>Fahrkorbmasse (P):</label>
-            <input type="number" id="ber_fang_p" placeholder="Wert eingeben" step="1" min="0">
+            <input type="number" id="ber_fang_p" placeholder="Wert eingeben" step="1" min="0" oninput="berechneBremskraft()">
             <span class="einheit">kg</span>
         </div>
         <div class="eingabe-zeile" style="margin-top:8px;">
             <label>Nennlast (Q):</label>
-            <input type="number" id="ber_fang_q" placeholder="Wert eingeben" step="1" min="0">
+            <input type="number" id="ber_fang_q" placeholder="Wert eingeben" step="1" min="0" oninput="berechneBremskraft()">
             <span class="einheit">kg</span>
         </div>
 
         <div class="formel-container" style="margin-top:16px;">
             <span>F<sub>B</sub> = (P + Q) × 16</span>
         </div>
+
+        <div id="bremskraft_ergebnis" style="display:none; margin-top:12px; padding:14px; border-radius:8px; background:#e8f5e9; border:1px solid #66bb6a; color:#1b5e20; font-weight:bold; font-size:16px;"></div>
     </div>
 </div>
 <div id="elektro_fang" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
@@ -4415,6 +4417,16 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         document.getElementById('pq_t_b').textContent = b.toFixed(0);
         document.getElementById('pq_t_c').textContent = c.toFixed(0);
         zwEl.style.display = 'block';
+    }
+
+    function berechneBremskraft() {
+        var P = parseFloat(document.getElementById('ber_fang_p').value);
+        var Q = parseFloat(document.getElementById('ber_fang_q').value);
+        var res = document.getElementById('bremskraft_ergebnis');
+        if (isNaN(P) || isNaN(Q)) { res.style.display = 'none'; return; }
+        var fb = (P + Q) * 16;
+        res.style.display = 'block';
+        res.innerHTML = 'F<sub>B</sub> = (' + P.toFixed(0) + ' + ' + Q.toFixed(0) + ') × 16 = <strong>' + fb.toFixed(0) + ' N</strong>';
     }
 
     /* Messgerät wählen und neu berechnen */
