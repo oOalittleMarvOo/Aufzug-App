@@ -4352,15 +4352,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         document.getElementById('btn_brems_fang').classList.remove('aktiv');
         document.getElementById('btn_sperr_fang').classList.remove('aktiv');
         btn.classList.add('aktiv');
-        var p = parseFloat(document.getElementById('fahrkorbmasse_fang').value);
-        var q = parseFloat(document.getElementById('nennlast_fang').value);
-        var pqVorhanden = (!isNaN(p) && p > 0) && (!isNaN(q) && q > 0);
-        if (typ === 'sperr') {
-            document.getElementById('pq_toleranz_bereich').style.display = 'none';
-        } else if (pqVorhanden) {
-            document.getElementById('pq_toleranz_bereich').style.display = 'block';
-            berechnePQToleranz();
-        }
+        document.getElementById('pq_toleranz_bereich').style.display = (typ === 'brems') ? 'block' : 'none';
     }
 
     function berechnePQToleranz() {
