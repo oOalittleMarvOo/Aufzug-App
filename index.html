@@ -2796,7 +2796,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     <div class="tabs">
         <button class="tab aktiv" onclick="zeigeTabGeneric(this, 'pruefung_fang', 'detailFang')">📋 Prüfung vor Ort</button>
         <button class="tab" onclick="zeigeTabGeneric(this, 'dokumente_fang', 'detailFang')">📄 Dokumente</button>
-        <button class="tab" onclick="zeigeTabGeneric(this, 'berechnung_fang', 'detailFang')">🔢 Berechnung</button>
+        <button class="tab" onclick="zeigeTabGeneric(this, 'berechnung_fang', 'detailFang'); uebernehmeWerteFang()">🔢 Berechnung</button>
         <button class="tab" onclick="zeigeTabGeneric(this, 'elektro_fang', 'detailFang')">⚡ Elektro</button>
     </div>
     <div id="pruefung_fang" class="tab-inhalt aktiv">
@@ -2989,6 +2989,16 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 <div id="berechnung_fang" class="tab-inhalt">
     <div class="frage">
         <h3>Berechnung der zulässigen Masse</h3>
+        <div class="eingabe-zeile" style="margin-top:12px;">
+            <label>Fahrkorbmasse (P):</label>
+            <input type="number" id="ber_fang_p" placeholder="Wert eingeben" step="1" min="0">
+            <span class="einheit">kg</span>
+        </div>
+        <div class="eingabe-zeile" style="margin-top:8px;">
+            <label>Nennlast (Q):</label>
+            <input type="number" id="ber_fang_q" placeholder="Wert eingeben" step="1" min="0">
+            <span class="einheit">kg</span>
+        </div>
     </div>
 </div>
 <div id="elektro_fang" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
@@ -4361,6 +4371,13 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     /* Sicherungsberechnung für eigenständige Sicherungs-Seite */
 
     let messgeraet_s = 'dinvde'; /* Standard: DIN VDE = 30% Abzug */
+
+    function uebernehmeWerteFang() {
+        var p = document.getElementById('fahrkorbmasse_fang').value;
+        var q = document.getElementById('nennlast_fang').value;
+        if (p) document.getElementById('ber_fang_p').value = p;
+        if (q) document.getElementById('ber_fang_q').value = q;
+    }
 
     function waehleFangtyp(btn, typ) {
         document.getElementById('btn_brems_fang').classList.remove('aktiv');
