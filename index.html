@@ -4153,6 +4153,41 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
        PRÜFLAST BERECHNUNG (3.1.1)
        Prüflast = Nennlast × 1,25
     ------------------------------------------ */
+    function berechnePQ() {
+        var P   = parseFloat(document.getElementById('fang_fahrkorbmasse').value);
+        var Q   = parseFloat(document.getElementById('fang_nennlast_pq').value);
+        var PQ3 = parseFloat(document.getElementById('fang_eingestellt_pq').value);
+        var abw = parseFloat(document.getElementById('fang_abweichung_pq').value);
+        var zwEl  = document.getElementById('pq_zwischenwerte');
+        var resEl = document.getElementById('pq_ergebnis');
+
+        if (isNaN(P) || isNaN(Q)) { zwEl.style.display = 'none'; resEl.style.display = 'none'; return; }
+        var PQberechnet = P + Q;
+        document.getElementById('pq_berechnet').textContent = PQberechnet.toFixed(0);
+        zwEl.style.display = 'block';
+
+        if (isNaN(PQ3) || isNaN(abw)) { resEl.style.display = 'none'; return; }
+        var a = PQ3 * (abw / 100);
+        var b = PQ3 - a;
+        var c = PQ3 + a;
+        resEl.style.display = 'block';
+        if (PQberechnet >= b && PQberechnet <= c) {
+            resEl.style.background = '#e8f5e9';
+            resEl.style.border = '1px solid #66bb6a';
+            resEl.style.color = '#1b5e20';
+            resEl.innerHTML = '✅ i.O. – P+Q (' + PQberechnet.toFixed(0) + ' kg) liegt im Toleranzbereich ['
+                + b.toFixed(0) + ' – ' + c.toFixed(0) + ' kg]'
+                + '<br><small style="font-weight:400">Eingestellt: ' + PQ3.toFixed(0) + ' kg ± ' + abw + ' % (a = ' + a.toFixed(0) + ' kg)</small>';
+        } else {
+            resEl.style.background = '#ffebee';
+            resEl.style.border = '1px solid #ef9a9a';
+            resEl.style.color = '#b71c1c';
+            resEl.innerHTML = '❌ Abweichung – P+Q (' + PQberechnet.toFixed(0) + ' kg) außerhalb ['
+                + b.toFixed(0) + ' – ' + c.toFixed(0) + ' kg]'
+                + '<br><small style="font-weight:400">Eingestellt: ' + PQ3.toFixed(0) + ' kg ± ' + abw + ' % (a = ' + a.toFixed(0) + ' kg)</small>';
+        }
+    }
+
     function berechnePrueflast() {
         const nennlast = parseFloat(document.getElementById('nennlast_fang').value);
         const bereich  = document.getElementById('pruef_ergebnis');
