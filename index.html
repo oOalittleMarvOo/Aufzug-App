@@ -2964,6 +2964,25 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         </div>
     </div>
 
+    <!-- FRAGE 4.6 – Schiene passt zur Fangvorrichtung? -->
+    <div class="frage" id="fang_frage4_6">
+        <h3>4.6 – Passt die Schiene zur Fangvorrichtung?</h3>
+        <p style="color:#555;font-size:14px;margin-bottom:10px;">(Gezogen / bearbeitet / trocken / geölt)</p>
+        <div class="antwort-gruppe">
+            <button class="antwort-btn passt" onclick="antwort(this,'fang_frage4_6')">🟢 i.O.</button>
+            <button class="antwort-btn passt-nicht" onclick="antwort(this,'fang_frage4_6')">🔴 Mangel</button>
+            <button class="antwort-btn irrelevant" onclick="antwort(this,'fang_frage4_6')">⚪ Trifft nicht zu</button>
+        </div>
+        <div class="mangelfeld" id="mangel-fang_frage4_6">
+            <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+            <label>Bitte Mangel beschreiben:</label>
+            <textarea placeholder="Beschreibung des Mangels..."></textarea>
+        </div>
+        <div class="mangelfeld" id="trifft-fang_frage4_6" style="background:#f0f0f0;border-color:#999;">
+            <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
+            <textarea placeholder="Begründung oder Kommentar..."></textarea>
+        </div>
+    </div>
 
 </div>
 <div id="dokumente_fang" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
