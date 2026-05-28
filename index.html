@@ -2801,57 +2801,6 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     </div>
     <div id="pruefung_fang" class="tab-inhalt aktiv">
 
-    <!-- P+Q EINSTELLUNG PRÜFEN -->
-    <div class="frage" id="frage_pq_einstellung">
-        <h3>– P+Q Einstellung prüfen</h3>
-
-        <div class="eingabe-zeile">
-            <label>1 – Fahrkorbmasse:</label>
-            <input type="number" id="fang_fahrkorbmasse" placeholder="Wert eingeben" step="1" min="0" oninput="berechnePQ()">
-            <span class="einheit">kg</span>
-        </div>
-        <div class="eingabe-zeile" style="margin-top:8px;">
-            <label>2 – Nennlast:</label>
-            <input type="number" id="fang_nennlast_pq" placeholder="Wert eingeben" step="1" min="0" oninput="berechnePQ()">
-            <span class="einheit">kg</span>
-        </div>
-        <div class="eingabe-zeile" style="margin-top:8px;">
-            <label>3 – Eingestelltes P+Q:</label>
-            <input type="number" id="fang_eingestellt_pq" placeholder="Wert eingeben" step="1" min="0" oninput="berechnePQ()">
-            <span class="einheit">kg</span>
-        </div>
-
-        <div id="pq_zwischenwerte" style="display:none; margin-top:12px; padding:12px; background:#f4f8ff; border-radius:8px; border:1px solid #90caf9; font-size:14px;">
-            <div class="zwischenwert">
-                <label>Berechnetes P+Q (1+2) =</label>
-                <span id="pq_berechnet" style="font-weight:bold;color:#0057a8;">–</span> kg
-            </div>
-        </div>
-
-        <div class="eingabe-zeile" style="margin-top:12px;">
-            <label>3.1.1 – Zulässige Abweichung:</label>
-            <input type="number" id="fang_abweichung_pq" placeholder="z.B. 5" step="0.1" min="0" max="100" oninput="berechnePQ()">
-            <span class="einheit">%</span>
-        </div>
-
-        <div id="pq_ergebnis" style="display:none; margin-top:12px; padding:14px; border-radius:8px; font-weight:bold;"></div>
-
-        <div class="antwort-gruppe" style="margin-top:15px;">
-            <button class="antwort-btn passt" onclick="antwort(this, 'frage_pq_einstellung')">🟢 i.O.</button>
-            <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage_pq_einstellung')">🔴 Mangel</button>
-            <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage_pq_einstellung')">⚪ Trifft nicht zu</button>
-        </div>
-        <div class="mangelfeld" id="mangel-frage_pq_einstellung">
-            <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
-            <label>Bitte Mangel beschreiben:</label>
-            <textarea placeholder="Beschreibung des Mangels..."></textarea>
-        </div>
-        <div class="mangelfeld" id="trifft-frage_pq_einstellung" style="background:#f0f0f0;border-color:#999;">
-            <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
-            <textarea placeholder="Begründung oder Kommentar..."></textarea>
-        </div>
-    </div>
-
     <!-- FRAGE 3.1.1 – Fangprobe mit 125% Last -->
     <div class="frage" id="frage3_1_1">
         <h3>3.1.1 – Wurde die Fangprobe mit 125 % der Nennlast durchgeführt?</h3>
@@ -2966,25 +2915,6 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         </div>
     </div>
 
-    <!-- FRAGE 4 – Fangvorrichtung für Führungsschienen zugelassen -->
-    <div class="frage" id="frage_fang_schienen">
-        <h3>4 – Ist die Fangvorrichtung für die verwendeten Führungsschienen zugelassen?</h3>
-        <div class="hinweis">ℹ️ Z.B. bearbeitete und geölte Schienen – Zulassung laut Typenschild prüfen.</div>
-        <div class="antwort-gruppe">
-            <button class="antwort-btn passt" onclick="antwort(this, 'frage_fang_schienen')">🟢 i.O.</button>
-            <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage_fang_schienen')">🔴 Mangel</button>
-            <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage_fang_schienen')">⚪ Trifft nicht zu</button>
-        </div>
-        <div class="mangelfeld" id="mangel-frage_fang_schienen">
-            <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
-            <label>Bitte Mangel beschreiben:</label>
-            <textarea placeholder="Beschreibung des Mangels..."></textarea>
-        </div>
-        <div class="mangelfeld" id="trifft-frage_fang_schienen" style="background:#f0f0f0;border-color:#999;">
-            <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
-            <textarea placeholder="Begründung oder Kommentar..."></textarea>
-        </div>
-    </div>
 
 </div>
 <div id="dokumente_fang" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
