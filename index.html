@@ -2801,6 +2801,16 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     </div>
     <div id="pruefung_fang" class="tab-inhalt aktiv">
 
+    <!-- ART DER FANGVORRICHTUNG -->
+    <div class="frage">
+        <h3>Art der Fangvorrichtung</h3>
+        <div class="auswahl-gruppe">
+            <button class="auswahl-btn" id="btn_brems_fang" onclick="waehleFangtyp(this,'brems')">🛑 Bremsfangvorrichtung</button>
+            <button class="auswahl-btn" id="btn_sperr_fang" onclick="waehleFangtyp(this,'sperr')">🔒 Sperrfangvorrichtung</button>
+        </div>
+    </div>
+
+
     <!-- FRAGE 3.1.1 – Fangprobe mit 125% Last -->
     <div class="frage" id="frage3_1_1">
         <h3>3.1.1 – Wurde die Fangprobe mit 125 % der Nennlast durchgeführt?</h3>
@@ -4293,6 +4303,12 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     /* Sicherungsberechnung für eigenständige Sicherungs-Seite */
 
     let messgeraet_s = 'dinvde'; /* Standard: DIN VDE = 30% Abzug */
+
+    function waehleFangtyp(btn, typ) {
+        document.getElementById('btn_brems_fang').classList.remove('aktiv');
+        document.getElementById('btn_sperr_fang').classList.remove('aktiv');
+        btn.classList.add('aktiv');
+    }
 
     /* Messgerät wählen und neu berechnen */
     function waehleMessgeraet(btn, geraet) {
