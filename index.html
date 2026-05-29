@@ -2925,8 +2925,15 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             <input type="number" id="v_fang" placeholder="Wert eingeben" step="0.01" min="0" oninput="berechneVerzögerung()">
             <span class="einheit">m/s</span>
         </div>
-        <div class="eingabe-zeile">
-            <label>Fanglänge s:</label>
+
+        <!-- Zulässiger Bremsweg (nur v nötig) -->
+        <div id="s_bereich_ergebnis" style="display:none; margin-top:10px; padding:12px; background:#f4f8ff; border-radius:8px; border:1px solid #90caf9; font-size:14px;">
+            <div class="zwischenwert"><label>s_min (a = 1 g) =</label> <span id="s_min_wert" style="font-weight:bold;color:#0057a8;">–</span> mm</div>
+            <div class="zwischenwert"><label>s_max (a = 0,2 g) =</label> <span id="s_max_wert" style="font-weight:bold;color:#0057a8;">–</span> mm</div>
+        </div>
+
+        <div class="eingabe-zeile" style="margin-top:10px;">
+            <label>Fanglänge s (gemessen):</label>
             <input type="number" id="s_fang" placeholder="Wert eingeben" step="1" min="0" oninput="berechneVerzögerung()">
             <span class="einheit">mm</span>
         </div>
@@ -4272,6 +4279,18 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         const v = parseFloat(document.getElementById('v_fang').value);
         const s_mm = parseFloat(document.getElementById('s_fang').value);
         const bereich = document.getElementById('verzögerung_ergebnis');
+        const sBereich = document.getElementById('s_bereich_ergebnis');
+
+        /* s_min und s_max sobald v bekannt */
+        if (!isNaN(v) && v > 0) {
+            const s_min = (v * v) / (2 * 9.81) * 1000;
+            const s_max = (v * v) / (2 * 1.962) * 1000;
+            document.getElementById('s_min_wert').innerText = s_min.toFixed(0);
+            document.getElementById('s_max_wert').innerText = s_max.toFixed(0);
+            sBereich.style.display = 'block';
+        } else {
+            sBereich.style.display = 'none';
+        }
 
         if (isNaN(v) || v <= 0 || isNaN(s_mm) || s_mm <= 0) {
             bereich.style.display = 'none';
