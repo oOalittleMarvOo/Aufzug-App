@@ -3017,6 +3017,26 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         </div>
     </div>
 
+    <!-- FRAGE – Steuerung separat zurücksetzen -->
+    <div class="frage" id="frage_steuerung_reset">
+        <h3>Muss die Steuerung separat zurückgesetzt werden?</h3>
+        <div class="hinweis">📋 DIN EN 81-20 5.6.2.1.4.3</div>
+        <div class="antwort-gruppe">
+            <button class="antwort-btn passt" onclick="antwort(this, 'frage_steuerung_reset')">🟢 i.O.</button>
+            <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage_steuerung_reset')">🔴 Mangel</button>
+            <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage_steuerung_reset')">⚪ Trifft nicht zu</button>
+        </div>
+        <div class="mangelfeld" id="mangel-frage_steuerung_reset">
+            <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+            <label>Bitte Mangel beschreiben:</label>
+            <textarea placeholder="Beschreibung des Mangels..."></textarea>
+        </div>
+        <div class="mangelfeld" id="trifft-frage_steuerung_reset" style="background:#f0f0f0;border-color:#999;">
+            <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
+            <textarea placeholder="Begründung oder Kommentar..."></textarea>
+        </div>
+    </div>
+
     <!-- FRAGE 3.1.3 – Typenschild korrekt -->
     <div class="frage" id="frage3_1_3">
         <h3>Ist das Typenschild vorhanden und korrekt?</h3>
