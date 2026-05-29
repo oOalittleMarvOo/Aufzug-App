@@ -3769,6 +3769,24 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         });
         document.getElementById('anlagendatenBar').style.display = hatDaten ? 'flex' : 'none';
 
+        /* Bauteil-Felder vorausfüllen */
+        function setFeld(id, val, fn) {
+            var el = document.getElementById(id);
+            if (el && val) { el.value = val; if (fn) fn(); }
+        }
+        var v  = aktuelleAnlagendaten.geschwindigkeit;
+        var p  = aktuelleAnlagendaten.fk_masse;
+        var q  = aktuelleAnlagendaten.nennlast;
+        setFeld('v_fang',             v, berechneVerzögerung);
+        setFeld('geschwindigkeit',     v, berechneAlles);
+        setFeld('schutzraum_v',        v, berechneSchutzraum);
+        setFeld('fahrkorbmasse_fang',  p, berechnePrueflast);
+        setFeld('fang_fahrkorbmasse_t',p, berechnePQToleranz);
+        setFeld('ber_fang_p',          p, berechneBremskraft);
+        setFeld('nennlast_fang',       q, berechnePrueflast);
+        setFeld('fang_nennlast_t',     q, berechnePQToleranz);
+        setFeld('ber_fang_q',          q, berechneBremskraft);
+
         document.getElementById('modalSeriennummer').classList.remove('aktiv');
         oeffneBauteilModal();
     }
