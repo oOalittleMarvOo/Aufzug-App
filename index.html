@@ -1372,6 +1372,37 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         <p style="color:#666;margin-bottom:15px;font-size:14px;">Bitte geben Sie die Seriennummer der Anlage ein.</p>
         <!-- Texteingabe für die Seriennummer -->
         <input type="text" id="seriennummerInput" placeholder="z.B. AZ-2024-00123">
+
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px;text-align:left;">
+            <div style="display:flex;align-items:center;gap:10px;">
+                <label style="width:120px;font-size:14px;color:#555;">Nennlast (Q):</label>
+                <input type="number" id="anlage_nennlast" placeholder="kg" style="flex:1;padding:7px;border:1px solid #ccc;border-radius:6px;font-size:14px;">
+                <span style="font-size:13px;color:#777;">kg</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;">
+                <label style="width:120px;font-size:14px;color:#555;">FK-Masse (P):</label>
+                <input type="number" id="anlage_fk_masse" placeholder="kg" style="flex:1;padding:7px;border:1px solid #ccc;border-radius:6px;font-size:14px;">
+                <span style="font-size:13px;color:#777;">kg</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;">
+                <label style="width:120px;font-size:14px;color:#555;">GG-Masse:</label>
+                <input type="number" id="anlage_gg_masse" placeholder="kg" style="flex:1;padding:7px;border:1px solid #ccc;border-radius:6px;font-size:14px;">
+                <span style="font-size:13px;color:#777;">kg</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;">
+                <label style="width:120px;font-size:14px;color:#555;">Geschwindigkeit:</label>
+                <input type="number" id="anlage_geschwindigkeit" placeholder="m/s" step="0.01" style="flex:1;padding:7px;border:1px solid #ccc;border-radius:6px;font-size:14px;">
+                <span style="font-size:13px;color:#777;">m/s</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;">
+                <label style="width:120px;font-size:14px;color:#555;">Schienentyp:</label>
+                <input type="text" id="anlage_schienentyp" placeholder="z.B. T 89/B" style="flex:1;padding:7px;border:1px solid #ccc;border-radius:6px;font-size:14px;">
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;">
+                <label style="width:120px;font-size:14px;color:#555;">Tragmittel:</label>
+                <input type="text" id="anlage_tragmittel" placeholder="z.B. 3×8mm Stahl" style="flex:1;padding:7px;border:1px solid #ccc;border-radius:6px;font-size:14px;">
+            </div>
+        </div>
         <div class="modal-buttons">
             <button class="modal-btn-skip" onclick="document.getElementById('modalSeriennummer').classList.remove('aktiv')">← Abbrechen</button>
             <button class="modal-btn-ok" onclick="speichereSeriennummer()">✅ Weiter</button>
@@ -1683,12 +1714,17 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
 <div class="seriennummer-bar" id="seriennummerBar" style="display:none;">
     <span>📋 Projekt:</span>
-    <!-- Hier wird die Seriennummer per JavaScript eingetragen -->
     <span id="seriennummerAnzeige">–</span>
-    <!-- Bearbeiten-Link öffnet das Modal erneut -->
     <button class="seriennummer-edit" onclick="oeffneModal()">✏️ ändern</button>
-    <!-- Bauteile-Auswahl jederzeit änderbar -->
     <button class="seriennummer-edit" id="btnBauteileAendern" onclick="oeffneBauteilModal()" style="display:none;">🔧 Bauteile ✏️ ändern</button>
+</div>
+<div id="anlagendatenBar" style="display:none; flex-wrap:wrap; gap:8px 16px; padding:8px 16px; background:#f4f8ff; border-bottom:1px solid #d0e4f7; font-size:13px; color:#0057a8;">
+    <span>Q: <strong id="ad_nennlast">–</strong> kg</span>
+    <span>P: <strong id="ad_fk_masse">–</strong> kg</span>
+    <span>GG: <strong id="ad_gg_masse">–</strong> kg</span>
+    <span>v: <strong id="ad_geschwindigkeit">–</strong> m/s</span>
+    <span>Schiene: <strong id="ad_schienentyp">–</strong></span>
+    <span>Tragmittel: <strong id="ad_tragmittel">–</strong></span>
 </div>
 
 <!-- ==========================================
@@ -3711,12 +3747,23 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
     /* Seriennummer speichern – öffnet danach Bauteil-Auswahl Modal */
     function speichereSeriennummer() {
-        const eingabe = document.getElementById('seriennummerInput').value.trim(); /* Eingabe auslesen */
-        aktuelleSeriennummer = eingabe || '–'; /* Leer → Strich */
-        document.getElementById('seriennummerAnzeige').innerText = aktuelleSeriennummer; /* In Leiste anzeigen */
-        document.getElementById('seriennummerBar').style.display = 'flex'; /* Leiste einblenden */
-        document.getElementById('modalSeriennummer').classList.remove('aktiv'); /* SN-Modal schließen */
-        oeffneBauteilModal(); /* Bauteil-Auswahl öffnen */
+        const eingabe = document.getElementById('seriennummerInput').value.trim();
+        aktuelleSeriennummer = eingabe || '–';
+        document.getElementById('seriennummerAnzeige').innerText = aktuelleSeriennummer;
+        document.getElementById('seriennummerBar').style.display = 'flex';
+
+        /* Anlagendaten speichern und anzeigen */
+        var felder = ['nennlast','fk_masse','gg_masse','geschwindigkeit','schienentyp','tragmittel'];
+        var hatDaten = false;
+        felder.forEach(function(f) {
+            var val = document.getElementById('anlage_' + f).value.trim();
+            var el = document.getElementById('ad_' + f);
+            if (el) { el.textContent = val || '–'; if (val) hatDaten = true; }
+        });
+        document.getElementById('anlagendatenBar').style.display = hatDaten ? 'flex' : 'none';
+
+        document.getElementById('modalSeriennummer').classList.remove('aktiv');
+        oeffneBauteilModal();
     }
 
     /* Checkbox im Modal: Gruppen-Buttons ein-/ausblenden */
