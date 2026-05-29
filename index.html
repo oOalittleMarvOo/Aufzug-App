@@ -2801,9 +2801,18 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     </div>
     <div id="pruefung_fang" class="tab-inhalt aktiv">
 
+    <!-- ANTRIEBSART -->
+    <div class="frage">
+        <h3>3.1 – Antriebsart</h3>
+        <div class="auswahl-gruppe">
+            <button class="auswahl-btn" id="btn_treibscheibe" onclick="waehleAntriebsart(this,'treibscheibe')">⚙️ Treibscheibe</button>
+            <button class="auswahl-btn" id="btn_hydraulik" onclick="waehleAntriebsart(this,'hydraulik')">💧 Hydraulik</button>
+        </div>
+    </div>
+
     <!-- ART DER FANGVORRICHTUNG -->
     <div class="frage">
-        <h3>– Art der Fangvorrichtung</h3>
+        <h3>3.2 – Art der Fangvorrichtung</h3>
         <div class="auswahl-gruppe">
             <button class="auswahl-btn" id="btn_brems_fang" onclick="waehleFangtyp(this,'brems')">🛑 Bremsfangvorrichtung</button>
             <button class="auswahl-btn" id="btn_sperr_fang" onclick="waehleFangtyp(this,'sperr')">🔒 Sperrfangvorrichtung</button>
@@ -2812,7 +2821,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
     <!-- P+Q TOLERANZPRÜFUNG – nur bei Bremsfangvorrichtung -->
     <div class="frage" id="pq_toleranz_bereich" style="display:none;">
-        <h3>– P+Q Einstellung prüfen <span style="font-size:13px;color:#0057a8;font-weight:normal;">(±7,5 % Toleranz)</span></h3>
+        <h3>3.2.1 – P+Q Einstellung prüfen <span style="font-size:13px;color:#0057a8;font-weight:normal;">(±7,5 % Toleranz)</span></h3>
         <div class="hinweis">📋 DIN EN 81-50, 5.3.4 a)</div>
 
         <div class="eingabe-zeile">
@@ -2844,7 +2853,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
     <!-- FRAGE 3.1.1 – Fangprobe mit 125% Last -->
     <div class="frage" id="frage3_1_1">
-        <h3>3.1.1 – Wurde die Fangprobe mit 125 % der Nennlast durchgeführt?</h3>
+        <h3>3.3 – Wurde die Fangprobe mit 125 % der Nennlast durchgeführt?</h3>
         <div class="hinweis">ℹ️ Die Verzögerung beim Auslösen der Fangvorrichtung sollte zwischen 0,2g und 1g liegen.</div>
 
         <!-- Eingabe Fahrkorbmasse + Nennlast + automatische Berechnung -->
@@ -2922,7 +2931,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
     <!-- FRAGE 3.1.2 – Fangvorrichtung setzt sich zurück -->
     <div class="frage" id="frage3_1_2">
-        <h3>3.1.2 – Setzt sich die Fangvorrichtung nach dem Herausfahren aus der Fang selbstständig zurück?</h3>
+        <h3>3.4 – Setzt sich die Fangvorrichtung nach dem Herausfahren aus der Fang selbstständig zurück?</h3>
         <div class="antwort-gruppe">
             <button class="antwort-btn passt" onclick="antwort(this, 'frage3_1_2')">🟢 i.O.</button>
             <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage3_1_2')">🔴 Mangel</button>
@@ -2941,7 +2950,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
     <!-- FRAGE 3.1.3 – Typenschild korrekt -->
     <div class="frage" id="frage3_1_3">
-        <h3>3.1.3 – Ist das Typenschild vorhanden und korrekt?</h3>
+        <h3>3.5 – Ist das Typenschild vorhanden und korrekt?</h3>
         <div class="hinweis">📋 DIN EN 81-20 5.6.2.1.1.3</div>
         <div class="hinweis">
             ℹ️ Folgende Angaben müssen auf dem Typenschild angebracht sein:<br><br>
@@ -2966,9 +2975,9 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         </div>
     </div>
 
-    <!-- FRAGE 4.6 – Schiene passt zur Fangvorrichtung? -->
+    <!-- FRAGE 3.6 – Schiene passt zur Fangvorrichtung? -->
     <div class="frage" id="fang_frage4_6">
-        <h3>4.6 – Passt die Schiene zur Fangvorrichtung?</h3>
+        <h3>3.6 – Passt die Schiene zur Fangvorrichtung?</h3>
         <p style="color:#555;font-size:14px;margin-bottom:10px;">(Gezogen / bearbeitet / trocken / geölt)</p>
         <div class="antwort-gruppe">
             <button class="antwort-btn passt" onclick="antwort(this,'fang_frage4_6')">🟢 i.O.</button>
@@ -4398,6 +4407,12 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         var q = document.getElementById('nennlast_fang').value;
         if (p) document.getElementById('ber_fang_p').value = p;
         if (q) document.getElementById('ber_fang_q').value = q;
+    }
+
+    function waehleAntriebsart(btn, typ) {
+        document.getElementById('btn_treibscheibe').classList.remove('aktiv');
+        document.getElementById('btn_hydraulik').classList.remove('aktiv');
+        btn.classList.add('aktiv');
     }
 
     function waehleFangtyp(btn, typ) {
