@@ -2856,7 +2856,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         <h3>Art der Fangvorrichtung</h3>
         <div class="auswahl-gruppe">
             <button class="auswahl-btn" id="btn_brems_fang" onclick="waehleFangtyp(this,'brems')">🛑 Bremsfangvorrichtung</button>
-            <button class="auswahl-btn" id="btn_sperr_fang" onclick="waehleFangtyp(this,'sperr')">🔒 Sperrfangvorrichtung<span id="sperr_max_hinweis" style="display:none; font-size:12px; font-weight:normal;"><br>bis max. 0,63 m/s</span></button>
+            <button class="auswahl-btn" id="btn_sperr_fang" onclick="waehleFangtyp(this,'sperr')">🔒 Sperrfangvorrichtung<span id="sperr_max_hinweis" style="display:none; font-size:12px; font-weight:normal;"><br><span id="sperr_max_text"></span></span></button>
         </div>
     </div>
 
@@ -4472,7 +4472,17 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         document.getElementById('btn_treibscheibe').classList.remove('aktiv');
         document.getElementById('btn_hydraulik').classList.remove('aktiv');
         btn.classList.add('aktiv');
-        document.getElementById('sperr_max_hinweis').style.display = (typ === 'treibscheibe') ? 'block' : 'none';
+        var hinweis = document.getElementById('sperr_max_hinweis');
+        var text = document.getElementById('sperr_max_text');
+        if (typ === 'treibscheibe') {
+            text.innerText = 'bis max. 0,63 m/s';
+            hinweis.style.display = 'block';
+        } else if (typ === 'hydraulik') {
+            text.innerText = 'Rollensperrfang ohne Geschwindigkeitsbegrenzer bis zu 0,8 m/s';
+            hinweis.style.display = 'block';
+        } else {
+            hinweis.style.display = 'none';
+        }
     }
 
     function waehleFangtyp(btn, typ) {
