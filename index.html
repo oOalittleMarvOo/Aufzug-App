@@ -977,6 +977,24 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     }
 
     /* Automatische Nummerierung per CSS-Counter */
+    #pruefung { counter-reset: seil-counter; }
+    #pruefung > .frage > h3::before {
+        counter-increment: seil-counter;
+        content: "1.1." counter(seil-counter) " \2013  ";
+    }
+
+    #pruefung_begrenzer { counter-reset: begrenzer-counter; }
+    #pruefung_begrenzer > .frage > h3::before {
+        counter-increment: begrenzer-counter;
+        content: "2.1." counter(begrenzer-counter) " \2013  ";
+    }
+
+    #elektro_begrenzer { counter-reset: elektrobegrenzer-counter; }
+    #elektro_begrenzer > .frage > h3::before {
+        counter-increment: elektrobegrenzer-counter;
+        content: "2.3." counter(elektrobegrenzer-counter) " \2013  ";
+    }
+
     #pruefung_fang { counter-reset: fang-counter; }
     #pruefung_fang > .frage:not(#pq_toleranz_bereich) > h3::before {
         counter-increment: fang-counter;
@@ -984,6 +1002,24 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     }
     #pq_toleranz_bereich > h3::before {
         content: "3.2.1 \2013  ";
+    }
+
+    #pruefung_schienen { counter-reset: schienen-counter; }
+    #pruefung_schienen > .frage > h3::before {
+        counter-increment: schienen-counter;
+        content: "4." counter(schienen-counter) " \2013  ";
+    }
+
+    #pruefung_antrieb { counter-reset: antrieb-counter; }
+    #pruefung_antrieb > .frage > h3::before {
+        counter-increment: antrieb-counter;
+        content: "7." counter(antrieb-counter) " \2013  ";
+    }
+
+    #detailSchutzraum > div { counter-reset: schutzraum-counter; }
+    #detailSchutzraum > div > .frage > h3::before {
+        counter-increment: schutzraum-counter;
+        content: "13.1." counter(schutzraum-counter) " \2013  ";
     }
 
     /* ==========================================
@@ -1294,7 +1330,6 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     }
 
 </style>
-```
 
 </head>
 <body>
@@ -1777,7 +1812,6 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     <button class="zuruck" onclick="zeige('bauteilSeite')">← Zurück</button>
     <h2 id="bauteilTitel"></h2>
 
-```
 <!-- TAB-LEISTE: Drei Tabs, erster Tab standardmäßig aktiv -->
 <div class="tabs">
     <button class="tab aktiv" onclick="zeigeTab(this, 'pruefung')">📋 Prüfung vor Ort</button>
@@ -1794,7 +1828,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
     <!-- FRAGE 1.1.2 – Mindestbruchkraft = 8-fache Zugkraft? (Passt/Mangel/Trifft nicht zu) -->
     <div class="frage" id="frage1_2">
-        <h3>1.1.2 – Beträgt die Mindestbruchkraft das Achtfache der Zugkraft der Fangvorrichtung?</h3>
+        <h3>Beträgt die Mindestbruchkraft das Achtfache der Zugkraft der Fangvorrichtung?</h3>
         <div class="antwort-gruppe">
             <button class="antwort-btn passt" onclick="antwort(this, 'frage1_2')">🟢 i.O.</button>
             <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage1_2')">🔴 Mangel</button>
@@ -1816,7 +1850,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
     <!-- FRAGE 1.1.3 – Seildurchmesser messen (Messwert-Eingabe in mm) -->
     <div class="frage" id="frage1_3">
-        <h3>1.1.3 – Durchmesser mit dem Messschieber erfassen:</h3>
+        <h3>Durchmesser mit dem Messschieber erfassen:</h3>
         <div class="messwert-gruppe">
             <!-- Zahl-Eingabefeld mit 0.01mm Schrittweite -->
             <input type="number" id="messwert1_3" placeholder="Wert eingeben" step="0.01" min="0" oninput="pruefeVerhaeltnis()"> <!-- Startet Verhältnisprüfung sofort -->
@@ -1830,7 +1864,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
     <!-- FRAGE 1.1.4 – Seilklemmen (Frosch) fest? (Passt/Mangel/Trifft nicht zu) -->
     <div class="frage" id="frage1_4">
-        <h3>1.1.4 – Sind die Schrauben fest wenn Seilklemmen (Frosch) verwendet wurden?</h3>
+        <h3>Sind die Schrauben fest wenn Seilklemmen (Frosch) verwendet wurden?</h3>
         <div class="antwort-gruppe">
             <button class="antwort-btn passt" onclick="antwort(this, 'frage1_4')">🟢 i.O.</button>
             <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage1_4')">🔴 Mangel</button>
@@ -2336,7 +2370,6 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 <div class="pdf-bereich">
     <button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button>
 </div>
-```
 
 </div><!-- Ende detailSeil -->
 
@@ -2350,7 +2383,6 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     <button class="zuruck" onclick="zeige('bauteilSeite')">← Zurück</button> <!-- Grauer Zurück-Button -->
     <h2 id="bauteilTitelBegrenzer"></h2> <!-- Titel: wird per JavaScript befüllt -->
 
-```
 <!-- TAB-LEISTE: Vier Tabs – erster Tab standardmäßig aktiv -->
 <div class="tabs">
     <button class="tab aktiv" onclick="zeigeTabBegrenzer(this, 'pruefung_begrenzer')">📋 Prüfung vor Ort</button> <!-- Tab 1 aktiv -->
@@ -2367,7 +2399,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     <!-- FRAGE 2.1.1 – Rollendurchmesser des GB messen
          Wird mit 1.1.3 (Seildurchmesser) verglichen: Verhältnis muss ≥ 1:30 sein -->
     <div class="frage" id="frage2_1_1">
-        <h3>2.1.1 – Rollendurchmesser des Geschwindigkeitsbegrenzers erfassen:</h3> <!-- Fragetitel -->
+        <h3>Rollendurchmesser des Geschwindigkeitsbegrenzers erfassen:</h3> <!-- Fragetitel -->
         <div class="hinweis">ℹ️ DIN 81:20 5.6.2.2.1.3 c) – Verhältnis Rollendurchmesser zu Seildurchmesser muss mindestens 1:30 betragen</div> <!-- Norm-Hinweis -->
         <!-- Eingabefeld Rollendurchmesser -->
         <div class="messwert-gruppe">
@@ -2404,7 +2436,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
     <!-- FRAGE 2.1.2 – Zugänglichkeit des Geschwindigkeitsbegrenzers -->
     <div class="frage" id="frage2_1_2">
-        <h3>2.1.2 – Der Zugang zum Geschwindigkeitsbegrenzer muss zur Prüfung und Wartung zugänglich sein. Befindet er sich im Schacht, muss er von außen zugänglich sein (Wartungsklappe).</h3> <!-- Fragetitel -->
+        <h3>Der Zugang zum Geschwindigkeitsbegrenzer muss zur Prüfung und Wartung zugänglich sein. Befindet er sich im Schacht, muss er von außen zugänglich sein (Wartungsklappe).</h3> <!-- Fragetitel -->
         <!-- Blauer Hinweiskasten mit Ausnahme-Regelung -->
         <div class="hinweis">ℹ️ Ausnahme bei Fernauslösung: Kabellose Fernauslösungen sind nicht zulässig. Der Geschwindigkeitsbegrenzer ist von der Grube oder vom Fahrkorbdach erreichbar. Der Geschwindigkeitsbegrenzer setzt sich selbstständig zurück nach der Aufwärtsfahrt.<br><br>📋 DIN 81:20 5.6.2.2.1.4</div> <!-- Norm-Hinweis -->
         <!-- Antwort-Buttons: Passt / Mangel / Trifft nicht zu -->
@@ -2428,7 +2460,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
     <!-- FRAGE 2.1.3 – Verplombung bei einstellbarem Geschwindigkeitsbegrenzer -->
     <div class="frage" id="frage2_1_3">
-        <h3>2.1.3 – Wenn der Geschwindigkeitsbegrenzer einstellbar ist, muss dieser verplombt sein.</h3> <!-- Fragetitel -->
+        <h3>Wenn der Geschwindigkeitsbegrenzer einstellbar ist, muss dieser verplombt sein.</h3> <!-- Fragetitel -->
         <div class="hinweis">ℹ️ DIN 81:20 5.6.2.2.1.5</div> <!-- Norm-Hinweis -->
         <div class="antwort-gruppe">
             <button class="antwort-btn passt" onclick="antwort(this, 'frage2_1_3')">🟢 i.O.</button>
@@ -2448,7 +2480,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
     <!-- FRAGE 2.1.4 – Fangprobe / Geschwindigkeitsbegrenzerschalter -->
     <div class="frage" id="frage2_1_4">
-        <h3>2.1.4 – Fangprobe: Nach der Fangprobe den Fangschalter überbrücken und prüfen ob der Geschwindigkeitsbegrenzerschalter abgeschaltet hat.</h3>
+        <h3>Fangprobe: Nach der Fangprobe den Fangschalter überbrücken und prüfen ob der Geschwindigkeitsbegrenzerschalter abgeschaltet hat.</h3>
         <div class="antwort-gruppe">
             <button class="antwort-btn passt" onclick="antwort(this, 'frage2_1_4')">🟢 i.O.</button>
             <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage2_1_4')">🔴 Mangel</button>
@@ -2467,7 +2499,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
     <!-- FRAGE 2.1.5 – Auslösegeschwindigkeit -->
     <div class="frage" id="frage2_1_5">
-        <h3>2.1.5 – Ist die richtige Auslösegeschwindigkeit eingestellt?</h3>
+        <h3>Ist die richtige Auslösegeschwindigkeit eingestellt?</h3>
         <!-- Hinweiskasten mit festen Grenzwerten – immer sichtbar -->
         <div class="hinweis">
             ℹ️ Grenzwerte der Auslösegeschwindigkeit:<br><br>
@@ -2525,7 +2557,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
     <!-- FRAGE 2.1.6 – Typenschild -->
     <div class="frage" id="frage2_1_6">
-        <h3>2.1.6 – Typenschild vorhanden bzw. stimmt es mit dem Baumuster überein?</h3>
+        <h3>Typenschild vorhanden bzw. stimmt es mit dem Baumuster überein?</h3>
         <div class="antwort-gruppe">
             <button class="antwort-btn passt" onclick="antwort(this, 'frage2_1_6')">🟢 i.O.</button>
             <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage2_1_6')">🔴 Mangel</button>
@@ -2569,7 +2601,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
     <!-- FRAGE 2.3.1 – Sicherung -->
     <div class="frage" id="frage2_3_1">
-        <h3>2.3.1 – Sicherung</h3> <!-- Fragetitel -->
+        <h3>Sicherung</h3> <!-- Fragetitel -->
         <div class="eingabe-zeile">
             <label>Gemessener Strom:</label>
             <input type="number" id="gemessener_strom" placeholder="Wert eingeben" step="0.1" min="0" oninput="berechneAusloeseStrom()"> <!-- Eingabe in Ampere -->
@@ -2686,7 +2718,6 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 <div class="pdf-bereich">
     <button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button> <!-- Roter PDF-Button -->
 </div>
-```
 
 </div><!-- Ende detailBegrenzer -->
 
@@ -3061,7 +3092,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
         <!-- 4.1 – FAHRKORBSCHIENE MASSE -->
         <div class="frage">
-            <h3>4.1 – Typ-Fahrkorbschiene: Maße erfassen</h3>
+            <h3>Typ-Fahrkorbschiene: Maße erfassen</h3>
             <div class="eingabe-zeile">
                 <label>1.1 Gesamtbreite:</label>
                 <input type="number" id="sch_fk_breite" placeholder="Wert" step="0.1" min="0">
@@ -3086,7 +3117,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
         <!-- 4.2 – GEGENGEWICHTSSCHIENE MASSE -->
         <div class="frage">
-            <h3>4.2 – Typ-Gegengewichtsschiene: Maße erfassen</h3>
+            <h3>Typ-Gegengewichtsschiene: Maße erfassen</h3>
             <div class="eingabe-zeile">
                 <label>2.1 Gesamtbreite:</label>
                 <input type="number" id="sch_gg_breite" placeholder="Wert" step="0.1" min="0">
@@ -3111,7 +3142,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
         <!-- FRAGE 4.3 – Fangvorrichtung/Masse/Last geändert? -->
         <div class="frage" id="sch_frage3">
-            <h3>4.3 – Wurde die Fangvorrichtung, die Fahrkorbmasse oder die Nennlast geändert?</h3>
+            <h3>Wurde die Fangvorrichtung, die Fahrkorbmasse oder die Nennlast geändert?</h3>
             <div class="ja-nein-gruppe">
                 <button class="ja-btn" onclick="jaNein(this,'sch_frage3','ja'); document.getElementById('sch_frage3_sub').style.display='block'">✅ Ja</button>
                 <button class="nein-btn" onclick="jaNein(this,'sch_frage3','nein'); document.getElementById('sch_frage3_sub').style.display='none'">❌ Nein</button>
@@ -3134,7 +3165,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
         <!-- FRAGE 4.4.1 – Verschraubungen komplett? -->
         <div class="frage" id="sch_frage4_1">
-            <h3>4.4.1 – Verschraubungen komplett?</h3>
+            <h3>Verschraubungen komplett?</h3>
             <div class="antwort-gruppe">
                 <button class="antwort-btn passt" onclick="antwort(this,'sch_frage4_1')">🟢 i.O.</button>
                 <button class="antwort-btn passt-nicht" onclick="antwort(this,'sch_frage4_1')">🔴 Mangel</button>
@@ -3149,7 +3180,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
         <!-- FRAGE 4.4.2 – Muttern vollflächig? -->
         <div class="frage" id="sch_frage4_2">
-            <h3>4.4.2 – Muttern liegen vollflächig auf?</h3>
+            <h3>Muttern liegen vollflächig auf?</h3>
             <div class="antwort-gruppe">
                 <button class="antwort-btn passt" onclick="antwort(this,'sch_frage4_2')">🟢 i.O.</button>
                 <button class="antwort-btn passt-nicht" onclick="antwort(this,'sch_frage4_2')">🔴 Mangel</button>
@@ -3164,7 +3195,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
         <!-- FRAGE 4.5 – Befestigungsabstände eingehalten? -->
         <div class="frage" id="sch_frage5">
-            <h3>4.5 – Sind die maximalen Befestigungsabstände eingehalten?</h3>
+            <h3>Sind die maximalen Befestigungsabstände eingehalten?</h3>
             <div class="antwort-gruppe">
                 <button class="antwort-btn passt" onclick="antwort(this,'sch_frage5')">🟢 i.O.</button>
                 <button class="antwort-btn passt-nicht" onclick="antwort(this,'sch_frage5')">🔴 Mangel</button>
@@ -3179,7 +3210,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
         <!-- FRAGE 4.6 – Schiene passt zur Fangvorrichtung? -->
         <div class="frage" id="sch_frage6">
-            <h3>4.6 – Passt die Schiene zur Fangvorrichtung?</h3>
+            <h3>Passt die Schiene zur Fangvorrichtung?</h3>
             <p style="color:#555;font-size:14px;margin-bottom:10px;">(Gezogen / bearbeitet / trocken / geölt)</p>
             <div class="antwort-gruppe">
                 <button class="antwort-btn passt" onclick="antwort(this,'sch_frage6')">🟢 i.O.</button>
@@ -3250,7 +3281,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     <div id="pruefung_antrieb" class="tab-inhalt aktiv">
         <div class="frage" id="ant_frage1">
             <h3 style="display:flex;align-items:center;gap:8px;">
-                7.1 – Stimmen die Sicherungen des Antriebs mit den Querschnitten der Zuleitungen überein?
+                Stimmen die Sicherungen des Antriebs mit den Querschnitten der Zuleitungen überein?
                 <button onclick="document.getElementById('modalAntriebSicherung').classList.add('aktiv')" style="background:#0057a8;color:white;border:none;border-radius:50%;width:26px;height:26px;font-size:14px;font-weight:bold;cursor:pointer;flex-shrink:0;">i</button>
             </h3>
             <span id="ant_1_mangel" data-mangel="false" style="display:none;"></span>
@@ -3362,13 +3393,12 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     <button class="zuruck" onclick="zeige('bauteilSeite')">← Zurück</button>
     <h2 id="bauteilTitelSchutzraum"></h2>
 
-```
 <!-- Nur ein Tab: Prüfung vor Ort -->
 <div style="margin-top:20px;">
 
     <!-- GESCHWINDIGKEIT – gilt für alle Berechnungen -->
     <div class="frage">
-        <h3>13.1.0 – Nenngeschwindigkeit eingeben</h3>
+        <h3>Nenngeschwindigkeit eingeben</h3>
         <div class="eingabe-zeile">
             <label>Nenngeschwindigkeit v:</label>
             <input type="number" id="schutzraum_v" placeholder="Wert eingeben" step="0.01" min="0" oninput="berechneSchutzraum()">
@@ -3378,7 +3408,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
     <!-- ANTRIEBSART AUSWAHL -->
     <div class="frage">
-        <h3>13.1.1 – Antriebsart auswählen</h3>
+        <h3>Antriebsart auswählen</h3>
         <div class="auswahl-gruppe">
             <button class="auswahl-btn" id="btn_treibscheibe" onclick="waehleAntrieb(this, 'treibscheibe')">⚙️ Treibscheibe</button>
             <button class="auswahl-btn" id="btn_hydraulik" onclick="waehleAntrieb(this, 'hydraulik')">💧 Hydraulik</button>
@@ -3387,7 +3417,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
     <!-- FRAGE 13.1.2 – RESTFAHRWEG -->
     <div class="frage" id="schutzraum_frage2" style="display:none;">
-        <h3>13.1.2 – Restfahrweg ≥ 10 cm</h3>
+        <h3>Restfahrweg ≥ 10 cm</h3>
         <div class="hinweis">ℹ️ DIN EN 81-20 – Mindest-Restfahrweg im Schacht</div>
 
         <!-- Soll-Wert wird berechnet und angezeigt -->
@@ -3410,7 +3440,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
     <!-- FRAGE 13.1.3 – SCHUTZRAUMMASSE -->
     <div class="frage" id="schutzraum_frage3" style="display:none;">
-        <h3>13.1.3 – Schutzraum Maße prüfen</h3>
+        <h3>Schutzraum Maße prüfen</h3>
         <div class="hinweis">ℹ️ DIN EN 81-20 – Mindestmaße je nach Körperhaltung</div>
 
         <!-- Auswahl Stehend / Hockend -->
@@ -3449,7 +3479,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
     <!-- FRAGE 13.1.5 – REDUKTION HOCKEND -->
     <div class="frage" id="schutzraum_frage5" style="display:none;">
-        <h3>13.1.5 – Reduktion des Schutzraums (nur hockend)</h3>
+        <h3>Reduktion des Schutzraums (nur hockend)</h3>
         <div class="hinweis">ℹ️ DIN EN 81-20 Bild 4 – Zulässige Reduktion:<br>• Fläche: max. 10 cm<br>• Höhe: max. 30 cm</div>
 
         <!-- Passt / Mangel -->
@@ -3466,7 +3496,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
     <!-- FRAGE 13.1.6 – SCHILDER – immer letzte Frage -->
     <div class="frage" id="schutzraum_frage_schild" style="display:none;">
-        <h3>13.1.6 – Sind die korrekten Schilder angebracht?</h3>
+        <h3>Sind die korrekten Schilder angebracht?</h3>
         <div class="hinweis">ℹ️ DIN EN 81-20 – Pflicht: Schild mit erlaubter Körperhaltung im Schutzraum</div>
         <div class="antwort-gruppe">
             <button class="antwort-btn passt" onclick="waehleSchild(this, 'vorhanden')">🟢 Vorhanden</button>
@@ -3482,7 +3512,6 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 </div><!-- Ende Prüfung vor Ort -->
 
 <div class="pdf-bereich"><button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button></div>
-```
 
 </div>
 
