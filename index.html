@@ -3710,6 +3710,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
        Wird im PDF-Export und in der Leiste verwendet
     ------------------------------------------ */
     let aktuelleSeriennummer = '';
+    let aktuelleAnlagendaten = {};
     let gewaehlteBauteile   = [];
     let bauteilGruppen      = {}; /* { seil: 'triebwerk', begrenzer: 'schacht', ... } */
 
@@ -3735,6 +3736,11 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
        Befüllt das Eingabefeld mit der aktuellen Seriennummer */
     function oeffneModal() {
         document.getElementById('seriennummerInput').value = aktuelleSeriennummer;
+        var felder = ['nennlast','fk_masse','gg_masse','geschwindigkeit','schienentyp','tragmittel'];
+        felder.forEach(function(f) {
+            var el = document.getElementById('anlage_' + f);
+            if (el) el.value = aktuelleAnlagendaten[f] || '';
+        });
         document.getElementById('modalSeriennummer').classList.add('aktiv');
     }
 
@@ -3757,6 +3763,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         var hatDaten = false;
         felder.forEach(function(f) {
             var val = document.getElementById('anlage_' + f).value.trim();
+            aktuelleAnlagendaten[f] = val;
             var el = document.getElementById('ad_' + f);
             if (el) { el.textContent = val || '–'; if (val) hatDaten = true; }
         });
@@ -3973,6 +3980,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             version: 1,
             datum: new Date().toISOString(),
             seriennummer: aktuelleSeriennummer,
+            anlagendaten: aktuelleAnlagendaten,
             gewaehlteBauteile: gewaehlteBauteile,
             bauteilGruppen: bauteilGruppen,
             dokEintraege: {},
@@ -4117,6 +4125,17 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         document.getElementById('seriennummerBar').style.display = aktuelleSeriennummer !== '–' ? 'flex' : 'none';
         var pf = document.getElementById('projektFortsetzenBereich');
         if (pf) pf.style.display = aktuelleSeriennummer !== '–' ? 'block' : 'none';
+
+        /* Anlagendaten */
+        aktuelleAnlagendaten = daten.anlagendaten || {};
+        var adFelder = ['nennlast','fk_masse','gg_masse','geschwindigkeit','schienentyp','tragmittel'];
+        var hatDaten = false;
+        adFelder.forEach(function(f) {
+            var val = aktuelleAnlagendaten[f] || '';
+            var el = document.getElementById('ad_' + f);
+            if (el) { el.textContent = val || '–'; if (val) hatDaten = true; }
+        });
+        document.getElementById('anlagendatenBar').style.display = hatDaten ? 'flex' : 'none';
 
         /* Bauteile & Gruppen */
         gewaehlteBauteile = daten.gewaehlteBauteile || [];
