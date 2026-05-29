@@ -3069,6 +3069,9 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     <div class="frage" id="fang_frage4_6">
         <h3>Passt die Schiene zur Fangvorrichtung?</h3>
         <p style="color:#555;font-size:14px;margin-bottom:10px;">(Gezogen / bearbeitet / trocken / geölt)</p>
+        <div id="fang_baumuster_anzeige" style="display:none; margin-bottom:12px; padding:10px 14px; background:#f4f8ff; border-radius:8px; border:1px solid #90caf9; font-size:14px; color:#0057a8;">
+            📋 Baumuster: <strong id="fang_baumuster_wert"></strong>
+        </div>
         <div class="antwort-gruppe">
             <button class="antwort-btn passt" onclick="antwort(this,'fang_frage4_6')">🟢 i.O.</button>
             <button class="antwort-btn passt-nicht" onclick="antwort(this,'fang_frage4_6')">🔴 Mangel</button>
@@ -3086,7 +3089,15 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     </div>
 
 </div>
-<div id="dokumente_fang" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+<div id="dokumente_fang" class="tab-inhalt">
+    <div class="frage">
+        <h3>Baumuster</h3>
+        <div class="eingabe-zeile">
+            <label>Baumuster-Nr.:</label>
+            <input type="text" id="fang_baumuster" placeholder="Baumuster eintragen" oninput="aktualisiereBaumuster()" style="flex:1; padding:8px; border:1px solid #ccc; border-radius:6px; font-size:15px;">
+        </div>
+    </div>
+</div>
 <div id="berechnung_fang" class="tab-inhalt">
     <div class="frage">
         <h3>Bremskraft</h3>
@@ -4501,6 +4512,13 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     /* Sicherungsberechnung für eigenständige Sicherungs-Seite */
 
     let messgeraet_s = 'dinvde'; /* Standard: DIN VDE = 30% Abzug */
+
+    function aktualisiereBaumuster() {
+        var val = document.getElementById('fang_baumuster').value.trim();
+        var anzeige = document.getElementById('fang_baumuster_anzeige');
+        document.getElementById('fang_baumuster_wert').textContent = val;
+        anzeige.style.display = val ? 'block' : 'none';
+    }
 
     function uebernehmeWerteFang() {
         var p = document.getElementById('fahrkorbmasse_fang').value;
