@@ -2934,17 +2934,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         <div class="hinweis">📋 DIN EN 81-20 5.6.2.1.3</div>
         <div class="hinweis">ℹ️ Die Verzögerung beim Auslösen der Fangvorrichtung sollte zwischen 0,2g und 1g liegen.</div>
 
-        <!-- Eingabe Fahrkorbmasse + Nennlast + automatische Berechnung -->
-        <div class="eingabe-zeile" style="margin-top:15px;">
-            <label>Fahrkorbmasse (P):</label>
-            <input type="number" id="fahrkorbmasse_fang" placeholder="Wert eingeben" step="1" min="0" oninput="berechnePrueflast()">
-            <span class="einheit">kg</span>
-        </div>
-        <div class="eingabe-zeile" style="margin-top:8px;">
-            <label>Nennlast (Q):</label>
-            <input type="number" id="nennlast_fang" placeholder="Wert eingeben" step="1" min="0" oninput="berechnePrueflast()">
-            <span class="einheit">kg</span>
-        </div>
+        <!-- P+Q aus Anlagendaten – keine manuelle Eingabe nötig -->
         <div id="pruef_ergebnis" style="display:none; margin-top:10px;">
             <div class="zwischenwert">
                 <label>P + Q =</label>
@@ -3780,10 +3770,9 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         setFeld('v_fang',             v, berechneVerzögerung);
         setFeld('geschwindigkeit',     v, berechneAlles);
         setFeld('schutzraum_v',        v, berechneSchutzraum);
-        setFeld('fahrkorbmasse_fang',  p, berechnePrueflast);
+        berechnePrueflast();
         setFeld('fang_fahrkorbmasse_t',p, berechnePQToleranz);
         setFeld('ber_fang_p',          p, berechneBremskraft);
-        setFeld('nennlast_fang',       q, berechnePrueflast);
         setFeld('fang_nennlast_t',     q, berechnePQToleranz);
         setFeld('ber_fang_q',          q, berechneBremskraft);
 
@@ -4516,8 +4505,8 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     }
 
     function berechnePrueflast() {
-        const p       = parseFloat(document.getElementById('fahrkorbmasse_fang').value);
-        const q       = parseFloat(document.getElementById('nennlast_fang').value);
+        const p       = parseFloat(aktuelleAnlagendaten.fk_masse)  || 0;
+        const q       = parseFloat(aktuelleAnlagendaten.nennlast)  || 0;
         const bereich = document.getElementById('pruef_ergebnis');
         if ((isNaN(p) || p <= 0) && (isNaN(q) || q <= 0)) { bereich.style.display = 'none'; return; }
         const pVal = isNaN(p) ? 0 : p;
@@ -4625,10 +4614,11 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     }
 
     function uebernehmeWerteFang() {
-        var p = document.getElementById('fahrkorbmasse_fang').value;
-        var q = document.getElementById('nennlast_fang').value;
+        var p = aktuelleAnlagendaten.fk_masse;
+        var q = aktuelleAnlagendaten.nennlast;
         if (p) document.getElementById('ber_fang_p').value = p;
         if (q) document.getElementById('ber_fang_q').value = q;
+        berechneBremskraft();
     }
 
     function waehleAntriebsart(btn, typ) {
