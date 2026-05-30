@@ -2934,16 +2934,8 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         <div class="hinweis">📋 DIN EN 81-20 5.6.2.1.3</div>
         <div class="hinweis">ℹ️ Die Verzögerung beim Auslösen der Fangvorrichtung sollte zwischen 0,2g und 1g liegen.</div>
 
-        <!-- P+Q aus Anlagendaten – keine manuelle Eingabe nötig -->
-        <div id="pruef_ergebnis" style="display:none; margin-top:10px;">
-            <div class="zwischenwert">
-                <label>P + Q =</label>
-                <span id="ergebnis_pq" style="font-weight:bold;color:#0057a8;">–</span>
-            </div>
-            <div class="zwischenwert">
-                <label>Prüflast (125 %) =</label>
-                <span id="ergebnis_pruef" style="font-weight:bold;color:#0057a8;">–</span>
-            </div>
+        <div id="pruef_ergebnis" style="display:none; margin-top:12px; padding:10px 14px; background:#f4f8ff; border-radius:8px; border:1px solid #90caf9; font-size:14px; color:#0057a8;">
+            ℹ️ Prüflast (Q × 125 %) = <strong><span id="ergebnis_pruef">–</span> kg</strong>
         </div>
 
         <!-- Verzögerungsberechnung -->
@@ -4505,21 +4497,11 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     }
 
     function berechnePrueflast() {
-        const p       = parseFloat(aktuelleAnlagendaten.fk_masse)  || 0;
-        const q       = parseFloat(aktuelleAnlagendaten.nennlast)  || 0;
+        const q       = parseFloat(aktuelleAnlagendaten.nennlast);
         const bereich = document.getElementById('pruef_ergebnis');
-        if ((isNaN(p) || p <= 0) && (isNaN(q) || q <= 0)) { bereich.style.display = 'none'; return; }
-        const pVal = isNaN(p) ? 0 : p;
-        const qVal = isNaN(q) ? 0 : q;
-        const pq = pVal + qVal;
-        document.getElementById('ergebnis_pq').innerText = pq.toFixed(0) + ' kg';
-        document.getElementById('ergebnis_pruef').innerText = (pq * 1.25).toFixed(0) + ' kg';
+        if (isNaN(q) || q <= 0) { bereich.style.display = 'none'; return; }
+        document.getElementById('ergebnis_pruef').innerText = (q * 1.25).toFixed(0);
         bereich.style.display = 'block';
-        var bremsAktiv = document.getElementById('btn_brems_fang').classList.contains('aktiv');
-        if (bremsAktiv && pVal > 0 && qVal > 0) {
-            document.getElementById('pq_toleranz_bereich').style.display = 'block';
-            berechnePQToleranz();
-        }
     }
 
     /* ------------------------------------------
