@@ -3341,7 +3341,49 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         <button class="tab" onclick="zeigeTabGeneric(this, 'elektro_puffer', 'detailPuffer')">⚡ Elektro</button>
     </div>
     <div id="pruefung_puffer" class="tab-inhalt aktiv"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
-    <div id="dokumente_puffer" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="dokumente_puffer" class="tab-inhalt">
+        <div class="frage">
+            <h3>Puffertyp</h3>
+            <div class="eingabe-zeile" style="margin-top:10px;">
+                <label>Puffertyp:</label>
+                <select id="puffer_typ_select" onchange="waehlePuffertyp()" style="padding:8px;border:1px solid #ccc;border-radius:6px;font-size:15px;flex:1;">
+                    <option value="">– bitte wählen –</option>
+                    <option value="300400A">300400A</option>
+                    <option value="300335A">300335A</option>
+                    <option value="300401A">300401A</option>
+                    <option value="300401B">300401B</option>
+                    <option value="300405A">300405A</option>
+                    <option value="300402A">300402A</option>
+                    <option value="300178A">300178A</option>
+                    <option value="300183A">300183A</option>
+                    <option value="300403A">300403A</option>
+                    <option value="300404A">300404A</option>
+                    <option value="300400L">300400L</option>
+                    <option value="300401M">300401M</option>
+                    <option value="300401L">300401L</option>
+                    <option value="300402L">300402L</option>
+                    <option value="300419L">300419L</option>
+                    <option value="300403L">300403L</option>
+                    <option value="300404L">300404L</option>
+                    <option value="300401P">300401P</option>
+                    <option value="300402P">300402P</option>
+                    <option value="300401Q">300401Q</option>
+                    <option value="300402Q">300402Q</option>
+                    <option value="300400S">300400S</option>
+                    <option value="300400R">300400R</option>
+                    <option value="D0">D0</option>
+                    <option value="D1">D1</option>
+                    <option value="D2">D2</option>
+                    <option value="D3">D3</option>
+                </select>
+            </div>
+            <div id="puffer_info" style="display:none; margin-top:14px; padding:12px 16px; background:#f4f8ff; border-radius:8px; border:1px solid #90caf9; font-size:14px;">
+                <div class="zwischenwert"><label>Baumuster:</label> <span id="puffer_bm" style="font-weight:bold;color:#0057a8;">–</span></div>
+                <div class="zwischenwert" style="margin-top:8px;"><label>Masse bei 0,63 m/s:</label> <span id="puffer_v63" style="font-weight:bold;color:#0057a8;">–</span></div>
+                <div class="zwischenwert" style="margin-top:4px;"><label>Masse bei 1 m/s:</label> <span id="puffer_v1" style="font-weight:bold;color:#0057a8;">–</span></div>
+            </div>
+        </div>
+    </div>
     <div id="berechnung_puffer" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
     <div id="elektro_puffer" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
     <div class="pdf-bereich"><button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button></div>
@@ -4607,6 +4649,58 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         if (p) document.getElementById('ber_fang_p').value = p;
         if (q) document.getElementById('ber_fang_q').value = q;
         berechneBremskraft();
+    }
+
+    /* ------------------------------------------
+       PUFFER – Typenauswahl
+    ------------------------------------------ */
+    var PUFFER_TYPEN = [
+        { typ:'300400A', bm:'EU-B 137',     min63:150,  max63:1400, min1:230,  max1:570  },
+        { typ:'300335A', bm:'EU-B 138',     min63:null, max63:null, min1:230,  max1:900  },
+        { typ:'300401A', bm:'EU-B 139',     min63:320,  max63:3300, min1:400,  max1:950  },
+        { typ:'300401B', bm:'EU-B 140',     min63:240,  max63:2000, min1:350,  max1:750  },
+        { typ:'300405A', bm:'EU-B 141',     min63:null, max63:null, min1:300,  max1:1600 },
+        { typ:'300402A', bm:'EU-B 142',     min63:500,  max63:5500, min1:650,  max1:1600 },
+        { typ:'300178A', bm:'EU-B 143',     min63:null, max63:null, min1:600,  max1:2100 },
+        { typ:'300183A', bm:'EU-B 144',     min63:null, max63:null, min1:700,  max1:220  },
+        { typ:'300403A', bm:'EU-B 145',     min63:700,  max63:9400, min1:1200, max1:2600 },
+        { typ:'300404A', bm:'EU-B 146',     min63:1400, max63:9400, min1:2300, max1:4200 },
+        { typ:'300400L', bm:'EU-B 147',     min63:140,  max63:1650, min1:230,  max1:750  },
+        { typ:'300401M', bm:'EU-B 148',     min63:200,  max63:2100, min1:250,  max1:950  },
+        { typ:'300401L', bm:'EU-B 149',     min63:240,  max63:3500, min1:350,  max1:1200 },
+        { typ:'300402L', bm:'EU-B 150',     min63:450,  max63:5500, min1:620,  max1:1900 },
+        { typ:'300419L', bm:'EU-B 151',     min63:450,  max63:6300, min1:700,  max1:2300 },
+        { typ:'300403L', bm:'EU-B 152',     min63:600,  max63:9400, min1:1000, max1:2800 },
+        { typ:'300404L', bm:'EU-B 153',     min63:1000, max63:9400, min1:1400, max1:5500 },
+        { typ:'300401P', bm:'F-0446/2021',  min63:null, max63:null, min1:700,  max1:3000 },
+        { typ:'300402P', bm:'F-0447/2021',  min63:null, max63:null, min1:1000, max1:4500 },
+        { typ:'300401Q', bm:'F-0448/2021',  min63:null, max63:null, min1:330,  max1:2200 },
+        { typ:'300402Q', bm:'F-0449/2021',  min63:null, max63:null, min1:500,  max1:3300 },
+        { typ:'300400S', bm:'F-0457/2022',  min63:null, max63:null, min1:180,  max1:900  },
+        { typ:'300400R', bm:'F-0458/2022',  min63:null, max63:null, min1:350,  max1:1700 },
+        { typ:'D0',      bm:'F-0529/2022',  min63:150,  max63:1200, min1:180,  max1:600  },
+        { typ:'D1',      bm:'F-0530/2022',  min63:200,  max63:1500, min1:220,  max1:700  },
+        { typ:'D2',      bm:'F-0531/2022',  min63:250,  max63:3200, min1:330,  max1:1250 },
+        { typ:'D3',      bm:'F-0532/2022',  min63:500,  max63:5200, min1:600,  max1:1850 }
+    ];
+
+    function waehlePuffertyp() {
+        var val  = document.getElementById('puffer_typ_select').value;
+        var info = document.getElementById('puffer_info');
+        if (!val) { info.style.display = 'none'; return; }
+        var p = PUFFER_TYPEN.find(function(x) { return x.typ === val; });
+        if (!p) { info.style.display = 'none'; return; }
+        document.getElementById('puffer_bm').textContent  = p.bm;
+        var v63El = document.getElementById('puffer_v63');
+        if (p.min63 !== null) {
+            v63El.textContent = p.min63 + ' – ' + p.max63 + ' kg';
+            v63El.style.color = '#0057a8';
+        } else {
+            v63El.textContent = 'nicht zugelassen';
+            v63El.style.color = '#888';
+        }
+        document.getElementById('puffer_v1').textContent = p.min1 + ' – ' + p.max1 + ' kg';
+        info.style.display = 'block';
     }
 
     function waehleAntriebsart(btn, typ) {
