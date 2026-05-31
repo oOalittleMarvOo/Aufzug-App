@@ -5619,11 +5619,21 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
                     var line = lines[i].trim();
                     if (!line) continue;
                     var cols = parseCSVZeile(line);
-                    var bauteil = (cols[0] || '').toLowerCase().trim();
-                    var tab     = (cols[1] || '').toLowerCase().trim();
+                    var bauteil = (cols[0] || '').toLowerCase().trim()
+                        .replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss')
+                        .replace(/[^a-z0-9]/g,'');
+                    var tabRaw  = (cols[1] || '').toLowerCase().trim();
                     var frage   = (cols[2] || '').trim();
                     var norm    = (cols[3] || '').trim();
-                    if (!bauteil || !tab || !frage) continue;
+                    if (!bauteil || !tabRaw || !frage) continue;
+
+                    /* Tab-Normalisierung: Prüfung/Prüfen/pruefung → pruefung usw. */
+                    var tab;
+                    if (/^pr[üu]f/.test(tabRaw))       tab = 'pruefung';
+                    else if (/^dok/.test(tabRaw))       tab = 'dokumente';
+                    else if (/^ber/.test(tabRaw))       tab = 'berechnung';
+                    else if (/^el/.test(tabRaw))        tab = 'elektro';
+                    else tab = tabRaw;
 
                     var zielId = (bauteil === 'seil') ? tab : (tab + '_' + bauteil);
                     var ziel = document.getElementById(zielId);
