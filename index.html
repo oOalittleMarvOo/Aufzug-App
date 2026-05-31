@@ -5618,6 +5618,20 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     var SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQGP9FScGu-3DTE9L6WLez6gTgrL5rDD7FbtOYzodOA8MpAuHYu1nuOjgrUPeYzdhJ7xhEKuzAEd0Gf/pub?output=csv&gid=0';
     var sheetImportZaehler = 0;
 
+    var BAUTEIL_MAP = {
+        'geschwindigkeitsbegrenzer': 'begrenzer',
+        'fangvorrichtung':           'fang',
+        'rohrbruchventil':           'rohrbruch',
+        'hydraulikheber':            'heber',
+        'aufzugsschacht':            'schacht',
+        'schachttuer':               'schachttuer',
+        'kabine':                    'fahrkorb',
+        'aufzugskabine':             'fahrkorb',
+        'triebwerk':                 'antrieb',
+        'steuerungsanlage':          'steuerung',
+        'treibscheibe':              'antrieb'
+    };
+
     function parseCSVZeile(line) {
         var cells = [], cur = '', inQ = false;
         for (var j = 0; j < line.length; j++) {
@@ -5655,6 +5669,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
                     var bauteil = (cols[0] || '').toLowerCase().trim()
                         .replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss')
                         .replace(/[^a-z0-9]/g,'');
+                    bauteil = BAUTEIL_MAP[bauteil] || bauteil;
                     var tabRaw  = (cols[1] || '').toLowerCase().trim();
                     var frage   = (cols[2] || '').trim();
                     var norm    = (cols[3] || '').trim();
