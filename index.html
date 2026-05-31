@@ -987,6 +987,21 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         padding: 3px 10px;
         margin: 0 0 12px 0;
     }
+    .sheet-nr {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 22px;
+        height: 22px;
+        background: #9c27b0;
+        color: white;
+        border-radius: 50%;
+        font-size: 12px;
+        font-weight: 700;
+        margin-right: 6px;
+        flex-shrink: 0;
+    }
+    .frage.sheet-import h3 { display: flex; align-items: center; }
     .sheet-hinweis {
         background: #f3e5f5;
         border-left: 3px solid #9c27b0;
@@ -5631,6 +5646,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
                 var lines = text.split('\n');
                 var count = 0;
+                var sektionsZaehler = {};
 
                 for (var i = 1; i < lines.length; i++) {
                     var line = lines[i].trim();
@@ -5659,12 +5675,14 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
                     sheetImportZaehler++;
                     var fId = 'sheet_frage_' + sheetImportZaehler;
+                    sektionsZaehler[zielId] = (sektionsZaehler[zielId] || 0) + 1;
+                    var nr = sektionsZaehler[zielId];
 
                     var div = document.createElement('div');
                     div.className = 'frage sheet-import';
                     div.id = fId;
                     div.innerHTML =
-                        '<h3>' + frage + '</h3>' +
+                        '<h3><span class="sheet-nr">' + nr + '</span> ' + frage + '</h3>' +
                         (norm ? '<p class="norm-ref">📌 ' + norm + '</p>' : '') +
                         (hinweis ? '<div class="sheet-hinweis">ℹ️ ' + hinweis + '</div>' : '') +
                         '<div class="antwort-gruppe">' +
