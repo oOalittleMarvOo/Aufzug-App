@@ -970,6 +970,18 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         padding: 20px;           /* Innenabstand: 20px rundum */
         margin-bottom: 20px;     /* Abstand nach unten zur nächsten Frage */
     }
+    .frage.sheet-import {
+        background: #fdf6ff;
+        border-color: #ce93d8;
+        border-left: 4px solid #9c27b0;
+    }
+    .frage.sheet-import h3 { color: #6a1b9a; }
+    .frage.sheet-import .norm-ref {
+        font-size: 12px;
+        color: #9c27b0;
+        margin: -8px 0 10px 0;
+        opacity: 0.85;
+    }
     .frage h3 {
         color: #0057a8;     /* Fragetext: Firmenblau */
         margin-bottom: 15px; /* Abstand nach unten zu den Buttons */
@@ -1765,8 +1777,13 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         document.getElementById('iosHinweis').style.display = 'block';
     }
     </script>
-    <!-- Synchronisieren -->
+    <!-- Datenbank laden -->
     <div style="margin-top:16px; display:flex; flex-direction:column; align-items:center; gap:6px;">
+        <button class="modal-btn-skip" onclick="ladeGoogleSheet()" id="sheetLadenBtn" style="font-size:15px; padding:12px 20px; background:#7b1fa2; color:white; border:2px solid #4a148c;">📋 Datenbank laden</button>
+        <p id="sheetStatus" style="color:#777; font-size:12px; margin:0;"></p>
+    </div>
+    <!-- Synchronisieren -->
+    <div style="margin-top:10px; display:flex; flex-direction:column; align-items:center; gap:6px;">
         <button class="modal-btn-skip" onclick="synchronisiereApp()" id="syncBtn" style="font-size:15px; padding:12px 20px;">🔄 Mit Online-Version synchronisieren</button>
         <p id="syncDatum" style="color:#777; font-size:12px; margin:0;"></p>
     </div>
@@ -5568,7 +5585,90 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         if (!isNaN(v) && v >= 0) aktualisiereSollMasse(v);
     }
 
-    /* Maße prüfen */
+    /* ---- Google Sheets Import ---- */
+    var SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQGP9FScGu-3DTE9L6WLez6gTgrL5rDD7FbtOYzodOA8MpAuHYu1nuOjgrUPeYzdhJ7xhEKuzAEd0Gf/pub?output=csv&gid=0';
+    var sheetImportZaehler = 0;
+
+    function parseCSVZeile(line) {
+        var cells = [], cur = '', inQ = false;
+        for (var j = 0; j < line.length; j++) {
+            var c = line[j];
+            if (c === '"') { if (inQ && line[j+1] === '"') { cur += '"'; j++; } else inQ = !inQ; }
+            else if (c === ',' && !inQ) { cells.push(cur.trim()); cur = ''; }
+            else cur += c;
+        }
+        cells.push(cur.trim());
+        return cells;
+    }
+
+    function ladeGoogleSheet() {
+        var btn = document.getElementById('sheetLadenBtn');
+        var status = document.getElementById('sheetStatus');
+        btn.textContent = '⏳ Wird geladen…'; btn.disabled = true;
+
+        fetch(SHEET_CSV_URL)
+            .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+            .then(function(text) {
+                /* Alte Imports entfernen */
+                document.querySelectorAll('.frage.sheet-import').forEach(function(el) { el.remove(); });
+
+                var lines = text.split('\n');
+                var count = 0;
+
+                for (var i = 1; i < lines.length; i++) {
+                    var line = lines[i].trim();
+                    if (!line) continue;
+                    var cols = parseCSVZeile(line);
+                    var bauteil = (cols[0] || '').toLowerCase().trim();
+                    var tab     = (cols[1] || '').toLowerCase().trim();
+                    var frage   = (cols[2] || '').trim();
+                    var norm    = (cols[3] || '').trim();
+                    if (!bauteil || !tab || !frage) continue;
+
+                    var zielId = (bauteil === 'seil') ? tab : (tab + '_' + bauteil);
+                    var ziel = document.getElementById(zielId);
+                    if (!ziel) continue;
+
+                    sheetImportZaehler++;
+                    var fId = 'sheet_frage_' + sheetImportZaehler;
+
+                    var div = document.createElement('div');
+                    div.className = 'frage sheet-import';
+                    div.id = fId;
+                    div.innerHTML =
+                        '<h3>' + frage + '</h3>' +
+                        (norm ? '<p class="norm-ref">📌 ' + norm + '</p>' : '') +
+                        '<div class="antwort-gruppe">' +
+                          '<button class="antwort-btn passt"       onclick="antwort(this,\'' + fId + '\')">🟢 i.O.</button>' +
+                          '<button class="antwort-btn passt-nicht" onclick="antwort(this,\'' + fId + '\')">🔴 Mangel</button>' +
+                          '<button class="antwort-btn irrelevant"  onclick="antwort(this,\'' + fId + '\')">⚪ Trifft nicht zu</button>' +
+                        '</div>' +
+                        '<div class="mangelfeld" id="mangel-' + fId + '">' +
+                          '<p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>' +
+                          '<label>Bitte Mangel beschreiben:</label>' +
+                          '<textarea placeholder="Beschreibung des Mangels…"></textarea>' +
+                        '</div>' +
+                        '<div class="mangelfeld" id="trifft-' + fId + '">' +
+                          '<p class="mangel-hinweis" style="color:#888;">💬 Kommentar</p>' +
+                          '<label>Bitte Kommentar eingeben:</label>' +
+                          '<textarea placeholder="Kommentar…"></textarea>' +
+                        '</div>';
+                    ziel.appendChild(div);
+                    count++;
+                }
+
+                var msg = count > 0 ? '✅ ' + count + ' Fragen geladen (' + new Date().toLocaleTimeString('de-DE', {hour:'2-digit',minute:'2-digit'}) + ')' : '⚠️ Keine Fragen gefunden';
+                if (status) status.textContent = msg;
+                btn.textContent = count > 0 ? '✅ Geladen' : '⚠️ Leer';
+                setTimeout(function() { btn.textContent = '📋 Datenbank laden'; btn.disabled = false; }, 3000);
+            })
+            .catch(function(err) {
+                if (status) status.textContent = '❌ ' + err.message;
+                btn.textContent = '❌ Fehler';
+                setTimeout(function() { btn.textContent = '📋 Datenbank laden'; btn.disabled = false; }, 4000);
+            });
+    }
+
     /* ------------------------------------------
        PWA – SERVICE WORKER REGISTRIERUNG
        Aktiviert Offline-Funktion und App-Symbol
