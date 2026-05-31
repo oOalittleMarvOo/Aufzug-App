@@ -1063,37 +1063,6 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         content: "13.1." counter(schutzraum-counter) " \2013  ";
     }
 
-    /* Dokumente-Tabs: Nummerierung */
-    #dokumente                  { counter-reset: dok-seil-counter; }
-    #dokumente_begrenzer        { counter-reset: dok-begrenzer-counter; }
-    #dokumente_fang             { counter-reset: dok-fang-counter; }
-    #dokumente_puffer           { counter-reset: dok-puffer-counter; }
-    #dokumente_schienen         { counter-reset: dok-schienen-counter; }
-    #dokumente_steuerung        { counter-reset: dok-steuerung-counter; }
-    #dokumente_antrieb          { counter-reset: dok-antrieb-counter; }
-    #dokumente_tragseile        { counter-reset: dok-tragseile-counter; }
-    #dokumente_rohrbruch        { counter-reset: dok-rohrbruch-counter; }
-    #dokumente_heber            { counter-reset: dok-heber-counter; }
-    #dokumente_schacht          { counter-reset: dok-schacht-counter; }
-    #dokumente_schachttuer      { counter-reset: dok-schachttuer-counter; }
-    #dokumente_fahrkorb         { counter-reset: dok-fahrkorb-counter; }
-    #dokumente_frequenzumrichter { counter-reset: dok-freq-counter; }
-
-    #dokumente > .frage > h3::before                    { counter-increment: dok-seil-counter;       content: "Dok." counter(dok-seil-counter)       " \2013  "; }
-    #dokumente_begrenzer > .frage > h3::before          { counter-increment: dok-begrenzer-counter;  content: "Dok." counter(dok-begrenzer-counter)  " \2013  "; }
-    #dokumente_fang > .frage > h3::before               { counter-increment: dok-fang-counter;       content: "Dok." counter(dok-fang-counter)       " \2013  "; }
-    #dokumente_puffer > .frage > h3::before             { counter-increment: dok-puffer-counter;     content: "Dok." counter(dok-puffer-counter)     " \2013  "; }
-    #dokumente_schienen > .frage > h3::before           { counter-increment: dok-schienen-counter;   content: "Dok." counter(dok-schienen-counter)   " \2013  "; }
-    #dokumente_steuerung > .frage > h3::before          { counter-increment: dok-steuerung-counter;  content: "Dok." counter(dok-steuerung-counter)  " \2013  "; }
-    #dokumente_antrieb > .frage > h3::before            { counter-increment: dok-antrieb-counter;    content: "Dok." counter(dok-antrieb-counter)    " \2013  "; }
-    #dokumente_tragseile > .frage > h3::before          { counter-increment: dok-tragseile-counter;  content: "Dok." counter(dok-tragseile-counter)  " \2013  "; }
-    #dokumente_rohrbruch > .frage > h3::before          { counter-increment: dok-rohrbruch-counter;  content: "Dok." counter(dok-rohrbruch-counter)  " \2013  "; }
-    #dokumente_heber > .frage > h3::before              { counter-increment: dok-heber-counter;      content: "Dok." counter(dok-heber-counter)      " \2013  "; }
-    #dokumente_schacht > .frage > h3::before            { counter-increment: dok-schacht-counter;    content: "Dok." counter(dok-schacht-counter)    " \2013  "; }
-    #dokumente_schachttuer > .frage > h3::before        { counter-increment: dok-schachttuer-counter;content: "Dok." counter(dok-schachttuer-counter)" \2013  "; }
-    #dokumente_fahrkorb > .frage > h3::before           { counter-increment: dok-fahrkorb-counter;   content: "Dok." counter(dok-fahrkorb-counter)   " \2013  "; }
-    #dokumente_frequenzumrichter > .frage > h3::before  { counter-increment: dok-freq-counter;       content: "Dok." counter(dok-freq-counter)       " \2013  "; }
-
     /* ==========================================
        JA / NEIN BUTTONS
     ========================================== */
