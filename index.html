@@ -987,6 +987,15 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         padding: 3px 10px;
         margin: 0 0 12px 0;
     }
+    .sheet-hinweis {
+        background: #f3e5f5;
+        border-left: 3px solid #9c27b0;
+        border-radius: 6px;
+        padding: 8px 12px;
+        font-size: 13px;
+        color: #4a148c;
+        margin-bottom: 12px;
+    }
     .frage h3 {
         color: #0057a8;     /* Fragetext: Firmenblau */
         margin-bottom: 15px; /* Abstand nach unten zu den Buttons */
@@ -5633,6 +5642,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
                     var tabRaw  = (cols[1] || '').toLowerCase().trim();
                     var frage   = (cols[2] || '').trim();
                     var norm    = (cols[3] || '').trim();
+                    var hinweis = (cols[4] || '').trim();
                     if (!bauteil || !tabRaw || !frage) continue;
 
                     /* Tab-Normalisierung: Prüfung/Prüfen/pruefung → pruefung usw. */
@@ -5656,6 +5666,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
                     div.innerHTML =
                         '<h3>' + frage + '</h3>' +
                         (norm ? '<p class="norm-ref">📌 ' + norm + '</p>' : '') +
+                        (hinweis ? '<div class="sheet-hinweis">ℹ️ ' + hinweis + '</div>' : '') +
                         '<div class="antwort-gruppe">' +
                           '<button class="antwort-btn passt"       onclick="antwort(this,\'' + fId + '\')">🟢 i.O.</button>' +
                           '<button class="antwort-btn passt-nicht" onclick="antwort(this,\'' + fId + '\')">🔴 Mangel</button>' +
