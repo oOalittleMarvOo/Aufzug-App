@@ -5639,6 +5639,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
                     var zielId = (bauteil === 'seil') ? tab : (tab + '_' + bauteil);
                     var ziel = document.getElementById(zielId);
+                    if (i === 1) debugInfo += ' | ID gesucht: "' + zielId + '" gefunden: ' + (ziel ? 'JA' : 'NEIN');
                     if (!ziel) continue;
 
                     sheetImportZaehler++;
