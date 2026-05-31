@@ -2696,9 +2696,30 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 <!-- ==========================================
      TAB: DOKUMENTE (2.0.x) – Platzhalter
 ========================================== -->
-<div id="dokumente_begrenzer" class="tab-inhalt"> <!-- Versteckt -->
+<div id="dokumente_begrenzer" class="tab-inhalt">
     <div class="frage">
-        <h3>Dokumente folgen...</h3> <!-- Platzhalter für spätere Erweiterung -->
+        <h3>Baumuster</h3>
+        <div class="eingabe-zeile">
+            <label>Baumuster-Nr.:</label>
+            <input type="text" id="begrenzer_baumuster" placeholder="Baumuster eintragen" style="flex:1; padding:8px; border:1px solid #ccc; border-radius:6px; font-size:15px;">
+        </div>
+    </div>
+    <div class="frage" id="dok_begrenzer_baumuster_gueltig">
+        <h3>Baumuster gültig und unterschrieben?</h3>
+        <div class="antwort-gruppe">
+            <button class="antwort-btn passt" onclick="antwort(this, 'dok_begrenzer_baumuster_gueltig')">🟢 i.O.</button>
+            <button class="antwort-btn passt-nicht" onclick="antwort(this, 'dok_begrenzer_baumuster_gueltig')">🔴 Mangel</button>
+            <button class="antwort-btn irrelevant" onclick="antwort(this, 'dok_begrenzer_baumuster_gueltig')">⚪ Trifft nicht zu</button>
+        </div>
+        <div class="mangelfeld" id="mangel-dok_begrenzer_baumuster_gueltig">
+            <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+            <label>Bitte Mangel beschreiben:</label>
+            <textarea placeholder="Beschreibung des Mangels..."></textarea>
+        </div>
+        <div class="mangelfeld" id="trifft-dok_begrenzer_baumuster_gueltig" style="background:#f0f0f0;border-color:#999;">
+            <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
+            <textarea placeholder="Begründung oder Kommentar..."></textarea>
+        </div>
     </div>
 </div>
 
