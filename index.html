@@ -5617,7 +5617,6 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
                 var lines = text.split('\n');
                 var count = 0;
-                var debugInfo = 'Zeilen: ' + lines.length;
 
                 for (var i = 1; i < lines.length; i++) {
                     var line = lines[i].trim();
@@ -5629,7 +5628,6 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
                     var tabRaw  = (cols[1] || '').toLowerCase().trim();
                     var frage   = (cols[2] || '').trim();
                     var norm    = (cols[3] || '').trim();
-                    if (i === 1) debugInfo += ' | Zeile2: [' + cols.join('|') + ']';
                     if (!bauteil || !tabRaw || !frage) continue;
 
                     /* Tab-Normalisierung: Prüfung/Prüfen/pruefung → pruefung usw. */
@@ -5642,7 +5640,6 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
                     var zielId = (bauteil === 'seil') ? tab : (tab + '_' + bauteil);
                     var ziel = document.getElementById(zielId);
-                    if (i === 1) debugInfo += ' | ID gesucht: "' + zielId + '" gefunden: ' + (ziel ? 'JA' : 'NEIN');
                     if (!ziel) continue;
 
                     sheetImportZaehler++;
@@ -5673,7 +5670,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
                     count++;
                 }
 
-                var msg = count > 0 ? '✅ ' + count + ' Fragen geladen (' + new Date().toLocaleTimeString('de-DE', {hour:'2-digit',minute:'2-digit'}) + ')' : '⚠️ Keine Fragen – ' + debugInfo + ' | DOM-IDs: ' + vorhandeneIds.join(',');
+                var msg = count > 0 ? '✅ ' + count + ' Fragen geladen (' + new Date().toLocaleTimeString('de-DE', {hour:'2-digit',minute:'2-digit'}) + ')' : '⚠️ Keine Fragen gefunden – Bauteil/Tab prüfen';
                 if (status) status.textContent = msg;
                 btn.textContent = count > 0 ? '✅ Geladen' : '⚠️ Leer';
                 setTimeout(function() { btn.textContent = '📋 Datenbank laden'; btn.disabled = false; }, 3000);
