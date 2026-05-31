@@ -5606,6 +5606,9 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         var status = document.getElementById('sheetStatus');
         btn.textContent = '⏳ Wird geladen…'; btn.disabled = true;
 
+        /* Debug: welche dokumente_* IDs sind im DOM? */
+        var vorhandeneIds = Array.from(document.querySelectorAll('[id^="dokumente_"]')).map(function(el) { return el.id; });
+
         fetch(SHEET_CSV_URL)
             .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
             .then(function(text) {
@@ -5669,7 +5672,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
                     count++;
                 }
 
-                var msg = count > 0 ? '✅ ' + count + ' Fragen geladen (' + new Date().toLocaleTimeString('de-DE', {hour:'2-digit',minute:'2-digit'}) + ')' : '⚠️ Keine Fragen gefunden – ' + debugInfo;
+                var msg = count > 0 ? '✅ ' + count + ' Fragen geladen (' + new Date().toLocaleTimeString('de-DE', {hour:'2-digit',minute:'2-digit'}) + ')' : '⚠️ Keine Fragen – ' + debugInfo + ' | DOM-IDs: ' + vorhandeneIds.join(',');
                 if (status) status.textContent = msg;
                 btn.textContent = count > 0 ? '✅ Geladen' : '⚠️ Leer';
                 setTimeout(function() { btn.textContent = '📋 Datenbank laden'; btn.disabled = false; }, 3000);
