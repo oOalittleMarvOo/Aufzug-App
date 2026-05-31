@@ -1063,6 +1063,37 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         content: "13.1." counter(schutzraum-counter) " \2013  ";
     }
 
+    /* Dokumente-Tabs: Nummerierung {Bauteil}.{Nr} */
+    #dokumente                   { counter-reset: d1; }
+    #dokumente_begrenzer         { counter-reset: d2; }
+    #dokumente_fang              { counter-reset: d3; }
+    #dokumente_schienen          { counter-reset: d4; }
+    #dokumente_puffer            { counter-reset: d5; }
+    #dokumente_steuerung         { counter-reset: d6; }
+    #dokumente_antrieb           { counter-reset: d7; }
+    #dokumente_tragseile         { counter-reset: d8; }
+    #dokumente_rohrbruch         { counter-reset: d9; }
+    #dokumente_heber             { counter-reset: d10; }
+    #dokumente_schacht           { counter-reset: d11; }
+    #dokumente_schachttuer       { counter-reset: d12; }
+    #dokumente_fahrkorb          { counter-reset: d14; }
+    #dokumente_frequenzumrichter { counter-reset: d15; }
+
+    #dokumente > .frage > h3::before                    { counter-increment: d1;  content: "1."  counter(d1)  " \2013  "; }
+    #dokumente_begrenzer > .frage > h3::before          { counter-increment: d2;  content: "2."  counter(d2)  " \2013  "; }
+    #dokumente_fang > .frage > h3::before               { counter-increment: d3;  content: "3."  counter(d3)  " \2013  "; }
+    #dokumente_schienen > .frage > h3::before           { counter-increment: d4;  content: "4."  counter(d4)  " \2013  "; }
+    #dokumente_puffer > .frage > h3::before             { counter-increment: d5;  content: "5."  counter(d5)  " \2013  "; }
+    #dokumente_steuerung > .frage > h3::before          { counter-increment: d6;  content: "6."  counter(d6)  " \2013  "; }
+    #dokumente_antrieb > .frage > h3::before            { counter-increment: d7;  content: "7."  counter(d7)  " \2013  "; }
+    #dokumente_tragseile > .frage > h3::before          { counter-increment: d8;  content: "8."  counter(d8)  " \2013  "; }
+    #dokumente_rohrbruch > .frage > h3::before          { counter-increment: d9;  content: "9."  counter(d9)  " \2013  "; }
+    #dokumente_heber > .frage > h3::before              { counter-increment: d10; content: "10." counter(d10) " \2013  "; }
+    #dokumente_schacht > .frage > h3::before            { counter-increment: d11; content: "11." counter(d11) " \2013  "; }
+    #dokumente_schachttuer > .frage > h3::before        { counter-increment: d12; content: "12." counter(d12) " \2013  "; }
+    #dokumente_fahrkorb > .frage > h3::before           { counter-increment: d14; content: "14." counter(d14) " \2013  "; }
+    #dokumente_frequenzumrichter > .frage > h3::before  { counter-increment: d15; content: "15." counter(d15) " \2013  "; }
+
     /* ==========================================
        JA / NEIN BUTTONS
     ========================================== */
