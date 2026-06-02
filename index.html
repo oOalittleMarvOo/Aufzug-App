@@ -3806,13 +3806,36 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
                 <textarea placeholder="Begründung oder Kommentar..."></textarea>
             </div>
         </div>
+        <div class="frage" id="frage_freq_typenschild">
+            <h3>Sind Angaben am Typenschild korrekt?</h3>
+            <div class="hinweis">
+                ℹ️ Prüfen:<br>
+                &bull; Hersteller<br>
+                &bull; Baumuster-Nr.: <strong id="freq_baumuster_anzeige_pruef" style="color:#0057a8;">–</strong><br>
+                &bull; Typ der elektrischen Sicherheitseinrichtung
+            </div>
+            <div class="antwort-gruppe">
+                <button class="antwort-btn passt" onclick="antwort(this, 'frage_freq_typenschild')">🟢 i.O.</button>
+                <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage_freq_typenschild')">🔴 Mangel</button>
+                <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage_freq_typenschild')">⚪ Trifft nicht zu</button>
+            </div>
+            <div class="mangelfeld" id="mangel-frage_freq_typenschild">
+                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+                <label>Bitte Mangel beschreiben:</label>
+                <textarea placeholder="Beschreibung des Mangels..."></textarea>
+            </div>
+            <div class="mangelfeld" id="trifft-frage_freq_typenschild" style="background:#f0f0f0;border-color:#999;">
+                <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
+                <textarea placeholder="Begründung oder Kommentar..."></textarea>
+            </div>
+        </div>
     </div>
     <div id="dokumente_frequenzumrichter" class="tab-inhalt">
         <div class="frage">
             <h3>Baumuster</h3>
             <div class="eingabe-zeile">
                 <label>Baumuster-Nr.:</label>
-                <input type="text" id="frequenzumrichter_baumuster" placeholder="Baumuster eintragen" style="flex:1; padding:8px; border:1px solid #ccc; border-radius:6px; font-size:15px;">
+                <input type="text" id="frequenzumrichter_baumuster" placeholder="Baumuster eintragen" oninput="aktualisiereFreqBaumuster()" style="flex:1; padding:8px; border:1px solid #ccc; border-radius:6px; font-size:15px;">
             </div>
         </div>
         <div class="frage" id="dok_frequenzumrichter_baumuster_gueltig">
@@ -4786,6 +4809,12 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         var anzeige = document.getElementById('fang_baumuster_anzeige');
         document.getElementById('fang_baumuster_wert').textContent = val;
         anzeige.style.display = val ? 'block' : 'none';
+    }
+
+    function aktualisiereFreqBaumuster() {
+        var val = document.getElementById('frequenzumrichter_baumuster').value.trim();
+        var el = document.getElementById('freq_baumuster_anzeige_pruef');
+        if (el) el.textContent = val || '–';
     }
 
     function uebernehmeWerteFang() {
