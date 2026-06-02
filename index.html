@@ -3787,7 +3787,26 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         <button class="tab" onclick="zeigeTabGeneric(this, 'dokumente_frequenzumrichter', 'detailFrequenzumrichter')">📄 Dokumente</button>
         <button class="tab" onclick="zeigeTabGeneric(this, 'berechnung_frequenzumrichter', 'detailFrequenzumrichter')">🔢 Berechnung</button>
     </div>
-    <div id="pruefung_frequenzumrichter" class="tab-inhalt aktiv"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="pruefung_frequenzumrichter" class="tab-inhalt aktiv">
+        <div class="frage" id="frage_freq_bremskreis">
+            <h3>Hat im Stillstand eines der zwei unabhängigen Elemente im Bremskreis nicht geöffnet – Aufzugsanlage stillgesetzt?</h3>
+            <div class="hinweis">📋 DIN EN 81-20 5.9.2.2.2.3</div>
+            <div class="antwort-gruppe">
+                <button class="antwort-btn passt" onclick="antwort(this, 'frage_freq_bremskreis')">🟢 i.O.</button>
+                <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage_freq_bremskreis')">🔴 Mangel</button>
+                <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage_freq_bremskreis')">⚪ Trifft nicht zu</button>
+            </div>
+            <div class="mangelfeld" id="mangel-frage_freq_bremskreis">
+                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+                <label>Bitte Mangel beschreiben:</label>
+                <textarea placeholder="Beschreibung des Mangels..."></textarea>
+            </div>
+            <div class="mangelfeld" id="trifft-frage_freq_bremskreis" style="background:#f0f0f0;border-color:#999;">
+                <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
+                <textarea placeholder="Begründung oder Kommentar..."></textarea>
+            </div>
+        </div>
+    </div>
     <div id="dokumente_frequenzumrichter" class="tab-inhalt">
         <div class="frage">
             <h3>Baumuster</h3>
