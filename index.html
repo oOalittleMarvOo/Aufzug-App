@@ -1057,6 +1057,12 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         content: "7." counter(antrieb-counter) " \2013  ";
     }
 
+    #pruefung_frequenzumrichter { counter-reset: freq-counter; }
+    #pruefung_frequenzumrichter > .frage > h3::before {
+        counter-increment: freq-counter;
+        content: "15." counter(freq-counter) " \2013  ";
+    }
+
     #detailSchutzraum > div { counter-reset: schutzraum-counter; }
     #detailSchutzraum > div > .frage > h3::before {
         counter-increment: schutzraum-counter;
