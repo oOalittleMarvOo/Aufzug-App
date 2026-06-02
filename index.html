@@ -3788,7 +3788,32 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         <button class="tab" onclick="zeigeTabGeneric(this, 'berechnung_frequenzumrichter', 'detailFrequenzumrichter')">🔢 Berechnung</button>
     </div>
     <div id="pruefung_frequenzumrichter" class="tab-inhalt aktiv"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
-    <div id="dokumente_frequenzumrichter" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
+    <div id="dokumente_frequenzumrichter" class="tab-inhalt">
+        <div class="frage">
+            <h3>Baumuster</h3>
+            <div class="eingabe-zeile">
+                <label>Baumuster-Nr.:</label>
+                <input type="text" id="frequenzumrichter_baumuster" placeholder="Baumuster eintragen" style="flex:1; padding:8px; border:1px solid #ccc; border-radius:6px; font-size:15px;">
+            </div>
+        </div>
+        <div class="frage" id="dok_frequenzumrichter_baumuster_gueltig">
+            <h3>Baumuster gültig und unterschrieben?</h3>
+            <div class="antwort-gruppe">
+                <button class="antwort-btn passt" onclick="antwort(this, 'dok_frequenzumrichter_baumuster_gueltig')">🟢 i.O.</button>
+                <button class="antwort-btn passt-nicht" onclick="antwort(this, 'dok_frequenzumrichter_baumuster_gueltig')">🔴 Mangel</button>
+                <button class="antwort-btn irrelevant" onclick="antwort(this, 'dok_frequenzumrichter_baumuster_gueltig')">⚪ Trifft nicht zu</button>
+            </div>
+            <div class="mangelfeld" id="mangel-dok_frequenzumrichter_baumuster_gueltig">
+                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+                <label>Bitte Mangel beschreiben:</label>
+                <textarea placeholder="Beschreibung des Mangels..."></textarea>
+            </div>
+            <div class="mangelfeld" id="trifft-dok_frequenzumrichter_baumuster_gueltig" style="background:#f0f0f0;border-color:#999;">
+                <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
+                <textarea placeholder="Begründung oder Kommentar..."></textarea>
+            </div>
+        </div>
+    </div>
     <div id="berechnung_frequenzumrichter" class="tab-inhalt"><div class="frage"><h3>Inhalt folgt...</h3></div></div>
     <div class="pdf-bereich"><button class="pdf-btn" onclick="erstellePDF()">📄 PDF Protokoll erstellen</button></div>
 </div>
