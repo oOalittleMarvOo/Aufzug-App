@@ -3574,7 +3574,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             <div class="hinweis">📋 DIN EN 81-20 5.5.2.2</div>
             <div class="eingabe-zeile" style="margin-top:12px;">
                 <label>Gemessener Seildurchmesser:</label>
-                <input type="number" id="trag_durchmesser_wert" placeholder="Wert eingeben" step="0.1" min="0" style="width:100px; padding:8px; border:1px solid #ccc; border-radius:6px; font-size:15px;">
+                <input type="number" id="trag_durchmesser_wert" placeholder="Wert eingeben" step="0.1" min="0" oninput="berechneMinTreibscheibe()" style="width:100px; padding:8px; border:1px solid #ccc; border-radius:6px; font-size:15px;">
                 <span class="einheit">mm</span>
             </div>
         </div>
@@ -3583,6 +3583,9 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             <h3>Verhältnis Treibscheibendurchmesser zu Seildurchmesser mindestens 40</h3>
             <div class="hinweis">📋 DIN EN 81-20 5.5.2.1</div>
             <div class="hinweis" style="margin-top:8px;">ℹ️ Gemessen von der Seilmitte aus</div>
+            <div id="trag_treibscheibe_hinweis" style="display:none; margin-top:10px; padding:10px 14px; background:#e8f5e9; border:1px solid #a5d6a7; border-radius:8px; font-size:14px; color:#1b5e20;">
+                📐 Treibscheibe mindestens: <strong id="trag_treibscheibe_min"></strong> mm
+            </div>
             <div class="antwort-gruppe">
                 <button class="antwort-btn passt"       onclick="antwort(this,'frage_trag_verhaeltnis')">🟢 i.O.</button>
                 <button class="antwort-btn passt-nicht" onclick="antwort(this,'frage_trag_verhaeltnis')">🔴 Mangel</button>
@@ -5029,6 +5032,18 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         var anzeige = document.getElementById('fang_baumuster_anzeige');
         document.getElementById('fang_baumuster_wert').textContent = val;
         anzeige.style.display = val ? 'block' : 'none';
+    }
+
+    function berechneMinTreibscheibe() {
+        var d = parseFloat(document.getElementById('trag_durchmesser_wert').value);
+        var hinweis = document.getElementById('trag_treibscheibe_hinweis');
+        var min = document.getElementById('trag_treibscheibe_min');
+        if (d && d > 0) {
+            min.textContent = (d * 40).toFixed(0);
+            hinweis.style.display = 'block';
+        } else {
+            hinweis.style.display = 'none';
+        }
     }
 
     function aktualisiereFreqBaumuster() {
