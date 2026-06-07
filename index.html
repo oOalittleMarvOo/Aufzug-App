@@ -3570,28 +3570,23 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     <div id="pruefung_tragseile" class="tab-inhalt aktiv">
 
         <div class="frage" id="frage_trag_durchmesser">
-            <h3>Seildurchmesser mindestens 8 mm</h3>
-            <div class="hinweis">📋 DIN EN 81-20 5.5.2.2</div>
+            <h3>Seildurchmesser mindestens 8 mm – Verhältnis Treibscheibendurchmesser zu Seildurchmesser mindestens 40</h3>
+            <div class="hinweis">📋 DIN EN 81-20 5.5.2.2 &nbsp;|&nbsp; 5.5.2.1 &nbsp;|&nbsp; Gemessen von der Seilmitte aus</div>
             <div class="eingabe-zeile" style="margin-top:12px;">
                 <label>Gemessener Seildurchmesser:</label>
                 <input type="number" id="trag_durchmesser_wert" placeholder="Wert eingeben" step="0.1" min="0" oninput="berechneMinTreibscheibe()" style="width:100px; padding:8px; border:1px solid #ccc; border-radius:6px; font-size:15px;">
                 <span class="einheit">mm</span>
             </div>
-        </div>
-
-        <div class="frage" id="frage_trag_verhaeltnis">
-            <h3>Verhältnis Treibscheibendurchmesser zu Seildurchmesser mindestens 40</h3>
-            <div class="hinweis">📋 DIN EN 81-20 5.5.2.1 &nbsp;|&nbsp; Gemessen von der Seilmitte aus</div>
             <div id="trag_treibscheibe_hinweis" style="display:none; margin-top:10px; padding:10px 14px; background:#e8f5e9; border:1px solid #a5d6a7; border-radius:8px; font-size:14px; color:#1b5e20;">
                 📐 Treibscheibe mindestens: <strong id="trag_treibscheibe_min"></strong> mm
             </div>
             <div class="antwort-gruppe">
-                <button class="antwort-btn passt"       onclick="antwort(this,'frage_trag_verhaeltnis')">🟢 i.O.</button>
-                <button class="antwort-btn passt-nicht" onclick="antwort(this,'frage_trag_verhaeltnis')">🔴 Mangel</button>
-                <button class="antwort-btn irrelevant"  onclick="antwort(this,'frage_trag_verhaeltnis')">⚪ Trifft nicht zu</button>
+                <button class="antwort-btn passt"       onclick="antwort(this,'frage_trag_durchmesser')">🟢 i.O.</button>
+                <button class="antwort-btn passt-nicht" onclick="antwort(this,'frage_trag_durchmesser')">🔴 Mangel</button>
+                <button class="antwort-btn irrelevant"  onclick="antwort(this,'frage_trag_durchmesser')">⚪ Trifft nicht zu</button>
             </div>
-            <div class="mangelfeld" id="mangel-frage_trag_verhaeltnis"><p class="mangel-hinweis">⚠️ Mangel festgestellt!</p><label>Bitte Mangel beschreiben:</label><textarea placeholder="Beschreibung des Mangels..."></textarea></div>
-            <div class="mangelfeld" id="trifft-frage_trag_verhaeltnis" style="background:#f0f0f0;border-color:#999;"><p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p><textarea placeholder="Begründung oder Kommentar..."></textarea></div>
+            <div class="mangelfeld" id="mangel-frage_trag_durchmesser"><p class="mangel-hinweis">⚠️ Mangel festgestellt!</p><label>Bitte Mangel beschreiben:</label><textarea placeholder="Beschreibung des Mangels..."></textarea></div>
+            <div class="mangelfeld" id="trifft-frage_trag_durchmesser" style="background:#f0f0f0;border-color:#999;"><p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p><textarea placeholder="Begründung oder Kommentar..."></textarea></div>
         </div>
 
         <div class="frage" id="frage_trag_seilend">
