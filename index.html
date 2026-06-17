@@ -1519,7 +1519,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             <div class="s-step"><div class="s-kreis">4</div><span>Prüfung</span></div>
         </div>
         <h2>🔧 Welche Teile wurden umgebaut?</h2>
-        <div id="tut_bauteile" style="display:none; background:#e3f2fd; border:1px solid #90caf9; border-radius:8px; padding:14px 16px; margin-bottom:14px; font-size:14px; color:#0d47a1; line-height:1.7;">
+        <div id="tut_bauteile" style="background:#e3f2fd; border:1px solid #90caf9; border-radius:8px; padding:14px 16px; margin-bottom:14px; font-size:14px; color:#0d47a1; line-height:1.7;">
             📖 <strong>So geht's – Schritt für Schritt:</strong><br><br>
             <strong>1.</strong> Tippe auf das Kästchen ☐ neben einem Bauteil um es auszuwählen – es erscheint dann ein Haken ✅.<br><br>
             <strong>2.</strong> Direkt darunter erscheinen drei Buttons: <em>Triebwerksraum</em>, <em>Schacht</em> oder <em>Grube</em> – tippe auf den Ort, wo das Bauteil eingebaut ist.<br><br>
@@ -6230,7 +6230,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         zeigeUmbau();
     }
 
-    var tutorialInlineIds = ['tut_bauteile', 'tut_dokumenteSchritt', 'tut_bauteilListe'];
+    var tutorialInlineIds = ['tut_dokumenteSchritt', 'tut_bauteilListe'];
 
     function setTutorialKontext(key) {
         if (!tutorialModus) return;
