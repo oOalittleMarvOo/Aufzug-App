@@ -4206,6 +4206,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             if (el) el.value = aktuelleAnlagendaten[f] || '';
         });
         document.getElementById('modalSeriennummer').classList.add('aktiv');
+        setTutorialKontext('seriennummer');
     }
 
     /* Modal schließen ohne zu speichern (Überspringen-Button)
@@ -4289,6 +4290,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             }
         });
         document.getElementById('modalBauteile').classList.add('aktiv');
+        setTutorialKontext('bauteile');
     }
 
     /* Modal schließen ohne Speichern */
@@ -4313,6 +4315,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
     /* Dokumente-Schritt: Dokumente-Tabs aller gewählten Bauteile anzeigen */
     function zeigeDokumenteSchritt() {
+        setTutorialKontext('dokumenteSchritt');
         const container = document.getElementById('dokumenteSchrittInhalt');
         container.querySelectorAll('.dokumente-bauteil-header').forEach(h => h.remove());
 
@@ -4703,6 +4706,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         document.getElementById('bereichTitel').innerText = bereich;
         document.getElementById('hauptHeader').innerText = '🛗 ' + bereich; /* Header auf Bereichsname setzen */
         zeige('bauteilSeite');
+        setTutorialKontext('bauteilListe');
     }
 
     /* ------------------------------------------
@@ -4715,6 +4719,9 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         document.querySelectorAll('#' + seitenId + ' .tab-inhalt').forEach(el => el.classList.remove('aktiv'));
         btn.classList.add('aktiv');
         document.getElementById(tabId).classList.add('aktiv');
+        if (tabId.indexOf('pruefung') !== -1)    setTutorialKontext('pruefungTab');
+        else if (tabId.indexOf('berechnung') !== -1) setTutorialKontext('berechnungTab');
+        else if (tabId.indexOf('elektro') !== -1)    setTutorialKontext('elektroTab');
     }
 
     /* Mapping: Bauteil-ID → ID des Dokumente-Tab-Inhalts */
@@ -4745,6 +4752,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         const isOpen = detail.style.display === 'block';
         detail.style.display = isOpen ? 'none' : 'block';
         btn.classList.toggle('bauteil-btn-offen', !isOpen);
+        if (!isOpen) setTutorialKontext('bauteilDetail');
     }
 
     /* Rückwärtskompatibel: zeigeBauteil → toggleBauteil */
@@ -6167,57 +6175,55 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     ========================================== */
 
     var tutorialModus = false;
-    var tutorialSchritt = 0;
 
-    var tutorialSchritte = [
-        {
-            titel: "Schritt 1 von 6 – Seriennummer & Anlagendaten",
-            text: "Trag die <strong>Seriennummer</strong> der Anlage ein – steht am Typenschild. Darunter folgen die <strong>Anlagendaten</strong>: Nennlast, Masse Fahrkorb, Gegengewicht, Geschwindigkeit, Schienentyp und Tragmittel. Wichtig: Diese Werte werden automatisch in alle Berechnungen übertragen – du gibst sie nur einmal ein!"
+    var tutorialTexte = {
+        seriennummer: {
+            titel: "Seriennummer & Anlagendaten",
+            text: "Trag die <strong>Seriennummer</strong> ein – steht am Typenschild. Darunter kommen die <strong>Anlagendaten</strong>: Nennlast, Fahrkorbmasse, Gegengewicht, Geschwindigkeit, Schienentyp und Tragmittel. Diese Werte werden automatisch in alle Berechnungen übertragen – nur einmal eingeben!"
         },
-        {
-            titel: "Schritt 2 von 6 – Bauteile auswählen",
-            text: "Hake alle Bauteile an, die beim Umbau verändert wurden. Nach dem Abhaken erscheint die <strong>Gruppenauswahl</strong> (Triebwerksraum / Schacht / Grube) – wähle, wo das Bauteil verbaut ist. Tipp: Fahrkorb aktiviert automatisch Schienen mit."
+        bauteile: {
+            titel: "Bauteile auswählen",
+            text: "Hake alle Bauteile an, die beim Umbau verändert wurden. Nach dem Abhaken erscheint die <strong>Gruppenauswahl</strong> (Triebwerksraum / Schacht / Grube) – wähle wo das Bauteil verbaut ist. Tipp: Fahrkorb aktiviert automatisch Schienen mit."
         },
-        {
-            titel: "Schritt 3 von 6 – Bauteil öffnen",
-            text: "Tippe auf ein Bauteil in der Liste um es zu öffnen. Oben siehst du <strong>Tabs</strong>: Prüfung vor Ort, Dokumente, Berechnung, Elektro. Fang immer mit den <strong>Dokumenten</strong> an – Unterlagen zuerst prüfen, dann vor Ort."
+        dokumenteSchritt: {
+            titel: "Dokumente-Übersicht",
+            text: "Hier prüfst du die Unterlagen für jedes gewählte Bauteil. Drücke auf ein Bauteil um die Dokumentenfelder aufzuklappen. <strong>Immer zuerst Dokumente, dann die Vor-Ort-Prüfung.</strong>"
         },
-        {
-            titel: "Schritt 4 von 6 – Dokumente prüfen",
-            text: "Im <strong>Dokumente-Tab</strong> prüfst du ob alle Unterlagen vorliegen (z. B. EG-Baumusterbescheinigung, Einbauerklärung). Drücke <strong>🟢 i.O.</strong> wenn alles passt, <strong>🔴 Mangel</strong> wenn etwas fehlt – dann öffnet sich ein Textfeld für die Beschreibung."
+        bauteilListe: {
+            titel: "Bauteil-Liste",
+            text: "Tippe auf ein Bauteil um es aufzuklappen. Die Prüffelder erscheinen dann direkt darunter. Unten auf der Seite findest du den <strong>📄 PDF-Button</strong> – den drückst du am Ende wenn alles fertig ist."
         },
-        {
-            titel: "Schritt 5 von 6 – Prüfung vor Ort",
-            text: "Im <strong>Prüfung-Tab</strong> gehst du alle Prüfpunkte durch. Blaue Hinweisfelder erklären was zu tun ist. Berechnungsfelder füllen sich automatisch aus den Anlagendaten. Eingabefelder wie Seildurchmesser berechnen direkt den Mindestwert für den nächsten Prüfpunkt."
+        bauteilDetail: {
+            titel: "Bauteil geöffnet",
+            text: "Oben siehst du die <strong>Tabs</strong>: Prüfung vor Ort, Berechnung, Elektro. Im <strong>Prüfung-Tab</strong> bearbeitest du alle Prüfpunkte. Wechsel die Tabs je nachdem was du gerade brauchst."
         },
-        {
-            titel: "Schritt 6 von 6 – PDF erstellen",
-            text: "Wenn alle Bauteile geprüft sind, drücke unten auf <strong>📄 PDF Protokoll erstellen</strong>. Das Protokoll enthält alle Ergebnisse, Mängel und Eingaben in druckfertiger Form. <strong>Das war's – du kennst jetzt den kompletten Ablauf!</strong>"
+        pruefungTab: {
+            titel: "Prüfung vor Ort",
+            text: "Geh alle Punkte durch. Blaue Kästchen erklären was zu tun ist. Eingabefelder (z. B. Seildurchmesser) berechnen automatisch den Mindestwert für den nächsten Punkt. Bei <strong>🔴 Mangel</strong> öffnet sich ein Textfeld – Mangel kurz beschreiben."
+        },
+        berechnungTab: {
+            titel: "Berechnung",
+            text: "Hier laufen alle <strong>Berechnungen</strong> für dieses Bauteil. Felder aus den Anlagendaten sind schon vorausgefüllt – du ergänzt nur noch fehlende Werte und die Ergebnisse erscheinen automatisch."
+        },
+        elektroTab: {
+            titel: "Elektro-Messung",
+            text: "Hier trägst du die <strong>Messergebnisse</strong> ein, z. B. Niederohmigkeit oder Isolationswiderstand. Gemessenen Wert eintragen, die App zeigt ob er in Ordnung ist."
         }
-    ];
+    };
 
     function starteTutorial() {
         tutorialModus = true;
-        tutorialSchritt = 0;
-        zeigeTutorialBanner();
+        setTutorialKontext('seriennummer');
         zeigeUmbau();
     }
 
-    function zeigeTutorialBanner() {
-        var banner = document.getElementById('tutorialBanner');
-        var schritt = tutorialSchritte[tutorialSchritt];
-        document.getElementById('tutorialBannerTitel').innerHTML = schritt.titel;
-        document.getElementById('tutorialBannerText').innerHTML = schritt.text;
-        banner.style.display = 'block';
-    }
-
-    function tutorialWeiter() {
-        tutorialSchritt++;
-        if (tutorialSchritt >= tutorialSchritte.length) {
-            tutorialBeenden();
-        } else {
-            zeigeTutorialBanner();
-        }
+    function setTutorialKontext(key) {
+        if (!tutorialModus) return;
+        var t = tutorialTexte[key];
+        if (!t) return;
+        document.getElementById('tutorialBannerTitel').innerHTML = t.titel;
+        document.getElementById('tutorialBannerText').innerHTML = t.text;
+        document.getElementById('tutorialBanner').style.display = 'block';
     }
 
     function tutorialBeenden() {
@@ -6234,9 +6240,8 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             <div style="font-weight:700; font-size:12px; opacity:0.8; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px;" id="tutorialBannerTitel"></div>
             <div style="font-size:14px; line-height:1.55;" id="tutorialBannerText"></div>
         </div>
-        <div style="display:flex; flex-direction:column; gap:6px; flex-shrink:0; margin-top:2px;">
-            <button onclick="tutorialWeiter()" style="background:white; color:#0057a8; border:none; border-radius:8px; padding:9px 18px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap;">Weiter →</button>
-            <button onclick="tutorialBeenden()" style="background:transparent; color:rgba(255,255,255,0.65); border:1px solid rgba(255,255,255,0.35); border-radius:8px; padding:5px 10px; font-size:12px; cursor:pointer;">✕ Beenden</button>
+        <div style="flex-shrink:0; margin-top:2px;">
+            <button onclick="tutorialBeenden()" style="background:transparent; color:rgba(255,255,255,0.8); border:1px solid rgba(255,255,255,0.4); border-radius:8px; padding:8px 14px; font-size:13px; cursor:pointer; white-space:nowrap;">✕ Beenden</button>
         </div>
     </div>
 </div>
