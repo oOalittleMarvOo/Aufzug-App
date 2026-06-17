@@ -1519,13 +1519,6 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             <div class="s-step"><div class="s-kreis">4</div><span>Prüfung</span></div>
         </div>
         <h2>🔧 Welche Teile wurden umgebaut?</h2>
-        <div id="tut_bauteile" style="display:none; background:#e3f2fd; border:1px solid #90caf9; border-radius:8px; padding:14px 16px; margin-bottom:14px; font-size:14px; color:#0d47a1; line-height:1.7;">
-            📖 <strong>So geht's – Schritt für Schritt:</strong><br><br>
-            <strong>1.</strong> Tippe auf das Kästchen ☐ neben einem Bauteil um es auszuwählen – es erscheint dann ein Haken ✅.<br><br>
-            <strong>2.</strong> Direkt darunter erscheinen drei Buttons: <em>Triebwerksraum</em>, <em>Schacht</em> oder <em>Grube</em> – tippe auf den Ort, wo das Bauteil eingebaut ist.<br><br>
-            <strong>3.</strong> Wiederhole das für alle Bauteile die beim Umbau verändert wurden.<br><br>
-            💡 Wenn du dir nicht sicher bist wo ein Bauteil verbaut ist: Triebwerksraum = oben, Schacht = der Aufzugsschacht, Grube = unten.
-        </div>
         <p style="color:#666;margin-bottom:15px;font-size:14px;">Bauteil wählen → Gruppe zuweisen</p>
         <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;text-align:left;">
 
@@ -1894,9 +1887,6 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         <div class="s-step aktiv"><div class="s-kreis">4</div><span>Prüfung vor Ort</span></div>
     </div>
     <h2 id="bereichTitel"></h2>
-    <div id="tut_bauteilListe" style="display:none; background:#e3f2fd; border:1px solid #90caf9; border-radius:8px; padding:12px 14px; margin-bottom:14px; font-size:14px; color:#0d47a1; line-height:1.5;">
-        📖 Tippe auf ein Bauteil um es aufzuklappen – die Prüffelder erscheinen direkt darunter. Wenn du alle Bauteile abgearbeitet hast, drücke unten auf <strong>📄 Gesamtprotokoll PDF erstellen</strong>.
-    </div>
     <div id="umbauPdfBereich" style="display:none; margin-bottom:15px;">
         <button class="modal-btn-skip" style="margin-bottom:10px;" onclick="zeigeDokumenteSchritt()">← Zurück zu Dokumente</button>
         <button class="pdf-btn" onclick="erstellePDFUmbau()">📄 Gesamtprotokoll PDF erstellen</button>
@@ -4155,10 +4145,6 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     </div>
     <button class="modal-btn-skip" style="margin-bottom:10px;" onclick="speichereProjekt()">💾 Projekt speichern</button>
     <p class="dokumente-seite-titel">📄 Dokumente prüfen</p>
-    <div id="tut_dokumenteSchritt" style="display:none; background:#e3f2fd; border:1px solid #90caf9; border-radius:8px; padding:14px 16px; margin-bottom:12px; font-size:14px; color:#0d47a1; line-height:1.7;">
-        📖 Hier prüfst du die Unterlagen für jedes gewählte Bauteil. Klappe ein Bauteil auf und prüfe die Dokumente.<br><br>
-        💡 <strong>Wichtig:</strong> Alle Eintragungen die du hier machst, werden in der <strong>Prüfung vor Ort</strong> nochmal abgefragt – du gibst sie nur einmal ein und sie erscheinen automatisch als Prüfpunkte.
-    </div>
     <p style="color:#555;font-size:14px;margin-bottom:10px;">Bitte prüfen Sie die Unterlagen für die gewählten Bauteile, bevor die Prüfung vor Ort beginnt.</p>
     <div id="dokumenteSchrittInhalt"></div>
     <button class="weiter-zur-pruefung" onclick="weiterVonDokumenten()">✅ Weiter zur Prüfung vor Ort</button>
@@ -6231,50 +6217,34 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         zeigeUmbau();
     }
 
-    var tutorialInlineIds = ['tut_bauteile', 'tut_dokumenteSchritt', 'tut_bauteilListe'];
-
     function setTutorialKontext(key) {
         if (!tutorialModus) return;
-        /* Inline-Boxen: alle ausblenden, dann ggf. eine einblenden */
-        tutorialInlineIds.forEach(function(id) {
-            var el = document.getElementById(id);
-            if (el) el.style.display = 'none';
-        });
-        var inlineId = 'tut_' + key;
-        var inlineEl = document.getElementById(inlineId);
-        if (inlineEl) {
-            inlineEl.style.display = 'block';
-            document.getElementById('tutorialBanner').style.display = 'none';
-            return;
-        }
-        /* Kein Inline-Element → Banner unten zeigen */
         var t = tutorialTexte[key];
         if (!t) return;
-        document.getElementById('tutorialBannerTitel').innerHTML = t.titel;
-        document.getElementById('tutorialBannerText').innerHTML = t.text;
-        document.getElementById('tutorialBanner').style.display = 'block';
+        document.getElementById('tutorialPopupTitel').innerHTML = '📖 ' + t.titel;
+        document.getElementById('tutorialPopupText').innerHTML = t.text;
+        document.getElementById('tutorialPopup').style.display = 'flex';
+    }
+
+    function tutorialPopupSchliessen() {
+        document.getElementById('tutorialPopup').style.display = 'none';
     }
 
     function tutorialBeenden() {
         tutorialModus = false;
-        document.getElementById('tutorialBanner').style.display = 'none';
-        tutorialInlineIds.forEach(function(id) {
-            var el = document.getElementById(id);
-            if (el) el.style.display = 'none';
-        });
+        document.getElementById('tutorialPopup').style.display = 'none';
     }
 
 </script>
 
-<!-- TUTORIAL-BANNER (erscheint nur im Tutorial-Modus) -->
-<div id="tutorialBanner" style="display:none; position:fixed; bottom:0; left:0; right:0; background:#0057a8; color:white; padding:16px 20px; z-index:9999; box-shadow:0 -3px 12px rgba(0,0,0,0.3);">
-    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; max-width:600px; margin:0 auto;">
-        <div style="flex:1;">
-            <div style="font-weight:700; font-size:12px; opacity:0.8; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px;" id="tutorialBannerTitel"></div>
-            <div style="font-size:14px; line-height:1.55;" id="tutorialBannerText"></div>
-        </div>
-        <div style="flex-shrink:0; margin-top:2px;">
-            <button onclick="tutorialBeenden()" style="background:transparent; color:rgba(255,255,255,0.8); border:1px solid rgba(255,255,255,0.4); border-radius:8px; padding:8px 14px; font-size:13px; cursor:pointer; white-space:nowrap;">✕ Beenden</button>
+<!-- TUTORIAL-POPUP -->
+<div id="tutorialPopup" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:10000; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:white; border-radius:14px; max-width:420px; width:100%; padding:24px 22px; box-shadow:0 8px 32px rgba(0,0,0,0.25);">
+        <div id="tutorialPopupTitel" style="font-size:17px; font-weight:700; color:#0057a8; margin-bottom:14px;"></div>
+        <div id="tutorialPopupText" style="font-size:15px; color:#333; line-height:1.65; margin-bottom:22px;"></div>
+        <div style="display:flex; gap:10px; justify-content:flex-end;">
+            <button onclick="tutorialBeenden()" style="background:transparent; color:#999; border:1px solid #ccc; border-radius:8px; padding:10px 18px; font-size:14px; cursor:pointer;">Tutorial beenden</button>
+            <button onclick="tutorialPopupSchliessen()" style="background:#0057a8; color:white; border:none; border-radius:8px; padding:10px 22px; font-size:15px; font-weight:700; cursor:pointer;">Verstanden ✓</button>
         </div>
     </div>
 </div>
