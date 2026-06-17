@@ -1830,6 +1830,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         <button class="btn" onclick="zeigeUmbau()">🔧 2 – Umbau</button>
         <button class="btn" onclick="zeigeBauteile('3 – Komponenten')">🔩 3 – Komponenten</button>
         <button class="btn" onclick="zeige('sicherungSeite')">⚡ 4 – Sicherung</button>
+        <button class="btn" onclick="zeige('tutorialSeite')">📖 Tutorial</button>
     </div>
     <!-- Erscheint nur wenn ein Umbau-Projekt aktiv ist -->
     <div id="projektFortsetzenBereich" style="display:none; margin-top:15px;">
@@ -2984,6 +2985,16 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
      Alle neuen Bauteile – Inhalt folgt nach und nach
      Jede Seite hat 4 Tabs: Prüfung vor Ort / Dokumente / Berechnung / Elektro
 ========================================== -->
+
+<!-- TUTORIAL -->
+
+<div id="tutorialSeite" class="seite">
+    <button class="zuruck" onclick="zeige('startseite')">← Zurück</button>
+    <h2>📖 Tutorial</h2>
+    <div class="frage">
+        <h3>Inhalt folgt...</h3>
+    </div>
+</div>
 
 <!-- BAUTEIL 3: FANGVORRICHTUNG -->
 
