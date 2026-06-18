@@ -5750,6 +5750,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
        Erstellt ein Protokoll für alle gewählten Bauteile
     ------------------------------------------ */
     function erstellePDFUmbau() {
+        if (tutorialModus) { setTutorialKontext('abschluss'); return; }
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         let y = 20;
@@ -6208,6 +6209,10 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         elektroTab: {
             titel: "Elektro-Messung",
             text: "Hier trägst du die <strong>Messergebnisse</strong> ein, z. B. Niederohmigkeit oder Isolationswiderstand. Gemessenen Wert eintragen, die App zeigt ob er in Ordnung ist."
+        },
+        abschluss: {
+            titel: "🎉 Tutorial abgeschlossen!",
+            text: "Du hast alle Schritte kennengelernt. Mit dem Button unten erstellst du jetzt dein erstes Protokoll – das ist der offizielle Abschluss des Tutorials."
         }
     };
 
@@ -6217,12 +6222,23 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         zeigeUmbau();
     }
 
+    var tutorialAktuellerKey = '';
+
     function setTutorialKontext(key) {
         if (!tutorialModus) return;
         var t = tutorialTexte[key];
         if (!t) return;
-        document.getElementById('tutorialPopupTitel').innerHTML = '📖 ' + t.titel;
+        tutorialAktuellerKey = key;
+        document.getElementById('tutorialPopupTitel').innerHTML = (key === 'abschluss' ? '' : '📖 ') + t.titel;
         document.getElementById('tutorialPopupText').innerHTML = t.text;
+        var btn = document.getElementById('tutorialVerstanden');
+        if (key === 'abschluss') {
+            btn.textContent = '📄 Protokoll erstellen & Tutorial beenden';
+            btn.onclick = function() { tutorialBeenden(); erstellePDFUmbau(); };
+        } else {
+            btn.textContent = 'Verstanden ✓';
+            btn.onclick = tutorialPopupSchliessen;
+        }
         document.getElementById('tutorialPopup').style.display = 'flex';
     }
 
@@ -6244,7 +6260,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         <div id="tutorialPopupText" style="font-size:15px; color:#333; line-height:1.65; margin-bottom:22px;"></div>
         <div style="display:flex; gap:10px; justify-content:flex-end;">
             <button onclick="tutorialBeenden()" style="background:transparent; color:#999; border:1px solid #ccc; border-radius:8px; padding:10px 18px; font-size:14px; cursor:pointer;">Tutorial beenden</button>
-            <button onclick="tutorialPopupSchliessen()" style="background:#0057a8; color:white; border:none; border-radius:8px; padding:10px 22px; font-size:15px; font-weight:700; cursor:pointer;">Verstanden ✓</button>
+            <button id="tutorialVerstanden" onclick="tutorialPopupSchliessen()" style="background:#0057a8; color:white; border:none; border-radius:8px; padding:10px 22px; font-size:15px; font-weight:700; cursor:pointer;">Verstanden ✓</button>
         </div>
     </div>
 </div>
