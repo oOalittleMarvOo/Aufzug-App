@@ -5870,71 +5870,153 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         if (tutorialModus) { setTutorialKontext('abschluss'); return; }
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
-        let y = 20;
-        const zeilenAbstand = 7;
-        const seitenHoehe = 280;
 
-        function zeile(text, einzug = 0) {
-            if (y > seitenHoehe) { doc.addPage(); y = 20; }
-            const lines = doc.splitTextToSize(text, 180 - einzug);
-            lines.forEach(l => {
-                if (y > seitenHoehe) { doc.addPage(); y = 20; }
-                doc.text(l, 15 + einzug, y);
-                y += zeilenAbstand;
-            });
+        /* ── Konstanten ── */
+        const W = 210, H = 297, ML = 12, MR = 12, CW = W - ML - MR;
+        const C_BLAU      = [0, 87, 168];
+        const C_HELLBLAU  = [236, 244, 255];
+        const C_GRAU      = [245, 245, 245];
+        const C_GRAURAND  = [200, 200, 200];
+        const C_GRUEN     = [46, 125, 50];
+        const C_ROT       = [180, 30, 30];
+        const C_DUNKEL    = [40, 40, 40];
+        let y = 12, seite = 1;
+
+        /* ── Footer ── */
+        function footer() {
+            doc.setDrawColor(...C_GRAURAND);
+            doc.line(ML, H - 11, W - MR, H - 11);
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(7.5);
+            doc.setTextColor(150, 150, 150);
+            doc.text('Aufzug-App  |  Prüfprotokoll Umbau', ML, H - 6);
+            doc.text(new Date().toLocaleDateString('de-DE'), W / 2, H - 6, { align: 'center' });
+            doc.text('Seite ' + seite, W - MR, H - 6, { align: 'right' });
         }
 
-        /* Kopfzeile */
-        doc.setFontSize(18); doc.setTextColor(0, 87, 168);
-        zeile('Aufzug-App - Umbau Pruefprotokoll');
-        doc.setFontSize(10); doc.setTextColor(100, 100, 100);
-        zeile('Erstellt: ' + new Date().toLocaleDateString('de-DE') + '  ' + new Date().toLocaleTimeString('de-DE'));
-        if (aktuelleSeriennummer) zeile('Projektnummer: ' + aktuelleSeriennummer);
-        y += 4;
+        /* ── Seitenumbruch ── */
+        function check(h) {
+            if (y + h > H - 16) { footer(); doc.addPage(); seite++; y = 12; }
+        }
 
-        /* Alle Bauteile oder nur gewählte */
+        /* ── Trennlinie ── */
+        function linie() { doc.setDrawColor(...C_GRAURAND); doc.line(ML, y, W - MR, y); y += 3; }
+
+        /* ── Abschnitts-Header (blauer Balken) ── */
+        function sectionHeader(text) {
+            check(10);
+            doc.setFillColor(...C_BLAU);
+            doc.roundedRect(ML, y, CW, 8, 2, 2, 'F');
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(9.5);
+            doc.setTextColor(255, 255, 255);
+            doc.text(text, ML + 4, y + 5.5);
+            y += 11;
+        }
+
+        /* ══════════════════════════════════════════
+           SEITE 1 – DECKBLATT-HEADER
+        ══════════════════════════════════════════ */
+        doc.setFillColor(...C_HELLBLAU);
+        doc.setDrawColor(...C_BLAU);
+        doc.roundedRect(ML, y, CW, 30, 3, 3, 'FD');
+
+        /* Logo-Platzhalter */
+        doc.setFillColor(...C_GRAU);
+        doc.setDrawColor(...C_GRAURAND);
+        doc.roundedRect(ML + 3, y + 3, 36, 24, 2, 2, 'FD');
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7);
+        doc.setTextColor(170, 170, 170);
+        doc.text('LOGO', ML + 3 + 18, y + 16, { align: 'center' });
+
+        /* Titel */
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(15);
+        doc.setTextColor(...C_BLAU);
+        doc.text('Prüfprotokoll – Aufzug Umbau', ML + 44, y + 10);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9);
+        doc.setTextColor(80, 80, 80);
+        doc.text('Erstellt: ' + new Date().toLocaleDateString('de-DE') + '  ' + new Date().toLocaleTimeString('de-DE'), ML + 44, y + 17);
+        if (aktuelleSeriennummer) {
+            doc.text('Projektnummer: ' + aktuelleSeriennummer, ML + 44, y + 23);
+        }
+        y += 36;
+
+        /* ── Anlagendaten-Box ── */
+        if (aktuelleAnlagendaten && Object.keys(aktuelleAnlagendaten).length > 0) {
+            const ad = aktuelleAnlagendaten;
+            const boxH = 34;
+            doc.setFillColor(...C_GRAU);
+            doc.setDrawColor(...C_GRAURAND);
+            doc.roundedRect(ML, y, CW, boxH, 3, 3, 'FD');
+
+            /* Box-Kopf */
+            doc.setFillColor(...C_BLAU);
+            doc.roundedRect(ML, y, CW, 7, 3, 3, 'F');
+            doc.rect(ML, y + 4, CW, 3, 'F');
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(8.5);
+            doc.setTextColor(255, 255, 255);
+            doc.text('ANLAGENDATEN', ML + 4, y + 5);
+
+            const r1 = y + 13, r2 = y + 20, r3 = y + 27;
+            const c1 = ML + 4, c2 = ML + CW / 2 + 2;
+            const lw = 28;
+
+            function adZeile(lbl, val, cx, ry) {
+                doc.setFont('helvetica', 'bold'); doc.setFontSize(8); doc.setTextColor(80, 80, 80);
+                doc.text(lbl, cx, ry);
+                doc.setFont('helvetica', 'normal'); doc.setTextColor(...C_DUNKEL);
+                doc.text(String(val || '–'), cx + lw, ry);
+            }
+
+            adZeile('Nennlast:', (ad.nennlast || '–') + ' kg',         c1, r1);
+            adZeile('FK-Masse:', (ad.fk_masse || '–') + ' kg',         c2, r1);
+            adZeile('GG-Masse:', (ad.gg_masse || '–') + ' kg',         c1, r2);
+            adZeile('Geschwindigkeit:', (ad.geschwindigkeit || '–') + ' m/s', c2, r2);
+            adZeile('Tragmittel:', (ad.tragmittel || '–'),              c1, r3);
+            adZeile('Schienen:', (ad.schienentyp || '–'),               c2, r3);
+
+            y += boxH + 6;
+        }
+
+        /* ── Bauteile ── */
         const alleIds = gewaehlteBauteile.length > 0 ? gewaehlteBauteile : BAUTEILE.map(b => b.id);
+        const gruppenConfig = [
+            { key: 'triebwerk', label: 'Triebwerksraum' },
+            { key: 'schacht',   label: 'Schacht'         },
+            { key: 'grube',     label: 'Grube'           },
+            { key: 'ohne',      label: 'Weitere Bauteile'}
+        ];
+        const gruppenIds = { triebwerk: [], schacht: [], grube: [], ohne: [] };
+        alleIds.forEach(id => { gruppenIds[bauteilGruppen[id] || 'ohne'].push(id); });
 
-        if (gewaehlteBauteile.length === 0) {
-            /* Keine Auswahl → alle Bauteile flach ohne Gruppen */
-            doc.setFontSize(13); doc.setTextColor(0, 87, 168);
-            zeile('Alle Bauteile');
+        gruppenConfig.forEach(g => {
+            if (gruppenIds[g.key].length === 0) return;
+            check(14);
             y += 2;
-            alleIds.forEach(id => ausgabeBauteil(id));
-        } else {
-            /* Gewählte Bauteile nach Gruppen sortiert ausgeben */
-            const gruppenConfig = [
-                { key: 'triebwerk', label: 'Triebwerksraum' },
-                { key: 'schacht',   label: 'Schacht'        },
-                { key: 'grube',     label: 'Grube'          },
-                { key: 'ohne',      label: 'Weitere'        }
-            ];
-            const gruppenIds = { triebwerk: [], schacht: [], grube: [], ohne: [] };
-            alleIds.forEach(id => { gruppenIds[bauteilGruppen[id] || 'ohne'].push(id); });
+            sectionHeader(g.label.toUpperCase());
+            gruppenIds[g.key].forEach(id => ausgabeBauteil(id));
+        });
 
-            gruppenConfig.forEach(g => {
-                if (gruppenIds[g.key].length === 0) return;
-                doc.setFontSize(13); doc.setTextColor(0, 87, 168);
-                zeile('-- ' + g.label + ' --');
-                y += 2;
-                gruppenIds[g.key].forEach(id => ausgabeBauteil(id));
-                y += 4;
-            });
-        }
+        footer();
 
+        /* ── Bauteil-Ausgabe ── */
         function ausgabeBauteil(id) {
             const bauteil = BAUTEILE.find(b => b.id === id);
             const item    = document.querySelector('.bauteil-item[data-bauteil-id="' + id + '"]');
             if (!item) return;
 
             const btn = item.querySelector('.bauteil-btn');
-            let status = 'Offen';
-            if (btn && btn.classList.contains('status-ok'))     status = 'Mangelfrei';
-            if (btn && btn.classList.contains('status-mangel')) status = 'Mangel';
+            let status = 'Offen', sFarbe = [130, 130, 130];
+            if (btn && btn.classList.contains('status-ok'))     { status = 'Mangelfrei'; sFarbe = [...C_GRUEN]; }
+            if (btn && btn.classList.contains('status-mangel')) { status = 'Mangel';     sFarbe = [...C_ROT];   }
 
-            doc.setFontSize(11); doc.setTextColor(0, 0, 0);
-            zeile(bauteil.label + '  [' + status + ']');
-
+            /* Fragen sammeln */
+            const fragen = [];
             const detail   = item.querySelector('.bauteil-detail');
             const pruefTab = detail ? detail.querySelector('.tab-inhalt') : null;
             if (pruefTab) {
@@ -5943,22 +6025,88 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
                     const titel = h3 ? h3.innerText.replace(/\s+/g, ' ').trim() : '';
                     const aktiv = frage.querySelector('.antwort-btn.aktiv');
                     const antw  = aktiv ? aktiv.innerText.replace(/[🟢🔴⚪✅❌]/g, '').trim() : 'Offen';
-                    if (titel) {
-                        doc.setFontSize(9); doc.setTextColor(40, 40, 40);
-                        zeile(titel + ': ' + antw, 5);
-                    }
-                    const mangelDiv = frage.querySelector('[id^="mangel-"]');
-                    if (mangelDiv && mangelDiv.style.display === 'block') {
-                        const ta = mangelDiv.querySelector('textarea');
-                        if (ta && ta.value.trim()) {
-                            doc.setTextColor(180, 0, 0);
-                            zeile('Mangel: ' + ta.value.trim(), 10);
-                            doc.setTextColor(40, 40, 40);
-                        }
-                    }
+                    const mDiv  = frage.querySelector('[id^="mangel-"]');
+                    const mText = (mDiv && mDiv.style.display === 'block') ? (mDiv.querySelector('textarea')?.value?.trim() || '') : '';
+                    if (titel) fragen.push({ titel, antw, mText });
                 });
             }
-            y += 3;
+
+            /* Höhe schätzen und Box zeichnen */
+            const zeilenHoehe = 5.5;
+            let boxH = 10;
+            fragen.forEach(f => {
+                const zeilen = doc.splitTextToSize(f.titel, CW - 38);
+                boxH += zeilen.length * zeilenHoehe + 1;
+                if (f.mText) boxH += 9;
+            });
+            boxH += 4;
+
+            check(Math.min(boxH, 50));
+
+            /* Box */
+            doc.setFillColor(255, 255, 255);
+            doc.setDrawColor(...C_GRAURAND);
+            doc.roundedRect(ML, y, CW, boxH, 2, 2, 'FD');
+
+            /* Bauteil-Header (hellblauer Streifen) */
+            doc.setFillColor(...C_HELLBLAU);
+            doc.roundedRect(ML, y, CW, 8, 2, 2, 'F');
+            doc.rect(ML, y + 4, CW, 4, 'F');
+
+            /* Linker blauer Rand-Akzent */
+            doc.setFillColor(...C_BLAU);
+            doc.rect(ML, y, 3, boxH, 'F');
+            if (boxH > 4) doc.roundedRect(ML, y, 3, 4, 1, 1, 'F');
+
+            /* Bauteil-Titel */
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(9);
+            doc.setTextColor(0, 60, 120);
+            doc.text(bauteil.label, ML + 6, y + 5.5);
+
+            /* Status rechts */
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(8.5);
+            doc.setTextColor(...sFarbe);
+            doc.text(status, W - MR - 4, y + 5.5, { align: 'right' });
+
+            y += 10;
+
+            /* Fragen */
+            fragen.forEach(f => {
+                if (y > H - 20) { footer(); doc.addPage(); seite++; y = 12; }
+
+                let aFarbe = [100, 100, 100];
+                if (f.antw === 'Passt' || f.antw === 'Mangelfrei') aFarbe = [...C_GRUEN];
+                if (f.antw === 'Mangel')                            aFarbe = [...C_ROT];
+
+                const zeilen = doc.splitTextToSize(f.titel, CW - 38);
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(8);
+                doc.setTextColor(...C_DUNKEL);
+                doc.text(zeilen, ML + 6, y);
+
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(8);
+                doc.setTextColor(...aFarbe);
+                doc.text(f.antw, W - MR - 4, y, { align: 'right' });
+
+                y += zeilen.length * zeilenHoehe + 1;
+
+                if (f.mText) {
+                    doc.setFillColor(255, 235, 235);
+                    doc.setDrawColor(200, 60, 60);
+                    doc.roundedRect(ML + 6, y, CW - 9, 7, 1, 1, 'FD');
+                    doc.setFont('helvetica', 'italic');
+                    doc.setFontSize(7.5);
+                    doc.setTextColor(160, 0, 0);
+                    const mz = doc.splitTextToSize('Mangel: ' + f.mText, CW - 16);
+                    doc.text(mz, ML + 8, y + 4);
+                    y += Math.max(7, mz.length * 4) + 2;
+                }
+            });
+
+            y += 5;
         }
 
         const datum = new Date().toLocaleDateString('de-DE').replace(/\./g, '-');
@@ -5972,96 +6120,196 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
        Alle Daten werden direkt aus dem DOM ausgelesen
     ------------------------------------------ */
     function erstellePDF() {
-        /* jsPDF initialisieren: A4 Hochformat, Einheit mm */
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
 
-        /* Vertikale Position in mm (startet bei 20mm vom oberen Rand) */
-        let y = 20;
-        const zeilenAbstand = 8;  /* 8mm zwischen Zeilen */
-        const seitenHoehe = 280;  /* A4 = 297mm, 280mm Nutzbereich */
+        /* ── Konstanten ── */
+        const W = 210, H = 297, ML = 12, MR = 12, CW = W - ML - MR;
+        const C_BLAU     = [0, 87, 168];
+        const C_HELLBLAU = [236, 244, 255];
+        const C_GRAU     = [245, 245, 245];
+        const C_GRAURAND = [200, 200, 200];
+        const C_GRUEN    = [46, 125, 50];
+        const C_ROT      = [180, 30, 30];
+        const C_DUNKEL   = [40, 40, 40];
+        const C_ORANGE   = [200, 100, 0];
+        let y = 12, seite = 1;
 
-        /* Hilfsfunktion: neue Zeile schreiben, bei Bedarf neue Seite beginnen */
-        function neueZeile(text, einzug = 0) {
-            if (y > seitenHoehe) { doc.addPage(); y = 20; }
-            doc.text(text, 15 + einzug, y); /* 15mm linker Rand + optionaler Einzug */
-            y += zeilenAbstand;
+        function footer() {
+            doc.setDrawColor(...C_GRAURAND);
+            doc.line(ML, H - 11, W - MR, H - 11);
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(7.5); doc.setTextColor(150, 150, 150);
+            doc.text('Aufzug-App  |  Prüfprotokoll', ML, H - 6);
+            doc.text(new Date().toLocaleDateString('de-DE'), W / 2, H - 6, { align: 'center' });
+            doc.text('Seite ' + seite, W - MR, H - 6, { align: 'right' });
         }
 
-        /* KOPFZEILE: Titel blau, Meta-Infos grau */
-        doc.setFontSize(18); doc.setTextColor(0, 87, 168);
-        neueZeile('Aufzug-App - Pruefprotokoll');
-        doc.setFontSize(11); doc.setTextColor(100, 100, 100);
-        neueZeile('Erstellt am: ' + new Date().toLocaleDateString('de-DE') + ' um ' + new Date().toLocaleTimeString('de-DE'));
-        neueZeile('Bauteil: ' + (document.getElementById('bauteilTitel').innerText || '-'));
-        neueZeile('Bereich: ' + (document.getElementById('bereichTitel').innerText || '-'));
-        /* Seriennummer nur wenn vorhanden */
-        if (aktuelleSeriennummer) neueZeile('Seriennummer: ' + aktuelleSeriennummer);
-        y += 5; /* Leerzeile */
+        function check(h) {
+            if (y + h > H - 16) { footer(); doc.addPage(); seite++; y = 12; }
+        }
 
-        /* ABSCHNITT 1: Prüfung vor Ort */
-        doc.setFontSize(14); doc.setTextColor(0, 87, 168);
-        neueZeile('1. Pruefung vor Ort');
-        doc.setFontSize(10); doc.setTextColor(0, 0, 0);
-        neueZeile('1.1 Verhaeltnis 1:30: ' + holeAntwort('frage1_1'));
-        /* Mangeltext nur wenn vorhanden */
-        const mangel11 = holeMangel('frage1_1');
-        if (mangel11) neueZeile('    Mangel: ' + mangel11, 5);
-        neueZeile('1.2 Mindestbruchkraft = 8x Zugkraft: ' + holeAntwort('frage1_2'));
-        const mangel12 = holeMangel('frage1_2');
-        if (mangel12) neueZeile('    Mangel: ' + mangel12, 5);
-        /* Messwert direkt aus dem Eingabefeld lesen */
-        const messwert = document.getElementById('messwert1_3').value;
-        neueZeile('1.3 Seildurchmesser: ' + (messwert || 'Nicht erfasst') + ' mm');
-        neueZeile('1.4 Seilklemmen fest: ' + holeAntwort('frage1_4'));
-        const mangel14 = holeMangel('frage1_4');
-        if (mangel14) neueZeile('    Mangel: ' + mangel14, 5);
+        function sectionHeader(text) {
+            check(10); y += 3;
+            doc.setFillColor(...C_BLAU);
+            doc.roundedRect(ML, y, CW, 8, 2, 2, 'F');
+            doc.setFont('helvetica', 'bold'); doc.setFontSize(9.5); doc.setTextColor(255, 255, 255);
+            doc.text(text, ML + 4, y + 5.5);
+            y += 11;
+        }
+
+        function wertZeile(label, wert, einheit) {
+            check(7);
+            doc.setFont('helvetica', 'bold'); doc.setFontSize(8.5); doc.setTextColor(80, 80, 80);
+            doc.text(label, ML + 5, y);
+            doc.setFont('helvetica', 'normal'); doc.setTextColor(...C_DUNKEL);
+            doc.text(String(wert || '–') + (einheit ? ' ' + einheit : ''), ML + 70, y);
+            y += 6;
+        }
+
+        function ergebnisBox(label, wert, ok) {
+            check(10);
+            const farbe = ok === true ? C_GRUEN : ok === false ? C_ROT : C_ORANGE;
+            doc.setFillColor(...farbe.map(v => Math.min(255, v + 180)));
+            doc.setDrawColor(...farbe);
+            doc.roundedRect(ML + 4, y, CW - 4, 8, 1.5, 1.5, 'FD');
+            doc.setFont('helvetica', 'bold'); doc.setFontSize(8.5); doc.setTextColor(...farbe);
+            doc.text(label + ':  ' + String(wert || '–'), ML + 7, y + 5);
+            y += 10;
+        }
+
+        function fragenBlock(fragenIds) {
+            fragenIds.forEach(({ id, label }) => {
+                const antw = holeAntwort(id);
+                const mang = holeMangel(id);
+                check(7);
+
+                let aFarbe = [100, 100, 100];
+                if (antw === 'Passt' || antw === 'Mangelfrei') aFarbe = [...C_GRUEN];
+                if (antw === 'Mangel') aFarbe = [...C_ROT];
+
+                const zeilen = doc.splitTextToSize(label, CW - 38);
+                doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(...C_DUNKEL);
+                doc.text(zeilen, ML + 5, y);
+                doc.setFont('helvetica', 'bold'); doc.setTextColor(...aFarbe);
+                doc.text(antw, W - MR - 4, y, { align: 'right' });
+                y += zeilen.length * 5.5 + 1;
+
+                if (mang) {
+                    doc.setFillColor(255, 235, 235); doc.setDrawColor(200, 60, 60);
+                    doc.roundedRect(ML + 6, y, CW - 9, 7, 1, 1, 'FD');
+                    doc.setFont('helvetica', 'italic'); doc.setFontSize(7.5); doc.setTextColor(160, 0, 0);
+                    doc.text('Mangel: ' + mang, ML + 8, y + 4);
+                    y += 9;
+                }
+            });
+        }
+
+        /* ══════════════════════════════
+           HEADER
+        ══════════════════════════════ */
+        doc.setFillColor(...C_HELLBLAU);
+        doc.setDrawColor(...C_BLAU);
+        doc.roundedRect(ML, y, CW, 30, 3, 3, 'FD');
+
+        doc.setFillColor(...C_GRAU); doc.setDrawColor(...C_GRAURAND);
+        doc.roundedRect(ML + 3, y + 3, 36, 24, 2, 2, 'FD');
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(7); doc.setTextColor(170, 170, 170);
+        doc.text('LOGO', ML + 21, y + 16, { align: 'center' });
+
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(14); doc.setTextColor(...C_BLAU);
+        doc.text('Prüfprotokoll – ' + (document.getElementById('bauteilTitel')?.innerText || 'Bauteil'), ML + 44, y + 10);
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(80, 80, 80);
+        doc.text('Bereich: ' + (document.getElementById('bereichTitel')?.innerText || '–'), ML + 44, y + 17);
+        doc.text('Erstellt: ' + new Date().toLocaleDateString('de-DE') + '  ' + new Date().toLocaleTimeString('de-DE'), ML + 44, y + 23);
+        y += 36;
+
+        /* Anlagendaten */
+        if (aktuelleSeriennummer) {
+            doc.setFillColor(...C_GRAU); doc.setDrawColor(...C_GRAURAND);
+            doc.roundedRect(ML, y, CW, 10, 2, 2, 'FD');
+            doc.setFont('helvetica', 'bold'); doc.setFontSize(8.5); doc.setTextColor(80, 80, 80);
+            doc.text('Projektnummer / Seriennummer:', ML + 4, y + 6.5);
+            doc.setFont('helvetica', 'normal'); doc.setTextColor(...C_DUNKEL);
+            doc.text(aktuelleSeriennummer, ML + 70, y + 6.5);
+            y += 14;
+        }
+
+        /* ══════════════════════════════
+           1. PRÜFUNG VOR ORT
+        ══════════════════════════════ */
+        sectionHeader('1.  PRÜFUNG VOR ORT');
+
+        doc.setFillColor(255, 255, 255); doc.setDrawColor(...C_GRAURAND);
+        doc.roundedRect(ML, y, CW, 42, 2, 2, 'FD');
+        doc.setFillColor(...C_BLAU); doc.rect(ML, y, 3, 42, 'F');
+        doc.roundedRect(ML, y, 3, 4, 1, 1, 'F');
         y += 5;
 
-        /* ABSCHNITT 2: Dokumente */
-        doc.setFontSize(14); doc.setTextColor(0, 87, 168);
-        neueZeile('2. Dokumente');
-        doc.setFontSize(10); doc.setTextColor(0, 0, 0);
-        neueZeile('0.1 Datenblatt vorhanden: ' + holeAntwort('dok_datenblatt'));
+        fragenBlock([
+            { id: 'frage1_1', label: '1.1  Verhältnis 1:30' },
+            { id: 'frage1_2', label: '1.2  Mindestbruchkraft = 8× Zugkraft' },
+            { id: 'frage1_4', label: '1.4  Seilklemmen fest' }
+        ]);
+
+        const messwert = document.getElementById('messwert1_3')?.value;
+        wertZeile('1.3  Seildurchmesser:', messwert || '–', 'mm');
+        y += 3;
+
+        /* ══════════════════════════════
+           2. DOKUMENTE
+        ══════════════════════════════ */
+        sectionHeader('2.  DOKUMENTE');
+
+        doc.setFillColor(255, 255, 255); doc.setDrawColor(...C_GRAURAND);
+        doc.roundedRect(ML, y, CW, 12, 2, 2, 'FD');
+        doc.setFillColor(...C_BLAU); doc.rect(ML, y, 3, 12, 'F');
+        doc.roundedRect(ML, y, 3, 4, 1, 1, 'F');
         y += 5;
 
-        /* ABSCHNITT 3: Berechnung */
-        doc.setFontSize(14); doc.setTextColor(0, 87, 168);
-        neueZeile('3. Berechnung (EN 81-50)');
-        doc.setFontSize(10); doc.setTextColor(0, 0, 0);
+        fragenBlock([{ id: 'dok_datenblatt', label: '2.1  Datenblatt vorhanden' }]);
+        y += 3;
 
-        /* Rillenform-Text für PDF lesbar machen */
-        let rillenformText = 'Nicht gewaehlt';
-        if (gewaehlteRillenform === 'gehaertet') rillenformText = 'Keilrille gehaertet';
-        if (gewaehlteRillenform === 'nicht_gehaertet') rillenformText = 'Keilrille nicht gehaertet';
-        if (gewaehlteRillenform === 'halbrund') rillenformText = 'Halbrundrille mit Unterschnitt';
+        /* ══════════════════════════════
+           3. BERECHNUNG
+        ══════════════════════════════ */
+        sectionHeader('3.  BERECHNUNG  (DIN EN 81-50)');
 
-        /* Alle Eingabe- und Ergebniswerte ausgeben */
-        neueZeile('Rillenform: ' + rillenformText);
-        neueZeile('Nenngeschwindigkeit v: ' + (document.getElementById('geschwindigkeit').value || '-') + ' m/s');
-        neueZeile('Keilwinkel gamma: ' + (document.getElementById('keilwinkel').value || '-') + ' Grad');
-        neueZeile('Spannkraft G: ' + (document.getElementById('spannkraft').value || '-') + ' N');
-        neueZeile('Mindestbruchkraft: ' + (document.getElementById('mindestbruchkraft').value || '-') + ' kN');
-        neueZeile('Reibwert mu = ' + document.getElementById('ergebnis_mu').innerText);
-        neueZeile('Reibungszahl f(mu) = ' + document.getElementById('ergebnis_fmu').innerText);
-        neueZeile('Reibungszahl f(mu)_SF = ' + document.getElementById('ergebnis_fmu_sf').innerText);
-        neueZeile('Zugkraft F (GB oben, Fang abwaerts) = ' + document.getElementById('ergebnis_zugkraft').innerText);
-        neueZeile('SF-Wert (abwaerts) = ' + document.getElementById('ergebnis_sf_ab').innerText);
-        neueZeile('Sicherheitsfaktor S = ' + document.getElementById('ergebnis_sicherheitsfaktor').innerText);
+        let rillenformText = '–';
+        if (gewaehlteRillenform === 'gehaertet')      rillenformText = 'Keilrille gehärtet';
+        if (gewaehlteRillenform === 'nicht_gehaertet') rillenformText = 'Keilrille nicht gehärtet';
+        if (gewaehlteRillenform === 'halbrund')        rillenformText = 'Halbrundrille mit Unterschnitt';
 
-        /* Auswertungstexte: Emojis werden entfernt da sie im PDF oft nicht darstellbar sind */
-        const sfBox = document.getElementById('sicherheitsfaktor_box');
-        if (sfBox && sfBox.innerText) neueZeile('Auswertung SF: ' + sfBox.innerText.replace(/[❌⚠️✅]/g, '').trim());
-        const box_ab = document.getElementById('vergleich_box');
-        if (box_ab && box_ab.innerText) neueZeile('Auswertung abwaerts: ' + box_ab.innerText.replace(/[❌⚠️✅]/g, '').trim());
-        neueZeile('Zugkraft F (GB oben, Fang aufwaerts) = ' + document.getElementById('ergebnis_zugkraft_auf').innerText);
-        const box_auf = document.getElementById('vergleich_box_auf');
-        if (box_auf && box_auf.innerText) neueZeile('Auswertung aufwaerts: ' + box_auf.innerText.replace(/[❌⚠️✅]/g, '').trim());
-        neueZeile('Zugkraft F (GB unten) = ' + document.getElementById('ergebnis_zugkraft_unten').innerText);
-        const box_unten = document.getElementById('vergleich_box_unten');
-        if (box_unten && box_unten.innerText) neueZeile('Auswertung GB unten: ' + box_unten.innerText.replace(/[❌⚠️✅]/g, '').trim());
+        const boxBerH = 70;
+        check(boxBerH);
+        doc.setFillColor(255, 255, 255); doc.setDrawColor(...C_GRAURAND);
+        doc.roundedRect(ML, y, CW, boxBerH, 2, 2, 'FD');
+        doc.setFillColor(...C_BLAU); doc.rect(ML, y, 3, boxBerH, 'F');
+        doc.roundedRect(ML, y, 3, 4, 1, 1, 'F');
+        y += 5;
 
-        /* PDF speichern: Dateiname enthält das heutige Datum */
+        wertZeile('Rillenform:', rillenformText);
+        wertZeile('Nenngeschwindigkeit v:', document.getElementById('geschwindigkeit')?.value, 'm/s');
+        wertZeile('Keilwinkel γ:', document.getElementById('keilwinkel')?.value, '°');
+        wertZeile('Spannkraft G:', document.getElementById('spannkraft')?.value, 'N');
+        wertZeile('Mindestbruchkraft:', document.getElementById('mindestbruchkraft')?.value, 'kN');
+        y += 2;
+        wertZeile('Reibwert μ =', document.getElementById('ergebnis_mu')?.innerText);
+        wertZeile('Reibungszahl f(μ) =', document.getElementById('ergebnis_fmu')?.innerText);
+        wertZeile('Sicherheitsfaktor S =', document.getElementById('ergebnis_sicherheitsfaktor')?.innerText);
+        y += 2;
+
+        const sf   = document.getElementById('sicherheitsfaktor_box');
+        const v_ab = document.getElementById('vergleich_box');
+        const v_auf= document.getElementById('vergleich_box_auf');
+        const v_un = document.getElementById('vergleich_box_unten');
+
+        if (sf?.innerText)   ergebnisBox('SF-Auswertung',    sf.innerText.replace(/[❌⚠️✅]/g,'').trim(),  null);
+        if (v_ab?.innerText) ergebnisBox('Fang abwärts',     v_ab.innerText.replace(/[❌⚠️✅]/g,'').trim(), null);
+        if (v_auf?.innerText)ergebnisBox('Fang aufwärts',    v_auf.innerText.replace(/[❌⚠️✅]/g,'').trim(),null);
+        if (v_un?.innerText) ergebnisBox('GB unten',         v_un.innerText.replace(/[❌⚠️✅]/g,'').trim(), null);
+
+        footer();
         const datum = new Date().toLocaleDateString('de-DE').replace(/\./g, '-');
         doc.save('Pruefprotokoll_' + datum + '.pdf');
     }
