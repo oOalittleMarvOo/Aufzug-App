@@ -6390,8 +6390,9 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
                 const tw = doc.getTextWidth('F  =  (G / 2) × ( e');
                 doc.setFontSize(fs - 2);
                 doc.text('f(μ)·π', bx + tw, by - 2);
+                const supW = doc.getTextWidth('f(μ)·π');
                 doc.setFontSize(fs);
-                doc.text('  −  1 )', bx + tw + doc.getTextWidth('f(μ)·π') + 1, by);
+                doc.text('  −  1 )', bx + tw + supW + 1, by);
             },
             'F =', zugWert
         );
