@@ -6271,20 +6271,68 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         y += 3;
 
         /* ══════════════════════════════
-           3. BERECHNUNG
+           HILFSFUNKTION: Bruch zeichnen
+           Zeichnet  "vor  zaehler/nenner  nach"  als grafischen Bruch
+           Gibt die neue x-Position zurück
         ══════════════════════════════ */
-        sectionHeader('3.  BERECHNUNG  (DIN EN 81-50)');
+        function pdfBruch(vor, zaehler, nenner, nach, bx, by, fs) {
+            doc.setFontSize(fs);
+            doc.setTextColor(...C_DUNKEL);
+            let cx = bx;
+            if (vor) { doc.setFont('helvetica','normal'); doc.text(vor, cx, by); cx += doc.getTextWidth(vor) + 1; }
+            const nw  = doc.getTextWidth(zaehler);
+            const dw  = doc.getTextWidth(nenner);
+            const lw  = Math.max(nw, dw) + 4;
+            const lhf = fs * 0.38;
+            doc.setFont('helvetica','normal');
+            doc.text(zaehler, cx + lw / 2, by - lhf * 0.7, { align: 'center' });
+            doc.setDrawColor(...C_BLAU); doc.setLineWidth(0.35);
+            doc.line(cx, by, cx + lw, by);
+            doc.setLineWidth(0.2); doc.setDrawColor(...C_GRAURAND);
+            doc.text(nenner, cx + lw / 2, by + lhf * 1.1, { align: 'center' });
+            cx += lw + 1;
+            if (nach) { doc.text(nach, cx, by); }
+            return cx + (nach ? doc.getTextWidth(nach) : 0);
+        }
+
+        /* Norm-Referenz-Badge rechts */
+        function normBadge(norm, bx, by) {
+            doc.setFont('helvetica','italic'); doc.setFontSize(7); doc.setTextColor(120,120,120);
+            doc.text(norm, W - MR - 3, by, { align: 'right' });
+        }
+
+        /* ── Formel-Zeile: Norm + Formel + Ergebnis ── */
+        function formelZeile(norm, zeichne, ergebnisLabel, ergebnisWert) {
+            check(18);
+            /* Norm-Badge */
+            doc.setFont('helvetica','italic'); doc.setFontSize(7.5); doc.setTextColor(100, 100, 200);
+            doc.text(norm, ML + 5, y);
+            y += 4;
+            /* Formel zeichnen (Callback) */
+            const fs = 8.5;
+            zeichne(ML + 8, y + 2, fs);
+            /* Ergebnis rechts */
+            if (ergebnisLabel) {
+                doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(...C_BLAU);
+                doc.text(ergebnisLabel + '  ' + (ergebnisWert || '–'), W - MR - 4, y + 2, { align: 'right' });
+            }
+            y += 10;
+        }
+
+        /* ══════════════════════════════
+           3. EINGABEWERTE
+        ══════════════════════════════ */
+        sectionHeader('3.  BERECHNUNG  (DIN EN 81-50 §5.6.2.2.1)');
 
         let rillenformText = '–';
-        if (gewaehlteRillenform === 'gehaertet')      rillenformText = 'Keilrille gehärtet';
+        if (gewaehlteRillenform === 'gehaertet')       rillenformText = 'Keilrille gehärtet';
         if (gewaehlteRillenform === 'nicht_gehaertet') rillenformText = 'Keilrille nicht gehärtet';
         if (gewaehlteRillenform === 'halbrund')        rillenformText = 'Halbrundrille mit Unterschnitt';
 
-        const boxBerH = 70;
-        check(boxBerH);
-        doc.setFillColor(255, 255, 255); doc.setDrawColor(...C_GRAURAND);
-        doc.roundedRect(ML, y, CW, boxBerH, 2, 2, 'FD');
-        doc.setFillColor(...C_BLAU); doc.rect(ML, y, 3, boxBerH, 'F');
+        check(44);
+        doc.setFillColor(255,255,255); doc.setDrawColor(...C_GRAURAND);
+        doc.roundedRect(ML, y, CW, 40, 2, 2, 'FD');
+        doc.setFillColor(...C_BLAU); doc.rect(ML, y, 3, 40, 'F');
         doc.roundedRect(ML, y, 3, 4, 1, 1, 'F');
         y += 5;
 
@@ -6292,22 +6340,86 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         wertZeile('Nenngeschwindigkeit v:', document.getElementById('geschwindigkeit')?.value, 'm/s');
         wertZeile('Keilwinkel γ:', document.getElementById('keilwinkel')?.value, '°');
         wertZeile('Spannkraft G:', document.getElementById('spannkraft')?.value, 'N');
-        wertZeile('Mindestbruchkraft:', document.getElementById('mindestbruchkraft')?.value, 'kN');
-        y += 2;
-        wertZeile('Reibwert μ =', document.getElementById('ergebnis_mu')?.innerText);
-        wertZeile('Reibungszahl f(μ) =', document.getElementById('ergebnis_fmu')?.innerText);
-        wertZeile('Sicherheitsfaktor S =', document.getElementById('ergebnis_sicherheitsfaktor')?.innerText);
-        y += 2;
+        wertZeile('Mindestbruchkraft Fₘᴵⁿ:', document.getElementById('mindestbruchkraft')?.value, 'kN');
+        y += 4;
+
+        /* ══════════════════════════════
+           4. FORMELN MIT NORM-REFERENZ
+        ══════════════════════════════ */
+        sectionHeader('4.  VERWENDETE FORMELN');
+
+        check(80);
+        const formelBoxY = y;
+        doc.setFillColor(250, 251, 255); doc.setDrawColor(...C_GRAURAND);
+        doc.roundedRect(ML, y, CW, 78, 2, 2, 'FD');
+        doc.setFillColor(...C_BLAU); doc.rect(ML, y, 3, 78, 'F');
+        doc.roundedRect(ML, y, 3, 4, 1, 1, 'F');
+        y += 5;
+
+        /* --- μ --- */
+        const muWert = document.getElementById('ergebnis_mu')?.innerText || '–';
+        formelZeile(
+            'DIN EN 81-50 §5.6.2.2.1.2',
+            (bx, by, fs) => pdfBruch('μ  =  ', '0,1', '1 + v / 10', '', bx, by, fs),
+            'μ =', muWert
+        );
+
+        /* --- f(μ) --- */
+        const fmuWert = document.getElementById('ergebnis_fmu')?.innerText || '–';
+        if (gewaehlteRillenform === 'halbrund') {
+            formelZeile(
+                'DIN EN 81-50 §5.6.2.2.1.3 a)',
+                (bx, by, fs) => pdfBruch('f(μ)  =  4·μ·', '1 − sin(γ/2)', 'π − γ − sin(γ)', '', bx, by, fs),
+                'f(μ) =', fmuWert
+            );
+        } else {
+            formelZeile(
+                'DIN EN 81-50 §5.6.2.2.1.3 b)',
+                (bx, by, fs) => pdfBruch('f(μ)  =  ', 'μ', 'sin(γ / 2)', '', bx, by, fs),
+                'f(μ) =', fmuWert
+            );
+        }
+
+        /* --- Zugkraft F --- */
+        const zugWert = document.getElementById('ergebnis_zugkraft')?.innerText || '–';
+        formelZeile(
+            'DIN EN 81-50 §5.6.2.2.1.4',
+            (bx, by, fs) => {
+                doc.setFont('helvetica','normal'); doc.setFontSize(fs); doc.setTextColor(...C_DUNKEL);
+                doc.text('F  =  (G / 2) × ( e', bx, by);
+                const tw = doc.getTextWidth('F  =  (G / 2) × ( e');
+                doc.setFontSize(fs - 2);
+                doc.text('f(μ)·π', bx + tw, by - 2);
+                doc.setFontSize(fs);
+                doc.text('  −  1 )', bx + tw + doc.getTextWidth('f(μ)·π') + 1, by);
+            },
+            'F =', zugWert
+        );
+
+        /* --- Sicherheitsfaktor S --- */
+        const sfWert = document.getElementById('ergebnis_sicherheitsfaktor')?.innerText || '–';
+        formelZeile(
+            'DIN EN 81-50 §5.6.2.2.1.5  (S ≥ 8)',
+            (bx, by, fs) => pdfBruch('S  =  ', 'Fₘᴵⁿ', 'F', '≥  8', bx, by, fs),
+            'S =', sfWert
+        );
+
+        y = formelBoxY + 82;
+
+        /* ══════════════════════════════
+           5. AUSWERTUNG
+        ══════════════════════════════ */
+        sectionHeader('5.  AUSWERTUNG');
 
         const sf   = document.getElementById('sicherheitsfaktor_box');
         const v_ab = document.getElementById('vergleich_box');
         const v_auf= document.getElementById('vergleich_box_auf');
         const v_un = document.getElementById('vergleich_box_unten');
 
-        if (sf?.innerText)   ergebnisBox('SF-Auswertung',    sf.innerText.replace(/[❌⚠️✅]/g,'').trim(),  null);
-        if (v_ab?.innerText) ergebnisBox('Fang abwärts',     v_ab.innerText.replace(/[❌⚠️✅]/g,'').trim(), null);
-        if (v_auf?.innerText)ergebnisBox('Fang aufwärts',    v_auf.innerText.replace(/[❌⚠️✅]/g,'').trim(),null);
-        if (v_un?.innerText) ergebnisBox('GB unten',         v_un.innerText.replace(/[❌⚠️✅]/g,'').trim(), null);
+        if (sf?.innerText)    ergebnisBox('Sicherheitsfaktor',  sf.innerText.replace(/[❌⚠️✅]/g,'').trim(),  null);
+        if (v_ab?.innerText)  ergebnisBox('Fang abwärts',       v_ab.innerText.replace(/[❌⚠️✅]/g,'').trim(), null);
+        if (v_auf?.innerText) ergebnisBox('Fang aufwärts',      v_auf.innerText.replace(/[❌⚠️✅]/g,'').trim(),null);
+        if (v_un?.innerText)  ergebnisBox('GB unten',           v_un.innerText.replace(/[❌⚠️✅]/g,'').trim(), null);
 
         footer();
         const datum = new Date().toLocaleDateString('de-DE').replace(/\./g, '-');
