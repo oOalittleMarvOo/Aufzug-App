@@ -4278,23 +4278,49 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         BAUTEILE.forEach(b => {
             const check = document.getElementById('check_' + b.id);
             const gruppenDiv = document.getElementById('gruppe_' + b.id);
-            check.checked = gewaehlteBauteile.includes(b.id);
-            if (check.checked) {
-                gruppenDiv.style.display = 'flex';
-                const gespeicherteGruppe = bauteilGruppen[b.id];
-                gruppenDiv.querySelectorAll('.gruppe-btn').forEach(btn => {
-                    btn.classList.toggle('aktiv', btn.dataset.gruppe === gespeicherteGruppe);
-                });
+            if (tutorialModus) {
+                // Im Tutorial: nur Geschwindigkeitsbegrenzerseil auswählbar
+                if (b.id === 'seil') {
+                    check.checked = true;
+                    check.disabled = false;
+                    gruppenDiv.style.display = 'flex';
+                    const gespeicherteGruppe = bauteilGruppen[b.id];
+                    gruppenDiv.querySelectorAll('.gruppe-btn').forEach(btn => {
+                        btn.classList.toggle('aktiv', btn.dataset.gruppe === gespeicherteGruppe);
+                    });
+                } else {
+                    check.checked = false;
+                    check.disabled = true;
+                    gruppenDiv.style.display = 'none';
+                }
             } else {
-                gruppenDiv.style.display = 'none';
+                check.disabled = false;
+                check.checked = gewaehlteBauteile.includes(b.id);
+                if (check.checked) {
+                    gruppenDiv.style.display = 'flex';
+                    const gespeicherteGruppe = bauteilGruppen[b.id];
+                    gruppenDiv.querySelectorAll('.gruppe-btn').forEach(btn => {
+                        btn.classList.toggle('aktiv', btn.dataset.gruppe === gespeicherteGruppe);
+                    });
+                } else {
+                    gruppenDiv.style.display = 'none';
+                }
             }
         });
         document.getElementById('modalBauteile').classList.add('aktiv');
         setTutorialKontext('bauteile');
     }
 
+    /* Tutorial-Beschränkung aufheben wenn Modal geschlossen */
+    function aktiviereBauteilCheckboxen() {
+        BAUTEILE.forEach(b => {
+            document.getElementById('check_' + b.id).disabled = false;
+        });
+    }
+
     /* Modal schließen ohne Speichern */
     function schliesseBauteilModal() {
+        aktiviereBauteilCheckboxen();
         document.getElementById('modalBauteile').classList.remove('aktiv');
         document.getElementById('btnBauteileAendern').style.display = 'inline-block';
         aktualisiereBauteilListe();
@@ -4303,6 +4329,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
     /* Auswahl und Gruppen speichern */
     function speichereBauteile() {
+        aktiviereBauteilCheckboxen();
         gewaehlteBauteile = [];
         BAUTEILE.forEach(b => {
             if (document.getElementById('check_' + b.id).checked) gewaehlteBauteile.push(b.id);
@@ -6733,7 +6760,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         },
         bauteile: {
             titel: "Bauteile auswählen",
-            text: "Wähle alle Bauteile aus, die beim Umbau verändert wurden. Nach der Auswahl erscheint die <strong>Gruppenauswahl</strong> (Triebwerksraum / Schacht / Grube) – wähle wo das Bauteil verbaut ist. Tipp: Fahrkorb aktiviert automatisch Schienen mit."
+            text: "Im Tutorial arbeiten wir mit dem <strong>Geschwindigkeitsbegrenzerseil</strong>. Es ist bereits ausgewählt. Wähle noch die <strong>Gruppe</strong> (z. B. Schacht) und klick dann auf <em>Speichern</em>."
         },
         dokumenteSchritt: {
             titel: "Dokumente-Übersicht",
