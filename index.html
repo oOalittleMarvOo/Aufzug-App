@@ -6161,21 +6161,27 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         function wertZeile(label, wert, einheit) {
             check(7);
             doc.setFont('helvetica', 'bold'); doc.setFontSize(8.5); doc.setTextColor(80, 80, 80);
-            doc.text(label, ML + 5, y);
+            const labelZ = doc.splitTextToSize(label, 62);
+            doc.text(labelZ, ML + 5, y);
             doc.setFont('helvetica', 'normal'); doc.setTextColor(...C_DUNKEL);
-            doc.text(String(wert || '–') + (einheit ? ' ' + einheit : ''), ML + 70, y);
-            y += 6;
+            const wertStr = String(wert || '–') + (einheit ? ' ' + einheit : '');
+            doc.text(wertStr, W - MR - 4, y, { align: 'right' });
+            y += Math.max(labelZ.length, 1) * 6;
         }
 
         function ergebnisBox(label, wert, ok) {
-            check(10);
             const farbe = ok === true ? C_GRUEN : ok === false ? C_ROT : C_ORANGE;
+            doc.setFont('helvetica', 'bold'); doc.setFontSize(8.5);
+            const vollText = label + ':  ' + String(wert || '–');
+            const zeilen   = doc.splitTextToSize(vollText, CW - 10);
+            const boxH     = 4 + zeilen.length * 5;
+            check(boxH + 2);
             doc.setFillColor(...farbe.map(v => Math.min(255, v + 180)));
             doc.setDrawColor(...farbe);
-            doc.roundedRect(ML + 4, y, CW - 4, 8, 1.5, 1.5, 'FD');
-            doc.setFont('helvetica', 'bold'); doc.setFontSize(8.5); doc.setTextColor(...farbe);
-            doc.text(label + ':  ' + String(wert || '–'), ML + 7, y + 5);
-            y += 10;
+            doc.roundedRect(ML + 4, y, CW - 4, boxH, 1.5, 1.5, 'FD');
+            doc.setTextColor(...farbe);
+            doc.text(zeilen, ML + 7, y + 4.5);
+            y += boxH + 2;
         }
 
         function fragenBlock(fragenIds) {
@@ -6301,20 +6307,26 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             doc.text(norm, W - MR - 3, by, { align: 'right' });
         }
 
+        /* Spalten: Formel links (120 mm), Ergebnis rechts (fest) */
+        const COL_FORMEL = ML + 8;         /* Formel-Start x */
+        const COL_ERGEBNIS = W - MR - 4;  /* Ergebnis rechts-bündig x */
+        const NORM_MAX_W = 120;            /* max Breite Norm-Text */
+
         /* ── Formel-Zeile: Norm + Formel + Ergebnis ── */
         function formelZeile(norm, zeichne, ergebnisLabel, ergebnisWert) {
             check(18);
-            /* Norm-Badge */
+            /* Norm-Badge – läuft nicht über 120 mm hinaus */
             doc.setFont('helvetica','italic'); doc.setFontSize(7.5); doc.setTextColor(100, 100, 200);
-            doc.text(norm, ML + 5, y);
-            y += 4;
-            /* Formel zeichnen (Callback) */
+            const normZeilen = doc.splitTextToSize(norm, NORM_MAX_W);
+            doc.text(normZeilen, ML + 5, y);
+            y += normZeilen.length * 4;
+            /* Formel zeichnen (Callback) – startet in linker Spalte */
             const fs = 8.5;
-            zeichne(ML + 8, y + 2, fs);
-            /* Ergebnis rechts */
+            zeichne(COL_FORMEL, y + 2, fs);
+            /* Ergebnis in rechter Spalte */
             if (ergebnisLabel) {
                 doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(...C_BLAU);
-                doc.text(ergebnisLabel + '  ' + (ergebnisWert || '–'), W - MR - 4, y + 2, { align: 'right' });
+                doc.text(ergebnisLabel + '  ' + (ergebnisWert || '–'), COL_ERGEBNIS, y + 2, { align: 'right' });
             }
             y += 10;
         }
