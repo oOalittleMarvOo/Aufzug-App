@@ -6240,8 +6240,11 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
                 const mang = holeMangel(id);
                 check(8);
 
-                const istOk     = antw === 'Passt' || antw === 'Mangelfrei';
-                const istMangel = antw === 'Mangel';
+                // holeAntwort gibt rohen Button-Text zurück ("🟢 i.O.", "🔴 Mangel" …)
+                const istOk     = antw.includes('i.O.') || antw === 'Passt' || antw === 'Mangelfrei';
+                const istMangel = antw.includes('Mangel') && !antw.includes('Mangelfrei');
+                // Emoji-freier Text für PDF (Helvetica kennt keine Emojis)
+                const antwPDF = istOk ? 'i.O.' : istMangel ? 'Mangel' : antw.includes('N/A') || antw.includes('Trifft') ? 'N/A' : 'Nicht beantwortet';
                 const bX = ML + 5, bY = y - 3.5, bS = 5;
 
                 // Checkbox-Quadrat
@@ -6270,7 +6273,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
                 // Antwort-Text rechts
                 const aFarbe = istOk ? C_GRUEN : istMangel ? C_ROT : [150, 150, 150];
                 doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5); doc.setTextColor(...aFarbe);
-                doc.text(antw, W - MR - 4, y, { align: 'right' });
+                doc.text(antwPDF, W - MR - 4, y, { align: 'right' });
 
                 y += zeilen.length * 5.5 + 2;
 
