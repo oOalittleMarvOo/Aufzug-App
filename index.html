@@ -6780,7 +6780,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         },
         berechnungTab: {
             titel: "Berechnung",
-            text: "Die Berechnungsfelder wurden mit <strong>Beispielwerten</strong> vorausgefüllt:<br><br>🔹 Keilwinkel: <strong>38°</strong><br>🔹 Spannkraft G: <strong>300 N</strong><br>🔹 Mindestbruchkraft: <strong>24 kN</strong><br><br>Die Ergebnisse werden automatisch berechnet. In der Praxis trägst du hier die echten Messwerte ein."
+            text: "Die Berechnungsfelder wurden mit <strong>Beispielwerten</strong> vorausgefüllt:<br><br>🔹 Rillenform: <strong>Keilrille gehärtet</strong><br>🔹 Keilwinkel: <strong>38°</strong><br>🔹 Spannkraft G: <strong>300 N</strong><br>🔹 Mindestbruchkraft: <strong>24 kN</strong><br><br>Die Ergebnisse werden automatisch berechnet. In der Praxis trägst du hier die echten Messwerte ein."
         },
         elektroTab: {
             titel: "Elektro-Messung",
@@ -6806,6 +6806,12 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         if (!t) return;
         tutorialAktuellerKey = key;
         if (key === 'berechnungTab') {
+            // Rillenform vorauswählen (Keilrille gehärtet)
+            if (!gewaehlteRillenform) {
+                var rilleBtn = document.querySelector('.auswahl-btn[onclick*="gehaertet"]');
+                if (rilleBtn) waehleRillenform(rilleBtn, 'gehaertet');
+            }
+            // Zahlenwerte vorausfüllen
             var fel = { keilwinkel: '38', spannkraft: '300', mindestbruchkraft: '24' };
             Object.keys(fel).forEach(function(id) {
                 var el = document.getElementById(id);
