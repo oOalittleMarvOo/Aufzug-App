@@ -6135,6 +6135,62 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         const C_ORANGE   = [200, 100, 0];
         let y = 12, seite = 1;
 
+        /* ── Sonderzeichen-Rendering ──
+           jsPDF-Standardfont (Helvetica/WinAnsi) kennt keine griechischen
+           Buchstaben. Diese werden über den eingebauten Symbol-Font gezeichnet.
+           SYM bildet Unicode → Zeichen in der Symbol-Kodierung ab. */
+        const SYM = {
+            'μ': 'm', 'π': 'p', 'γ': 'g', 'α': 'a', 'β': 'b', 'λ': 'l',
+            'σ': 's', 'Σ': 'S', 'Δ': 'D', 'θ': 'q', 'Ω': 'W',
+            '≥': '³', '≤': '£', '∞': '¥'
+        };
+
+        /* Zeichnet str ab (x, Grundlinie y); Greek-Zeichen via Symbol-Font.
+           Gibt die rechte x-Kante zurück. */
+        function griechDraw(str, x, y, fs, style) {
+            style = style || 'normal';
+            doc.setFontSize(fs);
+            let cx = x;
+            for (const ch of String(str)) {
+                if (SYM[ch]) {
+                    doc.setFont('symbol', 'normal');
+                    doc.text(SYM[ch], cx, y);
+                    cx += doc.getTextWidth(SYM[ch]);
+                } else {
+                    doc.setFont('helvetica', style);
+                    doc.text(ch, cx, y);
+                    cx += doc.getTextWidth(ch);
+                }
+            }
+            return cx;
+        }
+
+        /* Breite von str unter Berücksichtigung der Symbol-Zeichen. */
+        function griechWidth(str, fs, style) {
+            style = style || 'normal';
+            doc.setFontSize(fs);
+            let w = 0;
+            for (const ch of String(str)) {
+                if (SYM[ch]) { doc.setFont('symbol', 'normal'); w += doc.getTextWidth(SYM[ch]); }
+                else { doc.setFont('helvetica', style); w += doc.getTextWidth(ch); }
+            }
+            return w;
+        }
+
+        /* str zentriert um cx zeichnen. */
+        function griechCenter(str, cx, y, fs, style) {
+            const w = griechWidth(str, fs, style);
+            return griechDraw(str, cx - w / 2, y, fs, style);
+        }
+
+        /* Ersetzt nicht-WinAnsi-Mathezeichen durch ASCII (für Fließtext). */
+        function clean(s) {
+            return String(s == null ? '' : s)
+                .replace(/≥/g, '>=').replace(/≤/g, '<=')
+                .replace(/−/g, '-')
+                .replace(/μ/g, 'my').replace(/γ/g, 'gamma').replace(/π/g, 'pi');
+        }
+
         function footer() {
             doc.setDrawColor(...C_GRAURAND);
             doc.line(ML, H - 11, W - MR, H - 11);
@@ -6160,9 +6216,9 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
         function wertZeile(label, wert, einheit) {
             check(7);
-            doc.setFont('helvetica', 'bold'); doc.setFontSize(8.5); doc.setTextColor(80, 80, 80);
-            doc.text(label, ML + 5, y);
-            doc.setFont('helvetica', 'normal'); doc.setTextColor(...C_DUNKEL);
+            doc.setTextColor(80, 80, 80);
+            griechDraw(label, ML + 5, y, 8.5, 'bold');
+            doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(...C_DUNKEL);
             doc.text(String(wert || '–') + (einheit ? ' ' + einheit : ''), ML + 70, y);
             y += 6;
         }
@@ -6174,7 +6230,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             doc.setDrawColor(...farbe);
             doc.roundedRect(ML + 4, y, CW - 4, 8, 1.5, 1.5, 'FD');
             doc.setFont('helvetica', 'bold'); doc.setFontSize(8.5); doc.setTextColor(...farbe);
-            doc.text(label + ':  ' + String(wert || '–'), ML + 7, y + 5);
+            doc.text(clean(label + ':  ' + (wert || '–')), ML + 7, y + 5);
             y += 10;
         }
 
@@ -6182,25 +6238,51 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             fragenIds.forEach(({ id, label }) => {
                 const antw = holeAntwort(id);
                 const mang = holeMangel(id);
-                check(7);
+                check(8);
 
-                let aFarbe = [100, 100, 100];
-                if (antw === 'Passt' || antw === 'Mangelfrei') aFarbe = [...C_GRUEN];
-                if (antw === 'Mangel') aFarbe = [...C_ROT];
+                const istOk     = antw === 'Passt' || antw === 'Mangelfrei';
+                const istMangel = antw === 'Mangel';
+                const bX = ML + 5, bY = y - 3.5, bS = 5;
 
-                const zeilen = doc.splitTextToSize(label, CW - 38);
+                // Checkbox-Quadrat
+                if (istOk) {
+                    doc.setFillColor(...C_GRUEN); doc.setDrawColor(...C_GRUEN);
+                } else if (istMangel) {
+                    doc.setFillColor(...C_ROT); doc.setDrawColor(...C_ROT);
+                } else {
+                    doc.setFillColor(220, 220, 220); doc.setDrawColor(170, 170, 170);
+                }
+                doc.roundedRect(bX, bY, bS, bS, 1, 1, 'FD');
+
+                // Weißer Haken für OK
+                if (istOk) {
+                    doc.setDrawColor(255, 255, 255); doc.setLineWidth(0.75);
+                    doc.line(bX + 1.1, bY + 2.7, bX + 2.1, bY + 3.9);
+                    doc.line(bX + 2.1, bY + 3.9, bX + 4.2, bY + 1.3);
+                    doc.setLineWidth(0.2);
+                }
+
+                // Label
+                const zeilen = doc.splitTextToSize(label, CW - 22);
                 doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(...C_DUNKEL);
-                doc.text(zeilen, ML + 5, y);
-                doc.setFont('helvetica', 'bold'); doc.setTextColor(...aFarbe);
+                doc.text(zeilen, bX + bS + 2.5, y);
+
+                // Antwort-Text rechts
+                const aFarbe = istOk ? C_GRUEN : istMangel ? C_ROT : [150, 150, 150];
+                doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5); doc.setTextColor(...aFarbe);
                 doc.text(antw, W - MR - 4, y, { align: 'right' });
-                y += zeilen.length * 5.5 + 1;
+
+                y += zeilen.length * 5.5 + 2;
 
                 if (mang) {
+                    const mZeilen = doc.splitTextToSize(clean('Mangel: ' + mang), CW - 16);
+                    const mH = mZeilen.length * 4 + 4;
+                    check(mH + 3);
                     doc.setFillColor(255, 235, 235); doc.setDrawColor(200, 60, 60);
-                    doc.roundedRect(ML + 6, y, CW - 9, 7, 1, 1, 'FD');
+                    doc.roundedRect(ML + 6, y, CW - 9, mH, 1, 1, 'FD');
                     doc.setFont('helvetica', 'italic'); doc.setFontSize(7.5); doc.setTextColor(160, 0, 0);
-                    doc.text('Mangel: ' + mang, ML + 8, y + 4);
-                    y += 9;
+                    doc.text(mZeilen, ML + 8, y + 4);
+                    y += mH + 4;
                 }
             });
         }
@@ -6236,88 +6318,88 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         }
 
         /* ══════════════════════════════
+           HILFSFUNKTIONEN: Bruch, Karte
+        ══════════════════════════════ */
+
+        /* Zeichnet Zähler/Nenner-Bruch an (bx, by), by = Bruchlinie. Gibt rechte x-Kante zurück.
+           Griechische Zeichen werden über griechDraw korrekt dargestellt. */
+        function pdfBruch(vor, zaehler, nenner, nach, bx, by, fs) {
+            doc.setTextColor(...C_DUNKEL);
+            let cx = bx;
+            if (vor) cx = griechDraw(vor, cx, by, fs) + 1.5;
+            const nw  = griechWidth(zaehler, fs);
+            const dw  = griechWidth(nenner, fs);
+            const lw  = Math.max(nw, dw) + 5;
+            const lhf = fs * 0.52;
+            griechCenter(zaehler, cx + lw / 2, by - lhf * 1.1, fs);
+            doc.setDrawColor(...C_BLAU); doc.setLineWidth(0.4);
+            doc.line(cx, by, cx + lw, by);
+            doc.setLineWidth(0.2); doc.setDrawColor(...C_GRAURAND);
+            griechCenter(nenner, cx + lw / 2, by + lhf * 1.5, fs);
+            cx += lw + 1.5;
+            if (nach) cx = griechDraw(nach, cx, by, fs);
+            return cx;
+        }
+
+        /* Formel-Karte: eigene Box pro Formel, Höhe je nach Bruch/Einfach */
+        function formelKarte(norm, zeichne, ergebnisLabel, ergebnisWert, istBruch) {
+            const kH = istBruch ? 28 : 22;
+            check(kH + 3);
+            const kY = y;
+            doc.setFillColor(250, 251, 255); doc.setDrawColor(...C_GRAURAND);
+            doc.roundedRect(ML, kY, CW, kH, 2, 2, 'FD');
+            doc.setFillColor(...C_BLAU); doc.rect(ML, kY, 3, kH, 'F');
+            doc.roundedRect(ML, kY, 3, 4, 1, 1, 'F');
+            doc.setFont('helvetica','italic'); doc.setFontSize(7); doc.setTextColor(100,100,200);
+            doc.text(clean(norm), ML + 7, kY + 5.5);
+            const formelY = istBruch ? kY + 17 : kY + 14;
+            zeichne(ML + 7, formelY, 8.5);
+            if (ergebnisLabel) {
+                const resY = istBruch ? kY + 24.5 : kY + 18.5;
+                const resTxt = ergebnisLabel + '  ' + (ergebnisWert || '–');
+                doc.setTextColor(...C_BLAU);
+                griechDraw(resTxt, W - MR - 4 - griechWidth(resTxt, 8.5, 'bold'), resY, 8.5, 'bold');
+            }
+            y += kH + 3;
+        }
+
+        /* ══════════════════════════════
            1. PRÜFUNG VOR ORT
         ══════════════════════════════ */
         sectionHeader('1.  PRÜFUNG VOR ORT');
 
-        doc.setFillColor(255, 255, 255); doc.setDrawColor(...C_GRAURAND);
-        doc.roundedRect(ML, y, CW, 42, 2, 2, 'FD');
-        doc.setFillColor(...C_BLAU); doc.rect(ML, y, 3, 42, 'F');
-        doc.roundedRect(ML, y, 3, 4, 1, 1, 'F');
-        y += 5;
-
+        check(65);
+        const s1Y = y; y += 5;
         fragenBlock([
             { id: 'frage1_1', label: '1.1  Verhältnis 1:30' },
             { id: 'frage1_2', label: '1.2  Mindestbruchkraft = 8× Zugkraft' },
             { id: 'frage1_4', label: '1.4  Seilklemmen fest' }
         ]);
-
         const messwert = document.getElementById('messwert1_3')?.value;
         wertZeile('1.3  Seildurchmesser:', messwert || '–', 'mm');
         y += 3;
+        doc.setDrawColor(...C_GRAURAND); doc.setLineWidth(0.3);
+        doc.roundedRect(ML, s1Y, CW, y - s1Y, 2, 2, 'D');
+        doc.setFillColor(...C_BLAU); doc.rect(ML, s1Y, 3, y - s1Y, 'F');
+        doc.roundedRect(ML, s1Y, 3, 4, 1, 1, 'F');
+        doc.setLineWidth(0.2);
+        y += 4;
 
         /* ══════════════════════════════
            2. DOKUMENTE
         ══════════════════════════════ */
         sectionHeader('2.  DOKUMENTE');
 
-        doc.setFillColor(255, 255, 255); doc.setDrawColor(...C_GRAURAND);
-        doc.roundedRect(ML, y, CW, 12, 2, 2, 'FD');
-        doc.setFillColor(...C_BLAU); doc.rect(ML, y, 3, 12, 'F');
-        doc.roundedRect(ML, y, 3, 4, 1, 1, 'F');
-        y += 5;
-
+        check(25);
+        const s2Y = y; y += 5;
         fragenBlock([{ id: 'dok_datenblatt', label: '2.1  Datenblatt vorhanden' }]);
         y += 3;
-
-        /* ══════════════════════════════
-           HILFSFUNKTION: Bruch zeichnen
-           Zeichnet  "vor  zaehler/nenner  nach"  als grafischen Bruch
-           Gibt die neue x-Position zurück
-        ══════════════════════════════ */
-        function pdfBruch(vor, zaehler, nenner, nach, bx, by, fs) {
-            doc.setFontSize(fs);
-            doc.setTextColor(...C_DUNKEL);
-            let cx = bx;
-            if (vor) { doc.setFont('helvetica','normal'); doc.text(vor, cx, by); cx += doc.getTextWidth(vor) + 1; }
-            const nw  = doc.getTextWidth(zaehler);
-            const dw  = doc.getTextWidth(nenner);
-            const lw  = Math.max(nw, dw) + 4;
-            const lhf = fs * 0.38;
-            doc.setFont('helvetica','normal');
-            doc.text(zaehler, cx + lw / 2, by - lhf * 0.7, { align: 'center' });
-            doc.setDrawColor(...C_BLAU); doc.setLineWidth(0.35);
-            doc.line(cx, by, cx + lw, by);
-            doc.setLineWidth(0.2); doc.setDrawColor(...C_GRAURAND);
-            doc.text(nenner, cx + lw / 2, by + lhf * 1.1, { align: 'center' });
-            cx += lw + 1;
-            if (nach) { doc.text(nach, cx, by); }
-            return cx + (nach ? doc.getTextWidth(nach) : 0);
-        }
-
-        /* Norm-Referenz-Badge rechts */
-        function normBadge(norm, bx, by) {
-            doc.setFont('helvetica','italic'); doc.setFontSize(7); doc.setTextColor(120,120,120);
-            doc.text(norm, W - MR - 3, by, { align: 'right' });
-        }
-
-        /* ── Formel-Zeile: Norm + Formel + Ergebnis ── */
-        function formelZeile(norm, zeichne, ergebnisLabel, ergebnisWert) {
-            check(18);
-            /* Norm-Badge */
-            doc.setFont('helvetica','italic'); doc.setFontSize(7.5); doc.setTextColor(100, 100, 200);
-            doc.text(norm, ML + 5, y);
-            y += 4;
-            /* Formel zeichnen (Callback) */
-            const fs = 8.5;
-            zeichne(ML + 8, y + 2, fs);
-            /* Ergebnis rechts */
-            if (ergebnisLabel) {
-                doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(...C_BLAU);
-                doc.text(ergebnisLabel + '  ' + (ergebnisWert || '–'), W - MR - 4, y + 2, { align: 'right' });
-            }
-            y += 10;
-        }
+        doc.setDrawColor(...C_GRAURAND); doc.setLineWidth(0.3);
+        doc.roundedRect(ML, s2Y, CW, y - s2Y, 2, 2, 'D');
+        doc.setFillColor(...C_BLAU); doc.rect(ML, s2Y, 3, y - s2Y, 'F');
+        doc.roundedRect(ML, s2Y, 3, 4, 1, 1, 'F');
+        doc.setLineWidth(0.2);
+        y += 4;
 
         /* ══════════════════════════════
            3. EINGABEWERTE
@@ -6329,82 +6411,69 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         if (gewaehlteRillenform === 'nicht_gehaertet') rillenformText = 'Keilrille nicht gehärtet';
         if (gewaehlteRillenform === 'halbrund')        rillenformText = 'Halbrundrille mit Unterschnitt';
 
-        check(44);
+        const eingabeFelder = [
+            ['Rillenform:', rillenformText, ''],
+            ['Nenngeschwindigkeit v:', document.getElementById('geschwindigkeit')?.value, 'm/s'],
+            ['Keilwinkel γ:', document.getElementById('keilwinkel')?.value, '°'],
+            ['Spannkraft G:', document.getElementById('spannkraft')?.value, 'N'],
+            ['Mindestbruchkraft Fmin:', document.getElementById('mindestbruchkraft')?.value, 'kN'],
+        ];
+        const s3H = eingabeFelder.length * 6 + 9;
+        check(s3H + 2);
+        const s3Y = y;
         doc.setFillColor(255,255,255); doc.setDrawColor(...C_GRAURAND);
-        doc.roundedRect(ML, y, CW, 40, 2, 2, 'FD');
-        doc.setFillColor(...C_BLAU); doc.rect(ML, y, 3, 40, 'F');
-        doc.roundedRect(ML, y, 3, 4, 1, 1, 'F');
-        y += 5;
-
-        wertZeile('Rillenform:', rillenformText);
-        wertZeile('Nenngeschwindigkeit v:', document.getElementById('geschwindigkeit')?.value, 'm/s');
-        wertZeile('Keilwinkel γ:', document.getElementById('keilwinkel')?.value, '°');
-        wertZeile('Spannkraft G:', document.getElementById('spannkraft')?.value, 'N');
-        wertZeile('Mindestbruchkraft Fₘᴵⁿ:', document.getElementById('mindestbruchkraft')?.value, 'kN');
-        y += 4;
+        doc.roundedRect(ML, s3Y, CW, s3H, 2, 2, 'FD');
+        doc.setFillColor(...C_BLAU); doc.rect(ML, s3Y, 3, s3H, 'F');
+        doc.roundedRect(ML, s3Y, 3, 4, 1, 1, 'F');
+        y = s3Y + 5;
+        eingabeFelder.forEach(([label, wert, einheit]) => wertZeile(label, wert || '–', einheit));
+        y = s3Y + s3H + 4;
 
         /* ══════════════════════════════
-           4. FORMELN MIT NORM-REFERENZ
+           4. VERWENDETE FORMELN
         ══════════════════════════════ */
         sectionHeader('4.  VERWENDETE FORMELN');
 
-        check(80);
-        const formelBoxY = y;
-        doc.setFillColor(250, 251, 255); doc.setDrawColor(...C_GRAURAND);
-        doc.roundedRect(ML, y, CW, 78, 2, 2, 'FD');
-        doc.setFillColor(...C_BLAU); doc.rect(ML, y, 3, 78, 'F');
-        doc.roundedRect(ML, y, 3, 4, 1, 1, 'F');
-        y += 5;
-
-        /* --- μ --- */
         const muWert = document.getElementById('ergebnis_mu')?.innerText || '–';
-        formelZeile(
+        formelKarte(
             'DIN EN 81-50 §5.6.2.2.1.2',
             (bx, by, fs) => pdfBruch('μ  =  ', '0,1', '1 + v / 10', '', bx, by, fs),
-            'μ =', muWert
+            'μ =', muWert, true
         );
 
-        /* --- f(μ) --- */
         const fmuWert = document.getElementById('ergebnis_fmu')?.innerText || '–';
         if (gewaehlteRillenform === 'halbrund') {
-            formelZeile(
+            formelKarte(
                 'DIN EN 81-50 §5.6.2.2.1.3 a)',
                 (bx, by, fs) => pdfBruch('f(μ)  =  4·μ·', '1 − sin(γ/2)', 'π − γ − sin(γ)', '', bx, by, fs),
-                'f(μ) =', fmuWert
+                'f(μ) =', fmuWert, true
             );
         } else {
-            formelZeile(
+            formelKarte(
                 'DIN EN 81-50 §5.6.2.2.1.3 b)',
                 (bx, by, fs) => pdfBruch('f(μ)  =  ', 'μ', 'sin(γ / 2)', '', bx, by, fs),
-                'f(μ) =', fmuWert
+                'f(μ) =', fmuWert, true
             );
         }
 
-        /* --- Zugkraft F --- */
         const zugWert = document.getElementById('ergebnis_zugkraft')?.innerText || '–';
-        formelZeile(
+        formelKarte(
             'DIN EN 81-50 §5.6.2.2.1.4',
             (bx, by, fs) => {
-                doc.setFont('helvetica','normal'); doc.setFontSize(fs); doc.setTextColor(...C_DUNKEL);
-                doc.text('F  =  (G / 2) × ( e', bx, by);
-                const tw = doc.getTextWidth('F  =  (G / 2) × ( e');
-                doc.setFontSize(fs - 2);
-                doc.text('f(μ)·π', bx + tw, by - 2);
-                doc.setFontSize(fs);
-                doc.text('  −  1 )', bx + tw + doc.getTextWidth('f(μ)·π') + 1, by);
+                doc.setTextColor(...C_DUNKEL);
+                let cx = griechDraw('F  =  (G / 2) × ( e', bx, by, fs);
+                cx = griechDraw('f(μ)·π', cx, by - 3, fs - 2.5);   // Exponent
+                griechDraw('  -  1 )', cx, by, fs);
             },
-            'F =', zugWert
+            'F =', zugWert, false
         );
 
-        /* --- Sicherheitsfaktor S --- */
         const sfWert = document.getElementById('ergebnis_sicherheitsfaktor')?.innerText || '–';
-        formelZeile(
+        formelKarte(
             'DIN EN 81-50 §5.6.2.2.1.5  (S ≥ 8)',
-            (bx, by, fs) => pdfBruch('S  =  ', 'Fₘᴵⁿ', 'F', '≥  8', bx, by, fs),
-            'S =', sfWert
+            (bx, by, fs) => pdfBruch('S  =  ', 'Fmin', 'F', '   ≥  8', bx, by, fs),
+            'S =', sfWert, true
         );
-
-        y = formelBoxY + 82;
 
         /* ══════════════════════════════
            5. AUSWERTUNG
