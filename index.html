@@ -6135,6 +6135,62 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         const C_ORANGE   = [200, 100, 0];
         let y = 12, seite = 1;
 
+        /* ── Sonderzeichen-Rendering ──
+           jsPDF-Standardfont (Helvetica/WinAnsi) kennt keine griechischen
+           Buchstaben. Diese werden über den eingebauten Symbol-Font gezeichnet.
+           SYM bildet Unicode → Zeichen in der Symbol-Kodierung ab. */
+        const SYM = {
+            'μ': 'm', 'π': 'p', 'γ': 'g', 'α': 'a', 'β': 'b', 'λ': 'l',
+            'σ': 's', 'Σ': 'S', 'Δ': 'D', 'θ': 'q', 'Ω': 'W',
+            '≥': '³', '≤': '£', '∞': '¥'
+        };
+
+        /* Zeichnet str ab (x, Grundlinie y); Greek-Zeichen via Symbol-Font.
+           Gibt die rechte x-Kante zurück. */
+        function griechDraw(str, x, y, fs, style) {
+            style = style || 'normal';
+            doc.setFontSize(fs);
+            let cx = x;
+            for (const ch of String(str)) {
+                if (SYM[ch]) {
+                    doc.setFont('symbol', 'normal');
+                    doc.text(SYM[ch], cx, y);
+                    cx += doc.getTextWidth(SYM[ch]);
+                } else {
+                    doc.setFont('helvetica', style);
+                    doc.text(ch, cx, y);
+                    cx += doc.getTextWidth(ch);
+                }
+            }
+            return cx;
+        }
+
+        /* Breite von str unter Berücksichtigung der Symbol-Zeichen. */
+        function griechWidth(str, fs, style) {
+            style = style || 'normal';
+            doc.setFontSize(fs);
+            let w = 0;
+            for (const ch of String(str)) {
+                if (SYM[ch]) { doc.setFont('symbol', 'normal'); w += doc.getTextWidth(SYM[ch]); }
+                else { doc.setFont('helvetica', style); w += doc.getTextWidth(ch); }
+            }
+            return w;
+        }
+
+        /* str zentriert um cx zeichnen. */
+        function griechCenter(str, cx, y, fs, style) {
+            const w = griechWidth(str, fs, style);
+            return griechDraw(str, cx - w / 2, y, fs, style);
+        }
+
+        /* Ersetzt nicht-WinAnsi-Mathezeichen durch ASCII (für Fließtext). */
+        function clean(s) {
+            return String(s == null ? '' : s)
+                .replace(/≥/g, '>=').replace(/≤/g, '<=')
+                .replace(/−/g, '-')
+                .replace(/μ/g, 'my').replace(/γ/g, 'gamma').replace(/π/g, 'pi');
+        }
+
         function footer() {
             doc.setDrawColor(...C_GRAURAND);
             doc.line(ML, H - 11, W - MR, H - 11);
@@ -6160,9 +6216,9 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
         function wertZeile(label, wert, einheit) {
             check(7);
-            doc.setFont('helvetica', 'bold'); doc.setFontSize(8.5); doc.setTextColor(80, 80, 80);
-            doc.text(label, ML + 5, y);
-            doc.setFont('helvetica', 'normal'); doc.setTextColor(...C_DUNKEL);
+            doc.setTextColor(80, 80, 80);
+            griechDraw(label, ML + 5, y, 8.5, 'bold');
+            doc.setFont('helvetica', 'normal'); doc.setFontSize(8.5); doc.setTextColor(...C_DUNKEL);
             doc.text(String(wert || '–') + (einheit ? ' ' + einheit : ''), ML + 70, y);
             y += 6;
         }
@@ -6174,7 +6230,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             doc.setDrawColor(...farbe);
             doc.roundedRect(ML + 4, y, CW - 4, 8, 1.5, 1.5, 'FD');
             doc.setFont('helvetica', 'bold'); doc.setFontSize(8.5); doc.setTextColor(...farbe);
-            doc.text(label + ':  ' + String(wert || '–'), ML + 7, y + 5);
+            doc.text(clean(label + ':  ' + (wert || '–')), ML + 7, y + 5);
             y += 10;
         }
 
@@ -6219,11 +6275,14 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
                 y += zeilen.length * 5.5 + 2;
 
                 if (mang) {
+                    const mZeilen = doc.splitTextToSize(clean('Mangel: ' + mang), CW - 16);
+                    const mH = mZeilen.length * 4 + 4;
+                    check(mH + 3);
                     doc.setFillColor(255, 235, 235); doc.setDrawColor(200, 60, 60);
-                    doc.roundedRect(ML + 6, y, CW - 9, 7, 1, 1, 'FD');
+                    doc.roundedRect(ML + 6, y, CW - 9, mH, 1, 1, 'FD');
                     doc.setFont('helvetica', 'italic'); doc.setFontSize(7.5); doc.setTextColor(160, 0, 0);
-                    doc.text('Mangel: ' + mang, ML + 8, y + 4);
-                    y += 9;
+                    doc.text(mZeilen, ML + 8, y + 4);
+                    y += mH + 4;
                 }
             });
         }
@@ -6262,32 +6321,23 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
            HILFSFUNKTIONEN: Bruch, Karte
         ══════════════════════════════ */
 
-        /* Zeichnet Zähler/Nenner-Bruch an (bx, by), by = Bruchlinie. Gibt rechte x-Kante zurück. */
+        /* Zeichnet Zähler/Nenner-Bruch an (bx, by), by = Bruchlinie. Gibt rechte x-Kante zurück.
+           Griechische Zeichen werden über griechDraw korrekt dargestellt. */
         function pdfBruch(vor, zaehler, nenner, nach, bx, by, fs) {
-            doc.setFontSize(fs);
             doc.setTextColor(...C_DUNKEL);
             let cx = bx;
-            if (vor) {
-                doc.setFont('helvetica','normal');
-                doc.text(vor, cx, by);
-                cx += doc.getTextWidth(vor) + 1.5;
-            }
-            const nw  = doc.getTextWidth(zaehler);
-            const dw  = doc.getTextWidth(nenner);
+            if (vor) cx = griechDraw(vor, cx, by, fs) + 1.5;
+            const nw  = griechWidth(zaehler, fs);
+            const dw  = griechWidth(nenner, fs);
             const lw  = Math.max(nw, dw) + 5;
             const lhf = fs * 0.52;
-            doc.setFont('helvetica','normal');
-            doc.text(zaehler, cx + lw / 2, by - lhf * 1.1, { align: 'center' });
+            griechCenter(zaehler, cx + lw / 2, by - lhf * 1.1, fs);
             doc.setDrawColor(...C_BLAU); doc.setLineWidth(0.4);
             doc.line(cx, by, cx + lw, by);
             doc.setLineWidth(0.2); doc.setDrawColor(...C_GRAURAND);
-            doc.text(nenner, cx + lw / 2, by + lhf * 1.5, { align: 'center' });
+            griechCenter(nenner, cx + lw / 2, by + lhf * 1.5, fs);
             cx += lw + 1.5;
-            if (nach) {
-                doc.setFont('helvetica','normal');
-                doc.text(nach, cx, by);
-                cx += doc.getTextWidth(nach);
-            }
+            if (nach) cx = griechDraw(nach, cx, by, fs);
             return cx;
         }
 
@@ -6301,13 +6351,14 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             doc.setFillColor(...C_BLAU); doc.rect(ML, kY, 3, kH, 'F');
             doc.roundedRect(ML, kY, 3, 4, 1, 1, 'F');
             doc.setFont('helvetica','italic'); doc.setFontSize(7); doc.setTextColor(100,100,200);
-            doc.text(norm, ML + 7, kY + 5.5);
+            doc.text(clean(norm), ML + 7, kY + 5.5);
             const formelY = istBruch ? kY + 17 : kY + 14;
             zeichne(ML + 7, formelY, 8.5);
             if (ergebnisLabel) {
                 const resY = istBruch ? kY + 24.5 : kY + 18.5;
-                doc.setFont('helvetica','bold'); doc.setFontSize(8.5); doc.setTextColor(...C_BLAU);
-                doc.text(ergebnisLabel + '  ' + (ergebnisWert || '–'), W - MR - 4, resY, { align: 'right' });
+                const resTxt = ergebnisLabel + '  ' + (ergebnisWert || '–');
+                doc.setTextColor(...C_BLAU);
+                griechDraw(resTxt, W - MR - 4 - griechWidth(resTxt, 8.5, 'bold'), resY, 8.5, 'bold');
             }
             y += kH + 3;
         }
@@ -6365,7 +6416,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             ['Nenngeschwindigkeit v:', document.getElementById('geschwindigkeit')?.value, 'm/s'],
             ['Keilwinkel γ:', document.getElementById('keilwinkel')?.value, '°'],
             ['Spannkraft G:', document.getElementById('spannkraft')?.value, 'N'],
-            ['Mindestbruchkraft Fₘᴵⁿ:', document.getElementById('mindestbruchkraft')?.value, 'kN'],
+            ['Mindestbruchkraft Fmin:', document.getElementById('mindestbruchkraft')?.value, 'kN'],
         ];
         const s3H = eingabeFelder.length * 6 + 9;
         check(s3H + 2);
@@ -6409,13 +6460,10 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         formelKarte(
             'DIN EN 81-50 §5.6.2.2.1.4',
             (bx, by, fs) => {
-                doc.setFont('helvetica','normal'); doc.setFontSize(fs); doc.setTextColor(...C_DUNKEL);
-                doc.text('F  =  (G / 2) × ( e', bx, by);
-                const tw = doc.getTextWidth('F  =  (G / 2) × ( e');
-                doc.setFontSize(fs - 2.5);
-                doc.text('f(μ)·π', bx + tw, by - 3);
-                doc.setFontSize(fs);
-                doc.text('  −  1 )', bx + tw + doc.getTextWidth('f(μ)·π') + 0.5, by);
+                doc.setTextColor(...C_DUNKEL);
+                let cx = griechDraw('F  =  (G / 2) × ( e', bx, by, fs);
+                cx = griechDraw('f(μ)·π', cx, by - 3, fs - 2.5);   // Exponent
+                griechDraw('  -  1 )', cx, by, fs);
             },
             'F =', zugWert, false
         );
@@ -6423,7 +6471,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         const sfWert = document.getElementById('ergebnis_sicherheitsfaktor')?.innerText || '–';
         formelKarte(
             'DIN EN 81-50 §5.6.2.2.1.5  (S ≥ 8)',
-            (bx, by, fs) => pdfBruch('S  =  ', 'Fₘᴵⁿ', 'F', '   ≥  8', bx, by, fs),
+            (bx, by, fs) => pdfBruch('S  =  ', 'Fmin', 'F', '   ≥  8', bx, by, fs),
             'S =', sfWert, true
         );
 
