@@ -5474,6 +5474,8 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         document.querySelectorAll('#detailSeil .tab-inhalt').forEach(el => el.classList.remove('aktiv')); /* Alle Inhalte verstecken */
         btn.classList.add('aktiv');                            /* Geklickten Tab aktivieren */
         document.getElementById(tabId).classList.add('aktiv'); /* Zugehörigen Inhalt anzeigen */
+        if (tabId === 'berechnung')   setTutorialKontext('berechnungTab');
+        else if (tabId === 'pruefung') setTutorialKontext('pruefungTab');
     }
 
     /* Tab wechseln für Bauteil 2 (Geschwindigkeitsbegrenzer)
