@@ -4338,11 +4338,17 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         var geschwWert = parseFloat((document.getElementById('hp_geschwindigkeit').value || '').replace(',', '.'));
         var btn = document.getElementById('hp_tp_puffer_infobtn');
         var box = document.getElementById('hp_tp_puffer_infobox');
-        // Info-Button nur bei Steuerung "Lisa 20" UND Geschwindigkeit >= 1,01 m/s
-        var bedingungErfuellt = (steuerung === 'Lisa 20') && !isNaN(geschwWert) && geschwWert >= 1.01;
-        if (bedingungErfuellt && STEUERUNG_INFO[steuerung]) {
+        var infoHtml = '';
+        if (!isNaN(geschwWert) && geschwWert <= 1.0) {
+            // Geschwindigkeit 1 m/s oder weniger – allgemeiner Puffer-Hinweis
+            infoHtml = 'Bei einer Geschwindigkeit von 1 m/s oder weniger ist zu beachten:<br>&bull; Der Puffer muss sitzen.<br>&bull; Der Puffer darf nicht porös sein.';
+        } else if (steuerung === 'Lisa 20' && !isNaN(geschwWert) && geschwWert >= 1.01 && STEUERUNG_INFO[steuerung]) {
+            // Lisa 20 und Geschwindigkeit >= 1,01 m/s – Brücken-Hinweis
+            infoHtml = STEUERUNG_INFO[steuerung];
+        }
+        if (infoHtml) {
             btn.style.display = 'inline-block';
-            box.innerHTML = 'ℹ️ ' + STEUERUNG_INFO[steuerung];
+            box.innerHTML = 'ℹ️ ' + infoHtml;
         } else {
             btn.style.display = 'none';
             box.style.display = 'none';
