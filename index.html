@@ -2991,10 +2991,33 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 <div id="wiederkehrendeSeite" class="seite"> <!-- Versteckt – wird per JavaScript eingeblendet -->
     <button class="zuruck" onclick="zeige('startseite')">← Zurück</button>
     <h2>🔁 1 – Wiederkehrende Prüfung</h2>
+    <p style="margin:12px 0 18px; line-height:1.6; color:#333; text-align:center;">Welche Prüfung möchtest du durchführen?</p>
+    <div class="auswahl">
+        <button class="btn" onclick="zeige('hauptpruefungSeite')">🔍 Hauptprüfung</button>
+        <button class="btn" onclick="zeige('zwischenpruefungSeite')">🔎 Zwischenprüfung</button>
+    </div>
+</div>
+
+<!-- HAUPTPRÜFUNG -->
+<div id="hauptpruefungSeite" class="seite">
+    <button class="zuruck" onclick="zeige('wiederkehrendeSeite')">← Zurück</button>
+    <h2>🔍 Hauptprüfung</h2>
     <div class="frage">
         <h3>In Arbeit</h3>
         <p style="margin:12px 0; line-height:1.6; color:#333;">
-            Dieser Bereich für die wiederkehrende Prüfung wird gerade aufgebaut. Der Inhalt folgt in Kürze.
+            Der Bereich für die Hauptprüfung wird gerade aufgebaut. Der Inhalt folgt in Kürze.
+        </p>
+    </div>
+</div>
+
+<!-- ZWISCHENPRÜFUNG -->
+<div id="zwischenpruefungSeite" class="seite">
+    <button class="zuruck" onclick="zeige('wiederkehrendeSeite')">← Zurück</button>
+    <h2>🔎 Zwischenprüfung</h2>
+    <div class="frage">
+        <h3>In Arbeit</h3>
+        <p style="margin:12px 0; line-height:1.6; color:#333;">
+            Der Bereich für die Zwischenprüfung wird gerade aufgebaut. Der Inhalt folgt in Kürze.
         </p>
     </div>
 </div>
