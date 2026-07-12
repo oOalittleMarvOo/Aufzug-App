@@ -3102,7 +3102,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
                 <div class="mangelfeld" id="mangel-hp_dok_notbefreiung_aktuell">
                     <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
                     <label>Bitte Mangel beschreiben:</label>
-                    <textarea placeholder="Beschreibung des Mangels..."></textarea>
+                    <textarea placeholder="Beschreibung des Mangels..." data-vorgabe="Es fehlt eine anlagenspezifische Notbefreiungsanleitung."></textarea>
                 </div>
             </div>
         </div>
@@ -5785,7 +5785,13 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
         const mangelfeld = document.getElementById('mangel-' + frageId);
         if (mangelfeld) {
-            mangelfeld.style.display = btn.classList.contains('passt-nicht') ? 'block' : 'none';
+            const zeigen = btn.classList.contains('passt-nicht');
+            mangelfeld.style.display = zeigen ? 'block' : 'none';
+            /* Vorgabetext setzen wenn vorhanden und Feld noch leer */
+            if (zeigen) {
+                const ta = mangelfeld.querySelector('textarea[data-vorgabe]');
+                if (ta && !ta.value.trim()) ta.value = ta.getAttribute('data-vorgabe');
+            }
         }
         const trifftfeld = document.getElementById('trifft-' + frageId);
         if (trifftfeld) {
