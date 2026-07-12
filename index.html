@@ -1826,11 +1826,11 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 <div id="startseite" class="startseite">
     <h2>0 – Hauptmenü</h2>
     <div class="auswahl">
-        <button class="btn" onclick="zeige('wiederkehrendeSeite')">🔁 5 – Wiederkehrende Prüfung</button>
-        <button class="btn" disabled style="background:#9e9e9e; color:#e0e0e0; cursor:not-allowed; opacity:0.6;">🏗️ 1 – Neubau</button>
-        <button class="btn" onclick="zeigeUmbau()">🔧 2 – Umbau</button>
-        <button class="btn" onclick="zeigeBauteile('3 – Komponenten')">🔩 3 – Komponenten</button>
-        <button class="btn" onclick="zeige('sicherungSeite')">⚡ 4 – Sicherung</button>
+        <button class="btn" onclick="zeige('wiederkehrendeSeite')">🔁 1 – Wiederkehrende Prüfung</button>
+        <button class="btn" disabled style="background:#9e9e9e; color:#e0e0e0; cursor:not-allowed; opacity:0.6;">🏗️ 2 – Neubau</button>
+        <button class="btn" onclick="zeigeUmbau()">🔧 3 – Umbau</button>
+        <button class="btn" onclick="zeigeBauteile('4 – Komponenten')">🔩 4 – Komponenten</button>
+        <button class="btn" onclick="zeige('sicherungSeite')">⚡ 5 – Sicherung</button>
     </div>
     <!-- Erscheint nur wenn ein Umbau-Projekt aktiv ist -->
     <div id="projektFortsetzenBereich" style="display:none; margin-top:15px;">
@@ -2990,7 +2990,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
 <div id="wiederkehrendeSeite" class="seite"> <!-- Versteckt – wird per JavaScript eingeblendet -->
     <button class="zuruck" onclick="zeige('startseite')">← Zurück</button>
-    <h2>🔁 5 – Wiederkehrende Prüfung</h2>
+    <h2>🔁 1 – Wiederkehrende Prüfung</h2>
     <div class="frage">
         <h3>In Arbeit</h3>
         <p style="margin:12px 0; line-height:1.6; color:#333;">
@@ -4455,8 +4455,8 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 
     /* Umbau-Button: öffnet zuerst das Seriennummer-Modal */
     function zeigeUmbau() {
-        document.getElementById('bereichTitel').innerText = '2 – Umbau';
-        document.getElementById('hauptHeader').innerText = '🛗 2 – Umbau'; /* Header setzen */
+        document.getElementById('bereichTitel').innerText = '3 – Umbau';
+        document.getElementById('hauptHeader').innerText = '🛗 3 – Umbau'; /* Header setzen */
         oeffneModal();
     }
 
@@ -4716,8 +4716,8 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         }
 
         /* Zur Umbau-Bauteilseite navigieren */
-        document.getElementById('bereichTitel').innerText = '2 – Umbau';
-        document.getElementById('hauptHeader').innerText = '🛗 2 – Umbau';
+        document.getElementById('bereichTitel').innerText = '3 – Umbau';
+        document.getElementById('hauptHeader').innerText = '🛗 3 – Umbau';
         document.getElementById('btnBauteileAendern').style.display = 'inline-block';
         aktualisiereBauteilListe();
         zeige('bauteilSeite');
