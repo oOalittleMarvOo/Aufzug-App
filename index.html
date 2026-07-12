@@ -3053,8 +3053,34 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             <strong>EQ-Nummer:</strong> <span id="hp_anzeige_eqnummer">–</span><br>
             <strong>Hersteller:</strong> <span id="hp_anzeige_hersteller">–</span>
         </p>
-        <p style="margin:12px 0; line-height:1.6; color:#666; font-size:14px;">
-            Die weiteren Prüfschritte folgen in Kürze.
+    </div>
+    <p style="margin:18px 0 14px; line-height:1.6; color:#333; text-align:center;">Welchen Bereich möchtest du prüfen?</p>
+    <div class="auswahl">
+        <button class="btn" onclick="zeige('hpDokumentenpruefungSeite')">📄 Dokumentenprüfung</button>
+        <button class="btn" onclick="zeige('hpTechnischePruefungSeite')">🔧 Technische Prüfung</button>
+    </div>
+</div>
+
+<!-- HAUPTPRÜFUNG: DOKUMENTENPRÜFUNG -->
+<div id="hpDokumentenpruefungSeite" class="seite">
+    <button class="zuruck" onclick="zeige('hauptpruefungProjektSeite')">← Zurück</button>
+    <h2>📄 Dokumentenprüfung</h2>
+    <div class="frage">
+        <h3>In Arbeit</h3>
+        <p style="margin:12px 0; line-height:1.6; color:#333;">
+            Der Bereich für die Dokumentenprüfung wird gerade aufgebaut. Der Inhalt folgt in Kürze.
+        </p>
+    </div>
+</div>
+
+<!-- HAUPTPRÜFUNG: TECHNISCHE PRÜFUNG -->
+<div id="hpTechnischePruefungSeite" class="seite">
+    <button class="zuruck" onclick="zeige('hauptpruefungProjektSeite')">← Zurück</button>
+    <h2>🔧 Technische Prüfung</h2>
+    <div class="frage">
+        <h3>In Arbeit</h3>
+        <p style="margin:12px 0; line-height:1.6; color:#333;">
+            Der Bereich für die technische Prüfung wird gerade aufgebaut. Der Inhalt folgt in Kürze.
         </p>
     </div>
 </div>
