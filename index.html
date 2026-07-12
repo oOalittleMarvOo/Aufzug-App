@@ -3009,11 +3009,11 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         </p>
         <div class="eingabe-zeile" style="margin-top:10px;">
             <label>Seriennummer:</label>
-            <input type="text" id="hp_seriennummer" placeholder="z.B. AZ-2024-00123">
+            <input type="text" id="hp_seriennummer" placeholder="optional – z.B. AZ-2024-00123">
         </div>
         <div class="eingabe-zeile" style="margin-top:10px;">
             <label>EQ-Nummer:</label>
-            <input type="text" id="hp_eqnummer" placeholder="z.B. EQ-123456">
+            <input type="text" id="hp_eqnummer" placeholder="optional – z.B. EQ-123456">
         </div>
         <div class="eingabe-zeile" style="margin-top:10px;">
             <label>Hersteller:</label>
@@ -4279,14 +4279,13 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         var serien = document.getElementById('hp_seriennummer').value.trim();
         var eq = document.getElementById('hp_eqnummer').value.trim();
         var hersteller = document.getElementById('hp_hersteller').value;
-        if (!serien) { alert('Bitte eine Seriennummer eingeben.'); return; }
-        if (!eq)     { alert('Bitte eine EQ-Nummer eingeben.'); return; }
+        // Seriennummer und EQ-Nummer sind optional und können übersprungen werden
         if (!hersteller) { alert('Bitte einen Hersteller wählen.'); return; }
         hpSeriennummer = serien;
         hpEqNummer = eq;
         hpHersteller = hersteller;
-        document.getElementById('hp_anzeige_seriennummer').innerText = serien;
-        document.getElementById('hp_anzeige_eqnummer').innerText = eq;
+        document.getElementById('hp_anzeige_seriennummer').innerText = serien || '–';
+        document.getElementById('hp_anzeige_eqnummer').innerText = eq || '–';
         document.getElementById('hp_anzeige_hersteller').innerText = hersteller;
         zeige('hauptpruefungProjektSeite');
     }
