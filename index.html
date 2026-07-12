@@ -3003,9 +3003,34 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     <button class="zuruck" onclick="zeige('wiederkehrendeSeite')">← Zurück</button>
     <h2>🔍 Hauptprüfung</h2>
     <div class="frage">
-        <h3>In Arbeit</h3>
+        <h3>Neues Projekt anlegen</h3>
         <p style="margin:12px 0; line-height:1.6; color:#333;">
-            Der Bereich für die Hauptprüfung wird gerade aufgebaut. Der Inhalt folgt in Kürze.
+            Bitte gib die Anlagendaten für die Hauptprüfung ein.
+        </p>
+        <div class="eingabe-zeile" style="margin-top:10px;">
+            <label>Seriennummer:</label>
+            <input type="text" id="hp_seriennummer" placeholder="z.B. AZ-2024-00123">
+        </div>
+        <div class="eingabe-zeile" style="margin-top:10px;">
+            <label>EQ-Nummer:</label>
+            <input type="text" id="hp_eqnummer" placeholder="z.B. EQ-123456">
+        </div>
+        <button class="btn" style="margin-top:18px; width:100%;" onclick="starteHauptpruefung()">✔️ Projekt starten</button>
+    </div>
+</div>
+
+<!-- HAUPTPRÜFUNG PROJEKT -->
+<div id="hauptpruefungProjektSeite" class="seite">
+    <button class="zuruck" onclick="zeige('hauptpruefungSeite')">← Zurück</button>
+    <h2>🔍 Hauptprüfung – Projekt</h2>
+    <div class="frage">
+        <h3>Projektdaten</h3>
+        <p style="margin:10px 0; line-height:1.8; color:#333;">
+            <strong>Seriennummer:</strong> <span id="hp_anzeige_seriennummer">–</span><br>
+            <strong>EQ-Nummer:</strong> <span id="hp_anzeige_eqnummer">–</span>
+        </p>
+        <p style="margin:12px 0; line-height:1.6; color:#666; font-size:14px;">
+            Die weiteren Prüfschritte folgen in Kürze.
         </p>
     </div>
 </div>
@@ -4214,6 +4239,21 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         { id: 'fahrkorb',           label: '14 – 🚖 Fahrkorb' },
         { id: 'frequenzumrichter',  label: '15 – 🎛️ Frequenzumrichter' }
     ];
+
+    /* Hauptprüfung: Projekt mit Seriennummer und EQ-Nummer starten */
+    var hpSeriennummer = '';
+    var hpEqNummer = '';
+    function starteHauptpruefung() {
+        var serien = document.getElementById('hp_seriennummer').value.trim();
+        var eq = document.getElementById('hp_eqnummer').value.trim();
+        if (!serien) { alert('Bitte eine Seriennummer eingeben.'); return; }
+        if (!eq)     { alert('Bitte eine EQ-Nummer eingeben.'); return; }
+        hpSeriennummer = serien;
+        hpEqNummer = eq;
+        document.getElementById('hp_anzeige_seriennummer').innerText = serien;
+        document.getElementById('hp_anzeige_eqnummer').innerText = eq;
+        zeige('hauptpruefungProjektSeite');
+    }
 
     /* Modal öffnen: zeigt das Seriennummer-Eingabefeld
        Befüllt das Eingabefeld mit der aktuellen Seriennummer */
