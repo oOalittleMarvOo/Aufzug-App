@@ -3015,6 +3015,20 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             <label>EQ-Nummer:</label>
             <input type="text" id="hp_eqnummer" placeholder="z.B. EQ-123456">
         </div>
+        <div class="eingabe-zeile" style="margin-top:10px;">
+            <label>Hersteller:</label>
+            <select id="hp_hersteller" style="flex:1; padding:8px; border:1px solid #ccc; border-radius:6px; font-size:14px;">
+                <option value="">– bitte wählen –</option>
+                <option value="Schindler">Schindler</option>
+                <option value="Kone">Kone</option>
+                <option value="ThyssenKrupp / TK Elevator">ThyssenKrupp / TK Elevator</option>
+                <option value="Otis">Otis</option>
+                <option value="Osma">Osma</option>
+                <option value="Wittur">Wittur</option>
+                <option value="Aufzugswerke Schmitt + Sohn">Aufzugswerke Schmitt + Sohn</option>
+                <option value="Sonstige">Sonstige</option>
+            </select>
+        </div>
         <button class="btn" style="margin-top:18px; width:100%;" onclick="starteHauptpruefung()">✔️ Projekt starten</button>
     </div>
 </div>
@@ -3027,7 +3041,8 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         <h3>Projektdaten</h3>
         <p style="margin:10px 0; line-height:1.8; color:#333;">
             <strong>Seriennummer:</strong> <span id="hp_anzeige_seriennummer">–</span><br>
-            <strong>EQ-Nummer:</strong> <span id="hp_anzeige_eqnummer">–</span>
+            <strong>EQ-Nummer:</strong> <span id="hp_anzeige_eqnummer">–</span><br>
+            <strong>Hersteller:</strong> <span id="hp_anzeige_hersteller">–</span>
         </p>
         <p style="margin:12px 0; line-height:1.6; color:#666; font-size:14px;">
             Die weiteren Prüfschritte folgen in Kürze.
@@ -4243,15 +4258,20 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     /* Hauptprüfung: Projekt mit Seriennummer und EQ-Nummer starten */
     var hpSeriennummer = '';
     var hpEqNummer = '';
+    var hpHersteller = '';
     function starteHauptpruefung() {
         var serien = document.getElementById('hp_seriennummer').value.trim();
         var eq = document.getElementById('hp_eqnummer').value.trim();
+        var hersteller = document.getElementById('hp_hersteller').value;
         if (!serien) { alert('Bitte eine Seriennummer eingeben.'); return; }
         if (!eq)     { alert('Bitte eine EQ-Nummer eingeben.'); return; }
+        if (!hersteller) { alert('Bitte einen Hersteller wählen.'); return; }
         hpSeriennummer = serien;
         hpEqNummer = eq;
+        hpHersteller = hersteller;
         document.getElementById('hp_anzeige_seriennummer').innerText = serien;
         document.getElementById('hp_anzeige_eqnummer').innerText = eq;
+        document.getElementById('hp_anzeige_hersteller').innerText = hersteller;
         zeige('hauptpruefungProjektSeite');
     }
 
