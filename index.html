@@ -4392,6 +4392,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         var box = document.getElementById('hp_tp_puffer_infobox');
         var niedrig = document.getElementById('hp_tp_puffer_niedrig');
         var funktion = document.getElementById('hp_tp_puffer');
+        var steuerung = document.getElementById('hp_steuerung') ? document.getElementById('hp_steuerung').value : '';
         var istNiedrig = !isNaN(geschwWert) && geschwWert <= 1.0;
         var istHoch    = !isNaN(geschwWert) && geschwWert >= 1.01;
 
@@ -4400,8 +4401,8 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         // Funktions-Prüfpunkt bei v <= 1 m/s ausblenden
         funktion.style.display = istNiedrig ? 'none' : 'block';
 
-        // Info-Hinweis (Brücke) nur bei höherer Geschwindigkeit anzeigen
-        if (istHoch) {
+        // Brücken-Hinweis nur bei > 1 m/s UND Steuerung "Lisa 20"
+        if (istHoch && steuerung === 'Lisa 20') {
             btn.style.display = 'inline-block';
             box.innerHTML = 'ℹ️ ' + PUFFER_INFO_HOCH;
             box.style.display = 'block';   // direkt sichtbar, "i" klappt es ein/aus
