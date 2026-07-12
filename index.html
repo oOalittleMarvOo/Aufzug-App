@@ -4327,14 +4327,11 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         document.getElementById('hp_steuerung_zeile').style.display = istSonstige ? 'flex' : 'none';
     }
 
-    /* Steuerungs-spezifische Info-Hinweise für Prüfpunkte */
-    var STEUERUNG_INFO = {
-        'Lisa 20': 'Um die Funktion der Fahrkorbpufferschalter nachzuweisen müssen die Endschalter gebrückt werden.<br>&bull; Die Brücke wird im ausgeschalteten Zustand gesetzt, die Brücke muss zertifiziert sein sowie wird die Brücke durch den Monteur gesetzt nach Abgleich des Stromlaufplans.<br>&bull; Die Endschalter sind im Stromlaufplan auf Seite 7 zu finden, die Klemmleiste XSU Klemme 5 auf 15.<br>&bull; Nachdem die Brücke gesetzt ist kann die Anlage mit Hilfe der Rückholsteuerung verfahren, dass der Fahrkorb oder das Gegengewicht den Puffer vollständig zusammen drückt.<br>&bull; Die Anlage muss mit der Brücke und einem zusammengedrückten Puffer einen Fehler im Normalbetrieb anzeigen.'
-    };
+    /* Puffer-Info-Hinweis für Geschwindigkeit >= 1,01 m/s (allgemein) */
+    var PUFFER_INFO_HOCH = 'Um die Funktion der Fahrkorbpufferschalter nachzuweisen müssen die Endschalter gebrückt werden.<br>&bull; Die Brücke wird im ausgeschalteten Zustand gesetzt, die Brücke muss zertifiziert sein sowie wird die Brücke durch den Monteur gesetzt nach Abgleich des Stromlaufplans.<br>&bull; Die Endschalter sind im Stromlaufplan auf Seite 7 zu finden, die Klemmleiste XSU Klemme 5 auf 15.<br>&bull; Nachdem die Brücke gesetzt ist kann die Anlage mit Hilfe der Rückholsteuerung verfahren, dass der Fahrkorb oder das Gegengewicht den Puffer vollständig zusammen drückt.<br>&bull; Die Anlage muss mit der Brücke und einem zusammengedrückten Puffer einen Fehler im Normalbetrieb anzeigen.';
 
-    /* Technische Prüfung öffnen und Info-Button je nach gewählter Steuerung setzen */
+    /* Technische Prüfung öffnen und Info-Button je nach Geschwindigkeit setzen */
     function zeigeTechnischePruefung() {
-        var steuerung = document.getElementById('hp_steuerung').value;
         var geschwWert = parseFloat((document.getElementById('hp_geschwindigkeit').value || '').replace(',', '.'));
         var btn = document.getElementById('hp_tp_puffer_infobtn');
         var box = document.getElementById('hp_tp_puffer_infobox');
@@ -4342,9 +4339,9 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         if (!isNaN(geschwWert) && geschwWert <= 1.0) {
             // Geschwindigkeit 1 m/s oder weniger – allgemeiner Puffer-Hinweis
             infoHtml = 'Bei einer Geschwindigkeit von 1 m/s oder weniger ist zu beachten:<br>&bull; Der Puffer muss sitzen.<br>&bull; Der Puffer darf nicht porös sein.';
-        } else if (steuerung === 'Lisa 20' && !isNaN(geschwWert) && geschwWert >= 1.01 && STEUERUNG_INFO[steuerung]) {
-            // Lisa 20 und Geschwindigkeit >= 1,01 m/s – Brücken-Hinweis
-            infoHtml = STEUERUNG_INFO[steuerung];
+        } else if (!isNaN(geschwWert) && geschwWert >= 1.01) {
+            // Geschwindigkeit ueber 1 m/s – Bruecken-Hinweis
+            infoHtml = PUFFER_INFO_HOCH;
         }
         if (infoHtml) {
             btn.style.display = 'inline-block';
