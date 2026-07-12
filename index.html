@@ -3036,6 +3036,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             <label>Steuerung:</label>
             <select id="hp_steuerung" style="flex:1; padding:8px; border:1px solid #ccc; border-radius:6px; font-size:14px;">
                 <option value="">– bitte wählen –</option>
+                <option value="Lisa 20">Lisa 20</option>
             </select>
         </div>
         <button class="btn" style="margin-top:18px; width:100%;" onclick="starteHauptpruefung()">✔️ Prüfung starten</button>
@@ -3077,11 +3078,24 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 <div id="hpTechnischePruefungSeite" class="seite">
     <button class="zuruck" onclick="zeige('hauptpruefungProjektSeite')">← Zurück</button>
     <h2>🔧 Technische Prüfung</h2>
-    <div class="frage">
-        <h3>In Arbeit</h3>
-        <p style="margin:12px 0; line-height:1.6; color:#333;">
-            Der Bereich für die technische Prüfung wird gerade aufgebaut. Der Inhalt folgt in Kürze.
-        </p>
+
+    <div class="frage" id="hp_tp_puffer">
+        <h3>1 – Prüfung der Funktionsfähigkeit der Puffer</h3>
+        <div class="hinweis">📋 TRBS 1201 Teil 4 (2) 3.2.3.2 – 12</div>
+        <div class="antwort-gruppe">
+            <button class="antwort-btn passt" onclick="antwort(this, 'hp_tp_puffer')">🟢 i.O.</button>
+            <button class="antwort-btn passt-nicht" onclick="antwort(this, 'hp_tp_puffer')">🔴 Mangel</button>
+            <button class="antwort-btn irrelevant" onclick="antwort(this, 'hp_tp_puffer')">⚪ Trifft nicht zu</button>
+        </div>
+        <div class="mangelfeld" id="mangel-hp_tp_puffer">
+            <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+            <label>Bitte Mangel beschreiben:</label>
+            <textarea placeholder="Beschreibung des Mangels..."></textarea>
+        </div>
+        <div class="mangelfeld" id="trifft-hp_tp_puffer" style="background:#f0f0f0;border-color:#999;">
+            <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
+            <textarea placeholder="Begründung oder Kommentar..."></textarea>
+        </div>
     </div>
 </div>
 
