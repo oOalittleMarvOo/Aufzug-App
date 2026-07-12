@@ -3017,7 +3017,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         </div>
         <div class="eingabe-zeile" style="margin-top:10px;">
             <label>Hersteller:</label>
-            <select id="hp_hersteller" style="flex:1; padding:8px; border:1px solid #ccc; border-radius:6px; font-size:14px;">
+            <select id="hp_hersteller" onchange="pruefeHersteller()" style="flex:1; padding:8px; border:1px solid #ccc; border-radius:6px; font-size:14px;">
                 <option value="">– bitte wählen –</option>
                 <option value="Schindler">Schindler</option>
                 <option value="Kone">Kone</option>
@@ -3028,6 +3028,9 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
                 <option value="Aufzugswerke Schmitt + Sohn">Aufzugswerke Schmitt + Sohn</option>
                 <option value="Sonstige">Sonstige</option>
             </select>
+        </div>
+        <div id="hp_hersteller_hinweis" class="hinweis" style="display:none; margin-top:10px; background:#fff8e1; border:1px solid #ffcc80; color:#8a6d00;">
+            ⚠️ Bei „Sonstige" sind ggf. die <strong>Fachanweisungen des Herstellers</strong> zu beachten.
         </div>
         <button class="btn" style="margin-top:18px; width:100%;" onclick="starteHauptpruefung()">✔️ Projekt starten</button>
     </div>
@@ -4259,6 +4262,11 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     var hpSeriennummer = '';
     var hpEqNummer = '';
     var hpHersteller = '';
+    /* Hinweis auf Fachanweisungen einblenden wenn "Sonstige" gewählt */
+    function pruefeHersteller() {
+        var wert = document.getElementById('hp_hersteller').value;
+        document.getElementById('hp_hersteller_hinweis').style.display = (wert === 'Sonstige') ? 'block' : 'none';
+    }
     function starteHauptpruefung() {
         var serien = document.getElementById('hp_seriennummer').value.trim();
         var eq = document.getElementById('hp_eqnummer').value.trim();
