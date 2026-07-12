@@ -3016,6 +3016,11 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             <input type="text" id="hp_eqnummer" placeholder="optional – z.B. EQ-123456">
         </div>
         <div class="eingabe-zeile" style="margin-top:10px;">
+            <label>Geschwindigkeit:</label>
+            <input type="number" id="hp_geschwindigkeit" placeholder="z.B. 1,0" step="0.01" min="0">
+            <span class="einheit">m/s</span>
+        </div>
+        <div class="eingabe-zeile" style="margin-top:10px;">
             <label>Hersteller:</label>
             <select id="hp_hersteller" onchange="pruefeHersteller()" style="flex:1; padding:8px; border:1px solid #ccc; border-radius:6px; font-size:14px;">
                 <option value="">– bitte wählen –</option>
@@ -3052,6 +3057,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         <p style="margin:10px 0; line-height:1.8; color:#333;">
             <strong>Seriennummer:</strong> <span id="hp_anzeige_seriennummer">–</span><br>
             <strong>EQ-Nummer:</strong> <span id="hp_anzeige_eqnummer">–</span><br>
+            <strong>Geschwindigkeit:</strong> <span id="hp_anzeige_geschwindigkeit">–</span><br>
             <strong>Hersteller:</strong> <span id="hp_anzeige_hersteller">–</span>
         </p>
     </div>
@@ -4312,6 +4318,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     var hpSeriennummer = '';
     var hpEqNummer = '';
     var hpHersteller = '';
+    var hpGeschwindigkeit = '';
     /* Hinweis auf Fachanweisungen einblenden wenn "Sonstige" gewählt */
     function pruefeHersteller() {
         var wert = document.getElementById('hp_hersteller').value;
@@ -4342,14 +4349,17 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     function starteHauptpruefung() {
         var serien = document.getElementById('hp_seriennummer').value.trim();
         var eq = document.getElementById('hp_eqnummer').value.trim();
+        var geschw = document.getElementById('hp_geschwindigkeit').value.trim();
         var hersteller = document.getElementById('hp_hersteller').value;
         // Seriennummer und EQ-Nummer sind optional und können übersprungen werden
         if (!hersteller) { alert('Bitte einen Hersteller wählen.'); return; }
         hpSeriennummer = serien;
         hpEqNummer = eq;
+        hpGeschwindigkeit = geschw;
         hpHersteller = hersteller;
         document.getElementById('hp_anzeige_seriennummer').innerText = serien || '–';
         document.getElementById('hp_anzeige_eqnummer').innerText = eq || '–';
+        document.getElementById('hp_anzeige_geschwindigkeit').innerText = geschw ? (geschw + ' m/s') : '–';
         document.getElementById('hp_anzeige_hersteller').innerText = hersteller;
         zeige('hauptpruefungProjektSeite');
     }
