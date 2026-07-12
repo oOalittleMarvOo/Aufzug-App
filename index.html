@@ -3072,11 +3072,24 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
 <div id="hpDokumentenpruefungSeite" class="seite">
     <button class="zuruck" onclick="zeige('hauptpruefungProjektSeite')">← Zurück</button>
     <h2>📄 Dokumentenprüfung</h2>
-    <div class="frage">
-        <h3>In Arbeit</h3>
-        <p style="margin:12px 0; line-height:1.6; color:#333;">
-            Der Bereich für die Dokumentenprüfung wird gerade aufgebaut. Der Inhalt folgt in Kürze.
-        </p>
+
+    <div class="frage" id="hp_dok_notbefreiung">
+        <h3>1 – Notbefreiungsanleitung</h3>
+        <div class="hinweis">ℹ️ Ist die Anleitung zur Personenbefreiung vorhanden und im Triebwerksraum bzw. an der Anlage ausgehängt?</div>
+        <div class="antwort-gruppe">
+            <button class="antwort-btn passt" onclick="antwort(this, 'hp_dok_notbefreiung')">🟢 i.O.</button>
+            <button class="antwort-btn passt-nicht" onclick="antwort(this, 'hp_dok_notbefreiung')">🔴 Mangel</button>
+            <button class="antwort-btn irrelevant" onclick="antwort(this, 'hp_dok_notbefreiung')">⚪ Trifft nicht zu</button>
+        </div>
+        <div class="mangelfeld" id="mangel-hp_dok_notbefreiung">
+            <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+            <label>Bitte Mangel beschreiben:</label>
+            <textarea placeholder="Beschreibung des Mangels..."></textarea>
+        </div>
+        <div class="mangelfeld" id="trifft-hp_dok_notbefreiung" style="background:#f0f0f0;border-color:#999;">
+            <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
+            <textarea placeholder="Begründung oder Kommentar..."></textarea>
+        </div>
     </div>
 </div>
 
