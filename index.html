@@ -3101,8 +3101,12 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
                 </div>
                 <div class="mangelfeld" id="mangel-hp_dok_notbefreiung_aktuell">
                     <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
-                    <label>Bitte Mangel beschreiben:</label>
-                    <textarea placeholder="Beschreibung des Mangels..." data-vorgabe="Es fehlt eine anlagenspezifische Notbefreiungsanleitung."></textarea>
+                    <label style="display:flex; align-items:flex-start; gap:8px; cursor:pointer; margin-bottom:10px;">
+                        <input type="checkbox" style="width:18px; height:18px; margin-top:2px; cursor:pointer;">
+                        <span>Es fehlt eine anlagenspezifische Notbefreiungsanleitung.</span>
+                    </label>
+                    <label>Weitere Beschreibung (optional):</label>
+                    <textarea placeholder="Zusätzliche Beschreibung des Mangels..."></textarea>
                 </div>
             </div>
         </div>
