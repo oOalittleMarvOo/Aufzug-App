@@ -3107,6 +3107,26 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             <textarea placeholder="Begründung oder Kommentar..."></textarea>
         </div>
     </div>
+
+    <!-- Prüfpunkt nur bei Geschwindigkeit <= 1 m/s -->
+    <div class="frage" id="hp_tp_puffer_niedrig" style="display:none;">
+        <h3>2 – Sichtprüfung Puffer (v ≤ 1 m/s)</h3>
+        <div class="hinweis">Bei einer Geschwindigkeit von 1 m/s oder weniger ist zu beachten:<br>&bull; Der Puffer muss sitzen.<br>&bull; Der Puffer darf nicht porös sein.</div>
+        <div class="antwort-gruppe">
+            <button class="antwort-btn passt" onclick="antwort(this, 'hp_tp_puffer_niedrig')">🟢 i.O.</button>
+            <button class="antwort-btn passt-nicht" onclick="antwort(this, 'hp_tp_puffer_niedrig')">🔴 Mangel</button>
+            <button class="antwort-btn irrelevant" onclick="antwort(this, 'hp_tp_puffer_niedrig')">⚪ Trifft nicht zu</button>
+        </div>
+        <div class="mangelfeld" id="mangel-hp_tp_puffer_niedrig">
+            <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+            <label>Bitte Mangel beschreiben:</label>
+            <textarea placeholder="Beschreibung des Mangels..."></textarea>
+        </div>
+        <div class="mangelfeld" id="trifft-hp_tp_puffer_niedrig" style="background:#f0f0f0;border-color:#999;">
+            <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
+            <textarea placeholder="Begründung oder Kommentar..."></textarea>
+        </div>
+    </div>
 </div>
 
 <!-- ZWISCHENPRÜFUNG -->
@@ -4330,22 +4350,22 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     /* Puffer-Info-Hinweis für Geschwindigkeit >= 1,01 m/s (allgemein) */
     var PUFFER_INFO_HOCH = 'Um die Funktion der Fahrkorbpufferschalter nachzuweisen müssen die Endschalter gebrückt werden.<br>&bull; Die Brücke wird im ausgeschalteten Zustand gesetzt, die Brücke muss zertifiziert sein sowie wird die Brücke durch den Monteur gesetzt nach Abgleich des Stromlaufplans.<br>&bull; Die Endschalter sind im Stromlaufplan auf Seite 7 zu finden, die Klemmleiste XSU Klemme 5 auf 15.<br>&bull; Nachdem die Brücke gesetzt ist kann die Anlage mit Hilfe der Rückholsteuerung verfahren, dass der Fahrkorb oder das Gegengewicht den Puffer vollständig zusammen drückt.<br>&bull; Die Anlage muss mit der Brücke und einem zusammengedrückten Puffer einen Fehler im Normalbetrieb anzeigen.';
 
-    /* Technische Prüfung öffnen und Info-Button je nach Geschwindigkeit setzen */
+    /* Technische Prüfung öffnen und Prüfpunkte je nach Geschwindigkeit setzen */
     function zeigeTechnischePruefung() {
         var geschwWert = parseFloat((document.getElementById('hp_geschwindigkeit').value || '').replace(',', '.'));
         var btn = document.getElementById('hp_tp_puffer_infobtn');
         var box = document.getElementById('hp_tp_puffer_infobox');
-        var infoHtml = '';
-        if (!isNaN(geschwWert) && geschwWert <= 1.0) {
-            // Geschwindigkeit 1 m/s oder weniger – allgemeiner Puffer-Hinweis
-            infoHtml = 'Bei einer Geschwindigkeit von 1 m/s oder weniger ist zu beachten:<br>&bull; Der Puffer muss sitzen.<br>&bull; Der Puffer darf nicht porös sein.';
-        } else if (!isNaN(geschwWert) && geschwWert >= 1.01) {
-            // Geschwindigkeit ueber 1 m/s – Bruecken-Hinweis
-            infoHtml = PUFFER_INFO_HOCH;
-        }
-        if (infoHtml) {
+        var niedrig = document.getElementById('hp_tp_puffer_niedrig');
+        var istNiedrig = !isNaN(geschwWert) && geschwWert <= 1.0;
+        var istHoch    = !isNaN(geschwWert) && geschwWert >= 1.01;
+
+        // Prüfpunkt "v <= 1 m/s" nur bei niedriger Geschwindigkeit anzeigen
+        niedrig.style.display = istNiedrig ? 'block' : 'none';
+
+        // Info-Hinweis (Brücke) nur bei höherer Geschwindigkeit anzeigen
+        if (istHoch) {
             btn.style.display = 'inline-block';
-            box.innerHTML = 'ℹ️ ' + infoHtml;
+            box.innerHTML = 'ℹ️ ' + PUFFER_INFO_HOCH;
             box.style.display = 'block';   // direkt sichtbar, "i" klappt es ein/aus
         } else {
             btn.style.display = 'none';
