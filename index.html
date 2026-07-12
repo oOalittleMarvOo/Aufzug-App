@@ -3016,8 +3016,8 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             <input type="text" id="hp_eqnummer" placeholder="optional – z.B. EQ-123456">
         </div>
         <div class="eingabe-zeile" style="margin-top:10px;">
-            <label>Geschwindigkeit:</label>
-            <input type="number" id="hp_geschwindigkeit" placeholder="z.B. 1,0" step="0.01" min="0">
+            <label>Geschwindigkeit:*</label>
+            <input type="number" id="hp_geschwindigkeit" placeholder="Pflichtfeld – z.B. 1,0" step="0.01" min="0">
             <span class="einheit">m/s</span>
         </div>
         <div class="eingabe-zeile" style="margin-top:10px;">
@@ -4355,6 +4355,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         var geschw = document.getElementById('hp_geschwindigkeit').value.trim();
         var hersteller = document.getElementById('hp_hersteller').value;
         // Seriennummer und EQ-Nummer sind optional und können übersprungen werden
+        if (!geschw) { alert('Bitte die Geschwindigkeit eingeben.'); return; }
         if (!hersteller) { alert('Bitte einen Hersteller wählen.'); return; }
         hpSeriennummer = serien;
         hpEqNummer = eq;
