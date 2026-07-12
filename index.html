@@ -3058,7 +3058,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     <p style="margin:18px 0 14px; line-height:1.6; color:#333; text-align:center;">Welchen Bereich möchtest du prüfen?</p>
     <div class="auswahl">
         <button class="btn" onclick="zeige('hpDokumentenpruefungSeite')">📄 Dokumentenprüfung</button>
-        <button class="btn" onclick="zeige('hpTechnischePruefungSeite')">🔧 Technische Prüfung</button>
+        <button class="btn" onclick="zeigeTechnischePruefung()">🔧 Technische Prüfung</button>
     </div>
 </div>
 
@@ -3080,8 +3080,12 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     <h2>🔧 Technische Prüfung</h2>
 
     <div class="frage" id="hp_tp_puffer">
-        <h3>1 – Prüfung der Funktionsfähigkeit der Puffer</h3>
+        <h3 style="display:flex; align-items:center; gap:8px;">
+            1 – Prüfung der Funktionsfähigkeit der Puffer
+            <button id="hp_tp_puffer_infobtn" onclick="document.getElementById('hp_tp_puffer_infobox').style.display = (document.getElementById('hp_tp_puffer_infobox').style.display==='block'?'none':'block')" style="display:none; background:#0057a8; color:white; border:none; border-radius:50%; width:24px; height:24px; font-size:14px; font-weight:bold; cursor:pointer; flex:none;">i</button>
+        </h3>
         <div class="hinweis">📋 TRBS 1201 Teil 4 (2) 3.2.3.2 – 12</div>
+        <div id="hp_tp_puffer_infobox" class="hinweis" style="display:none; margin-top:8px; background:#e8f0fe; border:1px solid #0057a8;"></div>
         <div class="antwort-gruppe">
             <button class="antwort-btn passt" onclick="antwort(this, 'hp_tp_puffer')">🟢 i.O.</button>
             <button class="antwort-btn passt-nicht" onclick="antwort(this, 'hp_tp_puffer')">🔴 Mangel</button>
@@ -4314,6 +4318,26 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         var istSonstige = (wert === 'Sonstige');
         document.getElementById('hp_hersteller_hinweis').style.display = istSonstige ? 'block' : 'none';
         document.getElementById('hp_steuerung_zeile').style.display = istSonstige ? 'flex' : 'none';
+    }
+
+    /* Steuerungs-spezifische Info-Hinweise für Prüfpunkte */
+    var STEUERUNG_INFO = {
+        'Lisa 20': 'Hinweis für Steuerung Lisa 20: (Text folgt).'
+    };
+
+    /* Technische Prüfung öffnen und Info-Button je nach gewählter Steuerung setzen */
+    function zeigeTechnischePruefung() {
+        var steuerung = document.getElementById('hp_steuerung').value;
+        var btn = document.getElementById('hp_tp_puffer_infobtn');
+        var box = document.getElementById('hp_tp_puffer_infobox');
+        if (steuerung && STEUERUNG_INFO[steuerung]) {
+            btn.style.display = 'inline-block';
+            box.innerHTML = 'ℹ️ ' + STEUERUNG_INFO[steuerung];
+        } else {
+            btn.style.display = 'none';
+            box.style.display = 'none';
+        }
+        zeige('hpTechnischePruefungSeite');
     }
     function starteHauptpruefung() {
         var serien = document.getElementById('hp_seriennummer').value.trim();
