@@ -4346,6 +4346,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         if (infoHtml) {
             btn.style.display = 'inline-block';
             box.innerHTML = 'ℹ️ ' + infoHtml;
+            box.style.display = 'block';   // direkt sichtbar, "i" klappt es ein/aus
         } else {
             btn.style.display = 'none';
             box.style.display = 'none';
