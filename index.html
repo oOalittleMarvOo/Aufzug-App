@@ -4335,9 +4335,12 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
     /* Technische Prüfung öffnen und Info-Button je nach gewählter Steuerung setzen */
     function zeigeTechnischePruefung() {
         var steuerung = document.getElementById('hp_steuerung').value;
+        var geschwWert = parseFloat((document.getElementById('hp_geschwindigkeit').value || '').replace(',', '.'));
         var btn = document.getElementById('hp_tp_puffer_infobtn');
         var box = document.getElementById('hp_tp_puffer_infobox');
-        if (steuerung && STEUERUNG_INFO[steuerung]) {
+        // Info-Button nur bei Steuerung "Lisa 20" UND Geschwindigkeit >= 1,01 m/s
+        var bedingungErfuellt = (steuerung === 'Lisa 20') && !isNaN(geschwWert) && geschwWert >= 1.01;
+        if (bedingungErfuellt && STEUERUNG_INFO[steuerung]) {
             btn.style.display = 'inline-block';
             box.innerHTML = 'ℹ️ ' + STEUERUNG_INFO[steuerung];
         } else {
