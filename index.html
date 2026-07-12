@@ -4356,11 +4356,14 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         var btn = document.getElementById('hp_tp_puffer_infobtn');
         var box = document.getElementById('hp_tp_puffer_infobox');
         var niedrig = document.getElementById('hp_tp_puffer_niedrig');
+        var funktion = document.getElementById('hp_tp_puffer');
         var istNiedrig = !isNaN(geschwWert) && geschwWert <= 1.0;
         var istHoch    = !isNaN(geschwWert) && geschwWert >= 1.01;
 
         // Prüfpunkt "v <= 1 m/s" nur bei niedriger Geschwindigkeit anzeigen
         niedrig.style.display = istNiedrig ? 'block' : 'none';
+        // Funktions-Prüfpunkt bei v <= 1 m/s ausblenden
+        funktion.style.display = istNiedrig ? 'none' : 'block';
 
         // Info-Hinweis (Brücke) nur bei höherer Geschwindigkeit anzeigen
         if (istHoch) {
