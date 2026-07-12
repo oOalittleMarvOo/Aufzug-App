@@ -3090,6 +3090,22 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
             <textarea placeholder="Begründung oder Kommentar..."></textarea>
         </div>
+
+        <!-- Folgefrage: erscheint nur bei i.O. -->
+        <div id="aktuell-hp_dok_notbefreiung" style="display:none; margin-top:14px; padding-top:12px; border-top:1px dashed #ccc;">
+            <div class="frage" id="hp_dok_notbefreiung_aktuell" style="box-shadow:none; padding:0; margin:0;">
+                <h3 style="font-size:15px;">Ist diese aktuell?</h3>
+                <div class="antwort-gruppe">
+                    <button class="antwort-btn passt" onclick="antwort(this, 'hp_dok_notbefreiung_aktuell')">🟢 i.O.</button>
+                    <button class="antwort-btn passt-nicht" onclick="antwort(this, 'hp_dok_notbefreiung_aktuell')">🔴 Mangel</button>
+                </div>
+                <div class="mangelfeld" id="mangel-hp_dok_notbefreiung_aktuell">
+                    <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+                    <label>Bitte Mangel beschreiben:</label>
+                    <textarea placeholder="Beschreibung des Mangels..."></textarea>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -5774,6 +5790,11 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         const trifftfeld = document.getElementById('trifft-' + frageId);
         if (trifftfeld) {
             trifftfeld.style.display = btn.classList.contains('irrelevant') ? 'block' : 'none';
+        }
+        /* Folgefrage (z.B. "Ist diese aktuell?") nur bei i.O. anzeigen */
+        const aktuellfeld = document.getElementById('aktuell-' + frageId);
+        if (aktuellfeld) {
+            aktuellfeld.style.display = btn.classList.contains('passt') ? 'block' : 'none';
         }
 
         /* Bauteil-Status nach jeder Antwort aktualisieren */
