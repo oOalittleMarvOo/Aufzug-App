@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<!-- Lemminge – kleiner Puzzle-Platformer im Stil des Klassikers "Lemmings". Eigenständige Datei, unabhängig von index.html. -->
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lemminge</title>
+<style>
+  :root{ --blue:#0057a8; --blue-dark:#003f7d; --bg:#eef3f8; }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    background:var(--bg); color:#1b2733; display:flex; flex-direction:column; align-items:center;
+    min-height:100vh; padding:10px;
+  }
+  h1{color:var(--blue); margin:6px 0 10px; font-size:1.4rem;}
+  #stage{ position:relative; width:800px; max-width:100%; }
+  #hud{
+    display:flex; flex-wrap:wrap; gap:4px 16px; justify-content:space-between;
+    background:var(--blue); color:#fff; padding:6px 12px; border-radius:8px 8px 0 0; font-size:0.85rem;
+  }
+  #hud b{font-weight:600;}
+  canvas{ display:block; width:100%; height:auto; background:#bfe3f5; border:2px solid var(--blue-dark); }
+  #toolbar{
+    display:flex; flex-wrap:wrap; gap:6px; background:#fff; border:2px solid var(--blue-dark); border-top:none;
+    border-radius:0 0 8px 8px; padding:8px; align-items:center;
+  }
+  .skillBtn{
+    position:relative; border:2px solid var(--blue); background:#fff; color:var(--blue-dark);
+    border-radius:8px; padding:6px 8px; font-size:1.1rem; cursor:pointer; min-width:48px;
+  }
+  .skillBtn .cnt{
+    position:absolute; bottom:-6px; right:-6px; background:var(--blue); color:#fff; border-radius:50%;
+    font-size:0.65rem; padding:1px 5px; font-weight:bold;
+  }
+  .skillBtn.selected{ background:var(--blue); color:#fff; }
+  .skillBtn:disabled{ opacity:.35; cursor:not-allowed; }
+  .ctlBtn{
+    border:2px solid var(--blue-dark); background:var(--blue-dark); color:#fff; border-radius:8px;
+    padding:7px 10px; font-size:0.85rem; cursor:pointer; font-weight:600;
+  }
+  .ctlBtn.secondary{ background:#fff; color:var(--blue-dark); }
+  #spacer{flex:1;}
+  #overlay{
+    position:absolute; inset:0; background:rgba(0,25,55,.82); color:#fff; display:none;
+    align-items:center; justify-content:center; text-align:center; border-radius:6px;
+  }
+  #overlay.show{display:flex;}
+  #overlayBox{ max-width:420px; padding:20px; }
+  #overlayBox h2{ margin:0 0 8px; font-size:1.5rem; }
+  #overlayBox button{ margin-top:14px; }
+  #levelPicker{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:10px; }
+  #backlink{ margin-top:10px; font-size:0.85rem; }
+  #backlink a{ color:var(--blue); }
+  .hint{font-size:0.75rem; color:#456; margin-top:6px; max-width:800px; text-align:center;}
+</style>
+</head>
+<body>
+<h1>🐹 Lemminge</h1>
+<div id="stage">
+  <div id="hud">
+    <span><b id="levelName">–</b></span>
+    <span>Raus: <b id="outCount">0</b>/<b id="totalCount">0</b></span>
+    <span>Gerettet: <b id="savedCount">0</b> (Ziel <b id="targetPct">0</b>%)</span>
+    <span>Verloren: <b id="deadCount">0</b></span>
+    <span>Zeit: <b id="timeLeft">–</b></span>
+  </div>
+  <canvas id="game" width="800" height="440"></canvas>
+  <div id="overlay"><div id="overlayBox">
+    <h2 id="overlayTitle"></h2>
+    <p id="overlayText"></p>
+    <div id="levelPicker"></div>
+    <button class="ctlBtn" id="overlayBtn">Weiter</button>
+  </div></div>
+  <div id="toolbar">
+    <button class="skillBtn" data-skill="climber" title="Kletterer">🧗<span class="cnt"></span></button>
+    <button class="skillBtn" data-skill="floater" title="Fallschirm">🪂<span class="cnt"></span></button>
+    <button class="skillBtn" data-skill="blocker" title="Blocker">🚧<span class="cnt"></span></button>
+    <button class="skillBtn" data-skill="builder" title="Baumeister">🧱<span class="cnt"></span></button>
+    <button class="skillBtn" data-skill="basher" title="Basher (gräbt seitlich)">⛏️<span class="cnt"></span></button>
+    <button class="skillBtn" data-skill="digger" title="Gräber (gräbt nach unten)">🕳️<span class="cnt"></span></button>
+    <button class="skillBtn" data-skill="bomber" title="Bomber">💣<span class="cnt"></span></button>
+    <div id="spacer"></div>
+    <button class="ctlBtn secondary" id="rateDown">Rate −</button>
+    <span id="rateVal" style="font-size:0.8rem;min-width:60px;text-align:center;">–</span>
+    <button class="ctlBtn secondary" id="rateUp">Rate +</button>
+    <button class="ctlBtn secondary" id="pauseBtn">⏸ Pause</button>
+    <button class="ctlBtn secondary" id="nukeBtn">☠ Alle sprengen</button>
+    <button class="ctlBtn" id="restartBtn">🔄 Neustart</button>
+  </div>
+</div>
+<p class="hint">Fähigkeit unten wählen, dann auf einen laufenden Lemming klicken/tippen, um sie ihm zuzuweisen. Tasten 1–7 wählen Fähigkeiten, N = Sprengen, P = Pause, R = Neustart.</p>
+<div id="backlink"><a href="index.html">← Zurück zur Aufzug-App</a></div>
+
+<script>
+(function(){
+"use strict";
+
+const W = 800, H = 440;
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+
+/* ---------- Terrain: Pixel-Grid + Offscreen-Canvas ---------- */
+let solid, steel, img, terrainCanvas, tctx;
+const GROUND_RGBA = [139,90,43,255];
+const STEEL_RGBA  = [90,96,105,255];
+
+function idx(x,y){ return y*W + x; }
+
+function initTerrain(){
+  solid = new Uint8Array(W*H);
+  steel = new Uint8Array(W*H);
+  terrainCanvas = document.createElement('canvas');
+  terrainCanvas.width = W; terrainCanvas.height = H;
+  tctx = terrainCanvas.getContext('2d');
+  img = tctx.createImageData(W,H);
+}
+
+function setPixel(x,y,isSteel){
+  if(x<0||x>=W||y<0||y>=H) return;
+  const i = idx(x,y);
+  solid[i] = 1; steel[i] = isSteel?1:0;
+  const p = i*4, col = isSteel?STEEL_RGBA:GROUND_RGBA;
+  img.data[p]=col[0]; img.data[p+1]=col[1]; img.data[p+2]=col[2]; img.data[p+3]=col[3];
+}
+
+function clearPixel(x,y){
+  if(x<0||x>=W||y<0||y>=H) return false;
+  const i = idx(x,y);
+  if(!solid[i] || steel[i]) return false;
+  solid[i]=0;
+  const p=i*4; img.data[p]=0; img.data[p+1]=0; img.data[p+2]=0; img.data[p+3]=0;
+  return true;
+}
+
+function fillBlock(x,y,w,h,isSteel){
+  for(let j=0;j<h;j++) for(let i=0;i<w;i++) setPixel(x+i,y+j,isSteel);
+}
+
+function paintAll(){ tctx.putImageData(img,0,0); }
+
+function repaintRect(x0,y0,x1,y1){
+  x0=Math.max(0,x0); y0=Math.max(0,y0); x1=Math.min(W-1,x1); y1=Math.min(H-1,y1);
+  if(x1<x0||y1<y0) return;
+  tctx.putImageData(img,0,0,x0,y0,x1-x0+1,y1-y0+1);
+}
+
+function isSolid(x,y){
+  if(y>=H) return false;
+  if(y<0) return false;
+  if(x<0||x>=W) return true;
+  return solid[idx(x|0,y|0)]===1;
+}
+function isSteelAt(x,y){
+  if(x<0||x>=W||y<0||y>=H) return false;
+  return steel[idx(x|0,y|0)]===1;
+}
+
+function digCircle(cx,cy,r){
+  let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9,changed=false;
+  for(let dy=-r;dy<=r;dy++) for(let dx=-r;dx<=r;dx++){
+    if(dx*dx+dy*dy>r*r) continue;
+    const x=(cx+dx)|0, y=(cy+dy)|0;
+    if(clearPixel(x,y)){ changed=true; if(x<x0)x0=x; if(x>x1)x1=x; if(y<y0)y0=y; if(y>y1)y1=y; }
+  }
+  if(changed) repaintRect(x0,y0,x1,y1);
+}
+
+function digRect(x,y,w,h){
+  let anyBlocked=false, changed=false;
+  const x0=x,y0=y,x1=x+w-1,y1=y+h-1;
+  for(let j=0;j<h;j++) for(let i=0;i<w;i++){
+    const px=x+i, py=y+j;
+    if(isSteelAt(px,py)) { anyBlocked=true; continue; }
+    if(clearPixel(px,py)) changed=true;
+  }
+  if(changed) repaintRect(x0,y0,x1,y1);
+  return {changed, blocked:anyBlocked};
+}
+
+function buildBrick(x,y,w,h){
+  fillBlock(x,y,w,h,false);
+  repaintRect(x,y,x+w-1,y+h-1);
+}
+
+/* ---------- Level-Definitionen ---------- */
+const LEVELS = [
+  {
+    name:'1 – Erste Schritte',
+    entrance:{x:40,y:350,dir:1},
+    exit:{x:730,y:352,w:40,h:48},
+    total:10, required:50, spawnInterval:2.2, timeLimit:150,
+    skills:{climber:0,floater:0,blocker:1,builder:6,basher:0,digger:0,bomber:0},
+    build(){
+      fillBlock(0,400,300,40,false);
+      fillBlock(360,400,440,40,false);
+      fillBlock(0,0,4,440,true);
+      fillBlock(W-4,0,4,440,true);
+    }
+  },
+  {
+    name:'2 – Grabungsarbeiten',
+    entrance:{x:40,y:250,dir:1},
+    exit:{x:700,y:252,w:40,h:48},
+    total:14, required:55, spawnInterval:1.8, timeLimit:180,
+    skills:{climber:0,floater:0,blocker:2,builder:2,basher:3,digger:3,bomber:1},
+    build(){
+      fillBlock(0,300,W,140,false);
+      fillBlock(560,180,40,120,false);
+      fillBlock(0,0,4,440,true);
+      fillBlock(W-4,0,4,440,true);
+    }
+  },
+  {
+    name:'3 – Der lange Weg',
+    entrance:{x:40,y:350,dir:1},
+    exit:{x:720,y:292,w:30,h:48},
+    total:18, required:50, spawnInterval:1.6, timeLimit:210,
+    skills:{climber:10,floater:10,blocker:2,builder:4,basher:2,digger:0,bomber:2},
+    build(){
+      fillBlock(0,400,240,40,false);
+      fillBlock(280,400,180,40,false);
+      fillBlock(460,120,120,320,false);
+      fillBlock(580,400,120,40,false);
+      fillBlock(700,340,70,100,false);
+      fillBlock(0,0,4,440,true);
+      fillBlock(W-4,0,4,440,true);
+    }
+  }
+];
+
+/* ---------- Spielzustand ---------- */
+const SKILL_KEYS = ['climber','floater','blocker','builder','basher','digger','bomber'];
+let state = {
+  levelIdx:0, lemmings:[], splats:[], particles:[],
+  spawned:0, saved:0, dead:0, spawnTimer:0, spawnInterval:2,
+  running:false, paused:false, over:false, timeLeft:0,
+  skillCounts:{}, selectedSkill:null, entrance:null, exit:null, total:0, required:0
+};
+
+const WALK_SPEED=42, CLIMB_SPEED=34;
+const GRAVITY=420, MAX_FALL=260, FLOAT_MAX_FALL=45, DEADLY_FALL=110;
+const STEP_MAX=8, LEM_HALF_W=3, LEM_H=10;
+const BUILD_INTERVAL=0.42, BUILD_STEPS=12, BUILD_RISE=4, BUILD_RUN=7;
+const BASH_INTERVAL=0.09, BASH_STEP=2;
+const DIG_INTERVAL=0.12, DIG_STEP=2;
+const BOMB_FUSE=5;
+
+function newLemming(x,y,dir){
+  return {
+    x, y, vx:dir, state:'falling', fallDist:0,
+    isClimber:false, isFloater:false,
+    buildTimer:0, buildStepsLeft:0,
+    bashTimer:0, digTimer:0, bombTimer:0,
+    animT:Math.random()*10, id:Math.random()
+  };
+}
+
+function loadLevel(i){
+  const lvl = LEVELS[i];
+  initTerrain();
+  lvl.build();
+  paintAll();
+  state.levelIdx=i;
+  state.lemmings=[]; state.splats=[]; state.particles=[];
+  state.spawned=0; state.saved=0; state.dead=0; state.spawnTimer=0;
+  state.spawnInterval=lvl.spawnInterval;
+  state.running=true; state.paused=false; state.over=false;
+  state.timeLeft=lvl.timeLimit;
+  state.skillCounts = Object.assign({},lvl.skills);
+  state.selectedSkill=null;
+  state.entrance=lvl.entrance; state.exit=lvl.exit;
+  state.total=lvl.total; state.required=lvl.required;
+  document.getElementById('levelName').textContent = lvl.name;
+  document.getElementById('totalCount').textContent = lvl.total;
+  document.getElementById('targetPct').textContent = lvl.required;
+  hideOverlay();
+  updateHud();
+  updateToolbar();
+}
+
+/* ---------- Fähigkeiten zuweisen ---------- */
+function canAssign(l, skill){
+  if(l.state==='dead'||l.state==='exited') return false;
+  if(state.skillCounts[skill]<=0) return false;
+  switch(skill){
+    case 'climber': return l.state==='walking' && !l.isClimber;
+    case 'floater': return (l.state==='walking'||l.state==='falling') && !l.isFloater;
+    case 'blocker': return l.state==='walking';
+    case 'builder': return l.state==='walking';
+    case 'basher':  return l.state==='walking';
+    case 'digger':  return l.state==='walking';
+    case 'bomber':  return l.state!=='exploding';
+    default: return false;
+  }
+}
+
+function assign(l, skill){
+  if(!canAssign(l,skill)) return false;
+  state.skillCounts[skill]--;
+  switch(skill){
+    case 'climber': l.isClimber=true; break;
+    case 'floater': l.isFloater=true; break;
+    case 'blocker': l.state='blocking'; break;
+    case 'builder': l.state='building'; l.buildStepsLeft=BUILD_STEPS; l.buildTimer=0; break;
+    case 'basher':  l.state='bashing'; l.bashTimer=0; break;
+    case 'digger':  l.state='digging'; l.digTimer=0; break;
+    case 'bomber':  l.state='exploding'; l.bombTimer=BOMB_FUSE; break;
+  }
+  updateToolbar();
+  return true;
+}
+
+/* ---------- Update-Logik ---------- */
+function isBlockerWall(x,y,exclude){
+  for(const l of state.lemmings){
+    if(l===exclude || l.state!=='blocking') continue;
+    if(Math.abs(x-l.x) <= LEM_HALF_W+1 && y>=l.y-LEM_H && y<=l.y) return true;
+  }
+  return false;
+}
+
+function die(l, reason){
+  l.state='dead';
+  state.dead++;
+  state.splats.push({x:l.x,y:l.y,t:0});
+}
+
+function exitLem(l){
+  l.state='exited';
+  state.saved++;
+}
+
+function inExit(l){
+  const ex=state.exit;
+  return l.x>=ex.x && l.x<=ex.x+ex.w && l.y>=ex.y && l.y<=ex.y+ex.h;
+}
+
+function updateFalling(l, dt){
+  let speed = Math.min((l.isFloater && l.fallDist>16)?FLOAT_MAX_FALL:MAX_FALL, l._vy = (l._vy||0)+GRAVITY*dt);
+  if(l.isFloater && l.fallDist>16) l._vy = FLOAT_MAX_FALL;
+  let remaining = speed*dt;
+  while(remaining>0){
+    const step = Math.min(1, remaining);
+    const ny = l.y+step;
+    if(ny>=H+40){ die(l,'void'); return; }
+    if(isSolid(l.x,ny) || isBlockerWall(l.x,ny,l)){
+      const fell = l.fallDist;
+      l._vy=0;
+      if(fell>DEADLY_FALL && !l.isFloater){ die(l,'splat'); return; }
+      l.state='walking'; l.fallDist=0;
+      return;
+    }
+    l.y=ny; l.fallDist+=step; remaining-=step;
+  }
+}
+
+function updateWalking(l, dt){
+  if(!isSolid(l.x,l.y+1) && !isBlockerWall(l.x,l.y+1,l)){
+    l.state='falling'; l.fallDist=0; l._vy=0; return;
+  }
+  if(isBlockerWall(l.x+l.vx*(LEM_HALF_W+1),l.y-2,l)){ l.vx=-l.vx; return; }
+  let obstacle=0;
+  for(let s=0;s<=STEP_MAX;s++){
+    let solidHere=false;
+    for(let d=LEM_HALF_W; d<=LEM_HALF_W+2; d++){
+      if(isSolid(l.x+l.vx*d, l.y-s)){ solidHere=true; break; }
+    }
+    if(solidHere) obstacle=s+1; else break;
+  }
+  if(obstacle>STEP_MAX){
+    if(l.isClimber){ l.state='climbing'; return; }
+    l.vx=-l.vx; return;
+  }
+  if(obstacle>0) l.y -= obstacle;
+  l.x += l.vx*WALK_SPEED*dt;
+  if(!isSolid(l.x,l.y+1)){
+    for(let s=1;s<=STEP_MAX;s++){
+      if(isSolid(l.x,l.y+s)){ l.y += s; break; }
+    }
+  }
+  if(inExit(l)){ exitLem(l); return; }
+}
+
+function updateClimbing(l, dt){
+  const sideX = l.x + l.vx*(LEM_HALF_W+1);
+  if(isSolid(l.x, l.y-LEM_H-2)){
+    l.vx=-l.vx; l.state='falling'; l.fallDist=0; l._vy=0; return;
+  }
+  l.y -= CLIMB_SPEED*dt;
+  if(!isSolid(sideX, l.y-LEM_H)){
+    l.state='walking';
+    l.x += l.vx*2;
+  }
+}
+
+function updateBuilding(l, dt){
+  l.buildTimer += dt;
+  if(l.buildTimer < BUILD_INTERVAL) return;
+  l.buildTimer=0;
+  const bx = l.vx>0 ? Math.round(l.x+1) : Math.round(l.x-BUILD_RUN-1);
+  const by = Math.round(l.y-BUILD_RISE);
+  const aheadX = l.x + l.vx*BUILD_RUN;
+  const aheadY = l.y - BUILD_RISE;
+  if(isSolid(aheadX, aheadY) || isSolid(aheadX, aheadY-LEM_H)){
+    l.state='walking'; return;
+  }
+  buildBrick(bx, by, BUILD_RUN, BUILD_RISE+1);
+  l.y -= BUILD_RISE;
+  l.x += l.vx*BUILD_RUN;
+  l.buildStepsLeft--;
+  if(inExit(l)){ exitLem(l); return; }
+  if(l.buildStepsLeft<=0){ l.state='walking'; }
+}
+
+function updateBashing(l, dt){
+  const bandTop = Math.round(l.y-LEM_H);
+  const edge = l.x + l.vx*(LEM_HALF_W+1);
+  let wallHere = false;
+  for(let yy=bandTop; yy<=Math.round(l.y); yy+=2){ if(isSolid(Math.round(edge),yy)){ wallHere=true; break; } }
+  if(!wallHere){
+    l.x += l.vx*WALK_SPEED*dt;
+    if(!isSolid(l.x,l.y+1)){ l.state='falling'; l.fallDist=0; l._vy=0; return; }
+    if(inExit(l)){ exitLem(l); }
+    return;
+  }
+  l.bashTimer += dt;
+  if(l.bashTimer < BASH_INTERVAL) return;
+  l.bashTimer=0;
+  const rectX = l.vx>0 ? Math.round(edge) : Math.round(edge)-BASH_STEP+1;
+  const res = digRect(rectX, bandTop, BASH_STEP, LEM_H+1);
+  if(res.blocked && !res.changed){ l.vx=-l.vx; l.state='walking'; return; }
+  l.emptyBashCycles = res.changed ? 0 : (l.emptyBashCycles||0)+1;
+  if(l.emptyBashCycles>=2){ l.state='walking'; return; }
+  l.x += l.vx*BASH_STEP;
+  if(!isSolid(l.x,l.y+1)){ l.state='falling'; l.fallDist=0; l._vy=0; }
+}
+
+function updateDigging(l, dt){
+  l.digTimer += dt;
+  if(l.digTimer < DIG_INTERVAL) return;
+  l.digTimer=0;
+  const res = digRect(Math.round(l.x-LEM_HALF_W), Math.round(l.y), LEM_HALF_W*2, DIG_STEP);
+  if(res.blocked && !res.changed){ l.state='walking'; return; }
+  l.y += DIG_STEP;
+  if(l.y>=H+10){ die(l,'void'); return; }
+}
+
+function updateExploding(l, dt){
+  l.bombTimer -= dt;
+  if(l.bombTimer<=0){
+    digCircle(Math.round(l.x), Math.round(l.y-LEM_H/2), 15);
+    die(l,'bomb');
+  }
+}
+
+function updateLemming(l, dt){
+  l.animT += dt;
+  switch(l.state){
+    case 'falling': updateFalling(l,dt); break;
+    case 'walking': updateWalking(l,dt); break;
+    case 'climbing': updateClimbing(l,dt); break;
+    case 'building': updateBuilding(l,dt); break;
+    case 'bashing': updateBashing(l,dt); break;
+    case 'digging': updateDigging(l,dt); break;
+    case 'blocking': break;
+    case 'exploding': updateExploding(l,dt); break;
+  }
+}
+
+function nukeAll(){
+  let i=0;
+  for(const l of state.lemmings){
+    if(l.state==='dead'||l.state==='exited'||l.state==='exploding') continue;
+    l.state='exploding'; l.bombTimer = 0.4 + i*0.18; i++;
+  }
+}
+
+/* ---------- Game Loop ---------- */
+let lastT=0;
+function loop(t){
+  if(!lastT) lastT=t;
+  let dt=(t-lastT)/1000; lastT=t;
+  if(dt>0.05) dt=0.05;
+  if(state.running && !state.paused && !state.over){
+    step(dt);
+  }
+  draw();
+  requestAnimationFrame(loop);
+}
+
+function step(dt){
+  const lvl = LEVELS[state.levelIdx];
+  state.timeLeft -= dt;
+  if(state.spawned < state.total){
+    state.spawnTimer += dt;
+    if(state.spawnTimer >= state.spawnInterval){
+      state.spawnTimer=0;
+      state.spawned++;
+      state.lemmings.push(newLemming(state.entrance.x, state.entrance.y, state.entrance.dir));
+    }
+  }
+  for(const l of state.lemmings){
+    if(l.state==='dead'||l.state==='exited') continue;
+    updateLemming(l, dt);
+  }
+  for(const s of state.splats) s.t += dt;
+  state.splats = state.splats.filter(s=>s.t<0.5);
+
+  const allDone = state.spawned>=state.total && state.lemmings.every(l=>l.state==='dead'||l.state==='exited');
+  const timeUp = state.timeLeft<=0;
+  if(allDone || timeUp){
+    finishLevel(timeUp && !allDone);
+  }
+  updateHud();
+}
+
+function finishLevel(byTimeout){
+  if(state.over) return;
+  state.over=true; state.running=false;
+  const pct = state.total>0 ? Math.round(state.saved/state.total*100) : 0;
+  const won = pct >= state.required;
+  const title = won ? '🎉 Level geschafft!' : '💀 Level verloren';
+  let text = `Gerettet: ${state.saved} von ${state.total} (${pct}%), Ziel war ${state.required}%.`;
+  if(byTimeout) text += ' Die Zeit ist abgelaufen.';
+  showOverlay(title, text, won);
+}
+
+/* ---------- Rendering ---------- */
+function drawLemming(l){
+  if(l.state==='dead') return;
+  const bob = l.state==='walking' ? Math.sin(l.animT*10)*1.4 : 0;
+  const x=l.x, y=l.y+bob;
+  let color = '#ffce4d';
+  if(l.state==='blocking') color='#e04b4b';
+  if(l.state==='building') color='#e08a2b';
+  if(l.state==='bashing') color='#8a5a2b';
+  if(l.state==='digging') color='#5a5a5a';
+  if(l.state==='exploding') color='#ff3b3b';
+  if(l.isFloater && (l.state==='falling')) color='#4bb3e0';
+  ctx.fillStyle=color;
+  ctx.fillRect(x-LEM_HALF_W, y-LEM_H, LEM_HALF_W*2, LEM_H-4);
+  ctx.beginPath();
+  ctx.arc(x, y-LEM_H-1, 3, 0, Math.PI*2);
+  ctx.fill();
+  if(l.isClimber){ ctx.fillStyle='#2b6cb0'; ctx.fillRect(x-LEM_HALF_W-1,y-6,2,4); }
+  if(l.isFloater && l.state==='falling'){
+    ctx.strokeStyle='#333'; ctx.beginPath();
+    ctx.arc(x, y-LEM_H-9, 6, Math.PI, 0); ctx.stroke();
+  }
+  if(l.state==='exploding'){
+    ctx.fillStyle='#fff'; ctx.font='9px sans-serif'; ctx.textAlign='center';
+    ctx.fillText(Math.max(0,Math.ceil(l.bombTimer)), x, y-LEM_H-8);
+  }
+  if(l.vx<0){ ctx.fillStyle='rgba(0,0,0,.25)'; ctx.fillRect(x-LEM_HALF_W-1,y-6,1,3); }
+}
+
+function drawSplat(s){
+  const a = 1 - s.t/0.5;
+  ctx.fillStyle = `rgba(200,30,30,${a})`;
+  ctx.beginPath(); ctx.arc(s.x, s.y-4, 5, 0, Math.PI*2); ctx.fill();
+}
+
+function draw(){
+  const g = ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'#bfe3f5'); g.addColorStop(1,'#e8f6ff');
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+
+  if(terrainCanvas) ctx.drawImage(terrainCanvas,0,0);
+
+  if(state.entrance){
+    ctx.fillStyle='#003f7d';
+    ctx.fillRect(state.entrance.x-14, state.entrance.y-6, 28, 16);
+  }
+  if(state.exit){
+    ctx.fillStyle='#1f8a3b';
+    ctx.fillRect(state.exit.x, state.exit.y, state.exit.w, state.exit.h);
+    ctx.fillStyle='#0e5522';
+    ctx.fillRect(state.exit.x+state.exit.w/2-2, state.exit.y-22, 4, 22);
+    ctx.fillStyle='#fff'; ctx.font='16px sans-serif'; ctx.textAlign='center';
+    ctx.fillText('🚪', state.exit.x+state.exit.w/2, state.exit.y+state.exit.h/2+6);
+  }
+
+  for(const l of state.lemmings) drawLemming(l);
+  for(const s of state.splats) drawSplat(s);
+}
+
+/* ---------- HUD / UI ---------- */
+function updateHud(){
+  document.getElementById('outCount').textContent = state.spawned;
+  document.getElementById('savedCount').textContent = state.saved;
+  document.getElementById('deadCount').textContent = state.dead;
+  document.getElementById('timeLeft').textContent = Math.max(0, Math.ceil(state.timeLeft));
+  document.getElementById('rateVal').textContent = state.spawnInterval.toFixed(1)+'s/Lemming';
+}
+
+function updateToolbar(){
+  document.querySelectorAll('.skillBtn').forEach(btn=>{
+    const sk = btn.dataset.skill;
+    const cnt = state.skillCounts[sk]||0;
+    btn.querySelector('.cnt').textContent = cnt;
+    btn.disabled = cnt<=0;
+    btn.classList.toggle('selected', state.selectedSkill===sk);
+  });
+}
+
+function showOverlay(title, text, won){
+  document.getElementById('overlayTitle').textContent = title;
+  document.getElementById('overlayText').textContent = text;
+  const picker = document.getElementById('levelPicker');
+  picker.innerHTML='';
+  const btn = document.getElementById('overlayBtn');
+  if(won && state.levelIdx < LEVELS.length-1){
+    btn.textContent = 'Nächstes Level ▶';
+    btn.onclick = ()=> loadLevel(state.levelIdx+1);
+  } else {
+    btn.textContent = 'Nochmal versuchen';
+    btn.onclick = ()=> loadLevel(state.levelIdx);
+  }
+  LEVELS.forEach((lvl,i)=>{
+    const b=document.createElement('button');
+    b.className='ctlBtn secondary';
+    b.textContent=lvl.name;
+    b.onclick=()=>loadLevel(i);
+    picker.appendChild(b);
+  });
+  document.getElementById('overlay').classList.add('show');
+}
+function hideOverlay(){ document.getElementById('overlay').classList.remove('show'); }
+
+/* ---------- Eingabe ---------- */
+document.querySelectorAll('.skillBtn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const sk = btn.dataset.skill;
+    state.selectedSkill = state.selectedSkill===sk ? null : sk;
+    updateToolbar();
+  });
+});
+
+canvas.addEventListener('click', (e)=>{
+  if(!state.selectedSkill || state.over) return;
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = W/rect.width, scaleY = H/rect.height;
+  const cx = (e.clientX-rect.left)*scaleX, cy=(e.clientY-rect.top)*scaleY;
+  let best=null, bestD=22*22;
+  for(const l of state.lemmings){
+    if(l.state==='dead'||l.state==='exited') continue;
+    const d = (l.x-cx)**2 + (l.y-LEM_H/2-cy)**2;
+    if(d<bestD){ bestD=d; best=l; }
+  }
+  if(best) assign(best, state.selectedSkill);
+});
+
+document.getElementById('rateDown').onclick=()=>{ state.spawnInterval=Math.min(3, state.spawnInterval+0.2); updateHud(); };
+document.getElementById('rateUp').onclick=()=>{ state.spawnInterval=Math.max(0.4, state.spawnInterval-0.2); updateHud(); };
+document.getElementById('pauseBtn').onclick=()=>{
+  state.paused=!state.paused;
+  document.getElementById('pauseBtn').textContent = state.paused? '▶ Weiter':'⏸ Pause';
+};
+document.getElementById('nukeBtn').onclick=()=> nukeAll();
+document.getElementById('restartBtn').onclick=()=> loadLevel(state.levelIdx);
+document.getElementById('overlayBtn').onclick=()=>{};
+
+window.addEventListener('keydown', (e)=>{
+  const n = parseInt(e.key,10);
+  if(n>=1 && n<=7){ state.selectedSkill = SKILL_KEYS[n-1]; updateToolbar(); }
+  if(e.key==='n'||e.key==='N') nukeAll();
+  if(e.key==='p'||e.key==='P') document.getElementById('pauseBtn').click();
+  if(e.key==='r'||e.key==='R') loadLevel(state.levelIdx);
+});
+
+/* ---------- Start ---------- */
+loadLevel(0);
+requestAnimationFrame(loop);
+
+})();
+</script>
+</body>
+</html>
