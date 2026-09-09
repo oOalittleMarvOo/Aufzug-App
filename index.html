@@ -970,6 +970,12 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         padding: 20px;           /* Innenabstand: 20px rundum */
         margin-bottom: 20px;     /* Abstand nach unten zur nächsten Frage */
     }
+    .frage.bedingt {
+        background: #f7f7f7;
+        border-color: #ccc;
+        opacity: 0.75;
+    }
+    .frage.bedingt h3 { color: #888; }
     .frage.sheet-import {
         background: #fdf6ff;
         border-color: #ce93d8;
@@ -4568,7 +4574,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             </div>
         </div>
 
-        <div class="frage" id="frage_bremse_evakuierung">
+        <div class="frage bedingt" id="frage_bremse_evakuierung">
             <h3>Kann der Fahrkorb bei manuell gelöster Bremse und Beladung im Gleichgewichtsbereich [(q±0,1)·Q] in das nächstliegende Geschoss bewegt werden?</h3>
             <div class="hinweis">📋 DIN EN 81-20 5.9.2.2.9 – Bei manuell gelöster Bremse und einer Beladung zwischen (q−0,1)Q und (q+0,1)Q muss der Fahrkorb durch Schwerkraft oder durch mechanische/elektrische Hilfsmittel (von der Hauptstromversorgung unabhängig) in das nächstliegende Geschoss verfahren werden können. (q = Ausgleichsfaktor, Q = Nennlast)</div>
             <div class="antwort-gruppe">
@@ -4606,7 +4612,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             </div>
         </div>
 
-        <div class="frage" id="frage_bremse_notbetrieb_handrad">
+        <div class="frage bedingt" id="frage_bremse_notbetrieb_handrad">
             <h3>Wird die mechanische Notbetriebseinrichtung durch die Aufzugsbewegung angetrieben – ist sie ein glattes, nicht durchbrochenes Handrad?</h3>
             <div class="hinweis">📋 DIN EN 81-20 5.9.2.3.1 a) 1) – Kann die Einrichtung durch die Aufzugsbewegung angetrieben werden, muss sie als glattes, nicht durchbrochenes Handrad ausgeführt sein.</div>
             <div class="antwort-gruppe">
@@ -4625,7 +4631,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             </div>
         </div>
 
-        <div class="frage" id="frage_bremse_notbetrieb_aufbewahrung">
+        <div class="frage bedingt" id="frage_bremse_notbetrieb_aufbewahrung">
             <h3>Abnehmbare Notbetriebseinrichtung: Wird sie gut zugänglich aufbewahrt und bei Verwechslungsgefahr entsprechend gekennzeichnet?</h3>
             <div class="hinweis">📋 DIN EN 81-20 5.9.2.3.1 a) 2) – Abnehmbare Einrichtungen müssen an gut zugänglicher Stelle in den Aufstellungsorten für Triebwerk und Steuerung aufbewahrt werden. Bei Verwechslungsgefahr ist eine entsprechende Kennzeichnung erforderlich.</div>
             <div class="antwort-gruppe">
@@ -4644,7 +4650,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             </div>
         </div>
 
-        <div class="frage" id="frage_bremse_notbetrieb_sicherheitseinrichtung">
+        <div class="frage bedingt" id="frage_bremse_notbetrieb_sicherheitseinrichtung">
             <h3>Wird beim Aufstecken der abnehmbaren Einrichtung auf das Triebwerk eine elektrische Sicherheitseinrichtung nach 5.11.2 betätigt?</h3>
             <div class="hinweis">📋 DIN EN 81-20 5.9.2.3.1 a) 3) – Ist die Einrichtung abnehmbar oder kann sie vom Triebwerk getrennt werden, muss spätestens beim Aufstecken eine elektrische Sicherheitseinrichtung nach 5.11.2 betätigt werden.</div>
             <div class="antwort-gruppe">
@@ -4663,7 +4669,7 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
             </div>
         </div>
 
-        <div class="frage" id="frage_bremse_notbetrieb_energie">
+        <div class="frage bedingt" id="frage_bremse_notbetrieb_energie">
             <h3>Elektrische Notbetriebseinrichtung: Reicht die Energieversorgung aus, den Fahrkorb mit beliebiger Last innerhalb von 1 h nach einem Ausfall in eine benachbarte Haltestelle zu bewegen?</h3>
             <div class="hinweis">📋 DIN EN 81-20 5.9.2.3.1 b) 1) – Die Energieversorgung der elektrischen Notbetriebseinrichtung muss ausreichen, um den Fahrkorb mit einer beliebigen Last innerhalb von 1 h nach einem Ausfall in eine benachbarte Haltestelle zu verfahren. (Trifft nicht zu, wenn mechanische Notbetriebseinrichtung vorhanden)</div>
             <div class="antwort-gruppe">
