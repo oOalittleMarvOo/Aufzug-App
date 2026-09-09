@@ -1075,6 +1075,12 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
         content: "15." counter(freq-counter) " \2013  ";
     }
 
+    #pruefung_bremse { counter-reset: bremse-counter; }
+    #pruefung_bremse > .frage > h3::before {
+        counter-increment: bremse-counter;
+        content: "16." counter(bremse-counter) " \2013  ";
+    }
+
     #detailSchutzraum > div { counter-reset: schutzraum-counter; }
     #detailSchutzraum > div > .frage > h3::before {
         counter-increment: schutzraum-counter;
