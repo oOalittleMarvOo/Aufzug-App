@@ -4603,6 +4603,120 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
                 <textarea placeholder="Begründung oder Kommentar..."></textarea>
             </div>
         </div>
+
+        <div class="frage" id="frage_bremse_notbetrieb_kraft">
+            <h3>Mechanische Notbetriebseinrichtung: Überschreitet die Betätigungskraft zum Bewegen des Fahrkorbs in eine Haltestelle nicht 150 N?</h3>
+            <div class="hinweis">📋 DIN EN 81-20 5.9.2.3.1 a) – Die mechanische Notbetriebseinrichtung darf zum Verfahren des Fahrkorbs in eine Haltestelle eine Kraft von 150 N nicht überschreiten. (Trifft nicht zu, wenn elektrische Notbetriebseinrichtung vorhanden)</div>
+            <div class="antwort-gruppe">
+                <button class="antwort-btn passt" onclick="antwort(this, 'frage_bremse_notbetrieb_kraft')">🟢 i.O.</button>
+                <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage_bremse_notbetrieb_kraft')">🔴 Mangel</button>
+                <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage_bremse_notbetrieb_kraft')">⚪ Trifft nicht zu</button>
+            </div>
+            <div class="mangelfeld" id="mangel-frage_bremse_notbetrieb_kraft">
+                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+                <label>Bitte Mangel beschreiben:</label>
+                <textarea placeholder="Beschreibung des Mangels..."></textarea>
+            </div>
+            <div class="mangelfeld" id="trifft-frage_bremse_notbetrieb_kraft" style="background:#f0f0f0;border-color:#999;">
+                <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
+                <textarea placeholder="Begründung oder Kommentar..."></textarea>
+            </div>
+        </div>
+
+        <div class="frage" id="frage_bremse_notbetrieb_handrad">
+            <h3>Wird die mechanische Notbetriebseinrichtung durch die Aufzugsbewegung angetrieben – ist sie ein glattes, nicht durchbrochenes Handrad?</h3>
+            <div class="hinweis">📋 DIN EN 81-20 5.9.2.3.1 a) 1) – Kann die Einrichtung durch die Aufzugsbewegung angetrieben werden, muss sie als glattes, nicht durchbrochenes Handrad ausgeführt sein.</div>
+            <div class="antwort-gruppe">
+                <button class="antwort-btn passt" onclick="antwort(this, 'frage_bremse_notbetrieb_handrad')">🟢 i.O.</button>
+                <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage_bremse_notbetrieb_handrad')">🔴 Mangel</button>
+                <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage_bremse_notbetrieb_handrad')">⚪ Trifft nicht zu</button>
+            </div>
+            <div class="mangelfeld" id="mangel-frage_bremse_notbetrieb_handrad">
+                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+                <label>Bitte Mangel beschreiben:</label>
+                <textarea placeholder="Beschreibung des Mangels..."></textarea>
+            </div>
+            <div class="mangelfeld" id="trifft-frage_bremse_notbetrieb_handrad" style="background:#f0f0f0;border-color:#999;">
+                <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
+                <textarea placeholder="Begründung oder Kommentar..."></textarea>
+            </div>
+        </div>
+
+        <div class="frage" id="frage_bremse_notbetrieb_aufbewahrung">
+            <h3>Abnehmbare Notbetriebseinrichtung: Wird sie gut zugänglich aufbewahrt und bei Verwechslungsgefahr entsprechend gekennzeichnet?</h3>
+            <div class="hinweis">📋 DIN EN 81-20 5.9.2.3.1 a) 2) – Abnehmbare Einrichtungen müssen an gut zugänglicher Stelle in den Aufstellungsorten für Triebwerk und Steuerung aufbewahrt werden. Bei Verwechslungsgefahr ist eine entsprechende Kennzeichnung erforderlich.</div>
+            <div class="antwort-gruppe">
+                <button class="antwort-btn passt" onclick="antwort(this, 'frage_bremse_notbetrieb_aufbewahrung')">🟢 i.O.</button>
+                <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage_bremse_notbetrieb_aufbewahrung')">🔴 Mangel</button>
+                <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage_bremse_notbetrieb_aufbewahrung')">⚪ Trifft nicht zu</button>
+            </div>
+            <div class="mangelfeld" id="mangel-frage_bremse_notbetrieb_aufbewahrung">
+                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+                <label>Bitte Mangel beschreiben:</label>
+                <textarea placeholder="Beschreibung des Mangels..."></textarea>
+            </div>
+            <div class="mangelfeld" id="trifft-frage_bremse_notbetrieb_aufbewahrung" style="background:#f0f0f0;border-color:#999;">
+                <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
+                <textarea placeholder="Begründung oder Kommentar..."></textarea>
+            </div>
+        </div>
+
+        <div class="frage" id="frage_bremse_notbetrieb_sicherheitseinrichtung">
+            <h3>Wird beim Aufstecken der abnehmbaren Einrichtung auf das Triebwerk eine elektrische Sicherheitseinrichtung nach 5.11.2 betätigt?</h3>
+            <div class="hinweis">📋 DIN EN 81-20 5.9.2.3.1 a) 3) – Ist die Einrichtung abnehmbar oder kann sie vom Triebwerk getrennt werden, muss spätestens beim Aufstecken eine elektrische Sicherheitseinrichtung nach 5.11.2 betätigt werden.</div>
+            <div class="antwort-gruppe">
+                <button class="antwort-btn passt" onclick="antwort(this, 'frage_bremse_notbetrieb_sicherheitseinrichtung')">🟢 i.O.</button>
+                <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage_bremse_notbetrieb_sicherheitseinrichtung')">🔴 Mangel</button>
+                <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage_bremse_notbetrieb_sicherheitseinrichtung')">⚪ Trifft nicht zu</button>
+            </div>
+            <div class="mangelfeld" id="mangel-frage_bremse_notbetrieb_sicherheitseinrichtung">
+                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+                <label>Bitte Mangel beschreiben:</label>
+                <textarea placeholder="Beschreibung des Mangels..."></textarea>
+            </div>
+            <div class="mangelfeld" id="trifft-frage_bremse_notbetrieb_sicherheitseinrichtung" style="background:#f0f0f0;border-color:#999;">
+                <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
+                <textarea placeholder="Begründung oder Kommentar..."></textarea>
+            </div>
+        </div>
+
+        <div class="frage" id="frage_bremse_notbetrieb_energie">
+            <h3>Elektrische Notbetriebseinrichtung: Reicht die Energieversorgung aus, den Fahrkorb mit beliebiger Last innerhalb von 1 h nach einem Ausfall in eine benachbarte Haltestelle zu bewegen?</h3>
+            <div class="hinweis">📋 DIN EN 81-20 5.9.2.3.1 b) 1) – Die Energieversorgung der elektrischen Notbetriebseinrichtung muss ausreichen, um den Fahrkorb mit einer beliebigen Last innerhalb von 1 h nach einem Ausfall in eine benachbarte Haltestelle zu verfahren. (Trifft nicht zu, wenn mechanische Notbetriebseinrichtung vorhanden)</div>
+            <div class="antwort-gruppe">
+                <button class="antwort-btn passt" onclick="antwort(this, 'frage_bremse_notbetrieb_energie')">🟢 i.O.</button>
+                <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage_bremse_notbetrieb_energie')">🔴 Mangel</button>
+                <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage_bremse_notbetrieb_energie')">⚪ Trifft nicht zu</button>
+            </div>
+            <div class="mangelfeld" id="mangel-frage_bremse_notbetrieb_energie">
+                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+                <label>Bitte Mangel beschreiben:</label>
+                <textarea placeholder="Beschreibung des Mangels..."></textarea>
+            </div>
+            <div class="mangelfeld" id="trifft-frage_bremse_notbetrieb_energie" style="background:#f0f0f0;border-color:#999;">
+                <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
+                <textarea placeholder="Begründung oder Kommentar..."></textarea>
+            </div>
+        </div>
+
+        <div class="frage" id="frage_bremse_notbetrieb_geschwindigkeit">
+            <h3>Elektrische Notbetriebseinrichtung: Beträgt die Fahrgeschwindigkeit im Notbetrieb höchstens 0,30 m/s?</h3>
+            <div class="hinweis">📋 DIN EN 81-20 5.9.2.3.1 b) 2) – Die Fahrgeschwindigkeit im elektrischen Notbetrieb darf 0,30 m/s nicht überschreiten.</div>
+            <div class="antwort-gruppe">
+                <button class="antwort-btn passt" onclick="antwort(this, 'frage_bremse_notbetrieb_geschwindigkeit')">🟢 i.O.</button>
+                <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage_bremse_notbetrieb_geschwindigkeit')">🔴 Mangel</button>
+                <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage_bremse_notbetrieb_geschwindigkeit')">⚪ Trifft nicht zu</button>
+            </div>
+            <div class="mangelfeld" id="mangel-frage_bremse_notbetrieb_geschwindigkeit">
+                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+                <label>Bitte Mangel beschreiben:</label>
+                <textarea placeholder="Beschreibung des Mangels..."></textarea>
+            </div>
+            <div class="mangelfeld" id="trifft-frage_bremse_notbetrieb_geschwindigkeit" style="background:#f0f0f0;border-color:#999;">
+                <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
+                <textarea placeholder="Begründung oder Kommentar..."></textarea>
+            </div>
+        </div>
     </div>
 
     <div id="dokumente_bremse" class="tab-inhalt">
