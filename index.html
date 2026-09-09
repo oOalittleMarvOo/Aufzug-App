@@ -4470,6 +4470,101 @@ background-size: cover;         /* Bild deckt gesamten Hintergrund ab */
                 <textarea placeholder="Begründung oder Kommentar..."></textarea>
             </div>
         </div>
+
+        <div class="frage" id="frage_bremse_druckfedern">
+            <h3>Wird der Bremsdruck durch geführte Druckfedern oder Gewichte erzeugt?</h3>
+            <div class="hinweis">📋 DIN EN 81-20 5.9.2.2.4 – Der Druck auf die Bremsbacken oder Bremsklötze muss durch geführte Druckfedern oder Gewichte erzeugt werden.</div>
+            <div class="antwort-gruppe">
+                <button class="antwort-btn passt" onclick="antwort(this, 'frage_bremse_druckfedern')">🟢 i.O.</button>
+                <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage_bremse_druckfedern')">🔴 Mangel</button>
+                <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage_bremse_druckfedern')">⚪ Trifft nicht zu</button>
+            </div>
+            <div class="mangelfeld" id="mangel-frage_bremse_druckfedern">
+                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+                <label>Bitte Mangel beschreiben:</label>
+                <textarea placeholder="Beschreibung des Mangels..."></textarea>
+            </div>
+            <div class="mangelfeld" id="trifft-frage_bremse_druckfedern" style="background:#f0f0f0;border-color:#999;">
+                <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
+                <textarea placeholder="Begründung oder Kommentar..."></textarea>
+            </div>
+        </div>
+
+        <div class="frage" id="frage_bremse_keine_bandbremse">
+            <h3>Handelt es sich nicht um eine Bandbremse?</h3>
+            <div class="hinweis">📋 DIN EN 81-20 5.9.2.2.5 – Bandbremsen sind unzulässig.</div>
+            <div class="antwort-gruppe">
+                <button class="antwort-btn passt" onclick="antwort(this, 'frage_bremse_keine_bandbremse')">🟢 i.O.</button>
+                <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage_bremse_keine_bandbremse')">🔴 Mangel</button>
+                <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage_bremse_keine_bandbremse')">⚪ Trifft nicht zu</button>
+            </div>
+            <div class="mangelfeld" id="mangel-frage_bremse_keine_bandbremse">
+                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+                <label>Bitte Mangel beschreiben:</label>
+                <textarea placeholder="Beschreibung des Mangels..."></textarea>
+            </div>
+            <div class="mangelfeld" id="trifft-frage_bremse_keine_bandbremse" style="background:#f0f0f0;border-color:#999;">
+                <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
+                <textarea placeholder="Begründung oder Kommentar..."></textarea>
+            </div>
+        </div>
+
+        <div class="frage" id="frage_bremse_nicht_brennbar">
+            <h3>Sind die Bremsbeläge aus nicht brennbarem Material?</h3>
+            <div class="hinweis">📋 DIN EN 81-20 5.9.2.2.6 – Die Bremsbeläge dürfen nicht brennbar sein.</div>
+            <div class="antwort-gruppe">
+                <button class="antwort-btn passt" onclick="antwort(this, 'frage_bremse_nicht_brennbar')">🟢 i.O.</button>
+                <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage_bremse_nicht_brennbar')">🔴 Mangel</button>
+                <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage_bremse_nicht_brennbar')">⚪ Trifft nicht zu</button>
+            </div>
+            <div class="mangelfeld" id="mangel-frage_bremse_nicht_brennbar">
+                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+                <label>Bitte Mangel beschreiben:</label>
+                <textarea placeholder="Beschreibung des Mangels..."></textarea>
+            </div>
+            <div class="mangelfeld" id="trifft-frage_bremse_nicht_brennbar" style="background:#f0f0f0;border-color:#999;">
+                <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
+                <textarea placeholder="Begründung oder Kommentar..."></textarea>
+            </div>
+        </div>
+
+        <div class="frage" id="frage_bremse_manuelle_lueftung">
+            <h3>Kann die Triebwerksbremse durch kontinuierliche Betätigung manuell gelüftet werden?</h3>
+            <div class="hinweis">📋 DIN EN 81-20 5.9.2.2.7 – Manuelles Lüften muss möglich sein: mechanisch (z. B. über Hebel) oder elektrisch über eine automatisch wiederaufladende Notstromversorgung. Ein Fehler beim manuellen Lüften darf nicht zum Ausfall der Bremsfunktion führen.</div>
+            <div class="antwort-gruppe">
+                <button class="antwort-btn passt" onclick="antwort(this, 'frage_bremse_manuelle_lueftung')">🟢 i.O.</button>
+                <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage_bremse_manuelle_lueftung')">🔴 Mangel</button>
+                <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage_bremse_manuelle_lueftung')">⚪ Trifft nicht zu</button>
+            </div>
+            <div class="mangelfeld" id="mangel-frage_bremse_manuelle_lueftung">
+                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+                <label>Bitte Mangel beschreiben:</label>
+                <textarea placeholder="Beschreibung des Mangels..."></textarea>
+            </div>
+            <div class="mangelfeld" id="trifft-frage_bremse_manuelle_lueftung" style="background:#f0f0f0;border-color:#999;">
+                <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
+                <textarea placeholder="Begründung oder Kommentar..."></textarea>
+            </div>
+        </div>
+
+        <div class="frage" id="frage_bremse_kreise_pruefbar">
+            <h3>Kann jeder Bremskreis einzeln von außerhalb des Schachts geprüft werden?</h3>
+            <div class="hinweis">📋 DIN EN 81-20 5.9.2.2.7 – Es muss möglich sein, jeden Bremskreis einzeln von außerhalb des Schachts zu prüfen.</div>
+            <div class="antwort-gruppe">
+                <button class="antwort-btn passt" onclick="antwort(this, 'frage_bremse_kreise_pruefbar')">🟢 i.O.</button>
+                <button class="antwort-btn passt-nicht" onclick="antwort(this, 'frage_bremse_kreise_pruefbar')">🔴 Mangel</button>
+                <button class="antwort-btn irrelevant" onclick="antwort(this, 'frage_bremse_kreise_pruefbar')">⚪ Trifft nicht zu</button>
+            </div>
+            <div class="mangelfeld" id="mangel-frage_bremse_kreise_pruefbar">
+                <p class="mangel-hinweis">⚠️ Mangel festgestellt!</p>
+                <label>Bitte Mangel beschreiben:</label>
+                <textarea placeholder="Beschreibung des Mangels..."></textarea>
+            </div>
+            <div class="mangelfeld" id="trifft-frage_bremse_kreise_pruefbar" style="background:#f0f0f0;border-color:#999;">
+                <p class="mangel-hinweis" style="color:#666;">💬 Kommentar (optional):</p>
+                <textarea placeholder="Begründung oder Kommentar..."></textarea>
+            </div>
+        </div>
     </div>
 
     <div id="dokumente_bremse" class="tab-inhalt">
