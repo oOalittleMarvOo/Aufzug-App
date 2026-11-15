@@ -72,23 +72,35 @@ for (const [x,z] of [[8,-6],[-10,5],[14,10],[-6,-14]]) {
 }
 
 /* ---------- Lemming-Charakter ---------- */
+const OUTLINE_COLOR = 0x1b2733;
+const OUTLINE_MAT = new THREE.MeshBasicMaterial({ color: OUTLINE_COLOR, side: THREE.BackSide });
+
+function addOutline(mesh, scale){
+  const outline = new THREE.Mesh(mesh.geometry, OUTLINE_MAT);
+  outline.scale.multiplyScalar(scale);
+  mesh.add(outline);
+}
+
 const lemming = new THREE.Group();
 
 const bodyMat = new THREE.MeshStandardMaterial({ color: 0xffce4d });
 const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.5, 1.0, 4, 12), bodyMat);
 body.position.y = 1.0;
 body.castShadow = true;
+addOutline(body, 1.06);
 lemming.add(body);
 
 const hairMat = new THREE.MeshStandardMaterial({ color: 0x2b6cb0 });
 const hair = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.4, 0.25), hairMat);
 hair.position.set(0, 1.75, 0.05);
 hair.castShadow = true;
+addOutline(hair, 1.15);
 lemming.add(hair);
 
 const noseMat = new THREE.MeshStandardMaterial({ color: 0xe08a2b });
 const nose = new THREE.Mesh(new THREE.SphereGeometry(0.12, 8, 8), noseMat);
 nose.position.set(0, 1.55, 0.45);
+addOutline(nose, 1.25);
 lemming.add(nose);
 
 lemming.position.set(0, 0, 0);
