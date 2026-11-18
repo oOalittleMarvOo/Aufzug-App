@@ -82,77 +82,68 @@ function addOutline(mesh, scale){
 }
 
 const lemming = new THREE.Group();
-const bodyMat = new THREE.MeshStandardMaterial({ color: 0xffce4d });
-const hairMat = new THREE.MeshStandardMaterial({ color: 0x2b6cb0 });
-const eyeMat = new THREE.MeshBasicMaterial({ color: 0x1b2733 });
-const noseMat = new THREE.MeshStandardMaterial({ color: 0xe08a2b });
+const bodyMat = new THREE.MeshStandardMaterial({ color: 0xd98b3c });
+const bodyDarkMat = new THREE.MeshStandardMaterial({ color: 0xb9702a });
+const eyeWhiteMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
+const pupilMat = new THREE.MeshBasicMaterial({ color: 0x1b2733 });
 
-// Rumpf, der beim Laufen leicht wippt
+// Rumpf, der beim Laufen leicht wippt/hoppelt
 const torsoGroup = new THREE.Group();
 lemming.add(torsoGroup);
 
-const torso = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.7, 0.35), bodyMat);
-torso.position.y = 0.95;
-torso.castShadow = true;
-addOutline(torso, 1.08);
-torsoGroup.add(torso);
+// runder, eiförmiger Körper (Kopf und Rumpf sind beim Lemming eins)
+const body = new THREE.Mesh(new THREE.SphereGeometry(0.55, 24, 18), bodyMat);
+body.position.y = 0.75;
+body.scale.set(1.02, 0.98, 1.08);
+body.castShadow = true;
+addOutline(body, 1.06);
+torsoGroup.add(body);
 
-const head = new THREE.Mesh(new THREE.SphereGeometry(0.32, 16, 12), bodyMat);
-head.position.y = 1.62;
-head.castShadow = true;
-addOutline(head, 1.08);
-torsoGroup.add(head);
-
-const hair = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.32, 0.22), hairMat);
-hair.position.set(0, 2.02, 0.02);
-hair.rotation.z = 0.15;
-hair.castShadow = true;
-addOutline(hair, 1.15);
-torsoGroup.add(hair);
-
-const nose = new THREE.Mesh(new THREE.SphereGeometry(0.09, 8, 8), noseMat);
-nose.position.set(0, 1.58, 0.33);
-addOutline(nose, 1.25);
-torsoGroup.add(nose);
-
+// riesige runde Augen – das markanteste Merkmal
 for (const side of [-1, 1]) {
-  const eye = new THREE.Mesh(new THREE.SphereGeometry(0.045, 8, 8), eyeMat);
-  eye.position.set(side * 0.12, 1.68, 0.29);
-  torsoGroup.add(eye);
+  const eyeWhite = new THREE.Mesh(new THREE.SphereGeometry(0.2, 16, 12), eyeWhiteMat);
+  eyeWhite.position.set(side * 0.23, 0.92, 0.42);
+  addOutline(eyeWhite, 1.1);
+  torsoGroup.add(eyeWhite);
+
+  const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.095, 12, 10), pupilMat);
+  pupil.position.set(side * 0.23, 0.9, 0.58);
+  torsoGroup.add(pupil);
 }
 
-// Arme: Schulter-Pivot + Mesh, damit sie beim Laufen vom Schultergelenk aus schwingen
-const arms = [];
+// winzige Arm-Stummel
 for (const side of [-1, 1]) {
-  const pivot = new THREE.Group();
-  pivot.position.set(side * 0.32, 1.22, 0);
-  torsoGroup.add(pivot);
-  const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.07, 0.5, 8), bodyMat);
-  arm.position.y = -0.25;
+  const arm = new THREE.Mesh(new THREE.SphereGeometry(0.13, 10, 8), bodyMat);
+  arm.position.set(side * 0.53, 0.55, 0.05);
+  arm.scale.set(0.8, 1.1, 0.8);
   arm.castShadow = true;
-  addOutline(arm, 1.12);
-  pivot.add(arm);
-  arms.push(pivot);
+  addOutline(arm, 1.15);
+  torsoGroup.add(arm);
 }
 
-// Beine: Hüft-Pivot + Mesh + flacher Schuh, fürs typische Lemminge-"Watschel"-Laufen
-const legs = [];
+// kleine Füße, auf denen der runde Körper "sitzt"
+const feet = [];
 for (const side of [-1, 1]) {
-  const pivot = new THREE.Group();
-  pivot.position.set(side * 0.16, 0.6, 0);
-  torsoGroup.add(pivot);
-  const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.09, 0.5, 8), bodyMat);
-  leg.position.y = -0.25;
-  leg.castShadow = true;
-  addOutline(leg, 1.1);
-  pivot.add(leg);
-  const shoe = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.12, 0.32), hairMat);
-  shoe.position.set(0, -0.44, 0.07);
-  shoe.castShadow = true;
-  addOutline(shoe, 1.1);
-  pivot.add(shoe);
-  legs.push(pivot);
+  const foot = new THREE.Mesh(new THREE.SphereGeometry(0.17, 12, 8), bodyDarkMat);
+  foot.position.set(side * 0.22, 0.15, 0.1);
+  foot.scale.set(1, 0.6, 1.2);
+  foot.castShadow = true;
+  addOutline(foot, 1.12);
+  torsoGroup.add(foot);
+  feet.push(foot);
 }
+
+// geringelter Schwanz am Hinterteil
+const tail = new THREE.Mesh(
+  new THREE.TorusGeometry(0.14, 0.045, 8, 16, Math.PI * 1.4),
+  bodyDarkMat
+);
+tail.position.set(0, 0.55, -0.48);
+tail.rotation.y = Math.PI / 2;
+tail.rotation.x = 0.3;
+tail.castShadow = true;
+addOutline(tail, 1.2);
+torsoGroup.add(tail);
 
 lemming.position.set(0, 0, 0);
 scene.add(lemming);
@@ -164,7 +155,7 @@ window.addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
 
 /* ---------- Kamera: Third-Person, per Maus drehbar ---------- */
 let camYaw = 0;
-let camDistance = 7;
+let camDistance = 5;
 let dragging = false, lastMouseX = 0;
 
 renderer.domElement.addEventListener('mousedown', e => { dragging = true; lastMouseX = e.clientX; });
@@ -217,17 +208,13 @@ function updateMovement(dt){
     facing += diff * Math.min(1, dt*10);
     lemming.rotation.y = facing;
 
-    // Lauf-Animation: Arme und Beine schwingen gegenläufig, Rumpf wippt
-    const swing = Math.sin(clock.elapsedTime*10) * 0.6;
-    legs[0].rotation.x = swing;
-    legs[1].rotation.x = -swing;
-    arms[0].rotation.x = -swing;
-    arms[1].rotation.x = swing;
-    torsoGroup.position.y = Math.abs(Math.sin(clock.elapsedTime*10))*0.08;
+    // Lauf-Animation: kleines Hoppeln mit Stauchen/Strecken statt Gliedmaßen-Schwung
+    const hop = Math.abs(Math.sin(clock.elapsedTime*9));
+    torsoGroup.position.y = hop * 0.12;
+    torsoGroup.scale.set(1 - hop*0.06, 1 + hop*0.1, 1 - hop*0.06);
   } else {
-    legs[0].rotation.x = legs[1].rotation.x = 0;
-    arms[0].rotation.x = arms[1].rotation.x = 0;
     torsoGroup.position.y = 0;
+    torsoGroup.scale.set(1, 1, 1);
   }
 
   // Lemming auf dem Boden halten (einfache Begrenzung)
@@ -238,9 +225,9 @@ function updateMovement(dt){
 function updateCamera(){
   const camX = lemming.position.x + Math.sin(camYaw) * camDistance;
   const camZ = lemming.position.z + Math.cos(camYaw) * camDistance;
-  const camY = lemming.position.y + 3.5;
+  const camY = lemming.position.y + 2.2;
   camera.position.lerp(new THREE.Vector3(camX, camY, camZ), 0.15);
-  camera.lookAt(lemming.position.x, lemming.position.y + 1.2, lemming.position.z);
+  camera.lookAt(lemming.position.x, lemming.position.y + 0.75, lemming.position.z);
 }
 
 function animate(){
